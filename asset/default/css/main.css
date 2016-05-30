@@ -1,0 +1,50 @@
+/*
+ Created on     April 05th, 2016
+ Created by     Greentrees
+ */
+
+@charset "utf-8";
+
+.w10, .w20, .w30, .w50, .w60, .w70, .w80 {
+    display: inline-block;
+}
+.w10 {width: 10%}
+.w20 {width: 20%}
+.w30 {width: 30%}
+.w50 {width: 50%}
+.w60 {width: 60%}
+.w70 {width: 70%}
+.w80 {width: 80%}
+
+
+.navbar .navbtn-group{
+    float: left;
+    display: block;
+    width: auto;
+    height: 50px;
+}
+.navbar .navbtn-group:after{
+    content: "";
+    clear: both;
+    display: block;
+}
+.navbar .navbtn-group a{
+    display: block;
+    float:left;
+    box-sizing: border-box;
+    height: 50px;
+    padding: 14px 10px;
+    border-right:1px solid #dfdfdf;
+    text-decoration: none;
+    color:#333;
+}
+.navbar .navbtn-group a.active{
+    background: #e7e7e7;
+}
+
+.text-red {
+    color: red;
+}
+.text-blue {
+    color: #0000ff;
+}
