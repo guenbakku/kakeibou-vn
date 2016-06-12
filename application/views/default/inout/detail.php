@@ -12,7 +12,7 @@
         <div class="panel-heading"><strong>2016/04/09 (Thứ ba)</strong> <strong class="pull-right">1200</strong></div>
         <div class="list-group">
             <!-- Item -->
-            <a class="list-group-item" href="<?=base_url()?>record/edit/1">
+            <a class="list-group-item" href="<?=base_url()?>inout/edit/1">
                 <span class="glyphicon glyphicon-menu-right pull-right"></span>
                 <span class="w60">
                     <strong>Ăn uống</strong><br>
@@ -24,7 +24,7 @@
                 </span>
             </a>
             <!-- Item -->
-            <a class="list-group-item" href="<?=base_url()?>record/edit/1">
+            <a class="list-group-item" href="<?=base_url()?>inout/edit/1">
                 <span class="glyphicon glyphicon-menu-right pull-right"></span>
                 <span class="w60">
                     <strong>Ăn uống</strong><br>
@@ -41,7 +41,7 @@
         <div class="panel-heading"><strong>2016/04/08 (Thứ hai)</strong> <strong class="pull-right">1200</strong></div>
         <div class="list-group">
             <!-- Item -->
-            <a class="list-group-item" href="<?=base_url()?>record/edit/1">
+            <a class="list-group-item" href="<?=base_url()?>inout/edit/1">
                 <span class="glyphicon glyphicon-menu-right pull-right"></span>
                 <span class="w60">
                     <strong>Ăn uống</strong><br>
@@ -53,7 +53,7 @@
                 </span>
             </a>
             <!-- Item -->
-            <a class="list-group-item" href="<?=base_url()?>record/edit/1">
+            <a class="list-group-item" href="<?=base_url()?>inout/edit/1">
                 <span class="glyphicon glyphicon-menu-right pull-right"></span>
                 <span class="w60">
                     <strong>Ăn uống</strong><br>

@@ -20,12 +20,14 @@
         <?=$_styles?>
         
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery-1.12.3.min.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/navigation.js"></script>
         <?=$_scripts?>
 	</head>
 
 	<body>
         <?=$this->template->get_view('main-nav')?>
+        <div class="container"><?=$this->flash->output()?></div>
         <?=$MAIN?>
     </body>
 

@@ -7,12 +7,12 @@ class Home extends CI_Controller {
     {   
         parent::__construct();
         if ($this->login_model->isLogin() === false){
-            redirect(base_url().'login');
+            redirect(base_url().'user/login');
         }
     }
     
 	public function index()
-    {   
+    {           
 		$this->template->write_view('MAIN', 'home');
         $this->template->render();
 	}

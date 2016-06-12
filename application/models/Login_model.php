@@ -1,20 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Login_model extends CI_Model {
+class Login_model extends App_Model {
     
-    public $dbInfo    = array();                    // Thông tin của user đang login lấy từ DB
-    public $db;
-    private $err  = '';
-    private $cookieName  = 'bhcb_loginAuth';
-    private $sessionName = 'bhcb_loginAuth';
+    const TABLE        = 'users';
+    const COOKIE_NAME  = 'bhcb_loginAuth';
+    const SESSION_NAME = 'bhcb_loginAuth';
+    
+    public $dbInfo    = array(); // Thông tin login của User lấy từ DB
     
     public function __construct()
     {
         parent::__construct();
         $this->load->library('session');
-        $this->db = $this->load->database('default', true);
-        $this->recoverLoginSession();
+        $this->load->database('default');
+        $this->recoverSession();
     }
     
     /*
@@ -27,9 +27,9 @@ class Login_model extends CI_Model {
      */
     public function excuteLogin($username, $password, $remember)
     {
-        if ($this->checkLoginInfo($username, hash('sha512', $password))){
-            $this->setLoginConn($remember);
-            $this->setLoginSession();
+        if ($this->validate($username, hash('sha512', $password))){
+            $this->setConnection($remember);
+            $this->setSession();
             return true;
         }
         else {
@@ -45,7 +45,7 @@ class Login_model extends CI_Model {
      */
     public function isLogin()
     { 
-        return $this->session->userdata($this->sessionName) === null? false : true;
+        return $this->session->userdata(self::SESSION_NAME) === null? false : true;
     }
     
     /*
@@ -54,14 +54,14 @@ class Login_model extends CI_Model {
      *
      *--------------------------------------------------------------------
      */
-    public function delLoginConn()
+    public function delConnection()
     {
         $this->input->set_cookie(array(
-            'name'      => $this->cookieName,
+            'name'      => self::COOKIE_NAME,
             'expire'    => -1,
         ));
         
-        $this->session->sess_destroy();
+        unset($_SESSION[self::SESSION_NAME]);
     }
     
     /*
@@ -71,7 +71,7 @@ class Login_model extends CI_Model {
      * 
      *--------------------------------------------------------------------
      */
-    private function checkLoginInfo($username, $password)
+    private function validate($username, $password)
     {   
         
         try {
@@ -80,8 +80,8 @@ class Login_model extends CI_Model {
                 throw new Exception('Username không hợp lệ');
             }
             
-            $dbInfo = $this->db->select('uid, username, password')
-                               ->from('users')
+            $dbInfo = $this->db->select('uid, username, password, fullname')
+                               ->from(self::TABLE)
                                ->where('username', $username)
                                ->limit(1)
                                ->get()->row_array();
@@ -94,12 +94,12 @@ class Login_model extends CI_Model {
                 throw new Exception('Password không đúng');
             }
             
-            $this->saveDbInfo($dbInfo['uid'], $dbInfo['username'], $dbInfo['password']);
+            $this->saveDbInfo($dbInfo);
             
             return true;
         }
         catch (Exception $e){
-            $this->setErr($e->getMessage());
+            $this->setError($e->getMessage());
             return false;
         }
         
@@ -111,11 +111,11 @@ class Login_model extends CI_Model {
      *
      *--------------------------------------------------------------------
      */
-    private function saveDbInfo($uid, $username, $password)
+    private function saveDbInfo($array)
     {
-        $this->dbInfo['uid'] = $uid;
-        $this->dbInfo['username'] = $username;
-        $this->dbInfo['password'] = $password;
+        foreach (array('uid', 'username', 'password', 'fullname') as $key){
+            $this->dbInfo[$key] = isset($array[$key])? $array[$key] : null;
+        }
     }
     
     /*
@@ -124,7 +124,7 @@ class Login_model extends CI_Model {
      *
      *--------------------------------------------------------------------
      */
-    private function setLoginConn($remember=false)
+    private function setConnection($remember=false)
     {   
         try {
             
@@ -141,7 +141,7 @@ class Login_model extends CI_Model {
             $infoJsonEncrypt = $this->encryption->encrypt($infoJson);
             
             $this->input->set_cookie(array(
-                'name'      => $this->cookieName,
+                'name'      => self::COOKIE_NAME,
                 'value'     => $infoJsonEncrypt,
                 'expire'    => $remember==false? 0 : 31536000, // 365 ngày
             ));
@@ -160,12 +160,12 @@ class Login_model extends CI_Model {
      *
      *--------------------------------------------------------------------
      */
-    private function recoverLoginSession()
+    private function recoverSession()
     {
        
-        $infoJsonEncrypt = $this->input->cookie($this->cookieName);
+        $infoJsonEncrypt = $this->input->cookie(self::COOKIE_NAME);
         
-        if ($this->session->userdata($this->sessionName) === null && $infoJsonEncrypt !== null){
+        if ($this->session->userdata(self::SESSION_NAME) === null && $infoJsonEncrypt !== null){
 
             $this->load->library('encryption');
             
@@ -173,9 +173,9 @@ class Login_model extends CI_Model {
             $info     = json_decode($infoJson, true);
             
             if (isset($info['username'], $info['password']) 
-                && $this->checkLoginInfo($info['username'], $info['password'])){
+                && $this->validate($info['username'], $info['password'])){
                 
-                $this->setLoginSession();
+                $this->setSession();
             }
         }
     }
@@ -187,7 +187,7 @@ class Login_model extends CI_Model {
      *
      *--------------------------------------------------------------------
      */
-    private function setLoginSession()
+    private function setSession()
     {   
         try {
             
@@ -195,7 +195,7 @@ class Login_model extends CI_Model {
                 throw new Exception('Biến dbInfo rỗng');
             }
             
-            $this->session->set_userdata($this->sessionName, $this->dbInfo);
+            $this->session->set_userdata(self::SESSION_NAME, $this->dbInfo);
             
         }
         catch (Exception $e){
@@ -205,23 +205,24 @@ class Login_model extends CI_Model {
     
     /*
      *--------------------------------------------------------------------
+     * Lấy thông tin của User đang đăng nhập từ SESSION
      *
-     *
+     * @param   string : key name or null
+     * @return  mixed  : value of key or array of false if $key is incorrect
      *--------------------------------------------------------------------
      */
-    public function setErr($msg)
+    public function getInfo($key=null)
     {
-        $this->err .= $msg.'<br>';
+        $loginInfo = $this->session->userdata(self::SESSION_NAME);
+        if ($key === null){
+            return $loginInfo;
+        }
+        elseif (is_string($key)){
+            return isset($loginInfo[$key])? $loginInfo[$key] : false;
+        }
+        else {
+            return false;
+        }
     }
     
-    /*
-     *--------------------------------------------------------------------
-     *
-     *
-     *--------------------------------------------------------------------
-     */
-    public function getErr()
-    {
-        return $this->err;
-    }
 }

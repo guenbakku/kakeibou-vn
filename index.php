@@ -51,7 +51,7 @@
  * application/config/config.php lấy giá trị từ đây.
  */
  
-  define('BASEURL', 'http://localhost.centos/kakeibou/');
+  define('BASEURL', 'http://kakeibou.localhost.centos/');
 
 /*
  *---------------------------------------------------------------

@@ -8,7 +8,7 @@ $(function(){
 
 <div class="container">
     <div class="panel panel-default">
-        <a class="panel-heading" href="<?=base_url()?>summary/recordSummary" style="display:block"><strong><span class="glyphicon glyphicon-menu-right pull-right"></span> Thu chi trong tháng</strong></a>
+        <a class="panel-heading" href="<?=base_url()?>inout/summary" style="display:block"><strong><span class="glyphicon glyphicon-menu-right pull-right"></span> Thu chi trong tháng</strong></a>
         <table class="table">
             <tr>
                 <td style="width:33.3%">Thu</td>

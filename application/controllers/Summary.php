@@ -13,19 +13,7 @@ class Summary extends CI_Controller {
     
     public function index()
     {
-        $this->template->write_view('MAIN', 'subNav/summary');
-        $this->template->render();
-    }
-    
-	public function recordSummary()
-    {   
-		$this->template->write_view('MAIN', 'record-summary');
-        $this->template->render();
-	}
-    
-    public function recordDetail()
-    {
-		$this->template->write_view('MAIN', 'record-detail');
+        $this->template->write_view('MAIN', 'summary/menu');
         $this->template->render();
     }
     
