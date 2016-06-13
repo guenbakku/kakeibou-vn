@@ -17,4 +17,16 @@ class Summary extends CI_Controller {
         $this->template->render();
     }
     
+    public function overview()
+    {   
+		$this->template->write_view('MAIN', 'summary/overview');
+        $this->template->render();
+	}
+    
+    public function detail()
+    {
+		$this->template->write_view('MAIN', 'summary/detail');
+        $this->template->render();
+    }
+    
 }

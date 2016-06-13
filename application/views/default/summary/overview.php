@@ -28,7 +28,7 @@
         </div>
         <div class="list-group">
             <?php for($i=0; $i<50; $i++) : ?>
-            <a class="list-group-item" href="<?=base_url()?>inout/detail">
+            <a class="list-group-item" href="<?=base_url()?>summary/detail">
                 <span class="glyphicon glyphicon-menu-right pull-right"></span>
                 <p class="list-group-item-heading"><strong>2016/04/09</strong></p>
                 <p class="list-group-item-text">
