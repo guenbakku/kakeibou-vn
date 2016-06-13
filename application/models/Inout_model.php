@@ -12,7 +12,6 @@ class Inout_model extends App_Model {
     const FIX_CATEGORY_ID_MAX = '20';
     
     static public $INOUT_TYPE = array(
-        0 => 'Nội bộ',
         1 => 'Thu',
         2 => 'Chi',
     );
@@ -77,6 +76,32 @@ class Inout_model extends App_Model {
         }
         
         return $pair;
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Tính toán ID của người chuyển và người nhận khi cash_flow=handover
+     * Cách tính:
+     *      Nếu inout_type_id của data đang sửa = 2 (Chi) 
+     *              -> Người chuyển là player của data đang xét
+     *      Nếu inout_type_id của data đang sửa = 1 (Thu)
+     *              -> Người chuyển là người còn lại
+     *--------------------------------------------------------------------
+     */
+    public function setPlayersForHandoverEdit($data)
+    {
+        if ($data['cash_flow'] != 'handover'){
+            return false;
+        }
+        
+        $players = array($data['player'], 3-$data['player']);
+        
+        if ($data['inout_type_id'] == array_flip(self::$INOUT_TYPE)['Chi']){
+            return $players;
+        }
+        else {
+            return array_reverse($players);
+        }
     }
     
     public function getCashFlowName($type)

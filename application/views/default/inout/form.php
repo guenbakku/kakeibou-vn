@@ -2,6 +2,10 @@
 if (in_array($type, array('drawer', 'deposit'))){
     unset($select['accounts'][Inout_model::ACCOUNT_CASH_ID]);
 }
+
+// Thêm thuộc tính disabled cho input/select nếu dữ liệu sửa là dữ liệu pair
+
+$disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
 ?>
 
 <?php echo form_open($form_url, array('id' => 'addCashFlow', 'class' => 'container'))?>
@@ -61,7 +65,7 @@ if (in_array($type, array('drawer', 'deposit'))){
                     set_value($field_name, null), 
                     array(
                         'class' => 'form-control',
-                    )
+                    ) + $disabled_attr
                 )?>
             </div>
             <div class="form-group">
@@ -86,22 +90,22 @@ if (in_array($type, array('drawer', 'deposit'))){
                 <div class="row">
                     <div class="col-xs-6">
                         <?=form_dropdown(
-                            $field_name = 'player[]', 
+                            $field_name = 'player[0]', 
                             $select['players'], 
                             set_value($field_name, $this->login_model->getInfo('uid')), 
                             array(
                                 'class' => 'form-control',
-                            )
+                            ) + $disabled_attr
                         )?>
                     </div>
                     <div class="col-xs-6">
                         <?=form_dropdown(
-                            $field_name = 'player[]', 
+                            $field_name = 'player[1]', 
                             $select['players'], 
                             set_value($field_name, 3-$this->login_model->getInfo('uid')), 
                             array(
                                 'class' => 'form-control',
-                            )
+                            ) + $disabled_attr
                         )?>
                     </div>
                 </div>
