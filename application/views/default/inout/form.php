@@ -15,6 +15,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
             <div class="form-group">
                 <label>Số tiền:</label>
                 <div class="input-group">
+                    <span class="input-group-addon"><?=$inout_type_sign?></span>
                     <?=form_input(
                         array(
                             'name' => $field_name = 'amount',
@@ -116,7 +117,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                 <label>Ghi chú:</label>
                 <?=form_input(
                     $field_name = 'memo', 
-                    set_value($field_name, null),
+                    set_value($field_name, null, false),
                     array(
                         'class' => 'form-control',
                     )

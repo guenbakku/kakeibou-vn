@@ -42,10 +42,10 @@ class Inout_model extends App_Model {
             $this->db->insert(self::TABLE, $item);
         }
         
-        return $this;
+        return true;
     }
 
-    public function setPairAddData($type, $data)
+    private function setPairAddData($type, $data)
     {
         $data['cash_flow']  = $type;
         $data['created_on'] = date('Y-m-d H:i:s');
@@ -76,6 +76,43 @@ class Inout_model extends App_Model {
         }
         
         return $pair;
+    }
+    
+    public function edit($id, $data)
+    {
+        foreach ($this->getPairId($id) as $item){
+            $this->db->where('iorid', $item)->update(self::TABLE, $data);
+        }
+        
+        return true;
+    }
+    
+    private function getPairId($id)
+    {
+        $pair_id = $this->db->select('pair_id')
+                            ->where('iorid', $id)
+                            ->get(self::TABLE)
+                            ->row_array();
+        
+        // Id không có trong CSDL
+        if (empty($pair_id)){
+            return false;
+        }
+        
+        // Lấy value 'pair_id' và kiểm tra pair_id trống hay không
+        $pair_id = current($pair_id);
+
+        if (empty($pair_id)){
+            return array($id);
+        }
+        
+        // Trả về cặp id
+        return array_column($this->db->select('iorid')
+                                     ->where('pair_id', $pair_id)
+                                     ->get(self::TABLE)
+                                     ->result_array(),
+                           'iorid'
+                          );
     }
     
     /*
@@ -120,6 +157,30 @@ class Inout_model extends App_Model {
         }
         
         return self::$CASH_FLOW_NAMES[$type][1];
+    }
+    
+    public function getInoutTypeSign($type){
+        
+        if (is_string($type) && !is_numeric($type)){
+            
+            if (!isset(self::$CASH_FLOW_NAMES[$type])){
+                return false;
+            }
+            
+            return $this->getInoutTypeCode($type) == array_flip(self::$INOUT_TYPE)['Thu']
+                    ? '＋' : '―';
+        }
+        elseif (is_numeric($type)){
+
+        if (!isset(self::$INOUT_TYPE[$type])){
+                return false;
+            }
+            
+            return $type == array_flip(self::$INOUT_TYPE)['Thu']
+                    ? '＋' : '―';
+        }
+
+        return false;
     }
     
     public function getFixCategoryCode($type)

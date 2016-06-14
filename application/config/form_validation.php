@@ -23,6 +23,24 @@ $config = array(
             'label' => 'Số tiền',
             'rules' => 'required|is_natural_no_zero|xss_clean',
         ),
+        array(
+            'field' => 'memo',
+            'label' => 'Ghi chú',
+            'rules' => 'strip_tags',
+        ),
+    ),
+    
+    'inout/edit'=> array(
+        array(
+            'field' => 'amount',
+            'label' => 'Số tiền',
+            'rules' => 'required|is_natural_no_zero|xss_clean',
+        ),
+        array(
+            'field' => 'memo',
+            'label' => 'Ghi chú',
+            'rules' => 'strip_tags',
+        ),
     ),
 );
 

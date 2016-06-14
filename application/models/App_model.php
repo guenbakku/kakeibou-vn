@@ -67,11 +67,11 @@ class App_model extends CI_Model {
                 return false;
         }
         
-        return array_gen_key(
+        return array_column(
                         $this->db->select($select)
                                  ->get($table)->result_array(), 
-                        $select[0], 
-                        $select[1]
+                        $select[1],
+                        $select[0] 
                     );
     }
 }
