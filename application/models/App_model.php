@@ -63,6 +63,9 @@ class App_model extends CI_Model {
                 $this->db->where('inout_type_id', $option);
                 $this->db->where('restrict_delete', '0');
                 break;
+            case 'yearsInDB': 
+                $yearList = $this->getYearsListInDB();
+                return array_combine($yearList, $yearList);
             default:
                 return false;
         }
@@ -73,5 +76,25 @@ class App_model extends CI_Model {
                         $select[1],
                         $select[0] 
                     );
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Lấy danh sách tất cả năm có trong table inout_record
+     * 
+     * @param   void
+     * @return  array
+     *--------------------------------------------------------------------
+     */
+    public function getYearsListInDB()
+    {
+        $table = 'inout_records';
+        $range = $this->db->select("DATE_FORMAT(MIN(`date`), '%Y') as `min`, 
+                                    DATE_FORMAT(MAX(`date`), '%Y') as `max`", false)
+                          ->get($table)->row_array();
+                          
+        return $full_list = array_map(function($year){
+                    return sprintf('%04d', $year);
+               }, range($range['min'], $range['max']));
     }
 }

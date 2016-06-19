@@ -23,12 +23,10 @@ function array_gen_key($arr=null, $key=null, $val=null){
     // Kiểm tra sự tồn tại của colum trong array
     $first_item = reset($arr);
     if (!isset($first_item[$key]) || !is_string($first_item[$key])){
-        trigger_error('Key column khong ton tai! Function: '.__FUNCTION__);
-        return false;
+        return $arr;
     }
     if ($val !== null && !isset($first_item[$val])){
-        trigger_error('Value column khong ton tai! Function: '.__FUNCTION__);
-        return false;
+        return $arr;
     }
     
     $new_arr = array();

@@ -20,7 +20,7 @@
                 </span>
                 <span class="w20">
                     10,000,000<br>
-                    <span class="btn btn-info btn-xs">Bách</span><br>
+                    <span class="label label-info">Bách</span><br>
                 </span>
             </a>
             <!-- Item -->
@@ -32,7 +32,7 @@
                 </span>
                 <span class="w20">
                     10,000,000<br>
-                    <span class="btn btn-warning btn-xs">Hiệp</span><br>
+                    <span class="label label-warning">Hiệp</span><br>
                 </span>
             </a>
         </div>

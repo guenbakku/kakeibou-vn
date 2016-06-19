@@ -48,3 +48,8 @@
 .text-blue {
     color: #0000ff;
 }
+
+.table-center th,
+.table-center td{
+    text-align: center;
+}

@@ -8,10 +8,10 @@ class Inout_model extends App_Model {
     // ID của Account Tiền mặt trong Table Categories (chú ý kiểu String)
     const ACCOUNT_CASH_ID = '1'; 
     
-    // Mốc đánh dấu ID bắt đầu của category fix (không xóa được)
+    // Mốc đánh dấu ID bắt đầu của category fix
     const FIX_CATEGORY_ID_MAX = '20';
     
-    static public $INOUT_TYPE = array(
+    public static $INOUT_TYPE = array(
         1 => 'Thu',
         2 => 'Chi',
     );
@@ -22,7 +22,7 @@ class Inout_model extends App_Model {
     //      Phân loại khoản thu chi (nếu là 1 pair thu chi thì là của item đầu tiên)
     //      ID của Category đại diện (nếu là 1 pair thu chi thì là của item đầu tiên, nếu 0: không có Category đại diện)
     // Nếu trong pair có 1 item là tài khoản ngân hàng thì mặc định đó là item đầu tiên
-    static public $CASH_FLOW_NAMES = array(
+    public static $CASH_FLOW_NAMES = array(
         'outgo'     => array('Thêm mới khoản chi', 2, 0),
         'income'    => array('Thêm mới khoản thu', 1, 0),
         'drawer'    => array('Rút tiền từ tài khoản', 2, 1),

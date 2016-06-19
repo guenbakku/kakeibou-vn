@@ -4,7 +4,6 @@ if (in_array($type, array('drawer', 'deposit'))){
 }
 
 // Thêm thuộc tính disabled cho input/select nếu dữ liệu sửa là dữ liệu pair
-
 $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
 ?>
 
