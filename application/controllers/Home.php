@@ -7,7 +7,7 @@ class Home extends CI_Controller {
     {   
         parent::__construct();
         if ($this->login_model->isLogin() === false){
-            redirect(base_url().'user/login');
+            redirect(base_url().Login_model::LOGIN_URL);
         }
     }
     

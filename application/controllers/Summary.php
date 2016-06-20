@@ -7,7 +7,7 @@ class Summary extends CI_Controller {
     {   
         parent::__construct();
         if ($this->login_model->isLogin() === false){
-            redirect(base_url().'login');
+            redirect($this->login_model->getLoginUrl());
         }
         
         $this->load->model('summary_model');

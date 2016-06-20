@@ -6,6 +6,7 @@ class Login_model extends App_Model {
     const TABLE        = 'users';
     const COOKIE_NAME  = 'bhcb_loginAuth';
     const SESSION_NAME = 'bhcb_loginAuth';
+    const LOGIN_URL    = 'user/login';
     
     public $dbInfo    = array(); // Thông tin login của User lấy từ DB
     
@@ -223,6 +224,19 @@ class Login_model extends App_Model {
         else {
             return false;
         }
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Trả về url đến trang đăng nhập
+     *
+     * @param   void
+     * @return  string
+     *--------------------------------------------------------------------
+     */
+    public function getLoginUrl()
+    {
+        return base_url().self::LOGIN_URL;
     }
     
 }

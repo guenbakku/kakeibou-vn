@@ -5,7 +5,7 @@ class User extends CI_Controller {
         
 	public function index()
     {   
-        redirect(base_url().'user/login');
+        redirect($this->login_model->getLoginUrl());
 	}
     
     public function login()
