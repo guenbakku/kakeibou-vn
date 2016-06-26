@@ -83,7 +83,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('template', 'array', 'url', 'form', 'security', 'string', 'number', 'date', 'currency', 'kint-0.9/kint');
+$autoload['helper'] = array('template', 'array', 'url', 'form', 'security', 'string', 'number', 'date', 'currency');
 
 /*
 | -------------------------------------------------------------------
