@@ -51,7 +51,9 @@
     color: #0000ff;
 }
 
-select, textarea, 
+select, 
+option,
+textarea,
 input[type="text"], 
 input[type="password"], 
 input[type="datetime"], 
@@ -67,4 +69,9 @@ input[type="search"],
 input[type="tel"], 
 input[type="color"] { 
     font-size: 16px; 
+}
+
+.form-group > select,
+.row > .col-xs-8 > select {
+    font-size: 16px;
 }
