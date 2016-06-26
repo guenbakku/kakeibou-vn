@@ -1,69 +1,76 @@
 <div class="container">
-    <div class="btn-group">
-        <a class="btn btn-default">Thu</a>
-        <a class="btn btn-default">Chi</a>
+    <h4 class="text-center"><?=$date?></h4>
+    <div class="well">
+        <?=form_open($form_url, array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
+            <div class="row">
+                <div class="col-xs-8">
+                    <?=form_dropdown(
+                        'account', 
+                        $select['accounts'] + array('0' => 'Thực thu chi'), 
+                        $account, 
+                        array(
+                            'class' => 'form-control',
+                        )
+                    )?>
+                </div>
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-sm">Xem</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                    <?=form_dropdown(
+                        'player', 
+                        $select['players'] + array('0' => 'Tất cả'), 
+                        $player, 
+                        array(
+                            'class' => 'form-control',
+                        )
+                    )?>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
-<br>
 
 <div class="container">
     <div class="panel panel-default">
-        <!-- Date -->
-        <div class="panel-heading"><strong>2016/04/09 (Thứ ba)</strong> <strong class="pull-right">1200</strong></div>
-        <div class="list-group">
-            <!-- Item -->
-            <a class="list-group-item" href="<?=base_url()?>inout/edit/1">
-                <span class="glyphicon glyphicon-menu-right pull-right"></span>
-                <span class="w60">
-                    <strong>Ăn uống</strong><br>
-                    <span class="small text-muted">Mua bánh mì cho lab</span>
-                </span>
-                <span class="w20">
-                    10,000,000<br>
-                    <span class="label label-info">Bách</span><br>
-                </span>
-            </a>
-            <!-- Item -->
-            <a class="list-group-item" href="<?=base_url()?>inout/edit/1">
-                <span class="glyphicon glyphicon-menu-right pull-right"></span>
-                <span class="w60">
-                    <strong>Ăn uống</strong><br>
-                    <span class="small text-muted">Mua bánh mì cho lab</span>
-                </span>
-                <span class="w20">
-                    10,000,000<br>
-                    <span class="label label-warning">Hiệp</span><br>
-                </span>
-            </a>
-        </div>
         
-        <!-- Date -->
-        <div class="panel-heading"><strong>2016/04/08 (Thứ hai)</strong> <strong class="pull-right">1200</strong></div>
-        <div class="list-group">
-            <!-- Item -->
-            <a class="list-group-item" href="<?=base_url()?>inout/edit/1">
-                <span class="glyphicon glyphicon-menu-right pull-right"></span>
-                <span class="w60">
-                    <strong>Ăn uống</strong><br>
-                    <span class="small text-muted">Mua bánh mì cho lab</span>
-                </span>
-                <span class="w20">
-                    10,000,000<br>
-                    <span class="btn btn-info btn-xs">Bách</span><br>
-                </span>
-            </a>
-            <!-- Item -->
-            <a class="list-group-item" href="<?=base_url()?>inout/edit/1">
-                <span class="glyphicon glyphicon-menu-right pull-right"></span>
-                <span class="w60">
-                    <strong>Ăn uống</strong><br>
-                    <span class="small text-muted">Mua bánh mì cho lab</span>
-                </span>
-                <span class="w20">
-                    10,000,000<br>
-                    <span class="btn btn-warning btn-xs">Hiệp</span><br>
-                </span>
-            </a>
-        </div>
+        <?php if ($total_items > 0): ?>
+            <?php for ($i=0; $i<$total_items; $i++): ?>
+                <?php if ($i==0 || $list[$i]['date'] != $list[$i-1]['date']): ?>
+                    <div class="panel-heading"><strong><?=$list[$i]['date']?> (<?=day_of_week($list[$i]['date'])?>)</strong></div>
+                    <div class="list-group">
+                <?php endif ?>
+                        <!-- Item -->
+                        <a class="list-group-item" href="<?=base_url()?>inout/edit/<?=$list[$i]['iorid']?>">
+                            <div style="padding-right:15px; position:absolute; right:0px">
+                                <span class="glyphicon glyphicon-menu-right"></span>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-7">
+                                    <div><?=$list[$i]['category']?></div>
+                                    <div class="small text-muted"><em><?=$list[$i]['memo']?></em></div>
+                                </div>
+                                <div class="col-xs-4 text-right">
+                                    <?php if ($list[$i]['inout_type']=='Thu'):?>
+                                        <div class="text-blue">+<?=$list[$i]['amount']?></div>
+                                    <?php else: ?>
+                                        <div class="text-red">-<?=$list[$i]['amount']?></div>
+                                    <?php endif ?>
+                                    <div class="label <?=$list[$i]['player_label']?>"><?=$list[$i]['player']?></div><br>
+                                </div>
+                            </div>
+                        </a>
+                <?php if ($i==0 || $list[$i]['date'] != $list[$i-1]['date']): ?>
+                    </div>
+                <?php endif ?>
+            <?php endfor ?>
+        <?php else: ?>
+            <div class="panel-body">
+                Không có dữ liệu
+            </div>
+        <?php endif ?>
+
     </div>
 </div>

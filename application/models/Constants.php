@@ -11,4 +11,6 @@ class Constants extends CI_Model {
     
     const SUCC_EDIT_INOUT_RECORD = 'Sửa ghi chép thành công';
     
+    const SUCC_DELETE_INOUT_RECORD = 'Xóa ghi chép thành công';
+    
 }

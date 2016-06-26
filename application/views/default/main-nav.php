@@ -5,9 +5,9 @@
 <nav class="navbar navbar-default">
     <div class="container" style="padding-left:0">
         <div class="navbtn-group" id="mainNav">
-            <a href="<?=base_url()?>home/"><span class="glyphicon glyphicon-home"></span></a>
-            <a href="<?=base_url()?>inout/">Thêm</a>
-            <a href="<?=base_url()?>summary/">Thống kê</a>
+            <a href="<?=base_url()?>"><span class="glyphicon glyphicon-home" style="padding:0 5px"></span></a>
+            <a href="<?=base_url()?>inout/"><span class="glyphicon glyphicon-edit" style="padding:0 5px"></a>
+            <a href="<?=base_url()?>summary/"><span class="glyphicon glyphicon-th-list" style="padding:0 5px"></span></a>
         </div>
         <?php if ($this->login_model->isLogin()):?>
             <span class="navbar-text pull-right">

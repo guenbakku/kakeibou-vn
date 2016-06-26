@@ -7,6 +7,17 @@ if (in_array($type, array('drawer', 'deposit'))){
 $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
 ?>
 
+<script type="text/javascript">
+    $(function(){
+        $('.del-record').click(function(evt){
+            evt.preventDefault();
+            if (confirm('Muốn xóa ghi chép này?')){
+                window.location.href = $(this).attr('href');
+            }
+        });
+    });
+</script>
+
 <?php echo form_open($form_url, array('id' => 'addCashFlow', 'class' => 'container'))?>
     <div class="panel panel-default">
         <div class="panel-heading"><strong><?=$title?></strong></div>
@@ -123,9 +134,8 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                 )?>
             </div>
             <button type="submit" class="btn btn-primary">Nhập</button>
-            <button type="button" class="btn btn-info" onclick="history.back();return false;">Lui</button>
             <?php if ($this->uri->segment(2) == 'edit'): ?>
-                <button type="button" class="btn btn-danger pull-right">Xóa</button>
+                <a type="button" class="btn btn-danger pull-right del-record" href="<?=$del_url?>">Xóa</a>
             <?php endif ?>
         </div>
     </div>

@@ -36,9 +36,50 @@ class Summary extends CI_Controller {
         $this->template->render();
 	}
     
-    public function detail()
+    public function detail($date)
     {
-		$this->template->write_view('MAIN', 'summary/detail');
+        // Tính giới hạn thời gian
+        $mdate = str_replace('-', '', $date);
+        if (preg_match('/^\d{8}$/', $mdate)){
+            $range = array(
+                $mdate, 
+                $mdate,
+            );
+        }
+        elseif (preg_match('/^\d{6}$/', $mdate)){
+            $range = array(
+                date('Y-m-d', strtotime("{$mdate}01")),
+                date('Y-m-t', strtotime("{$mdate}01")),
+            );
+        }
+        elseif (preg_match('/^\d{4}$/', $mdate)){
+            $range = array(
+                $mdate.'0101',
+                $mdate.'1231',
+            );
+        }
+        else {
+            show_error(Constants::ERR_BAD_REQUEST);
+        }
+        
+        // Lấy thông tin về tài khoản và loại thu chi
+        $account = $this->input->get('account');
+        $player  = $this->input->get('player');
+        if ($account === null) $account = 1;
+        if ($player === null) $player = $this->login_model->getInfo('uid');
+        
+        $view_data['date'] = $date;
+        $view_data['list'] = $this->summary_model->getDailyList($range[0], $range[1], $account, $player);
+        $view_data['account'] = $account;
+        $view_data['player']  = $player;
+        $view_data['total_items'] = count($view_data['list']);
+        $view_data['form_url'] = my_site_url(__CLASS__, __FUNCTION__, $date);
+        $view_data['select']   = array(
+            'accounts' => $this->app_model->getSelectTagData('account_id'),
+            'players'  => $this->app_model->getSelectTagData('user_id'),
+        );
+        
+		$this->template->write_view('MAIN', 'summary/detail', $view_data);
         $this->template->render();
     }
     

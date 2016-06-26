@@ -36,13 +36,39 @@ class Inout_model extends App_Model {
         $this->load->database('default');
     }
     
+    public function get($id)
+    {
+        return $this->db->where('iorid', $id)
+                        ->limit(1)
+                        ->get(self::TABLE)
+                        ->row_array();
+    }
+    
     public function add($type, $data)
     {
+        $this->db->trans_start();
         foreach ($this->setPairAddData($type, $data) as $item){
             $this->db->insert(self::TABLE, $item);
         }
-        
-        return true;
+        $this->db->trans_complete();
+    }
+    
+    public function edit($id, $data)
+    {
+        $this->db->trans_start();
+        foreach ($this->getPairId($id) as $item){
+            $this->db->where('iorid', $item)->update(self::TABLE, $data);
+        }
+        $this->db->trans_complete();
+    }
+    
+    public function del($id)
+    {
+        $this->db->trans_start();
+        foreach ($this->getPairId($id) as $item){
+            $this->db->where('iorid', $item)->delete(self::TABLE);
+        }
+        $this->db->trans_complete();
     }
 
     private function setPairAddData($type, $data)
@@ -76,15 +102,6 @@ class Inout_model extends App_Model {
         }
         
         return $pair;
-    }
-    
-    public function edit($id, $data)
-    {
-        foreach ($this->getPairId($id) as $item){
-            $this->db->where('iorid', $item)->update(self::TABLE, $data);
-        }
-        
-        return true;
     }
     
     private function getPairId($id)
@@ -161,23 +178,23 @@ class Inout_model extends App_Model {
     
     public function getInoutTypeSign($type){
         
-        if (is_string($type) && !is_numeric($type)){
+        if (!is_numeric($type) && is_string($type)){
             
             if (!isset(self::$CASH_FLOW_NAMES[$type])){
                 return false;
             }
             
             return $this->getInoutTypeCode($type) == array_flip(self::$INOUT_TYPE)['Thu']
-                    ? '＋' : '―';
+                    ? '+' : '-';
         }
         elseif (is_numeric($type)){
 
-        if (!isset(self::$INOUT_TYPE[$type])){
+            if (!isset(self::$INOUT_TYPE[$type])){
                 return false;
             }
             
             return $type == array_flip(self::$INOUT_TYPE)['Thu']
-                    ? '＋' : '―';
+                    ? '+' : '-';
         }
 
         return false;

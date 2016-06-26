@@ -66,10 +66,7 @@ class Inout extends CI_Controller {
             show_error(Constants::ERR_BAD_REQUEST);
         }
         
-        $ioRecord = $this->inout_model->db->where('iorid', $id)
-                                          ->limit(1)
-                                          ->get(Inout_model::TABLE)
-                                          ->row_array();
+        $ioRecord = $this->inout_model->get($id);
         
         if (empty($ioRecord)){
             show_error(Constants::ERR_NOT_FOUND);
@@ -88,7 +85,11 @@ class Inout extends CI_Controller {
                 $this->inout_model->edit($id, $this->input->post());
                 
                 $this->flash->success(Constants::SUCC_EDIT_INOUT_RECORD);
-                redirect(base_url());
+                
+                // Redirect tới danh sách detail (được ghi trong $_GET['goto'])
+                $goto = base64_decode($this->input->get('goto'));
+                if ($goto == null) $goto = base_url();
+                redirect($goto);
                 exit();
             }
             catch (Exception $e){
@@ -100,12 +101,16 @@ class Inout extends CI_Controller {
             $ioRecord['player'] = $this->inout_model->setPlayersForHandoverEdit($ioRecord);
         }
         
+        // Lấy link HTTP_REFERER
+        $http_referer = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : null;
+        
         $_POST = $ioRecord;
         $type = $ioRecord['cash_flow'];
         $view_data                    = $ioRecord;
         $view_data['type']            = $type;
         $view_data['title']           = 'Chỉnh sửa';
-        $view_data['form_url']        = base_url()."inout/edit/".$id;
+        $view_data['form_url']        = base_url()."inout/edit/".$id."?goto=".base64_encode($http_referer);
+        $view_data['del_url']        = base_url()."inout/del/".$id."?goto=".base64_encode($http_referer);
         $view_data['inout_type_sign'] = $this->inout_model->getInoutTypeSign($ioRecord['inout_type_id']);
         $view_data['select']   = array(
             'accounts'   => $this->app_model->getSelectTagData('account_id'),
@@ -115,6 +120,22 @@ class Inout extends CI_Controller {
         
 		$this->template->write_view('MAIN', 'inout/form', $view_data);
         $this->template->render();
+    }
+    
+    public function del($id=null)
+    {
+        if (!is_numeric($id)){
+            show_error(Constants::ERR_BAD_REQUEST);
+        }
+        
+        $this->inout_model->del($id);
+        
+        $this->flash->success(Constants::SUCC_DELETE_INOUT_RECORD);
+        
+        // Redirect tới danh sách detail (được ghi trong $_GET['goto'])
+        $goto = base64_decode($this->input->get('goto'));
+        if ($goto == null) $goto = base_url();
+        redirect($goto);
     }
     
 }

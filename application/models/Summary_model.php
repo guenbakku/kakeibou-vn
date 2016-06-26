@@ -52,7 +52,8 @@ class Summary_model extends Inout_Model {
                                SUM(CASE WHEN `inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`
                         FROM `inout_records`
                         WHERE DATE_FORMAT(`date`, '{$date_format_string}') >= '{$min_date}' 
-                              AND DATE_FORMAT(`date`, '{$date_format_string}') <= '{$max_date}' AND `pair_id` = ''
+                              AND DATE_FORMAT(`date`, '{$date_format_string}') <= '{$max_date}' 
+                              AND `pair_id` = ''
                         GROUP BY DATE_FORMAT(`date`, '{$date_format_string}')
                      ) AS t";
         
@@ -78,6 +79,52 @@ class Summary_model extends Inout_Model {
         }
         
         return $full_list;
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Lấy dữ liệu thu, chi theo từng ngày trong khoảng thời gian từ from -> to
+     *
+     * @param   string  : 'yyyy-mm-dd'
+     * @param   string  : 'yyyy-mm-dd'
+     * @param   int     
+     * @param   int     : số quy định trong dữ liệu, nếu là 0 -> tất cả account
+     *--------------------------------------------------------------------
+     */
+    public function getDailyList($from, $to, $account, $player)
+    {
+        $sql['SELECT']   = "SELECT `inout_records`.`iorid`,
+                                   `inout_records`.`amount`,
+                                   `inout_records`.`memo`,
+                                   `inout_records`.`date`,
+                                   `inout_types`.`name` as `inout_type`,
+                                   `accounts`.`name` as `account`, 
+                                   `categories`.`name` as `category`,
+                                   `users`.`fullname` as `player`,
+                                   `users`.`label` as `player_label` ";
+        $sql['FROM']     = "FROM `inout_records` ";
+        $sql['JOINT']    = "JOIN `accounts` ON `accounts`.`aid` = `inout_records`.`account_id`
+                            JOIN `inout_types` ON `inout_types`.`iotid` = `inout_records`.`inout_type_id`
+                            JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id`
+                            JOIN `users` ON `users`.`uid` = `inout_records`.`player` ";
+        $sql['WHERE']    = "WHERE `inout_records`.`date` >= '{$from}' 
+                              AND `inout_records`.`date` <= '{$to}' ";
+        $sql['ORDER_BY'] = "ORDER BY `inout_records`.`date` ASC, 
+                                     `inout_records`.`inout_type_id` ASC, 
+                                     `inout_records`.`created_on` ASC ";
+        
+        if ($account > 0){
+            $sql['WHERE'] .= "AND `inout_records`.`account_id` = '{$account}' ";
+        }
+        else {
+            $sql['WHERE'] .= "AND `pair_id` = ''";
+        }
+        
+        if ($player > 0){
+            $sql['WHERE'] .= "AND `inout_records`.`player` = '{$player}' " ;
+        }
+        
+        return $this->db->query(implode(' ', $sql))->result_array(); 
     }
     
 }

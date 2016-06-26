@@ -57,6 +57,10 @@ class App_model extends CI_Model {
                 $select = array('uid', 'fullname');
                 $table  = 'users';
                 break;
+            case 'inout_type_id':
+                $select = array('iotid', 'name');
+                $table  = 'inout_types';
+                break;
             case 'category_id':
                 $select = array('cid', 'name');
                 $table  = 'categories';
@@ -72,6 +76,7 @@ class App_model extends CI_Model {
         
         return array_column(
                         $this->db->select($select)
+                                 ->order_by($select[0], 'asc')
                                  ->get($table)->result_array(), 
                         $select[1],
                         $select[0] 
