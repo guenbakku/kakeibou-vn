@@ -8,21 +8,23 @@ $(function(){
 
 <div class="container">
     <div class="panel panel-default">
-        <a class="panel-heading" href="<?=base_url()?>summary/recordSummary" style="display:block"><strong><span class="glyphicon glyphicon-menu-right pull-right"></span> Thu chi trong tháng</strong></a>
-        <table class="table">
+        <a class="panel-heading" href="<?=base_url()?>summary/viewlist" style="display:block">
+            <strong><span class="glyphicon glyphicon-menu-right pull-right"></span> Thu chi trong tháng (<?=date('Y-m')?>)</strong>
+        </a>
+        <table class="table table-bordered">
             <tr>
-                <td style="width:33.3%">Thu</td>
-                <td style="width:33.3%">Chi</td>
-                <td style="width:33.3%">Chênh lệch</td>
+                <th style="width:33.3%" class="text-center">Thu</th>
+                <th style="width:33.3%" class="text-center">Chi</th>
+                <th style="width:33.3%" class="text-center">Chênh lệch</th>
             </tr>
             <tr>
-                <td>20,000</td>
-                <td>10,000</td>
-                <td>10,000</td>
+                <td class="text-right"><?=currency($month_sum['thu'])?></td>
+                <td class="text-right"><?=currency($month_sum['chi'])?></td>
+                <td class="text-right"><?=currency($month_sum['tong'])?></td>
             </tr>
             <tr>
-                <th colspan="2">Mỗi ngày có thể tiêu:</th>
-                <th>1,500</th>
+                <th colspan="2" class="text-center">Mỗi ngày có thể tiêu:</th>
+                <td class="text-right"><?=currency($day_available_outgo)?></td>
             </tr>
         </table>
     </div>
@@ -30,29 +32,14 @@ $(function(){
 
 <div class="container">
     <div class="panel panel-default">
-        <div class="panel-heading"><strong>Còn lại</strong></div>
-        <table class="table">
-            <tr class="toggle">
-                <td>Tiền mặt</td>
-                <td style="width:40%">10,000,000 <span class="glyphicon glyphicon-triangle-bottom pull-right"></span></td>
-            </tr>
-            <tr class="toggle-target hide">
-                <td><span class="glyphicon glyphicon-arrow-right" style="padding-left:30px"></span> Bách</td>
-                <td>10,000</td>
-            </tr>
-            <tr class="toggle-target hide">
-                <td><span class="glyphicon glyphicon-arrow-right" style="padding-left:30px"></span> Hiệp</td>
-                <td>10,000</td>
-            </tr>
+        <div class="panel-heading"><strong>Tổng tiền còn lại</strong></div>
+        <table class="table table-bordered">
+            <?php foreach ($remaining as $k => $v): ?>
             <tr>
-                <td>Tài khoản</td>
-                <td>10,000</td>
+                <th><?=$k?></th>
+                <td style="width:33.3%" class="text-right"><?=currency($v)?></td>
             </tr>
-            <tr>
-                <th>Tổng cộng</th>
-                <th>10,000</th>
-            </tr>
+            <?php endforeach ?>
         </table>
     </div>
 </div>
-

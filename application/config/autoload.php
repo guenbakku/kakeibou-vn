@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('template');
+$autoload['libraries'] = array('template', 'flash');
 
 /*
 | -------------------------------------------------------------------
@@ -83,7 +83,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('template', 'url', 'form', 'security', 'string', 'number', 'date', 'kint-0.9/kint');
+$autoload['helper'] = array('template', 'array', 'url', 'form', 'security', 'string', 'number', 'date', 'currency');
 
 /*
 | -------------------------------------------------------------------
@@ -126,4 +126,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('login_model');
+$autoload['model'] = array('constants', 'app_model', 'setting_model', 'login_model', 'inout_model', 'summary_model');
