@@ -17,7 +17,6 @@ $APP_URL  = 'http://'.$DOMAIN.$APP_PATH;
 $files = array(
     '../.htaccess',
     '../index.php',
-    '../application/config/config.php',
     '../application/config/database.php',
     '../application/config/database.php',
     '../application/config/database.php',
@@ -28,7 +27,6 @@ $files = array(
 $patterns = array(
     "#RewriteBase (.*)#",
     "#'BASEURL', '(.*)'#",
-    "#\['cookie_domain'\].*=.*'(.*)'#",
     "#'database'.*=>.*'(.*)'#",
     "#'username'.*=>.*'(.*)'#",
     "#'password'.*=>.*'(.*)'#",
@@ -39,7 +37,6 @@ $patterns = array(
 $replaces = array(
     $APP_PATH,
     $APP_URL,
-    $DOMAIN=='localhost'? '' : '.nvb-online.com',
     'nvb-online_kakeibou',
     'nvb-online',
     'matkhauMYSQL'
