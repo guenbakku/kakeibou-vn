@@ -104,6 +104,7 @@ class Inout extends CI_Controller {
         // Lấy link HTTP_REFERER
         $http_referer = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : null;
         
+        $ioRecord['amount'] = abs($ioRecord['amount']);
         $_POST = $ioRecord;
         $type = $ioRecord['cash_flow'];
         $view_data                    = $ioRecord;
