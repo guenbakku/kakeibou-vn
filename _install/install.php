@@ -18,6 +18,9 @@ $files = array(
     '../.htaccess',
     '../index.php',
     '../application/config/config.php',
+    '../application/config/database.php',
+    '../application/config/database.php',
+    '../application/config/database.php',
 );
 
 // Những chỗ cần thay đổi trong từng file.
@@ -26,6 +29,9 @@ $patterns = array(
     "#RewriteBase (.*)#",
     "#'BASEURL', '(.*)'#",
     "#\['cookie_domain'\].*=.*'(.*)'#",
+    "#'database'.*=>.*'(.*)'#",
+    "#'username'.*=>.*'(.*)'#",
+    "#'password'.*=>.*'(.*)'#",
 ); 
 
 // Nội dung muốn thay đổi
@@ -34,6 +40,9 @@ $replaces = array(
     $APP_PATH,
     $APP_URL,
     $DOMAIN=='localhost'? '' : '.nvb-online.com',
+    'nvb-online_kakeibou',
+    'nvb-online',
+    'matkhauMYSQL'
 );
 
 if (count($files) != count($patterns) || count($files) != count($replaces)){
