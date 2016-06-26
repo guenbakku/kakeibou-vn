@@ -61,11 +61,11 @@
                     <div class="col-xs-11">
                         <div class="row">
                             <div class="col-xs-6"><span class="label label-default"><?=$k?></span></div>
-                            <div class="col-xs-6 text-right text-blue">+<?=number_format($v['thu'])?></div>
+                            <div class="col-xs-6 text-right text-blue"><?=currency($v['thu'])?></div>
                         </div>
                         <div class="row">
-                            <div class="col-xs-6"><?=number_format($v['tong'])?></div>
-                            <div class="col-xs-6 text-right text-red">-<?=number_format($v['chi'])?></div>
+                            <div class="col-xs-6"><?=currency($v['tong'])?></div>
+                            <div class="col-xs-6 text-right text-red"><?=currency($v['chi'])?></div>
                         </div>
                     </div>
                 </div>

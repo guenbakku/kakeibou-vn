@@ -10,7 +10,7 @@ class Summary_model extends Inout_Model {
             date('Y-m-t', strtotime("{$year}-{$month}-01"))
         );
        
-        $db_list = $this->getListFromDB('%Y-%m-%d', $range[0], $range[1]);
+        $db_list = $this->getSumListFromDB('%Y-%m-%d', $range[0], $range[1]);
         
         $full_list_keys = date_range($range[0], $range[1]);
         
@@ -25,7 +25,7 @@ class Summary_model extends Inout_Model {
             date('Y-12', strtotime("{$year}-12"))
         );
 
-        $db_list = $this->getListFromDB('%Y-%m', $range[0], $range[1]);
+        $db_list = $this->getSumListFromDB('%Y-%m', $range[0], $range[1]);
         
         $full_list_keys = array_map(function($month) use($year){
             return sprintf('%04d-%02d', $year, $month);
@@ -38,47 +38,9 @@ class Summary_model extends Inout_Model {
     {
         $full_list_keys = self::getYearsListInDB();
                 
-        $db_list = $this->getListFromDB('%Y', $full_list_keys[0], $full_list_keys[count($full_list_keys)-1]);
+        $db_list = $this->getSumListFromDB('%Y', $full_list_keys[0], $full_list_keys[count($full_list_keys)-1]);
         
         return array_reverse($this->combineList($full_list_keys, $db_list), true);
-    }
-    
-    private function getListFromDB($date_format_string, $min_date, $max_date)
-    {
-        $sql = "SELECT `key`, `thu`, `chi`, (`thu` - `chi`) AS `tong`
-                FROM (
-                        SELECT DATE_FORMAT(`date`, '{$date_format_string}') as `key`, 
-                               SUM(CASE WHEN `inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
-                               SUM(CASE WHEN `inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`
-                        FROM `inout_records`
-                        WHERE DATE_FORMAT(`date`, '{$date_format_string}') >= '{$min_date}' 
-                              AND DATE_FORMAT(`date`, '{$date_format_string}') <= '{$max_date}' 
-                              AND `pair_id` = ''
-                        GROUP BY DATE_FORMAT(`date`, '{$date_format_string}')
-                     ) AS t";
-        
-        return $this->db->query($sql)->result_array(); 
-    }
-    
-    private function combineList($full_list_keys=array(), $db_list=array())
-    {
-        $empty_item = array('tong' => 0, 'thu' => 0, 'chi' => 0, 'empty' => true);
-        $full_list = array();
-        
-        foreach ($full_list_keys as $k){
-            $item = current($db_list);
-            if ($k == $item['key']){
-                unset($item['key']);
-                $item['empty'] = false;
-                $full_list[$k] = $item;
-                next($db_list);
-            }
-            else {
-                $full_list[$k] = $empty_item;
-            }
-        }
-        
-        return $full_list;
     }
     
     /*
@@ -125,6 +87,107 @@ class Summary_model extends Inout_Model {
         }
         
         return $this->db->query(implode(' ', $sql))->result_array(); 
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Tính số tổng tiền còn lại tính đến hiện tại theo Tiền mặt, Tài khoản, Tổng cộng
+     *
+     *--------------------------------------------------------------------
+     */
+    public function getRemaining()
+    {
+        $sql = sprintf("SELECT SUM(`inout_records`.`amount`) as `amount`,
+                               `inout_records`.`account_id`,
+                               `accounts`.`name` as `account`, 
+                               `users`.`fullname` as `player`
+                        FROM `%s` 
+                        JOIN `accounts` ON `accounts`.`aid` = `inout_records`.`account_id`
+                        JOIN `users` ON `users`.`uid` = `inout_records`.`player`
+                        GROUP BY `account_id`, `player`
+                        ORDER BY `account_id` ASC, `player` ASC", self::TABLE);
+                        
+        $data = $this->db->query($sql)->result_array()  ; 
+        
+        $combine_data = array();
+        $total = 0;
+        foreach ($data as $i => $item){
+            $total += $item['amount'];
+            if ($item['account_id'] == 1){
+                $combine_data[$item['player']] = $item['amount'];
+            }
+            else {
+                @$combine_data[$item['account']] += $item['amount'];
+            }
+        }
+        
+        $combine_data['Tổng cộng'] = $total;
+        
+        return $combine_data;
+    }
+    
+    public function getDayAvailableOutgo($currentOutgo)
+    {
+        $month_outgo_plans = current($this->setting_model->get('month_outgo_plans', 'value'));
+        $remaining_days = days_in_month(date('m')) - date('d') + 1;
+        return floor(($month_outgo_plans - $currentOutgo)/$remaining_days);
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Lấy danh sách tổng, thu, chi trong một khoảng thời gian
+     *
+     * @param   string  : format date dùng trong SQL WHERE & GROUP
+     * @param   string  : min date
+     * @param   string  : max date
+     * @return  array 
+     *--------------------------------------------------------------------
+     */
+    public function getSumListFromDB($date_format_string, $min_date, $max_date)
+    {
+        $sql = "SELECT `key`, `thu`, `chi`, (`thu` + `chi`) AS `tong`
+                FROM (
+                        SELECT DATE_FORMAT(`date`, '{$date_format_string}') as `key`, 
+                               SUM(CASE WHEN `inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
+                               SUM(CASE WHEN `inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`
+                        FROM `inout_records`
+                        WHERE DATE_FORMAT(`date`, '{$date_format_string}') >= '{$min_date}' 
+                              AND DATE_FORMAT(`date`, '{$date_format_string}') <= '{$max_date}' 
+                              AND `pair_id` = ''
+                        GROUP BY DATE_FORMAT(`date`, '{$date_format_string}')
+                     ) AS t";
+        
+        return $this->db->query($sql)->result_array(); 
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Gắn từng item từ List (lấy từ CSDL) vào danh sách thời gian đầy đủ
+     *
+     * @param   array   : danh sách thời gian đầy đủ
+     * @param   array   : list lấy từ CSDL
+     * @return  array   : full list sau khi gắn dữ liệu
+     *--------------------------------------------------------------------
+     */
+    private function combineList($full_list_keys=array(), $db_list=array())
+    {
+        $empty_item = array('tong' => 0, 'thu' => 0, 'chi' => 0, 'empty' => true);
+        $full_list = array();
+        
+        foreach ($full_list_keys as $k){
+            $item = current($db_list);
+            if ($k == $item['key']){
+                unset($item['key']);
+                $item['empty'] = false;
+                $full_list[$k] = $item;
+                next($db_list);
+            }
+            else {
+                $full_list[$k] = $empty_item;
+            }
+        }
+        
+        return $full_list;
     }
     
 }

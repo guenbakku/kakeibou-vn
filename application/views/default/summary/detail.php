@@ -53,11 +53,7 @@
                                     <div class="small text-muted"><em><?=$list[$i]['memo']?></em></div>
                                 </div>
                                 <div class="col-xs-4 text-right">
-                                    <?php if ($list[$i]['inout_type']=='Thu'):?>
-                                        <div class="text-blue">+<?=number_format($list[$i]['amount'])?></div>
-                                    <?php else: ?>
-                                        <div class="text-red">-<?=number_format($list[$i]['amount'])?></div>
-                                    <?php endif ?>
+                                    <div class="<?=$list[$i]['inout_type']=='Thu'? 'text-blue' : 'text-red'?>"><?=currency($list[$i]['amount'])?></div>
                                     <div class="label <?=$list[$i]['player_label']?>"><?=$list[$i]['player']?></div><br>
                                 </div>
                             </div>

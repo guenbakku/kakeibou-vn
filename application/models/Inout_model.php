@@ -79,6 +79,7 @@ class Inout_model extends App_Model {
         $data['inout_type_id'] = $this->getInoutTypeCode($type);
         
         $pair[0] = $data;
+        $pair[0]['amount']  = $data['inout_type_id']==1? $pair[0]['amount'] : 0-$pair[0]['amount'];
         
         // Không phải loại theo tác tạo ra pair dữ liệu
         if (in_array($type, array('outgo', 'income'))){
@@ -88,6 +89,7 @@ class Inout_model extends App_Model {
         // Tạo pair dữ liệu
         $pair[1] = $pair[0];
         $pair[0]['pair_id'] = $pair[1]['pair_id'] = random_string('unique');
+        $pair[1]['amount']  = 0 - $pair[0]['amount'];
         $pair[1]['inout_type_id'] = 3 - $pair[0]['inout_type_id'];
         $pair[0]['category_id'] = $this->getFixCategoryCode($type);
         $pair[1]['category_id'] = $pair[0]['category_id']+1;
