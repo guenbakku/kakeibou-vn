@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2016 年 6 月 26 日 17:50
+-- Generation Time: 2016 年 6 月 26 日 23:05
 -- サーバのバージョン： 5.6.30
 -- PHP Version: 7.0.6
 
@@ -107,8 +107,14 @@ INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `bottle_id`, `
 (22, 'Đi lại', 0, 2, 0, 0),
 (23, 'Giải trí', 0, 2, 0, 0),
 (24, 'Góp tiền hàng tháng', 0, 1, 0, 0),
-(25, 'Khác', 0, 2, 0, 0),
-(26, 'Khác', 0, 1, 0, 0);
+(25, 'Điện, nước, gas, internet', 0, 2, 0, 0),
+(26, 'Khác', 0, 1, 0, 0),
+(27, 'Đồ gia dụng lặt vặt', 0, 2, 0, 0),
+(28, 'Trả thẻ credit', 0, 2, 0, 0),
+(29, 'Áo quần, giày dép', 0, 2, 0, 0),
+(30, 'Điện thoại', 0, 2, 0, 0),
+(31, 'Bảo hiểm', 0, 2, 0, 0),
+(32, 'Khác', 0, 2, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -136,15 +142,8 @@ CREATE TABLE `inout_records` (
 --
 
 INSERT INTO `inout_records` (`iorid`, `inout_type_id`, `account_id`, `category_id`, `pair_id`, `player`, `cash_flow`, `amount`, `memo`, `date`, `created_on`, `created_by`) VALUES
-(1, 2, 1, 21, '', 2, 'outgo', -10000, '', '2016-06-26', '2016-06-26 15:20:16', 2),
-(2, 1, 2, 3, '490ca58a974f4925347e7484b1c05049', 2, 'deposit', 5000, '', '2016-06-26', '2016-06-26 15:20:30', 2),
-(3, 2, 1, 4, '490ca58a974f4925347e7484b1c05049', 2, 'deposit', -5000, '', '2016-06-26', '2016-06-26 15:20:30', 2),
-(4, 1, 1, 24, '', 1, 'income', 5000, '', '2016-06-26', '2016-06-26 15:47:15', 2),
-(5, 2, 2, 1, 'b3f51eb0e13a3ce9e520c2960104c687', 2, 'drawer', -10000, '', '2016-06-26', '2016-06-26 16:41:16', 2),
-(6, 1, 1, 2, 'b3f51eb0e13a3ce9e520c2960104c687', 2, 'drawer', 10000, '', '2016-06-26', '2016-06-26 16:41:16', 2),
-(7, 2, 2, 1, '02686317605a218c0d2c1a8136bd3c48', 2, 'drawer', -10000, '', '2016-06-26', '2016-06-26 16:41:40', 2),
-(8, 1, 1, 2, '02686317605a218c0d2c1a8136bd3c48', 2, 'drawer', 10000, '', '2016-06-26', '2016-06-26 16:41:40', 2),
-(9, 2, 1, 21, '', 2, 'outgo', -40000, '', '2016-06-26', '2016-06-26 16:42:39', 2);
+(10, 2, 2, 1, 'b4e694822c2f757e0f4f8175e82ec147', 2, 'drawer', -30000, '', '2016-06-26', '2016-06-26 22:43:58', 2),
+(11, 1, 1, 2, 'b4e694822c2f757e0f4f8175e82ec147', 2, 'drawer', -30000, '', '2016-06-26', '2016-06-26 22:43:58', 2);
 
 -- --------------------------------------------------------
 
@@ -288,12 +287,12 @@ ALTER TABLE `bottles`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `cid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `cid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT for table `inout_records`
 --
 ALTER TABLE `inout_records`
-  MODIFY `iorid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `iorid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `inout_types`
 --
