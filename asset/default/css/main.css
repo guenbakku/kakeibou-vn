@@ -52,7 +52,6 @@
 }
 
 select, 
-option,
 textarea,
 input[type="text"], 
 input[type="password"], 
@@ -72,6 +71,17 @@ input[type="color"] {
 }
 
 .form-group > select,
-.row > .col-xs-8 > select {
+.row > .col-xs-1 > select,
+.row > .col-xs-2 > select,
+.row > .col-xs-3 > select,
+.row > .col-xs-4 > select,
+.row > .col-xs-5 > select,
+.row > .col-xs-6 > select,
+.row > .col-xs-7 > select,
+.row > .col-xs-8 > select,
+.row > .col-xs-9 > select,
+.row > .col-xs-10 > select,
+.row > .col-xs-11 > select,
+.row > .col-xs-12 > select{
     font-size: 16px;
 }
