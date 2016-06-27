@@ -17,9 +17,11 @@ $APP_URL  = 'http://'.$DOMAIN.$APP_PATH;
 $files = array(
     '../.htaccess',
     '../index.php',
+    '../index.php',
     '../application/config/database.php',
     '../application/config/database.php',
     '../application/config/database.php',
+    '../application/config/autoload.php',
 );
 
 // Những chỗ cần thay đổi trong từng file.
@@ -27,9 +29,11 @@ $files = array(
 $patterns = array(
     "#RewriteBase (.*)#",
     "#'BASEURL', '(.*)'#",
+    "#'ENVIRONMENT'.*'(development)#",
     "#'database'.*=>.*'(.*)'#",
     "#'username'.*=>.*'(.*)'#",
     "#'password'.*=>.*'(.*)'#",
+    "#(,\s+'kint-0.9/kint')#",
 ); 
 
 // Nội dung muốn thay đổi
@@ -37,9 +41,11 @@ $patterns = array(
 $replaces = array(
     $APP_PATH,
     $APP_URL,
+    'production',
     'nvb-online_kakeibou',
     'nvb-online',
-    'matkhauMYSQL'
+    'matkhauMYSQL',
+    '',
 );
 
 if (count($files) != count($patterns) || count($files) != count($replaces)){

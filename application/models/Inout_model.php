@@ -23,11 +23,11 @@ class Inout_model extends App_Model {
     //      ID của Category đại diện (nếu là 1 pair thu chi thì là của item đầu tiên, nếu 0: không có Category đại diện)
     // Nếu trong pair có 1 item là tài khoản ngân hàng thì mặc định đó là item đầu tiên
     public static $CASH_FLOW_NAMES = array(
-        'outgo'     => array('Thêm mới khoản chi', 2, 0),
-        'income'    => array('Thêm mới khoản thu', 1, 0),
-        'drawer'    => array('Rút tiền từ tài khoản', 2, 1),
-        'deposit'   => array('Nạp tiền vô tài khoản', 1, 3),
-        'handover'  => array('Chuyển tiền qua tay', 2, 5),
+        'outgo'     => array('Thêm thực chi', 2, 0),
+        'income'    => array('Thêm thực thu', 1, 0),
+        'drawer'    => array('Rút tiền từ tài khoản*', 2, 1),
+        'deposit'   => array('Nạp tiền vô tài khoản*', 1, 3),
+        'handover'  => array('Chuyển tiền qua tay*', 2, 5),
     );
     
     public function __construct()
@@ -55,8 +55,15 @@ class Inout_model extends App_Model {
     
     public function edit($id, $data)
     {
+        // Lấy loại thu chi để set âm dương cho amount
+        $inout_type_id = current($this->db->select('inout_type_id')
+                                          ->where('iorid', $id)
+                                          ->get(self::TABLE)->row_array());
+        $inout_type_ids = array($inout_type_id, 3 - $inout_type_id);
+        
         $this->db->trans_start();
-        foreach ($this->getPairId($id) as $item){
+        foreach ($this->getPairId($id) as $i => $item){
+            $data['amount'] = $inout_type_ids[$i] == 1? $data['amount'] : 0 - $data['amount'];
             $this->db->where('iorid', $item)->update(self::TABLE, $data);
         }
         $this->db->trans_complete();
@@ -125,13 +132,14 @@ class Inout_model extends App_Model {
             return array($id);
         }
         
-        // Trả về cặp id
-        return array_column($this->db->select('iorid')
+        // Lấy id còn lại trong cặp pair_id
+        $other_id = current($this->db->select('iorid')
                                      ->where('pair_id', $pair_id)
+                                     ->where('iorid !=', $id)
                                      ->get(self::TABLE)
-                                     ->result_array(),
-                           'iorid'
-                          );
+                                     ->row_array() );
+                             
+        return array($id, $other_id);
     }
     
     /*
