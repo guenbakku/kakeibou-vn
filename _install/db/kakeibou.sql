@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.4.1
+-- version 4.0.10.7
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: 2016 年 6 月 26 日 23:05
--- サーバのバージョン： 5.6.30
--- PHP Version: 7.0.6
+-- ホスト: localhost
+-- 生成日時: 2016 年 6 月 28 日 04:04
+-- サーバのバージョン: 5.5.45-cll-lve
+-- PHP のバージョン: 5.4.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,10 +14,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
--- Database: `kakeibou`
+-- データベース: `nvb-online_kakeibou`
 --
 
 -- --------------------------------------------------------
@@ -26,11 +26,13 @@ SET time_zone = "+00:00";
 -- テーブルの構造 `accounts`
 --
 
-CREATE TABLE `accounts` (
-  `aid` tinyint(4) NOT NULL,
+CREATE TABLE IF NOT EXISTS `accounts` (
+  `aid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
-  `description` varchar(256) NOT NULL COMMENT 'Ghi chú cho tài khoản'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Phân loại các tài khoản ngân hàng';
+  `description` varchar(256) NOT NULL COMMENT 'Ghi chú cho tài khoản',
+  PRIMARY KEY (`aid`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Phân loại các tài khoản ngân hàng' AUTO_INCREMENT=3 ;
 
 --
 -- テーブルのデータのダンプ `accounts`
@@ -46,11 +48,12 @@ INSERT INTO `accounts` (`aid`, `name`, `description`) VALUES
 -- テーブルの構造 `bottles`
 --
 
-CREATE TABLE `bottles` (
-  `bid` tinyint(4) NOT NULL,
+CREATE TABLE IF NOT EXISTS `bottles` (
+  `bid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
-  `ratio` tinyint(3) UNSIGNED NOT NULL COMMENT 'tỷ lệ phân chia mặc định'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `ratio` tinyint(3) unsigned NOT NULL COMMENT 'tỷ lệ phân chia mặc định',
+  PRIMARY KEY (`bid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- テーブルのデータのダンプ `bottles`
@@ -71,10 +74,13 @@ INSERT INTO `bottles` (`bid`, `name`, `ratio`) VALUES
 -- テーブルの構造 `bottle_records`
 --
 
-CREATE TABLE `bottle_records` (
+CREATE TABLE IF NOT EXISTS `bottle_records` (
   `iorid` int(11) NOT NULL COMMENT 'id của record thu nhập',
   `bottle_id` tinyint(4) NOT NULL COMMENT 'id của từng bottle',
-  `amount` int(11) NOT NULL
+  `amount` int(11) NOT NULL,
+  PRIMARY KEY (`iorid`,`bottle_id`),
+  UNIQUE KEY `prid` (`iorid`),
+  KEY `bid` (`bottle_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ghi lại tỷ lệ phân phối thu nhập vào các lọ';
 
 -- --------------------------------------------------------
@@ -83,14 +89,17 @@ CREATE TABLE `bottle_records` (
 -- テーブルの構造 `categories`
 --
 
-CREATE TABLE `categories` (
-  `cid` tinyint(4) NOT NULL,
+CREATE TABLE IF NOT EXISTS `categories` (
+  `cid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
-  `sort` tinyint(3) UNSIGNED NOT NULL,
-  `inout_type_id` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'id quy định loại thu, chi, mượn, cho mượn',
+  `sort` tinyint(3) unsigned NOT NULL,
+  `inout_type_id` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'id quy định loại thu, chi, mượn, cho mượn',
   `bottle_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Phân loại sẵn lọ cho danh mục',
-  `restrict_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'không cho delete'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `restrict_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'không cho delete',
+  PRIMARY KEY (`cid`),
+  KEY `bid` (`bottle_id`),
+  KEY `iotid` (`inout_type_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
 
 --
 -- テーブルのデータのダンプ `categories`
@@ -122,9 +131,9 @@ INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `bottle_id`, `
 -- テーブルの構造 `inout_records`
 --
 
-CREATE TABLE `inout_records` (
-  `iorid` int(11) NOT NULL,
-  `inout_type_id` tinyint(1) UNSIGNED NOT NULL,
+CREATE TABLE IF NOT EXISTS `inout_records` (
+  `iorid` int(11) NOT NULL AUTO_INCREMENT,
+  `inout_type_id` tinyint(1) unsigned NOT NULL,
   `account_id` tinyint(4) NOT NULL,
   `category_id` tinyint(4) NOT NULL,
   `pair_id` varchar(32) NOT NULL COMMENT 'Chứa unique string có chiều dài 32 ký tự',
@@ -134,16 +143,26 @@ CREATE TABLE `inout_records` (
   `memo` varchar(128) NOT NULL,
   `date` date NOT NULL,
   `created_on` datetime NOT NULL,
-  `created_by` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ghi chép thu chi';
+  `created_by` tinyint(4) NOT NULL,
+  PRIMARY KEY (`iorid`),
+  KEY `category_id` (`category_id`) USING BTREE,
+  KEY `account_id` (`account_id`) USING BTREE,
+  KEY `inout_type_id` (`inout_type_id`) USING BTREE,
+  KEY `user_id` (`player`) USING BTREE,
+  KEY `created_by` (`created_by`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='ghi chép thu chi' AUTO_INCREMENT=18 ;
 
 --
 -- テーブルのデータのダンプ `inout_records`
 --
 
 INSERT INTO `inout_records` (`iorid`, `inout_type_id`, `account_id`, `category_id`, `pair_id`, `player`, `cash_flow`, `amount`, `memo`, `date`, `created_on`, `created_by`) VALUES
-(10, 2, 2, 1, 'b4e694822c2f757e0f4f8175e82ec147', 2, 'drawer', -30000, '', '2016-06-26', '2016-06-26 22:43:58', 2),
-(11, 1, 1, 2, 'b4e694822c2f757e0f4f8175e82ec147', 2, 'drawer', -30000, '', '2016-06-26', '2016-06-26 22:43:58', 2);
+(12, 1, 2, 26, '', 2, 'income', 274848, 'Khởi tạo', '2016-06-26', '2016-06-26 23:26:28', 2),
+(13, 2, 1, 32, '', 1, 'outgo', -1594, 'Khởi tạo', '2016-06-26', '2016-06-26 23:32:05', 1),
+(14, 2, 1, 21, '', 1, 'outgo', -500, '', '2016-06-27', '2016-06-27 12:42:11', 1),
+(15, 1, 1, 26, '', 2, 'income', 182, 'Khởi tạo', '2016-06-26', '2016-06-27 18:55:33', 1),
+(16, 2, 2, 28, '', 1, 'outgo', -69492, '', '2016-06-27', '2016-06-27 21:18:00', 1),
+(17, 2, 1, 21, '', 1, 'outgo', -350, '', '2016-06-28', '2016-06-28 12:08:15', 1);
 
 -- --------------------------------------------------------
 
@@ -151,10 +170,12 @@ INSERT INTO `inout_records` (`iorid`, `inout_type_id`, `account_id`, `category_i
 -- テーブルの構造 `inout_types`
 --
 
-CREATE TABLE `inout_types` (
-  `iotid` tinyint(1) UNSIGNED NOT NULL,
-  `name` varchar(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Chi tiết phân loại thu chi';
+CREATE TABLE IF NOT EXISTS `inout_types` (
+  `iotid` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  PRIMARY KEY (`iotid`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Chi tiết phân loại thu chi' AUTO_INCREMENT=3 ;
 
 --
 -- テーブルのデータのダンプ `inout_types`
@@ -170,10 +191,11 @@ INSERT INTO `inout_types` (`iotid`, `name`) VALUES
 -- テーブルの構造 `settings`
 --
 
-CREATE TABLE `settings` (
+CREATE TABLE IF NOT EXISTS `settings` (
   `item` varchar(128) NOT NULL,
   `name` varchar(128) NOT NULL,
-  `value` varchar(512) NOT NULL
+  `value` varchar(512) NOT NULL,
+  PRIMARY KEY (`item`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='lưu các thiết lập hệ thống';
 
 --
@@ -181,7 +203,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`item`, `name`, `value`) VALUES
-('month_outgo_plans', 'Số tiền dự định chi trong tháng', '"500000"');
+('month_outgo_plans', 'Số tiền dự định chi trong tháng', '"7000"');
 
 -- --------------------------------------------------------
 
@@ -189,13 +211,15 @@ INSERT INTO `settings` (`item`, `name`, `value`) VALUES
 -- テーブルの構造 `users`
 --
 
-CREATE TABLE `users` (
-  `uid` tinyint(4) NOT NULL,
+CREATE TABLE IF NOT EXISTS `users` (
+  `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL,
   `fullname` varchar(128) NOT NULL,
   `label` varchar(50) NOT NULL COMMENT 'Class HTML',
-  `password` varchar(256) NOT NULL COMMENT 'sha512'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `password` varchar(256) NOT NULL COMMENT 'sha512',
+  PRIMARY KEY (`uid`),
+  UNIQUE KEY `name` (`username`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- テーブルのデータのダンプ `users`
@@ -205,104 +229,6 @@ INSERT INTO `users` (`uid`, `username`, `fullname`, `label`, `password`) VALUES
 (1, 'bach', 'Bách', 'label-info', '94bc0c204d0f1ed072f1b20fba90c698caaf70cbb5ec64d8538f8cc00c5dc287a90c654c91282265454c4d13e8b156fb2a296e253e3f546b3786193cbea19ecf'),
 (2, 'hiep', 'Hiệp', 'label-warning', '94bc0c204d0f1ed072f1b20fba90c698caaf70cbb5ec64d8538f8cc00c5dc287a90c654c91282265454c4d13e8b156fb2a296e253e3f546b3786193cbea19ecf');
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `accounts`
---
-ALTER TABLE `accounts`
-  ADD PRIMARY KEY (`aid`),
-  ADD UNIQUE KEY `name` (`name`);
-
---
--- Indexes for table `bottles`
---
-ALTER TABLE `bottles`
-  ADD PRIMARY KEY (`bid`);
-
---
--- Indexes for table `bottle_records`
---
-ALTER TABLE `bottle_records`
-  ADD PRIMARY KEY (`iorid`,`bottle_id`),
-  ADD UNIQUE KEY `prid` (`iorid`),
-  ADD KEY `bid` (`bottle_id`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`cid`),
-  ADD KEY `bid` (`bottle_id`),
-  ADD KEY `iotid` (`inout_type_id`);
-
---
--- Indexes for table `inout_records`
---
-ALTER TABLE `inout_records`
-  ADD PRIMARY KEY (`iorid`),
-  ADD KEY `category_id` (`category_id`) USING BTREE,
-  ADD KEY `account_id` (`account_id`) USING BTREE,
-  ADD KEY `inout_type_id` (`inout_type_id`) USING BTREE,
-  ADD KEY `user_id` (`player`) USING BTREE,
-  ADD KEY `created_by` (`created_by`);
-
---
--- Indexes for table `inout_types`
---
-ALTER TABLE `inout_types`
-  ADD PRIMARY KEY (`iotid`),
-  ADD UNIQUE KEY `name` (`name`);
-
---
--- Indexes for table `settings`
---
-ALTER TABLE `settings`
-  ADD PRIMARY KEY (`item`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`uid`),
-  ADD UNIQUE KEY `name` (`username`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `accounts`
---
-ALTER TABLE `accounts`
-  MODIFY `aid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `bottles`
---
-ALTER TABLE `bottles`
-  MODIFY `bid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `cid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
---
--- AUTO_INCREMENT for table `inout_records`
---
-ALTER TABLE `inout_records`
-  MODIFY `iorid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT for table `inout_types`
---
-ALTER TABLE `inout_types`
-  MODIFY `iotid` tinyint(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `uid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- ダンプしたテーブルの制約
 --

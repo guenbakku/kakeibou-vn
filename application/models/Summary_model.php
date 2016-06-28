@@ -145,12 +145,14 @@ class Summary_model extends Inout_Model {
      */
     public function getSumListFromDB($date_format_string, $min_date, $max_date)
     {
-        $sql = "SELECT `key`, `thu`, `chi`, (`thu` + `chi`) AS `tong`
+        $sql = "SELECT `key`, `thu`, `chi`, `chi_luu_dong`, (`thu` + `chi`) AS `tong`
                 FROM (
                         SELECT DATE_FORMAT(`date`, '{$date_format_string}') as `key`, 
-                               SUM(CASE WHEN `inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
-                               SUM(CASE WHEN `inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`
+                               SUM(CASE WHEN `inout_records`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
+                               SUM(CASE WHEN `inout_records`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`,
+                               SUM(CASE WHEN `inout_records`.`inout_type_id` = 2 AND `month_fixed_money` = 0 THEN `amount` ELSE 0 END) AS `chi_luu_dong`
                         FROM `inout_records`
+                        JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id` 
                         WHERE DATE_FORMAT(`date`, '{$date_format_string}') >= '{$min_date}' 
                               AND DATE_FORMAT(`date`, '{$date_format_string}') <= '{$max_date}' 
                               AND `pair_id` = ''
