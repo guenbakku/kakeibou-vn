@@ -66,13 +66,13 @@ class Summary_model extends Inout_Model {
                                    `users`.`label` as `player_label` ";
         $sql['FROM']     = "FROM `inout_records` ";
         $sql['JOINT']    = "JOIN `accounts` ON `accounts`.`aid` = `inout_records`.`account_id`
-                            JOIN `inout_types` ON `inout_types`.`iotid` = `inout_records`.`inout_type_id`
                             JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id`
+                            JOIN `inout_types` ON `inout_types`.`iotid` = `categories`.`inout_type_id`
                             JOIN `users` ON `users`.`uid` = `inout_records`.`player` ";
         $sql['WHERE']    = "WHERE `inout_records`.`date` >= '{$from}' 
                               AND `inout_records`.`date` <= '{$to}' ";
         $sql['ORDER_BY'] = "ORDER BY `inout_records`.`date` ASC, 
-                                     `inout_records`.`inout_type_id` ASC, 
+                                     `categories`.`inout_type_id` ASC, 
                                      `inout_records`.`created_on` ASC ";
         
         if ($account > 0){
@@ -148,9 +148,9 @@ class Summary_model extends Inout_Model {
         $sql = "SELECT `key`, `thu`, `chi`, `chi_luu_dong`, (`thu` + `chi`) AS `tong`
                 FROM (
                         SELECT DATE_FORMAT(`date`, '{$date_format_string}') as `key`, 
-                               SUM(CASE WHEN `inout_records`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
-                               SUM(CASE WHEN `inout_records`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`,
-                               SUM(CASE WHEN `inout_records`.`inout_type_id` = 2 AND `month_fixed_money` = 0 THEN `amount` ELSE 0 END) AS `chi_luu_dong`
+                               SUM(CASE WHEN `categories`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
+                               SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`,
+                               SUM(CASE WHEN `categories`.`inout_type_id` = 2 AND `month_fixed_money` = 0 THEN `amount` ELSE 0 END) AS `chi_luu_dong`
                         FROM `inout_records`
                         JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id` 
                         WHERE DATE_FORMAT(`date`, '{$date_format_string}') >= '{$min_date}' 

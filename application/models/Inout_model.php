@@ -39,6 +39,7 @@ class Inout_model extends App_Model {
     public function get($id)
     {
         return $this->db->where('iorid', $id)
+                        ->join('categories', 'categories.cid = inout_records.category_id')
                         ->limit(1)
                         ->get(self::TABLE)
                         ->row_array();
@@ -55,15 +56,17 @@ class Inout_model extends App_Model {
     
     public function edit($id, $data)
     {
-        // Lấy loại thu chi để set âm dương cho amount
-        $inout_type_id = current($this->db->select('inout_type_id')
-                                          ->where('iorid', $id)
-                                          ->get(self::TABLE)->row_array());
-        $inout_type_ids = array($inout_type_id, 3 - $inout_type_id);
+        // Dựa vào giá trị amount cũ trong dữ liệu để xét dấu 
+        // âm dương cho dữ liệu chuẩn bị thay đổi
+        $old_value = current($this->db->select('amount')
+                                      ->where('iorid', $id)
+                                      ->get(self::TABLE)->row_array());
+        $k = $old_value/abs($old_value);
+        $k_arr = array($k, 0 - $k);
         
         $this->db->trans_start();
         foreach ($this->getPairId($id) as $i => $item){
-            $data['amount'] = $inout_type_ids[$i] == 1? $data['amount'] : 0 - $data['amount'];
+            $data['amount'] = $k_arr[$i] * $data['amount'];
             $this->db->where('iorid', $item)->update(self::TABLE, $data);
         }
         $this->db->trans_complete();
@@ -83,10 +86,9 @@ class Inout_model extends App_Model {
         $data['cash_flow']  = $type;
         $data['created_on'] = date('Y-m-d H:i:s');
         $data['created_by'] = $this->login_model->getInfo('uid');
-        $data['inout_type_id'] = $this->getInoutTypeCode($type);
         
         $pair[0] = $data;
-        $pair[0]['amount']  = $data['inout_type_id']==1? $pair[0]['amount'] : 0-$pair[0]['amount'];
+        $pair[0]['amount']  = $this->getInoutTypeCode($type)==1? $pair[0]['amount'] : 0-$pair[0]['amount'];
         
         // Không phải loại theo tác tạo ra pair dữ liệu
         if (in_array($type, array('outgo', 'income'))){
@@ -97,7 +99,6 @@ class Inout_model extends App_Model {
         $pair[1] = $pair[0];
         $pair[0]['pair_id'] = $pair[1]['pair_id'] = random_string('unique');
         $pair[1]['amount']  = 0 - $pair[0]['amount'];
-        $pair[1]['inout_type_id'] = 3 - $pair[0]['inout_type_id'];
         $pair[0]['category_id'] = $this->getFixCategoryCode($type);
         $pair[1]['category_id'] = $pair[0]['category_id']+1;
         
