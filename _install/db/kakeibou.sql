@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2016 年 6 月 26 日 23:05
+-- Generation Time: 2016 年 6 月 28 日 20:14
 -- サーバのバージョン： 5.6.30
 -- PHP Version: 7.0.6
 
@@ -88,6 +88,7 @@ CREATE TABLE `categories` (
   `name` varchar(128) NOT NULL,
   `sort` tinyint(3) UNSIGNED NOT NULL,
   `inout_type_id` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'id quy định loại thu, chi, mượn, cho mượn',
+  `month_fixed_money` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Có phải là tiền cố định hàng tháng không',
   `bottle_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Phân loại sẵn lọ cho danh mục',
   `restrict_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'không cho delete'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -96,25 +97,25 @@ CREATE TABLE `categories` (
 -- テーブルのデータのダンプ `categories`
 --
 
-INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `bottle_id`, `restrict_delete`) VALUES
-(1, 'Rút tiền từ tài khoản*', 1, 2, 0, 1),
-(2, 'Rút tiền từ tài khoản*', 1, 1, 0, 1),
-(3, 'Nạp tiền vô tài khoản*', 2, 1, 0, 1),
-(4, 'Nạp tiền vô tài khoản*', 2, 2, 0, 1),
-(5, 'Chuyển tiền qua tay*', 3, 2, 0, 1),
-(6, 'Chuyển tiền qua tay*', 3, 1, 0, 1),
-(21, 'Ăn uống', 0, 2, 0, 0),
-(22, 'Đi lại', 0, 2, 0, 0),
-(23, 'Giải trí', 0, 2, 0, 0),
-(24, 'Góp tiền hàng tháng', 0, 1, 0, 0),
-(25, 'Điện, nước, gas, internet', 0, 2, 0, 0),
-(26, 'Khác', 0, 1, 0, 0),
-(27, 'Đồ gia dụng lặt vặt', 0, 2, 0, 0),
-(28, 'Trả thẻ credit', 0, 2, 0, 0),
-(29, 'Áo quần, giày dép', 0, 2, 0, 0),
-(30, 'Điện thoại', 0, 2, 0, 0),
-(31, 'Bảo hiểm', 0, 2, 0, 0),
-(32, 'Khác', 0, 2, 0, 0);
+INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `month_fixed_money`, `bottle_id`, `restrict_delete`) VALUES
+(1, 'Rút tiền từ tài khoản*', 1, 2, 0, 0, 1),
+(2, 'Rút tiền từ tài khoản*', 1, 1, 0, 0, 1),
+(3, 'Nạp tiền vô tài khoản*', 2, 1, 0, 0, 1),
+(4, 'Nạp tiền vô tài khoản*', 2, 2, 0, 0, 1),
+(5, 'Chuyển tiền qua tay*', 3, 2, 0, 0, 1),
+(6, 'Chuyển tiền qua tay*', 3, 1, 0, 0, 1),
+(21, 'Ăn uống', 0, 2, 0, 0, 0),
+(22, 'Đi lại', 0, 2, 0, 0, 0),
+(23, 'Giải trí', 0, 2, 0, 0, 0),
+(24, 'Góp tiền hàng tháng', 0, 1, 0, 0, 0),
+(25, 'Điện, nước, gas, internet', 0, 2, 1, 0, 0),
+(26, 'Khác', 0, 1, 0, 0, 0),
+(27, 'Đồ gia dụng lặt vặt', 0, 2, 0, 0, 0),
+(28, 'Trả thẻ credit', 0, 2, 1, 0, 0),
+(29, 'Áo quần, giày dép', 0, 2, 0, 0, 0),
+(30, 'Điện thoại', 0, 2, 1, 0, 0),
+(31, 'Bảo hiểm', 0, 2, 1, 0, 0),
+(32, 'Khác', 0, 2, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -124,7 +125,6 @@ INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `bottle_id`, `
 
 CREATE TABLE `inout_records` (
   `iorid` int(11) NOT NULL,
-  `inout_type_id` tinyint(1) UNSIGNED NOT NULL,
   `account_id` tinyint(4) NOT NULL,
   `category_id` tinyint(4) NOT NULL,
   `pair_id` varchar(32) NOT NULL COMMENT 'Chứa unique string có chiều dài 32 ký tự',
@@ -141,9 +141,13 @@ CREATE TABLE `inout_records` (
 -- テーブルのデータのダンプ `inout_records`
 --
 
-INSERT INTO `inout_records` (`iorid`, `inout_type_id`, `account_id`, `category_id`, `pair_id`, `player`, `cash_flow`, `amount`, `memo`, `date`, `created_on`, `created_by`) VALUES
-(10, 2, 2, 1, 'b4e694822c2f757e0f4f8175e82ec147', 2, 'drawer', -30000, '', '2016-06-26', '2016-06-26 22:43:58', 2),
-(11, 1, 1, 2, 'b4e694822c2f757e0f4f8175e82ec147', 2, 'drawer', -30000, '', '2016-06-26', '2016-06-26 22:43:58', 2);
+INSERT INTO `inout_records` (`iorid`, `account_id`, `category_id`, `pair_id`, `player`, `cash_flow`, `amount`, `memo`, `date`, `created_on`, `created_by`) VALUES
+(12, 2, 26, '', 2, 'income', 274848, 'Khởi tạo', '2016-06-26', '2016-06-26 23:26:28', 2),
+(13, 1, 32, '', 1, 'outgo', -1594, 'Khởi tạo', '2016-06-26', '2016-06-26 23:32:05', 1),
+(14, 1, 21, '', 1, 'outgo', -500, '', '2016-06-27', '2016-06-27 12:42:11', 1),
+(15, 1, 26, '', 2, 'income', 182, 'Khởi tạo', '2016-06-26', '2016-06-27 18:55:33', 1),
+(16, 2, 28, '', 1, 'outgo', -69492, '', '2016-06-27', '2016-06-27 21:18:00', 1),
+(17, 1, 21, '', 1, 'outgo', -350, '', '2016-06-28', '2016-06-28 12:08:15', 1);
 
 -- --------------------------------------------------------
 
@@ -181,7 +185,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`item`, `name`, `value`) VALUES
-('month_outgo_plans', 'Số tiền dự định chi trong tháng', '"500000"');
+('month_outgo_plans', 'Số tiền dự định chi trong tháng', '"7000"');
 
 -- --------------------------------------------------------
 
@@ -245,7 +249,6 @@ ALTER TABLE `inout_records`
   ADD PRIMARY KEY (`iorid`),
   ADD KEY `category_id` (`category_id`) USING BTREE,
   ADD KEY `account_id` (`account_id`) USING BTREE,
-  ADD KEY `inout_type_id` (`inout_type_id`) USING BTREE,
   ADD KEY `user_id` (`player`) USING BTREE,
   ADD KEY `created_by` (`created_by`);
 
@@ -292,7 +295,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `inout_records`
 --
 ALTER TABLE `inout_records`
-  MODIFY `iorid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `iorid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `inout_types`
 --
@@ -327,7 +330,6 @@ ALTER TABLE `categories`
 ALTER TABLE `inout_records`
   ADD CONSTRAINT `inout_records_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`cid`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `inout_records_ibfk_2` FOREIGN KEY (`player`) REFERENCES `users` (`uid`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `inout_records_ibfk_3` FOREIGN KEY (`inout_type_id`) REFERENCES `inout_types` (`iotid`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `inout_records_ibfk_6` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`aid`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `inout_records_ibfk_7` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
