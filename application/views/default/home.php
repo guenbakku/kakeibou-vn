@@ -32,7 +32,7 @@ $(function(){
 
 <div class="container">
     <div class="panel panel-default">
-        <div class="panel-heading"><strong>Tổng tiền còn lại</strong></div>
+        <div class="panel-heading"><strong>Tiền còn lại</strong></div>
         <table class="table table-bordered">
             <?php foreach ($remaining as $k => $v): ?>
             <tr>

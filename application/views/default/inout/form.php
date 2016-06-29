@@ -30,6 +30,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                         array(
                             'name' => $field_name = 'amount',
                             'type' => 'number',
+                            'pattern' => '\d*',
                         ),
                         set_value($field_name, null),
                         array(
@@ -140,5 +141,3 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
         </div>
     </div>
 </form>
-    
-    
