@@ -1,6 +1,6 @@
 <div class="container">
     <div class="panel panel-default">
-        <div class="panel-heading"><strong>Thêm mới thu chi</strong></div>
+        <div class="panel-heading"><strong>Ghi chép thu chi</strong></div>
         <div class="list-group">
             <?php $i=0 ?>
             <?php foreach (Inout_model::$CASH_FLOW_NAMES as $key => $item): ?>
@@ -9,4 +9,3 @@
        </div>
     </div>
 </div>
-    

@@ -23,8 +23,8 @@ class Inout_model extends App_Model {
     //      ID của Category đại diện (nếu là 1 pair thu chi thì là của item đầu tiên, nếu 0: không có Category đại diện)
     // Nếu trong pair có 1 item là tài khoản ngân hàng thì mặc định đó là item đầu tiên
     public static $CASH_FLOW_NAMES = array(
-        'outgo'     => array('Thêm thực chi', 2, 0),
-        'income'    => array('Thêm thực thu', 1, 0),
+        'outgo'     => array('Thêm khoản chi', 2, 0),
+        'income'    => array('Thêm khoản thu', 1, 0),
         'drawer'    => array('Rút tiền từ tài khoản*', 2, 1),
         'deposit'   => array('Nạp tiền vô tài khoản*', 1, 3),
         'handover'  => array('Chuyển tiền qua tay*', 2, 5),
