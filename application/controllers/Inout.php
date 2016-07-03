@@ -111,7 +111,7 @@ class Inout extends CI_Controller {
         $view_data['type']            = $type;
         $view_data['title']           = 'Chỉnh sửa';
         $view_data['form_url']        = base_url()."inout/edit/".$id."?goto=".base64_encode($http_referer);
-        $view_data['del_url']        = base_url()."inout/del/".$id."?goto=".base64_encode($http_referer);
+        $view_data['del_url']         = base_url()."inout/del/".$id."?goto=".base64_encode($http_referer);
         $view_data['inout_type_sign'] = $this->inout_model->getInoutTypeSign($ioRecord['inout_type_id']);
         $view_data['select']   = array(
             'accounts'   => $this->app_model->getSelectTagData('account_id'),
