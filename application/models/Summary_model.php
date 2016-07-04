@@ -126,11 +126,38 @@ class Summary_model extends Inout_Model {
         return $combine_data;
     }
     
-    public function getDayAvailableOutgo($currentOutgo)
+    /*
+     *--------------------------------------------------------------------
+     * Tính: dữ liệu chi lưu động của ngày hôm nay
+     *       số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng
+     * 
+     * @param   void
+     * @return  array: array(0 -> số chi lưu động của ngày hôm nay
+     *                       1 -> số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng)
+     *--------------------------------------------------------------------
+     */
+    public function getTodayLiquidOutgoStatus()
     {
+        $today = date("Y-m-d");
+        $month = date("Y-m");
+        
+        $sql = "SELECT SUM(`amount`) as `liquid_outgo_to_now`,
+                       SUM(CASE WHEN `date` = '{$today}' THEN `amount` ELSE 0 END) AS `liquid_outgo_today`
+                FROM `inout_records`
+                JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id`
+                WHERE DATE_FORMAT(`date`, '%Y-%m') = '{$month}'
+                    AND `inout_type_id` = 2
+                    AND `month_fixed_money` = 0";
+                            
+        $outgo = $this->db->query($sql)->row_array();
+        
         $month_outgo_plans = current($this->setting_model->get('month_outgo_plans', 'value'));
         $remaining_days = days_in_month(date('m')) - date('d') + 1;
-        return floor(($month_outgo_plans - $currentOutgo)/$remaining_days);
+        
+        return array(
+            $outgo['liquid_outgo_today'],
+            -floor(($month_outgo_plans + $outgo['liquid_outgo_to_now'] - $outgo['liquid_outgo_today'])/$remaining_days),
+        );
     }
     
     /*
