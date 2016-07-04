@@ -22,9 +22,21 @@ $(function(){
                 <td class="text-right"><?=currency($month_sum['chi'])?></td>
                 <td class="text-right"><?=currency($month_sum['tong'])?></td>
             </tr>
+        </table>
+    </div>
+</div>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Tình hình chi hôm nay</strong></div>
+        <table class="table table-bordered">
             <tr>
-                <th colspan="2" class="text-center">Mỗi ngày có thể tiêu:</th>
-                <td class="text-right"><?=currency($day_available_outgo)?></td>
+                <th>Đã chi</th>
+                <td style="width:33.3%" class="text-right"><?=currency($todayLiquidOutgoStatus[0])?></td>
+            </tr>
+            <tr>
+                <th>Hạn mức</th>
+                <td style="width:33.3%" class="text-right"><?=currency($todayLiquidOutgoStatus[1])?></td>
             </tr>
         </table>
     </div>
