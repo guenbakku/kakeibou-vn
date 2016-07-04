@@ -147,7 +147,8 @@ class Summary_model extends Inout_Model {
                 JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id`
                 WHERE DATE_FORMAT(`date`, '%Y-%m') = '{$month}'
                     AND `inout_type_id` = 2
-                    AND `month_fixed_money` = 0";
+                    AND `month_fixed_money` = 0
+                    AND `pair_id` = ''";
                             
         $outgo = $this->db->query($sql)->row_array();
         
@@ -172,12 +173,11 @@ class Summary_model extends Inout_Model {
      */
     public function getSumListFromDB($date_format_string, $min_date, $max_date)
     {
-        $sql = "SELECT `key`, `thu`, `chi`, `chi_luu_dong`, (`thu` + `chi`) AS `tong`
+        $sql = "SELECT `key`, `thu`, `chi`, (`thu` + `chi`) AS `tong`
                 FROM (
                         SELECT DATE_FORMAT(`date`, '{$date_format_string}') as `key`, 
                                SUM(CASE WHEN `categories`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
-                               SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`,
-                               SUM(CASE WHEN `categories`.`inout_type_id` = 2 AND `month_fixed_money` = 0 THEN `amount` ELSE 0 END) AS `chi_luu_dong`
+                               SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`
                         FROM `inout_records`
                         JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id` 
                         WHERE DATE_FORMAT(`date`, '{$date_format_string}') >= '{$min_date}' 
