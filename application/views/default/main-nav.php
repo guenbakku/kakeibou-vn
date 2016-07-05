@@ -2,7 +2,7 @@
     navigation('#mainNav');
 </script>
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container" style="padding-left:0">
         <div class="navbtn-group" id="mainNav">
             <a href="<?=base_url()?>"><span class="glyphicon glyphicon-home" style="padding:0 5px"></span></a>
