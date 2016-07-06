@@ -15,6 +15,13 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                 window.location.href = $(this).attr('href');
             }
         });
+        
+        $(".autocomplete").autocomplete({ 
+            source: function(req, resp) {
+                $.getJSON("/inout/searchMemo/" + encodeURIComponent(req.term), resp);
+            },
+            minLength: 2,
+        });
     });
 </script>
 
@@ -31,6 +38,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                             'name' => $field_name = 'amount',
                             'type' => 'number',
                             'pattern' => '\d*',
+                            'autofocus' => 'autofocus',
                         ),
                         set_value($field_name, null),
                         array(
@@ -130,7 +138,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                     $field_name = 'memo', 
                     set_value($field_name, null, false),
                     array(
-                        'class' => 'form-control',
+                        'class' => 'form-control autocomplete',
                     )
                 )?>
             </div>

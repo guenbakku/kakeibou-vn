@@ -139,4 +139,8 @@ class Inout extends CI_Controller {
         redirect($goto);
     }
     
+    public function searchMemo($q)
+    {
+        echo json_encode($this->inout_model->searchMemo(urldecode($q)));
+    }
 }

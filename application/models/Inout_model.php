@@ -80,7 +80,21 @@ class Inout_model extends App_Model {
         }
         $this->db->trans_complete();
     }
-
+    
+    public function searchMemo($q)
+    {
+        $q = $this->db->escape_like_str($q);
+        $sql = "SELECT `memo` 
+                FROM (SELECT `memo`, COUNT(`memo`) as `count`
+                      FROM `inout_records`
+                      WHERE `memo` LIKE '%{$q}%'
+                      GROUP BY `memo`) AS t
+                ORDER BY `count`
+                LIMIT 0, 10";
+        
+        return array_column($this->db->query($sql)->result_array(), 'memo');
+    }
+    
     private function setPairAddData($type, $data)
     {
         $data['cash_flow']  = $type;

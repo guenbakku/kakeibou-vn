@@ -89,3 +89,8 @@ input[type="color"] {
 .row > .col-xs-12 > select{
     font-size: 16px;
 }
+
+.ui-autocomplete-loading { 
+    background:url('../images/indicator.gif') no-repeat;
+    background-position: right 10px center;
+}
