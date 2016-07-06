@@ -16,11 +16,15 @@
         <link rel="shortcut icon" href="<?=template_url()?>images/favicon.gif" type="image/gif">
         <link rel="apple-touch-icon" href="<?=template_url()?>images/favicon.gif" />
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.11.4.custom/jquery-ui.structure.min.css">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.11.4.custom/jquery-ui.theme.min.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/main.css">
         <?=$_styles?>
         
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery-1.12.3.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/navigation.js"></script>
         <?=$_scripts?>
 	</head>
