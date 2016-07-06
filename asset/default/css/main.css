@@ -5,6 +5,10 @@
 
 @charset "utf-8";
 
+body{
+    padding-top:70px;
+}
+
 .w10, .w20, .w30, .w40, .w50, .w60, .w70, .w80, .w90 {
     display: inline-block;
 }
@@ -84,4 +88,9 @@ input[type="color"] {
 .row > .col-xs-11 > select,
 .row > .col-xs-12 > select{
     font-size: 16px;
+}
+
+.ui-autocomplete-loading { 
+    background:url('../images/indicator.gif') no-repeat;
+    background-position: right 10px center;
 }
