@@ -48,8 +48,8 @@ $(function(){
         <table class="table table-bordered">
             <tr>
                 <th style="width:34%"><br></th>
-                <th>Hiện tại</th>
-                <th style="width:33.3%">Tương lai</th>
+                <th class="text-center">Hiện tại</th>
+                <th class="text-center" style="width:33.3%">Tương lai</th>
             </tr>
             <?php foreach ($remaining as $k => $v): ?>
             <tr>
