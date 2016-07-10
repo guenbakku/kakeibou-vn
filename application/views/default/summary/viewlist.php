@@ -1,5 +1,11 @@
 <script type="text/javascript">
     navigation('#subNav');
+    
+    $(function(){
+        $('.submit-on-change').change(function(){
+            $(this).parents('form').submit();
+        });
+    });
 </script>
 
 <div class="container">
@@ -16,34 +22,31 @@
     <div class="well">
         <?=form_open($form_url, array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
             <div class="row">
-                <div class="col-xs-8">
+                <div class="col-xs-6">
+                    <label>Năm</label>
                     <?=form_dropdown(
                         $field_name = 'year', 
                         $select['year'], 
                         $year, 
                         array(
-                            'class' => 'form-control',
+                            'class' => 'form-control submit-on-change',
                         )
                     )?>
                 </div>
-                <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-sm">Xem</button>
-                </div>
-            </div>
-            <?php if ($mode == 'day'): ?>
-            <div class="row">
-                <div class="col-xs-8">
+                <?php if ($mode == 'day'): ?>
+                <div class="col-xs-6">
+                    <label>Tháng</label>
                     <?=form_dropdown(
                         $field_name = 'month', 
                         $select['month'], 
                         $month, 
                         array(
-                            'class' => 'form-control',
+                            'class' => 'form-control submit-on-change',
                         )
                     )?>
                 </div>
+                <?php endif ?>
             </div>
-            <?php endif ?>
         </form>
     </div>
 </div>
