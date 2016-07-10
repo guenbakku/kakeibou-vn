@@ -36,7 +36,7 @@ $(function(){
                 <th style="width:33.3%">Hôm nay</th>
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['today'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['today'][2]?>%">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['today'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['today'][2]?>%">
                             <span><?=$liquidOutgoStatus['today'][2]?>%</span>
                         </div>
                     </div>
@@ -47,7 +47,7 @@ $(function(){
                 <th>Tháng này</th>
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['month'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['month'][2]?>%">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['month'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['month'][2]?>%">
                             <span><?=$liquidOutgoStatus['month'][2]?>%</span>
                         </div>
                     </div>

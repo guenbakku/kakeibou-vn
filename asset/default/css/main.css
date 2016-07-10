@@ -90,6 +90,18 @@ input[type="color"] {
     font-size: 16px;
 }
 
+/* Chỉnh span trong progress bar vô giữa div */
+.progress {
+    position: relative;
+}
+
+.progress span {
+    position: absolute;
+    display: block;
+    width: 100%;
+    color: #333;
+ }
+
 .ui-autocomplete-loading { 
     background:url('../images/indicator.gif') no-repeat;
     background-position: right 10px center;
