@@ -6,6 +6,7 @@ $(function(){
 });
 </script>
 
+<?php if ($liquidOutgoStatus['month'][1] > 0): ?>
 <div class="container">
     <div class="panel panel-default">
         <a class="panel-heading" href="<?=base_url()?>setting/edit/month_outgo_plans" style="display:block">
@@ -36,6 +37,7 @@ $(function(){
         </table>
     </div>
 </div>
+<?php endif ?>
 
 <div class="container">
     <div class="panel panel-default">

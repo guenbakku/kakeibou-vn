@@ -156,6 +156,12 @@ class Summary_model extends Inout_Model {
      */
     public function getLiquidOutgoStatus()
     {
+        $month_outgo_plans = current($this->setting_model->get('month_outgo_plans', 'value'));
+        
+        if ($month_outgo_plans < 0){
+            return false;
+        }
+        
         $today = date("Y-m-d");
         $month = date("Y-m");
         
@@ -170,13 +176,12 @@ class Summary_model extends Inout_Model {
                             
         $outgo = $this->db->query($sql)->row_array();
         
-        $month_outgo_plans = current($this->setting_model->get('month_outgo_plans', 'value'));
         $remaining_days = days_in_month(date('m')) - date('d') + 1;
         
         // Gắn dữ liệu vào vị trí tương ứng và thêm tỷ lệ phần trăm
         return array_map(
             function ($item){
-                $item[2] = floor($item[0]/$item[1]*100);
+                $item[2] = $item[1]!=0? floor($item[0]/$item[1]*100) : 0;
                 return $item;
             }
             , array(
