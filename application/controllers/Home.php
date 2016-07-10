@@ -14,7 +14,7 @@ class Home extends CI_Controller {
 	public function index()
     {   
         $view_data['month_sum'] = current($this->summary_model->getSumListFromDB('%Y-%m', date('Y-m'), date('Y-m')));
-        $view_data['todayLiquidOutgoStatus'] = $this->summary_model->getTodayLiquidOutgoStatus();
+        $view_data['liquidOutgoStatus'] = $this->summary_model->getLiquidOutgoStatus();
         $view_data['remaining'] = $this->summary_model->getRemaining();
 		$this->template->write_view('MAIN', 'home', $view_data);
         $this->template->render();
