@@ -28,7 +28,9 @@ $(function(){
 
 <div class="container">
     <div class="panel panel-default">
-        <div class="panel-heading"><strong>Chi thực tế / Dự định</strong></div>
+        <a class="panel-heading" href="<?=base_url()?>setting/edit/month_outgo_plans" style="display:block">
+            <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Chi thực tế / Dự định</strong>
+        </a>
         <table class="table table-bordered">
             <tr>
                 <th style="width:33.3%">Hôm nay</th>
