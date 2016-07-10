@@ -134,15 +134,27 @@ class Summary_model extends Inout_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Tính: dữ liệu chi lưu động của ngày hôm nay
+     * Tính: số chi lưu động của ngày hôm nay tính tới thời điểm hiện tại
+     *       số chi lưu động của tháng này tính tới thời điểm hiện tại
      *       số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng
+     *       tổng số tiền dự tính chi trong tháng này (lấy từ CSDL)
      * 
      * @param   void
-     * @return  array: array(0 -> số chi lưu động của ngày hôm nay
-     *                       1 -> số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng)
+     * @return  array: array(
+     *                        'today' => array(
+     *                                          0 -> số chi lưu động của ngày hôm nay
+     *                                          1 -> số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng
+     *                                          2 -> tỷ lệ phần trăm
+     *                                         ),
+     *                        'month' => array(
+     *                                          0 -> số chi lưu động của tháng này (tới thời điểm hiện tại)
+     *                                          1 -> số tiền dự định chi trong tháng
+     *                                          2 => tỷ lệ phần trăm                        
+     *                                         ),
+     *                       )
      *--------------------------------------------------------------------
      */
-    public function getTodayLiquidOutgoStatus()
+    public function getLiquidOutgoStatus()
     {
         $today = date("Y-m-d");
         $month = date("Y-m");
@@ -161,9 +173,22 @@ class Summary_model extends Inout_Model {
         $month_outgo_plans = current($this->setting_model->get('month_outgo_plans', 'value'));
         $remaining_days = days_in_month(date('m')) - date('d') + 1;
         
-        return array(
-            $outgo['liquid_outgo_today'],
-            -floor(($month_outgo_plans + $outgo['liquid_outgo_to_now'] - $outgo['liquid_outgo_today'])/$remaining_days),
+        // Gắn dữ liệu vào vị trí tương ứng và thêm tỷ lệ phần trăm
+        return array_map(
+            function ($item){
+                $item[2] = floor($item[0]/$item[1]*100);
+                return $item;
+            }
+            , array(
+                'today' => array(
+                    - $outgo['liquid_outgo_today'],
+                    floor(($month_outgo_plans + $outgo['liquid_outgo_to_now'] - $outgo['liquid_outgo_today'])/$remaining_days),
+                ),
+                'month' => array(
+                    - $outgo['liquid_outgo_to_now'],
+                    $month_outgo_plans,
+                )
+            )
         );
     }
     
