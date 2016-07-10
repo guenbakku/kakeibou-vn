@@ -9,7 +9,7 @@ $(function(){
 <div class="container">
     <div class="panel panel-default">
         <a class="panel-heading" href="<?=base_url()?>summary/viewlist" style="display:block">
-            <strong><span class="glyphicon glyphicon-menu-right pull-right"></span> Thu chi trong tháng (<?=date('Y-m')?>)</strong>
+            <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Thu chi trong tháng (<?=date('Y-m')?>)</strong>
         </a>
         <table class="table table-bordered">
             <tr>
@@ -28,15 +28,29 @@ $(function(){
 
 <div class="container">
     <div class="panel panel-default">
-        <div class="panel-heading"><strong>Tình hình chi hôm nay</strong></div>
+        <div class="panel-heading"><strong>Chi thực tế / Dự định</strong></div>
         <table class="table table-bordered">
             <tr>
-                <th>Đã chi</th>
-                <td style="width:33.3%" class="text-right"><?=currency($todayLiquidOutgoStatus[0])?></td>
+                <th style="width:33.3%">Hôm nay</th>
+                <td class="text-center">
+                    <div class="progress" style="margin-bottom:0">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['today'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['today'][2]?>%">
+                            <span><?=$liquidOutgoStatus['today'][2]?>%</span>
+                        </div>
+                    </div>
+                    <span><?=currency($liquidOutgoStatus['today'][0], false)?> / <?=currency($liquidOutgoStatus['today'][1], false)?></span>
+                </td>
             </tr>
             <tr>
-                <th>Hạn mức</th>
-                <td style="width:33.3%" class="text-right"><?=currency($todayLiquidOutgoStatus[1])?></td>
+                <th>Tháng này</th>
+                <td class="text-center">
+                    <div class="progress" style="margin-bottom:0">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['month'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['month'][2]?>%">
+                            <span><?=$liquidOutgoStatus['month'][2]?>%</span>
+                        </div>
+                    </div>
+                    <span><?=currency($liquidOutgoStatus['month'][0], false)?> / <?=currency($liquidOutgoStatus['month'][1], false)?></span>
+                </td>
             </tr>
         </table>
     </div>
