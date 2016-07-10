@@ -97,7 +97,10 @@ class Summary_model extends Inout_Model {
      */
     public function getRemaining()
     {
-        $sql = sprintf("SELECT SUM(`inout_records`.`amount`) as `amount`,
+        $now = date('Y-m-d');
+        
+        $sql = sprintf("SELECT SUM(`amount`) as `future_amount`,
+                               SUM(CASE WHEN `date` <= '{$now}' THEN `amount` ELSE 0 END) AS `current_amount`,
                                `inout_records`.`account_id`,
                                `accounts`.`name` as `account`, 
                                `users`.`fullname` as `player`
@@ -107,17 +110,20 @@ class Summary_model extends Inout_Model {
                         GROUP BY `account_id`, `player`
                         ORDER BY `account_id` ASC, `player` ASC", self::TABLE);
                         
-        $data = $this->db->query($sql)->result_array()  ; 
+        $data = $this->db->query($sql)->result_array(); 
         
         $combine_data = array();
-        $total = 0;
+        $total = array(0, 0);
         foreach ($data as $i => $item){
-            $total += $item['amount'];
+            $total[0] += $item['current_amount'];
+            $total[1] += $item['future_amount'];
+            
             if ($item['account_id'] == 1){
-                $combine_data[$item['player']] = $item['amount'];
+                $combine_data[$item['player']] = array($item['current_amount'], $item['future_amount']);
             }
             else {
-                @$combine_data[$item['account']] += $item['amount'];
+                @$combine_data[$item['account']][0] += $item['current_amount'];
+                @$combine_data[$item['account']][1] += $item['future_amount'];
             }
         }
         

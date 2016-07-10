@@ -65,8 +65,8 @@ class Summary extends CI_Controller {
         // Lấy thông tin về tài khoản và loại thu chi
         $account = $this->input->get('account');
         $player  = $this->input->get('player');
-        if ($account === null) $account = 1;
-        if ($player === null) $player = $this->login_model->getInfo('uid');
+        if ($account === null) $account = 0;
+        if ($player === null) $player = 0;
         
         $view_data['date'] = $date;
         $view_data['list'] = $this->summary_model->getDailyList($range[0], $range[1], $account, $player);
