@@ -37,10 +37,9 @@ $(function(){
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">
                         <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['today'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['today'][2]?>%">
-                            <span><?=$liquidOutgoStatus['today'][2]?>%</span>
+                            <span><?=currency($liquidOutgoStatus['today'][0], false)?> / <?=currency($liquidOutgoStatus['today'][1], false)?> (<?=$liquidOutgoStatus['today'][2]?>%)</span>
                         </div>
                     </div>
-                    <span><?=currency($liquidOutgoStatus['today'][0], false)?> / <?=currency($liquidOutgoStatus['today'][1], false)?></span>
                 </td>
             </tr>
             <tr>
@@ -48,10 +47,9 @@ $(function(){
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">
                         <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['month'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['month'][2]?>%">
-                            <span><?=$liquidOutgoStatus['month'][2]?>%</span>
+                            <span><?=currency($liquidOutgoStatus['month'][0], false)?> / <?=currency($liquidOutgoStatus['month'][1], false)?> (<?=$liquidOutgoStatus['month'][2]?>%)</span>
                         </div>
                     </div>
-                    <span><?=currency($liquidOutgoStatus['month'][0], false)?> / <?=currency($liquidOutgoStatus['month'][1], false)?></span>
                 </td>
             </tr>
         </table>
