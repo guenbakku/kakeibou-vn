@@ -6,13 +6,29 @@ $(function(){
 });
 </script>
 
-<?php if ($liquidOutgoStatus['month'][1] > 0): ?>
 <div class="container">
     <div class="panel panel-default">
-        <a class="panel-heading" href="<?=base_url()?>setting/edit/month_outgo_plans" style="display:block">
-            <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Chi thực tế / Dự định</strong><br>
-            <span class="small text-muted"><em>Không tính các khoản chi cố định</em></span>
+        <a class="panel-heading" href="<?=base_url()?>summary/viewlist" style="display:block">
+            <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Thu chi tháng này (<?=date('Y-m')?>)</strong>
         </a>
+        <table class="table table-bordered" style="border-bottom:1px solid; border-color:inherit">
+            <tr>
+                <th style="width:33.3%" class="text-center">Thu</th>
+                <th style="width:33.3%" class="text-center">Chi</th>
+                <th style="width:33.3%" class="text-center">Chênh lệch</th>
+            </tr>
+            <tr>
+                <td class="text-right"><?=currency($month_sum['thu'])?></td>
+                <td class="text-right"><?=currency($month_sum['chi'])?></td>
+                <td class="text-right"><?=currency($month_sum['tong'])?></td>
+            </tr>
+        </table>
+        
+        <?php if ($liquidOutgoStatus['month'][1] > 0): ?>
+        <div class="panel-heading"">
+            <strong>Tỷ lệ Chi thực tế / Dự định</strong><br>
+            <span class="small text-muted"><em>(Không tính các khoản chi cố định)</em></span>
+        </div>
         <table class="table table-bordered">
             <tr>
                 <th style="width:33.3%">Hôm nay</th>
@@ -35,27 +51,8 @@ $(function(){
                 </td>
             </tr>
         </table>
-    </div>
-</div>
-<?php endif ?>
-
-<div class="container">
-    <div class="panel panel-default">
-        <a class="panel-heading" href="<?=base_url()?>summary/viewlist" style="display:block">
-            <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Thu chi trong tháng (<?=date('Y-m')?>)</strong>
-        </a>
-        <table class="table table-bordered">
-            <tr>
-                <th style="width:33.3%" class="text-center">Thu</th>
-                <th style="width:33.3%" class="text-center">Chi</th>
-                <th style="width:33.3%" class="text-center">Chênh lệch</th>
-            </tr>
-            <tr>
-                <td class="text-right"><?=currency($month_sum['thu'])?></td>
-                <td class="text-right"><?=currency($month_sum['chi'])?></td>
-                <td class="text-right"><?=currency($month_sum['tong'])?></td>
-            </tr>
-        </table>
+        <?php endif ?>
+        
     </div>
 </div>
 
