@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+//Set timezone là Tokyo
+date_default_timezone_set('Asia/Tokyo');
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
