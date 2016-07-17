@@ -3,7 +3,7 @@
         <div class="panel-heading"><strong>Login</strong></div>
         <div class="panel-body">
             
-            <form class="form-vertical" method="post" action="<?=base_url()?>user/login">
+            <?php echo form_open(base_url().'user/login', array('class' => 'form-vertical'))?>
                 <div class="form-group">
                     <label class="sr-only" for="username">Username</label>
                     <?=form_input(
