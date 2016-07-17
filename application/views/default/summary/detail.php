@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                         </a>
-                <?php if ($i==0 || $list[$i]['date'] != $list[$i-1]['date']): ?>
+                <?php if ($i==$total_items-1 || $list[$i]['date'] != $list[$i+1]['date']): ?>
                     </div>
                 <?php endif ?>
             <?php endfor ?>

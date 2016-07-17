@@ -133,7 +133,7 @@ class Inout extends CI_Controller {
         
         $this->flash->success(Constants::SUCC_DELETE_INOUT_RECORD);
         
-        // Redirect tới danh sách detail (được ghi trong $_GET['goto'])
+        // Redirect tới link được ghi trong $_GET['goto']
         $goto = base64_decode($this->input->get('goto'));
         if ($goto == null) $goto = base_url();
         redirect($goto);
