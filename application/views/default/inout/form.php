@@ -13,13 +13,6 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
     $(function(){
         $(".autofocus").focus();
         
-        $('.del-record').click(function(evt){
-            evt.preventDefault();
-            if (confirm('Muốn xóa ghi chép này?')){
-                window.location.href = $(this).attr('href');
-            }
-        });
-        
         $(".autocomplete").autocomplete({ 
             source: function(req, resp) {
                 $.getJSON("/inout/searchMemo/" + encodeURIComponent(req.term), resp);
@@ -154,9 +147,25 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                 </div>
                 <button type="submit" class="btn btn-primary">Nhập</button>
                 <?php if ($this->uri->segment(2) == 'edit'): ?>
-                    <a type="button" class="btn btn-danger pull-right del-record" href="<?=$del_url?>">Xóa</a>
+                    <button type="button" class="btn btn-danger pull-right del-record-btn">Xóa</button>
                 <?php endif ?>
             </div>
         </div>
     </form>
 </div>
+
+<?php if ($this->uri->segment(2) == 'edit'): ?>
+    <script type="text/javascript">
+        $(function(){
+            $('.del-record-btn').click(function(evt){
+                evt.preventDefault();
+                if (confirm('Muốn xóa ghi chép này?')){
+                    $('#delCashFlow').submit();
+                }
+            });
+        })
+    </script>
+    
+    <?php echo form_open($del_url, array('id' => 'delCashFlow', 'class' => 'form-vertical sr-only'))?>
+    </form>
+<?php endif ?> 
