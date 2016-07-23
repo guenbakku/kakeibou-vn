@@ -49,8 +49,8 @@ class Summary_model extends Inout_Model {
      *
      * @param   string  : 'yyyy-mm-dd'
      * @param   string  : 'yyyy-mm-dd'
-     * @param   int     
-     * @param   int     : số quy định trong dữ liệu, nếu là 0 -> tất cả account
+     * @param   int     : id loại tài khoản, nếu là 0 -> tất cả account
+     * @param   int     : id người phụ trách, nếu là 0 -> tất cả member
      *--------------------------------------------------------------------
      */
     public function getDailyList($from, $to, $account, $player)
@@ -79,7 +79,7 @@ class Summary_model extends Inout_Model {
             $sql['WHERE'] .= "AND `inout_records`.`account_id` = '{$account}' ";
         }
         else {
-            $sql['WHERE'] .= "AND `pair_id` = ''";
+            $sql['WHERE'] .= "AND `pair_id` = ''"; //Nếu lấy Tất cả account thì không tính phần lưu động nội bộ
         }
         
         if ($player > 0){
