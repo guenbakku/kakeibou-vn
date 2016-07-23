@@ -147,7 +147,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                 </div>
                 <button type="submit" class="btn btn-primary">Nhập</button>
                 <?php if ($this->uri->segment(2) == 'edit'): ?>
-                    <button type="button" class="btn btn-danger pull-right del-record-btn">Xóa</button>
+                    <button type="button" class="btn btn-danger pull-right" onclick="del_record()">Xóa</button>
                 <?php endif ?>
             </div>
         </div>
@@ -156,14 +156,11 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
 
 <?php if ($this->uri->segment(2) == 'edit'): ?>
     <script type="text/javascript">
-        $(function(){
-            $('.del-record-btn').click(function(evt){
-                evt.preventDefault();
-                if (confirm('Muốn xóa ghi chép này?')){
-                    $('#delCashFlow').submit();
-                }
-            });
-        })
+        function del_record(){
+            if (confirm('Muốn xóa ghi chép này?')){
+                $('#delCashFlow').submit();
+            }
+        }
     </script>
     
     <?php echo form_open($del_url, array('id' => 'delCashFlow', 'class' => 'form-vertical sr-only'))?>
