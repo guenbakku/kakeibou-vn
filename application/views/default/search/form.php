@@ -97,6 +97,19 @@
                         )?>
                     </div>
                 </div>
+                
+                <div class="form-group">
+                    <label>
+                        <?=form_checkbox(
+                            array(
+                                'name'      => $field_name = 'show_pair_inout',
+                                'value'     => '1',
+                                'checked'   => (bool)set_value($field_name, FALSE),
+                            )
+                        )?>
+                        Hiện cả dữ liệu lưu động nội bộ
+                    </label>
+                </div>
                 <button type="submit" class="btn btn-primary">Tìm</button>
             </div>
         </div>

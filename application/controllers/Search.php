@@ -21,12 +21,22 @@ class Search extends CI_Controller {
             try {
                 $_POST = $this->input->get();
                 
-                $condition_keys = array('amount', 'player', 'inout_type', 'memo', 'from', 'to');
-                $is_all_fields_empty = true;
+                $condition_keys = array(
+                    'amount'            => true, 
+                    'player'            => true, 
+                    'inout_type'        => true, 
+                    'memo'              => true,
+                    'from'              => true, 
+                    'to'                => true,
+                    'show_pair_inout'   => false,
+                );
+                $can_excute_search = false;
                 
-                foreach ($condition_keys as $key){
+                foreach ($condition_keys as $key => $is_required){
                     if (!empty($this->input->get($key))){
-                        $is_all_fields_empty = false;
+                        if ($is_required){
+                            $can_excute_search = true;
+                        }
                         $this->search_model->$key = $this->input->get($key);
                     }
                     else {
@@ -34,7 +44,7 @@ class Search extends CI_Controller {
                     }
                 }
                 
-                if ($is_all_fields_empty){
+                if (!$can_excute_search){
                     throw new Exception('Chưa nhập điều kiện tìm kiếm');
                 }
                 

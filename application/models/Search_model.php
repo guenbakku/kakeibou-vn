@@ -3,12 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Search_model extends App_Model {
     
-    private $amount     = null;
-    private $memo       = null;
-    private $from       = null;
-    private $to         = null;
-    private $inout_type = null;
-    private $player     = null;
+    private $amount          = null;
+    private $memo            = null;
+    private $from            = null;
+    private $to              = null;
+    private $inout_type      = null;
+    private $player          = null;
+    private $show_pair_inout = false;
     
     private $result     = array();
     public function __set($name, $val)
@@ -17,7 +18,7 @@ class Search_model extends App_Model {
             return false;
         }
         
-        $acceptable_keys = array('amount', 'memo', 'from', 'to', 'inout_type', 'player');
+        $acceptable_keys = array('amount', 'memo', 'from', 'to', 'inout_type', 'player', 'show_pair_inout');
         if (!in_array($name, $acceptable_keys, true)){
             throw new InvalidArgumentException($name . ' không tồn tại hoặc không được phép thay đổi');
         }
@@ -46,6 +47,10 @@ class Search_model extends App_Model {
                 throw new InvalidArgumentException('Dữ liệu ngày tháng ('.$name.') không hợp lệ.');
             }
         }
+        else if ($name === 'show_pair_inout')
+        {
+            $val = (bool) $val;
+        }
         
         $this->$name = $val;
     }
@@ -68,7 +73,6 @@ class Search_model extends App_Model {
                  ->join('categories', 'categories.cid = inout_records.category_id')
                  ->join('inout_types', 'inout_types.iotid = categories.inout_type_id')
                  ->join('users', 'users.uid = inout_records.player')
-                 ->where('inout_records.pair_id', '') // Không tìm khoản lưu động nội bộ
                  ->order_by('inout_records.date', 'ASC')
                  ->order_by('categories.inout_type_id', 'ASC')
                  ->order_by('inout_records.created_on', 'ASC');
@@ -99,6 +103,9 @@ class Search_model extends App_Model {
         }
         if ($this->to != null){
             $this->db->where('inout_records.date <=', $this->to);
+        }
+        if ($this->show_pair_inout === false){
+            $this->db->where('inout_records.pair_id', '');
         }
         
         // return $this->db->get_compiled_select();
