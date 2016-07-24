@@ -12,6 +12,35 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-6">
+                            <label>Memo:</label>
+                            <?=form_input(
+                                array(
+                                    'name' => $field_name = 'memo',
+                                    'type' => 'text',
+                                ),
+                                set_value($field_name, null, false),
+                                array(
+                                    'class' => 'form-control',
+                                )
+                            )?>
+                        </div>
+                        <div class="col-xs-6">
+                            <label>Phụ trách</label>
+                            <?=form_dropdown(
+                                $field_name = 'player', 
+                                $select['players'], 
+                                set_value($field_name, 0), 
+                                array(
+                                    'class' => 'form-control',
+                                )
+                            )?>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-6">
                             <label>Số tiền:</label>
                             <?=form_input(
                                 array(
@@ -38,19 +67,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Memo:</label>
-                    <?=form_input(
-                        array(
-                            'name' => $field_name = 'memo',
-                            'type' => 'text',
-                        ),
-                        set_value($field_name, null, false),
-                        array(
-                            'class' => 'form-control',
-                        )
-                    )?>
-                </div>
+                
                 <div class="form-group">
                     <label>Thời gian:</label>
                     <div class="input-group" style="width:100%">
@@ -79,17 +96,6 @@
                             )
                         )?>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>Phụ trách</label>
-                    <?=form_dropdown(
-                        $field_name = 'player', 
-                        $select['players'], 
-                        set_value($field_name, 0), 
-                        array(
-                            'class' => 'form-control',
-                        )
-                    )?>
                 </div>
                 <button type="submit" class="btn btn-primary">Tìm</button>
             </div>
