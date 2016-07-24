@@ -8,7 +8,7 @@ $(function(){
 
 <div class="container">
     <div class="panel panel-default">
-        <a class="panel-heading" href="<?=base_url()?>summary/viewlist" style="display:block">
+        <a class="panel-heading" href="<?=base_url()?>viewlist/summary" style="display:block">
             <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Thu chi tháng này (<?=date('Y-m')?>)</strong>
         </a>
         <table class="table table-bordered" style="border-bottom:1px solid; border-color:inherit">

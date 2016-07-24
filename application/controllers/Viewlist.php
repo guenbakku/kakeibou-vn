@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Summary extends CI_Controller {
+class Viewlist extends CI_Controller {
     
     public function __construct()
     {   
@@ -10,16 +10,16 @@ class Summary extends CI_Controller {
             redirect($this->login_model->getLoginUrl());
         }
         
-        $this->load->model('summary_model');
+        $this->load->model('viewlist_model');
     }
     
     public function index()
     {
-        $this->template->write_view('MAIN', 'summary/menu');
+        $this->template->write_view('MAIN', 'viewlist/menu');
         $this->template->render();
     }
     
-    public function viewList($mode=null)
+    public function summary($mode=null)
     {   
         if ($mode==null){
             redirect(my_site_url(__CLASS__, __FUNCTION__, 'day'));
@@ -29,14 +29,14 @@ class Summary extends CI_Controller {
             show_error(Constants::ERR_BAD_REQUEST);
         }
         
-        $view_data = call_user_func(array($this, __FUNCTION__ . '_' . $mode));
+        $view_data = call_user_func(array($this, __FUNCTION__ . '_by_' . $mode));
         $view_data['form_url'] = my_site_url(__CLASS__, __FUNCTION__, $mode);
         
-        $this->template->write_view('MAIN', 'summary/viewlist', $view_data);
+        $this->template->write_view('MAIN', 'viewlist/summary', $view_data);
         $this->template->render();
 	}
     
-    public function detail($date)
+    public function inouts_of_day($date)
     {
         // Tính giới hạn thời gian
         $mdate = str_replace('-', '', $date);
@@ -69,7 +69,7 @@ class Summary extends CI_Controller {
         if ($player === null) $player = 0;
         
         $view_data['date'] = $date;
-        $view_data['list'] = $this->summary_model->getDailyList($range[0], $range[1], $account, $player);
+        $view_data['list'] = $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account, $player);
         $view_data['account'] = $account;
         $view_data['player']  = $player;
         $view_data['total_items'] = count($view_data['list']);
@@ -79,7 +79,7 @@ class Summary extends CI_Controller {
             'players'  => $this->app_model->getSelectTagData('user_id'),
         );
         
-		$this->template->write_view('MAIN', 'summary/detail', $view_data);
+		$this->template->write_view('MAIN', 'viewlist/inouts_of_day', $view_data);
         $this->template->render();
     }
     
@@ -88,7 +88,7 @@ class Summary extends CI_Controller {
      * Private Method
      *====================================================================
      */
-    private function viewList_day()
+    private function summary_by_day()
     {
         $year = $this->input->get('year');
         $month = $this->input->get('month');
@@ -104,7 +104,7 @@ class Summary extends CI_Controller {
             show_error(Constants::ERR_BAD_REQUEST);
         }
         
-        $view_data['list'] = $this->summary_model->getListByDay($year, $month);
+        $view_data['list'] = $this->viewlist_model->getListByDay($year, $month);
         $view_data['year'] = $year;
         $view_data['month'] = $month;
         $view_data['mode'] = 'day';
@@ -116,7 +116,7 @@ class Summary extends CI_Controller {
         return $view_data;
     }
     
-    private function viewList_month()
+    private function summary_by_month()
     {
         $year = $this->input->get('year');
         
@@ -128,7 +128,7 @@ class Summary extends CI_Controller {
             show_error(Constants::ERR_BAD_REQUEST);
         }
         
-        $view_data['list'] = $this->summary_model->getListByMonth($year);
+        $view_data['list'] = $this->viewlist_model->getListByMonth($year);
         $view_data['year'] = $year;
         $view_data['mode'] = 'month';
         $view_data['select'] = array(
@@ -138,9 +138,9 @@ class Summary extends CI_Controller {
         return $view_data;
     }
     
-    private function viewList_year()
+    private function summary_by_year()
     {
-        $view_data['list'] = $this->summary_model->getListByYear();
+        $view_data['list'] = $this->viewlist_model->getListByYear();
         $view_data['mode'] = 'year';
         
         return $view_data;

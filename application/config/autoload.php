@@ -126,4 +126,4 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('constants', 'app_model', 'setting_model', 'login_model', 'inout_model', 'summary_model');
+$autoload['model'] = array('constants', 'app_model', 'setting_model', 'login_model', 'inout_model', 'viewlist_model');

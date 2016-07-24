@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Summary_model extends Inout_Model {
+class Viewlist_model extends Inout_Model {
     
     public function getListByDay($year, $month)
     {
@@ -53,7 +53,7 @@ class Summary_model extends Inout_Model {
      * @param   int     : id người phụ trách, nếu là 0 -> tất cả member
      *--------------------------------------------------------------------
      */
-    public function getDailyList($from, $to, $account, $player)
+    public function getInoutsOfDay($from, $to, $account, $player)
     {
         $sql['SELECT']   = "SELECT `inout_records`.`iorid`,
                                    `inout_records`.`amount`,

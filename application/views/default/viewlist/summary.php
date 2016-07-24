@@ -56,7 +56,7 @@
     <div class="panel panel-default">
         <div class="list-group">
             <?php foreach($list as $k => $v) : ?>
-            <a class="list-group-item" href="<?=base_url().'summary/detail/'.$k?>">
+            <a class="list-group-item" href="<?=base_url().'viewlist/inouts_of_day/'.$k?>">
                 <div class="row">
                     <div class="pull-right" style="padding-right:15px; position:absolute; right:0px">
                         <span class="glyphicon glyphicon-menu-right"></span>
