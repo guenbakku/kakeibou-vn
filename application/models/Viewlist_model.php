@@ -3,8 +3,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Viewlist_model extends Inout_Model {
     
-    public function getListByDay($year, $month)
+    /*
+     *--------------------------------------------------------------------
+     * Lấy danh sách tổng chi tiêu theo ngày (trong một tháng)
+     *--------------------------------------------------------------------
+     */
+    public function summary_by_day($year, $month)
     {
+        $year = (int)$year;
+        $month = (int)$month;
+        
+        if ($year < 0 || $month < 1 || $month > 12){
+            throw new Exception(Constants::ERR_BAD_REQUEST);
+        }
+        
         $range = array(
             date('Y-m-d', strtotime("{$year}-{$month}-01")),
             date('Y-m-t', strtotime("{$year}-{$month}-01"))
@@ -18,8 +30,19 @@ class Viewlist_model extends Inout_Model {
         
     }
     
-    public function getListByMonth($year)
+    /*
+     *--------------------------------------------------------------------
+     * Lấy danh sách tổng chi tiêu theo tháng (trong một năm)
+     *--------------------------------------------------------------------
+     */
+    public function summary_by_month($year=0)
     {
+        $year = (int)$year;
+        
+        if ($year < 0){
+            throw new Exception(Constants::ERR_BAD_REQUEST);
+        }
+        
         $range = array(
             date('Y-01', strtotime("{$year}-01")),
             date('Y-12', strtotime("{$year}-12"))
@@ -34,7 +57,12 @@ class Viewlist_model extends Inout_Model {
         return $this->combineList($full_list_keys, $db_list);
     }
     
-    public function getListByYear()
+    /*
+     *--------------------------------------------------------------------
+     * Lấy danh sách tổng chi tiêu theo năm
+     *--------------------------------------------------------------------
+     */
+    public function summary_by_year()
     {
         $full_list_keys = self::getYearsListInDB();
                 
