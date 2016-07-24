@@ -20,6 +20,7 @@
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.11.4.custom/jquery-ui.structure.min.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.11.4.custom/jquery-ui.theme.min.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/main.css">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/sticky-footer.css">
         <?=$_styles?>
         
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery-1.12.3.min.js"></script>
@@ -33,6 +34,7 @@
         <?=$this->template->get_view('main-nav')?>
         <div class="container"><?=$this->flash->output()?></div>
         <?=$MAIN?>
+        <?=$this->template->get_view('footer')?>
     </body>
 
 </html>

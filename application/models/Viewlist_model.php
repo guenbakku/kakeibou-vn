@@ -93,7 +93,7 @@ class Viewlist_model extends Inout_Model {
                                    `users`.`fullname` as `player`,
                                    `users`.`label` as `player_label` ";
         $sql['FROM']     = "FROM `inout_records` ";
-        $sql['JOINT']    = "JOIN `accounts` ON `accounts`.`aid` = `inout_records`.`account_id`
+        $sql['JOIN']     = "JOIN `accounts` ON `accounts`.`aid` = `inout_records`.`account_id`
                             JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id`
                             JOIN `inout_types` ON `inout_types`.`iotid` = `categories`.`inout_type_id`
                             JOIN `users` ON `users`.`uid` = `inout_records`.`player` ";
@@ -107,7 +107,7 @@ class Viewlist_model extends Inout_Model {
             $sql['WHERE'] .= "AND `inout_records`.`account_id` = '{$account}' ";
         }
         else {
-            $sql['WHERE'] .= "AND `pair_id` = ''"; //Nếu lấy Tất cả account thì không tính phần lưu động nội bộ
+            $sql['WHERE'] .= "AND `inout_records`.`pair_id` = ''"; //Nếu lấy Tất cả account thì không tính phần lưu động nội bộ
         }
         
         if ($player > 0){

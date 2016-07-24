@@ -3,6 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Constants extends CI_Model {
     
+    const VERSION = '3.0';
+    
     const ERR_BAD_REQUEST = 'Yêu cầu không hợp lệ';
     
     const ERR_NOT_FOUND = 'Không tìm thấy dữ liệu';
