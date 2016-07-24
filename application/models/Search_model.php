@@ -8,34 +8,41 @@ class Search_model extends App_Model {
     private $from            = null;
     private $to              = null;
     private $inout_type      = null;
+    private $account         = null;
     private $player          = null;
     private $show_pair_inout = false;
     
     private $result     = array();
+    
     public function __set($name, $val)
     {
         if ($val === null){
             return false;
         }
         
-        $acceptable_keys = array('amount', 'memo', 'from', 'to', 'inout_type', 'player', 'show_pair_inout');
+        $acceptable_keys = array('amount', 'memo', 'from', 'to', 'inout_type', 'account', 'player', 'show_pair_inout');
         if (!in_array($name, $acceptable_keys, true)){
             throw new InvalidArgumentException($name . ' không tồn tại hoặc không được phép thay đổi');
         }
         
         if ($name === 'amount'){
             if (!is_numeric($val) || $val < 0){
-                throw new InvalidArgumentException('Dữ liệu số tiền không hợp lệ.');
+                throw new InvalidArgumentException('Dữ liệu số tiền không hợp lệ');
             }
         }
         else if ($name === 'player'){
             if (!is_numeric($val)){
-                throw new InvalidArgumentException('Dữ liệu người phụ trách không hợp lệ.');
+                throw new InvalidArgumentException('Dữ liệu người phụ trách không hợp lệ');
             }
         }
         else if ($name === 'inout_type'){
             if (!is_numeric($val) || !in_array($val, array(0, 1, 2))){
-                throw new InvalidArgumentException('Dữ liệu loại thu chi không hợp lệ.');
+                throw new InvalidArgumentException('Dữ liệu loại thu chi không hợp lệ');
+            }
+        }
+        else if ($name === 'account'){
+            if (!is_numeric($val) || $val < 0){
+                throw new InvalidArgumentException('Dữ liệu loại tài khoản không hợp lệ');
             }
         }
         else if ($name === 'from' || $name === 'to'){
@@ -44,7 +51,7 @@ class Search_model extends App_Model {
             if (!preg_match('/^\d{4}(\-\d{2})?(\-\d{2})?$/', $val)
                 || !strtotime($val) )
             {
-                throw new InvalidArgumentException('Dữ liệu ngày tháng ('.$name.') không hợp lệ.');
+                throw new InvalidArgumentException('Dữ liệu ngày tháng ('.$name.') không hợp lệ');
             }
         }
         else if ($name === 'show_pair_inout')
@@ -81,6 +88,12 @@ class Search_model extends App_Model {
         if ($this->amount !== null){ // Chú ý so sánh là so sánh chính xác !== (xét luôn trường hợp nhập số 0)  
             $this->db->where('ABS(`inout_records`.`amount`)', $this->amount, false);
         }
+        if ($this->memo != null){
+            $parts = explode(' ', trim($this->memo));
+            foreach ($parts as $part){
+                $this->db->like('inout_records.memo', $part);
+            }
+        }
         if ($this->inout_type != null){
             if ($this->inout_type == 1){
                 $this->db->where('inout_records.amount >=', 0);
@@ -89,11 +102,8 @@ class Search_model extends App_Model {
                 $this->db->where('inout_records.amount <', 0);
             }
         }
-        if ($this->memo != null){
-            $parts = explode(' ', trim($this->memo));
-            foreach ($parts as $part){
-                $this->db->like('inout_records.memo', $part);
-            }
+        if ($this->account != null){
+            $this->db->where('inout_records.account_id', $this->account);
         }
         if ($this->player != null){
             $this->db->where('inout_records.player', $this->player);

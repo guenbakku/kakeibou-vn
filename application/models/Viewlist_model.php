@@ -83,38 +83,15 @@ class Viewlist_model extends Inout_Model {
      */
     public function getInoutsOfDay($from, $to, $account, $player)
     {
-        $sql['SELECT']   = "SELECT `inout_records`.`iorid`,
-                                   `inout_records`.`amount`,
-                                   `inout_records`.`memo`,
-                                   `inout_records`.`date`,
-                                   `inout_types`.`name` as `inout_type`,
-                                   `accounts`.`name` as `account`, 
-                                   `categories`.`name` as `category`,
-                                   `users`.`fullname` as `player`,
-                                   `users`.`label` as `player_label` ";
-        $sql['FROM']     = "FROM `inout_records` ";
-        $sql['JOIN']     = "JOIN `accounts` ON `accounts`.`aid` = `inout_records`.`account_id`
-                            JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id`
-                            JOIN `inout_types` ON `inout_types`.`iotid` = `categories`.`inout_type_id`
-                            JOIN `users` ON `users`.`uid` = `inout_records`.`player` ";
-        $sql['WHERE']    = "WHERE `inout_records`.`date` >= '{$from}' 
-                              AND `inout_records`.`date` <= '{$to}' ";
-        $sql['ORDER_BY'] = "ORDER BY `inout_records`.`date` ASC, 
-                                     `categories`.`inout_type_id` ASC, 
-                                     `inout_records`.`created_on` ASC ";
+        $this->load->model('search_model');
         
-        if ($account > 0){
-            $sql['WHERE'] .= "AND `inout_records`.`account_id` = '{$account}' ";
-        }
-        else {
-            $sql['WHERE'] .= "AND `inout_records`.`pair_id` = ''"; //Nếu lấy Tất cả account thì không tính phần lưu động nội bộ
-        }
+        $this->search_model->from            = $from;
+        $this->search_model->to              = $to;
+        $this->search_model->account         = $account;
+        $this->search_model->player          = $player;
+        $this->search_model->show_pair_inout = $account > 0? true : false;
         
-        if ($player > 0){
-            $sql['WHERE'] .= "AND `inout_records`.`player` = '{$player}' " ;
-        }
-        
-        return $this->db->query(implode(' ', $sql))->result_array(); 
+        return $this->search_model->search(); 
     }
     
     /*
