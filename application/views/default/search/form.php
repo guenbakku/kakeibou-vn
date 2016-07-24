@@ -8,7 +8,7 @@
     <?php echo form_open($form_url, array('method' => 'get', 'class' => 'form-vertical'))?>
         <div class="panel panel-default">
             <div class="panel-heading" onclick="toggle_collapse_form()"><strong><?=$title?></strong><span class="glyphicon glyphicon-menu-down pull-right"></span></div>
-            <div class="panel-body search-form <?=$show_form? '':'collapse'?>">
+            <div class="panel-body search-form <?=$show_form? 'collapse in':'collapse'?>">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-6">
