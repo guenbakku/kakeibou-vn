@@ -34,7 +34,7 @@ $(function(){
                 <th style="width:33.3%">Hôm nay</th>
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">
-                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['today'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['today'][2]?>%">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['today'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['today'][1]>0? $liquidOutgoStatus['today'][2] : 100?>%">
                             <span><?=currency($liquidOutgoStatus['today'][0], false)?> / <?=currency($liquidOutgoStatus['today'][1], false)?> (<?=$liquidOutgoStatus['today'][2]?>%)</span>
                         </div>
                     </div>
