@@ -11,9 +11,16 @@ class Inout_model extends App_Model {
     // Mốc đánh dấu ID bắt đầu của category fix
     const FIX_CATEGORY_ID_MAX = '20';
     
+    // Tên của loại thu chi
     public static $INOUT_TYPE = array(
         1 => 'Thu',
         2 => 'Chi',
+    );
+    
+    // Dấu của loại thu chi
+    public static $INOUT_TYPE_SIGN = array(
+        1 => 1,
+        2 => -1,
     );
     
     // Tên và phân loại thu chi cho từng loại dòng tiền
@@ -56,18 +63,16 @@ class Inout_model extends App_Model {
     
     public function edit($id, $data)
     {
-        // Dựa vào giá trị amount cũ trong dữ liệu để xét dấu 
-        // âm dương cho dữ liệu chuẩn bị thay đổi
-        $old_value = current($this->db->select('amount')
-                                      ->where('iorid', $id)
-                                      ->get(self::TABLE)->row_array());
-        $k = $old_value/abs($old_value);
-        $k_arr = array($k, 0 - $k);
+        $pair_data = $this->getPairId($id);
+        
+        // if ($pair_data === false){
+            // throw new Exception($Constants::ERR_BAD_REQUEST);
+        // }
         
         $this->db->trans_start();
-        foreach ($this->getPairId($id) as $i => $item){
-            $data['amount'] = $k_arr[$i] * $data['amount'];
-            $this->db->where('iorid', $item)->update(self::TABLE, $data);
+        foreach ($pair_data as $iorid => $inout_type_id){
+            $data['amount'] = $this::$INOUT_TYPE_SIGN[$inout_type_id] * ABS($data['amount']);
+            $this->db->where('iorid', $iorid)->update(self::TABLE, $data);
         }
         $this->db->trans_complete();
     }
@@ -128,33 +133,45 @@ class Inout_model extends App_Model {
         return $pair;
     }
     
+    /*
+     *--------------------------------------------------------------------
+     * Xét xem dữ liệu đang sửa có phải là dữ liệu lưu động nội bộ (có pair_id) hay không
+     * Nếu không phải dữ liệu lưu động nội bộ thì trả về array chứa 1 item
+     * Nếu là dữ liệu lưu động nội bộ thì trả về array chứa 2 item, 
+     *  1 là của dữ liệu đang sửa, 1 là của item còn lại trong cặp
+     * Array trả về sẽ có dạng (id => inout_type_id)
+     * 
+     *--------------------------------------------------------------------
+     */
     private function getPairId($id)
     {
-        $pair_id = $this->db->select('pair_id')
-                            ->where('iorid', $id)
-                            ->get(self::TABLE)
-                            ->row_array();
+        $res = $this->db->select('inout_records.iorid')
+                        ->select('inout_records.pair_id')
+                        ->select('categories.inout_type_id')
+                        ->from('inout_records')
+                        ->join('categories', 'categories.cid = inout_records.category_id')
+                        ->where('iorid', $id)
+                        ->limit(1)
+                        ->get()->result_array();
         
         // Id không có trong CSDL
-        if (empty($pair_id)){
+        if (empty($res)){
             return false;
         }
         
-        // Lấy value 'pair_id' và kiểm tra pair_id trống hay không
-        $pair_id = current($pair_id);
-
-        if (empty($pair_id)){
-            return array($id);
+        // Nếu là dữ liệu lưu động nội bộ thì lấy dữ liệu của item còn lại
+        $pair_id = $res[0]['pair_id'];
+        if (!empty($pair_id)){
+            $res = $this->db->select('inout_records.iorid')
+                            ->select('categories.inout_type_id')
+                            ->from('inout_records')
+                            ->join('categories', 'categories.cid = inout_records.category_id')
+                            ->where('pair_id', $pair_id)
+                            ->limit(2)
+                            ->get()->result_array();
         }
-        
-        // Lấy id còn lại trong cặp pair_id
-        $other_id = current($this->db->select('iorid')
-                                     ->where('pair_id', $pair_id)
-                                     ->where('iorid !=', $id)
-                                     ->get(self::TABLE)
-                                     ->row_array() );
-                             
-        return array($id, $other_id);
+
+        return array_column($res, 'inout_type_id', 'iorid');
     }
     
     /*
