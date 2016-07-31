@@ -25,10 +25,9 @@ class Search extends CI_Controller {
                 // Khi tìm kiếm, ít nhất một trong những điều kiện 
                 // bắt buộc được nhập mới thực hiện tìm kiếm 
                 $condition_keys = array(
-                    'amount'            => true, 
+                    'memo_or_amount'    => true,
                     'player'            => true, 
                     'inout_type'        => true, 
-                    'memo'              => true,
                     'from'              => true, 
                     'to'                => true,
                     'hide_pair_inout'   => false,
@@ -36,11 +35,23 @@ class Search extends CI_Controller {
                 $can_excute_search = false;
                 
                 foreach ($condition_keys as $key => $is_required){
-                    if (!empty($this->input->get($key))){
+                    $val = trim($this->input->get($key));
+                    if (!empty($val)){
                         if ($is_required){
                             $can_excute_search = true;
                         }
-                        $this->search_model->$key = $this->input->get($key);
+                        
+                        if ($key === 'memo_or_amount'){
+                            if (is_numeric($val)){
+                                $this->search_model->amount = $val;
+                            }
+                            else {
+                                $this->search_model->memo = $val;
+                            }
+                        }
+                        else {
+                            $this->search_model->$key = $val;
+                        }
                     }
                     else {
                         $this->search_model->$key = null;
