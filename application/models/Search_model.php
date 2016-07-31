@@ -10,7 +10,7 @@ class Search_model extends App_Model {
     private $inout_type      = null;
     private $account         = null;
     private $player          = null;
-    private $show_pair_inout = false;
+    private $hide_pair_inout = false;
     
     private $result     = array();
     
@@ -20,7 +20,7 @@ class Search_model extends App_Model {
             return false;
         }
         
-        $acceptable_keys = array('amount', 'memo', 'from', 'to', 'inout_type', 'account', 'player', 'show_pair_inout');
+        $acceptable_keys = array('amount', 'memo', 'from', 'to', 'inout_type', 'account', 'player', 'hide_pair_inout');
         if (!in_array($name, $acceptable_keys, true)){
             throw new InvalidArgumentException($name . ' không tồn tại hoặc không được phép thay đổi');
         }
@@ -54,7 +54,7 @@ class Search_model extends App_Model {
                 throw new InvalidArgumentException('Dữ liệu ngày tháng ('.$name.') không hợp lệ');
             }
         }
-        else if ($name === 'show_pair_inout')
+        else if ($name === 'hide_pair_inout')
         {
             $val = (bool) $val;
         }
@@ -85,16 +85,16 @@ class Search_model extends App_Model {
                  ->order_by('inout_records.created_on', 'ASC');
         
         // Set điều kiện tìm kiếm
-        if ($this->amount !== null){ // Chú ý so sánh là so sánh chính xác !== (xét luôn trường hợp nhập số 0)  
+        if ($this->amount != null){ // Chú ý không phải là kiểm tra empty vì muốn xét luôn trường hợp nhập 0
             $this->db->where('ABS(`inout_records`.`amount`)', $this->amount, false);
         }
-        if ($this->memo != null){
+        if (!empty($this->memo)){
             $parts = explode(' ', trim($this->memo));
             foreach ($parts as $part){
                 $this->db->like('inout_records.memo', $part);
             }
         }
-        if ($this->inout_type != null){
+        if (!empty($this->inout_type)){
             if ($this->inout_type == 1){
                 $this->db->where('inout_records.amount >=', 0);
             }
@@ -102,23 +102,22 @@ class Search_model extends App_Model {
                 $this->db->where('inout_records.amount <', 0);
             }
         }
-        if ($this->account != null){
+        if (!empty($this->account)){
             $this->db->where('inout_records.account_id', $this->account);
         }
-        if ($this->player != null){
+        if (!empty($this->player)){
             $this->db->where('inout_records.player', $this->player);
         }
-        if ($this->from != null){
+        if (!empty($this->from)){
             $this->db->where('inout_records.date >=', $this->from);
         }
-        if ($this->to != null){
+        if (!empty($this->to)){
             $this->db->where('inout_records.date <=', $this->to);
         }
-        if ($this->show_pair_inout === false){
+        if ($this->hide_pair_inout === true){
             $this->db->where('inout_records.pair_id', '');
         }
         
-        // return $this->db->get_compiled_select();
         return $this->result = $this->db->get()->result_array();
     }
 }

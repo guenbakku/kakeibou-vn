@@ -21,6 +21,9 @@ class Search extends CI_Controller {
             try {
                 $_POST = $this->input->get();
                 
+                // Điều kiện tìm kiếm => bắt buộc hay không
+                // Khi tìm kiếm, ít nhất một trong những điều kiện 
+                // bắt buộc được nhập mới thực hiện tìm kiếm 
                 $condition_keys = array(
                     'amount'            => true, 
                     'player'            => true, 
@@ -28,7 +31,7 @@ class Search extends CI_Controller {
                     'memo'              => true,
                     'from'              => true, 
                     'to'                => true,
-                    'show_pair_inout'   => false,
+                    'hide_pair_inout'   => false,
                 );
                 $can_excute_search = false;
                 

@@ -100,14 +100,15 @@
                 
                 <div class="form-group">
                     <label>
+                        <input type="hidden" value="0" name="<?=$field_name = 'hide_pair_inout'?>">
                         <?=form_checkbox(
                             array(
-                                'name'      => $field_name = 'show_pair_inout',
+                                'name'      => $field_name,
                                 'value'     => '1',
                                 'checked'   => (bool)set_value($field_name, FALSE),
                             )
                         )?>
-                        Hiện cả dữ liệu lưu động nội bộ
+                        Ẩn dữ liệu lưu động nội bộ
                     </label>
                 </div>
                 <button type="submit" class="btn btn-primary">Tìm</button>
