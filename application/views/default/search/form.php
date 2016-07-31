@@ -12,7 +12,7 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-12">
-                            <label>Memo hoặc Số tiền:</label>
+                            <label>Ghi chú hoặc Số tiền:</label>
                             <?=form_input(
                                 array(
                                     'name' => $field_name = 'memo_or_amount',
