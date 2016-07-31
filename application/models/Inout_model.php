@@ -79,9 +79,15 @@ class Inout_model extends App_Model {
     
     public function del($id)
     {
+        $pair_data = $this->getPairId($id);
+        
+        if ($pair_data === false){
+            throw new Exception($Constants::ERR_BAD_REQUEST);
+        }
+        
         $this->db->trans_start();
-        foreach ($this->getPairId($id) as $item){
-            $this->db->where('iorid', $item)->delete(self::TABLE);
+        foreach ($pair_data as $iorid => $inout_type_id){
+            $this->db->where('iorid', $iorid)->delete(self::TABLE);
         }
         $this->db->trans_complete();
     }
