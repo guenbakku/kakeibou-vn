@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.4.1
+-- version 4.0.10.14
 -- http://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: 2016 年 6 月 28 日 20:14
--- サーバのバージョン： 5.6.30
--- PHP Version: 7.0.6
+-- ホスト: localhost:3306
+-- 生成日時: 2016 年 8 月 07 日 21:11
+-- サーバのバージョン: 5.5.45-cll-lve
+-- PHP のバージョン: 5.4.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,10 +14,10 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
--- Database: `kakeibou`
+-- データベース: `nvb-online_kakeibou`
 --
 
 -- --------------------------------------------------------
@@ -26,11 +26,13 @@ SET time_zone = "+00:00";
 -- テーブルの構造 `accounts`
 --
 
-CREATE TABLE `accounts` (
-  `aid` tinyint(4) NOT NULL,
+CREATE TABLE IF NOT EXISTS `accounts` (
+  `aid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
-  `description` varchar(256) NOT NULL COMMENT 'Ghi chú cho tài khoản'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Phân loại các tài khoản ngân hàng';
+  `description` varchar(256) NOT NULL COMMENT 'Ghi chú cho tài khoản',
+  PRIMARY KEY (`aid`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Phân loại các tài khoản ngân hàng' AUTO_INCREMENT=3 ;
 
 --
 -- テーブルのデータのダンプ `accounts`
@@ -43,79 +45,43 @@ INSERT INTO `accounts` (`aid`, `name`, `description`) VALUES
 -- --------------------------------------------------------
 
 --
--- テーブルの構造 `bottles`
---
-
-CREATE TABLE `bottles` (
-  `bid` tinyint(4) NOT NULL,
-  `name` varchar(128) NOT NULL,
-  `ratio` tinyint(3) UNSIGNED NOT NULL COMMENT 'tỷ lệ phân chia mặc định'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- テーブルのデータのダンプ `bottles`
---
-
-INSERT INTO `bottles` (`bid`, `name`, `ratio`) VALUES
-(0, 'null', 0),
-(1, 'Nhu cầu thiết yếu', 10),
-(2, 'Tiết kiệm dài hạn', 10),
-(3, 'Giáo dục đào tạo', 10),
-(4, 'Quỹ tự do tài chính', 55),
-(5, 'Hưởng thụ', 10),
-(6, 'Giúp đỡ người khác', 5);
-
--- --------------------------------------------------------
-
---
--- テーブルの構造 `bottle_records`
---
-
-CREATE TABLE `bottle_records` (
-  `iorid` int(11) NOT NULL COMMENT 'id của record thu nhập',
-  `bottle_id` tinyint(4) NOT NULL COMMENT 'id của từng bottle',
-  `amount` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ghi lại tỷ lệ phân phối thu nhập vào các lọ';
-
--- --------------------------------------------------------
-
---
 -- テーブルの構造 `categories`
 --
 
-CREATE TABLE `categories` (
-  `cid` tinyint(4) NOT NULL,
+CREATE TABLE IF NOT EXISTS `categories` (
+  `cid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
-  `sort` tinyint(3) UNSIGNED NOT NULL,
-  `inout_type_id` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'id quy định loại thu, chi, mượn, cho mượn',
+  `sort` tinyint(3) unsigned NOT NULL,
+  `inout_type_id` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'id quy định loại thu, chi, mượn, cho mượn',
   `month_fixed_money` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Có phải là tiền cố định hàng tháng không',
-  `bottle_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Phân loại sẵn lọ cho danh mục',
-  `restrict_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'không cho delete'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `restrict_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'không cho delete',
+  PRIMARY KEY (`cid`),
+  KEY `iotid` (`inout_type_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
 
 --
 -- テーブルのデータのダンプ `categories`
 --
 
-INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `month_fixed_money`, `bottle_id`, `restrict_delete`) VALUES
-(1, 'Rút tiền từ tài khoản*', 1, 2, 0, 0, 1),
-(2, 'Rút tiền từ tài khoản*', 1, 1, 0, 0, 1),
-(3, 'Nạp tiền vô tài khoản*', 2, 1, 0, 0, 1),
-(4, 'Nạp tiền vô tài khoản*', 2, 2, 0, 0, 1),
-(5, 'Chuyển tiền qua tay*', 3, 2, 0, 0, 1),
-(6, 'Chuyển tiền qua tay*', 3, 1, 0, 0, 1),
-(21, 'Ăn uống', 0, 2, 0, 0, 0),
-(22, 'Đi lại', 0, 2, 0, 0, 0),
-(23, 'Giải trí', 0, 2, 0, 0, 0),
-(24, 'Góp tiền hàng tháng', 0, 1, 0, 0, 0),
-(25, 'Điện, nước, gas, internet', 0, 2, 1, 0, 0),
-(26, 'Khác', 0, 1, 0, 0, 0),
-(27, 'Đồ gia dụng lặt vặt', 0, 2, 0, 0, 0),
-(28, 'Trả thẻ credit', 0, 2, 1, 0, 0),
-(29, 'Áo quần, giày dép', 0, 2, 0, 0, 0),
-(30, 'Điện thoại', 0, 2, 1, 0, 0),
-(31, 'Bảo hiểm', 0, 2, 1, 0, 0),
-(32, 'Khác', 0, 2, 0, 0, 0);
+INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `month_fixed_money`, `restrict_delete`) VALUES
+(1, 'Rút tiền từ tài khoản*', 1, 2, 0, 1),
+(2, 'Rút tiền từ tài khoản*', 1, 1, 0, 1),
+(3, 'Nạp tiền vô tài khoản*', 2, 1, 0, 1),
+(4, 'Nạp tiền vô tài khoản*', 2, 2, 0, 1),
+(5, 'Chuyển tiền qua tay*', 3, 2, 0, 1),
+(6, 'Chuyển tiền qua tay*', 3, 1, 0, 1),
+(21, 'Ăn uống', 0, 2, 0, 0),
+(22, 'Đi lại', 0, 2, 0, 0),
+(23, 'Giải trí', 0, 2, 0, 0),
+(24, 'Góp tiền hàng tháng', 0, 1, 0, 0),
+(25, 'Điện, nước, gas, internet', 0, 2, 1, 0),
+(26, 'Khác', 0, 1, 0, 0),
+(27, 'Đồ gia dụng lặt vặt', 0, 2, 0, 0),
+(28, 'Trả thẻ credit', 0, 2, 1, 0),
+(29, 'Áo quần, giày dép', 0, 2, 0, 0),
+(30, 'Điện thoại', 0, 2, 1, 0),
+(31, 'Bảo hiểm', 0, 2, 1, 0),
+(32, 'Khác', 0, 2, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -123,8 +89,8 @@ INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `month_fixed_m
 -- テーブルの構造 `inout_records`
 --
 
-CREATE TABLE `inout_records` (
-  `iorid` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `inout_records` (
+  `iorid` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` tinyint(4) NOT NULL,
   `category_id` tinyint(4) NOT NULL,
   `pair_id` varchar(32) NOT NULL COMMENT 'Chứa unique string có chiều dài 32 ký tự',
@@ -134,8 +100,13 @@ CREATE TABLE `inout_records` (
   `memo` varchar(128) NOT NULL,
   `date` date NOT NULL,
   `created_on` datetime NOT NULL,
-  `created_by` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ghi chép thu chi';
+  `created_by` tinyint(4) NOT NULL,
+  PRIMARY KEY (`iorid`),
+  KEY `category_id` (`category_id`) USING BTREE,
+  KEY `account_id` (`account_id`) USING BTREE,
+  KEY `user_id` (`player`) USING BTREE,
+  KEY `created_by` (`created_by`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='ghi chép thu chi' AUTO_INCREMENT=212 ;
 
 --
 -- テーブルのデータのダンプ `inout_records`
@@ -147,7 +118,156 @@ INSERT INTO `inout_records` (`iorid`, `account_id`, `category_id`, `pair_id`, `p
 (14, 1, 21, '', 1, 'outgo', -500, '', '2016-06-27', '2016-06-27 12:42:11', 1),
 (15, 1, 26, '', 2, 'income', 182, 'Khởi tạo', '2016-06-26', '2016-06-27 18:55:33', 1),
 (16, 2, 28, '', 1, 'outgo', -69492, '', '2016-06-27', '2016-06-27 21:18:00', 1),
-(17, 1, 21, '', 1, 'outgo', -350, '', '2016-06-28', '2016-06-28 12:08:15', 1);
+(17, 1, 21, '', 1, 'outgo', -350, '', '2016-06-28', '2016-06-28 12:08:15', 1),
+(27, 1, 21, '', 2, 'outgo', -1125, '', '2016-06-25', '2016-06-28 23:52:36', 2),
+(28, 1, 21, '', 2, 'outgo', -1282, '', '2016-06-28', '2016-06-28 23:53:01', 2),
+(31, 1, 5, '4d89006fc4955c2e1841f0f9656b9067', 2, 'handover', -10000, '', '2016-06-28', '2016-06-28 23:53:41', 2),
+(32, 1, 6, '4d89006fc4955c2e1841f0f9656b9067', 1, 'handover', 10000, '', '2016-06-28', '2016-06-28 23:53:41', 2),
+(33, 1, 21, '', 1, 'outgo', -450, '', '2016-06-29', '2016-06-29 12:13:35', 1),
+(34, 1, 21, '', 1, 'outgo', -458, '', '2016-06-30', '2016-06-30 12:42:39', 1),
+(35, 1, 21, '', 2, 'outgo', -855, '', '2016-06-29', '2016-06-30 23:18:24', 2),
+(36, 1, 21, '', 2, 'outgo', -852, '', '2016-06-30', '2016-06-30 23:18:44', 2),
+(37, 1, 21, '', 2, 'outgo', -626, '', '2016-06-29', '2016-06-30 23:19:02', 2),
+(38, 1, 31, '', 2, 'outgo', -4620, '', '2016-06-30', '2016-06-30 23:19:30', 2),
+(39, 1, 25, '', 2, 'outgo', -1414, 'Internet', '2016-06-30', '2016-06-30 23:19:52', 2),
+(41, 1, 21, '', 1, 'outgo', -480, '', '2016-07-01', '2016-07-01 12:10:53', 1),
+(42, 2, 24, '', 1, 'income', 120000, '', '2016-07-02', '2016-07-01 19:04:59', 1),
+(43, 2, 1, '6a8e2de7d91f0579f758503b1201a6bf', 2, 'drawer', -10000, '', '2016-07-02', '2016-07-02 10:37:08', 1),
+(44, 1, 2, '6a8e2de7d91f0579f758503b1201a6bf', 2, 'drawer', 10000, '', '2016-07-02', '2016-07-02 10:37:08', 1),
+(45, 2, 1, '5164f16503d3789513e4b1990f6833a7', 1, 'drawer', -10000, '', '2016-07-02', '2016-07-02 10:37:28', 1),
+(46, 1, 2, '5164f16503d3789513e4b1990f6833a7', 1, 'drawer', 10000, '', '2016-07-02', '2016-07-02 10:37:28', 1),
+(47, 1, 32, '', 1, 'outgo', -540, 'Daiso', '2016-07-02', '2016-07-02 11:09:30', 1),
+(48, 1, 21, '', 1, 'outgo', -1921, '', '2016-07-02', '2016-07-02 12:17:02', 1),
+(49, 2, 25, '', 1, 'outgo', -3421, 'Gas', '2016-06-30', '2016-07-02 12:18:59', 1),
+(50, 2, 25, '', 1, 'outgo', -5022, 'Internet', '2016-06-30', '2016-07-02 12:19:27', 1),
+(51, 1, 32, '', 1, 'outgo', -494, 'Đất trồng cây', '2016-07-03', '2016-07-03 13:07:24', 1),
+(53, 1, 21, '', 1, 'outgo', -762, 'Nước uống', '2016-07-03', '2016-07-03 19:06:27', 1),
+(54, 1, 21, '', 1, 'outgo', -1, '', '2016-07-03', '2016-07-03 19:37:56', 1),
+(55, 1, 21, '', 1, 'outgo', -246, '', '2016-07-03', '2016-07-03 20:03:30', 1),
+(56, 1, 21, '', 2, 'outgo', -90, '', '2016-07-02', '2016-07-03 22:18:04', 2),
+(57, 1, 21, '', 2, 'outgo', -800, '', '2016-07-03', '2016-07-03 22:18:34', 2),
+(58, 1, 21, '', 2, 'outgo', -1452, '', '2016-07-02', '2016-07-03 22:18:58', 2),
+(59, 1, 21, '', 2, 'outgo', -1285, '', '2016-07-02', '2016-07-03 22:19:23', 2),
+(60, 1, 21, '', 2, 'outgo', -950, '', '2016-07-02', '2016-07-03 22:19:45', 2),
+(61, 1, 21, '', 2, 'outgo', -98, '', '2016-07-03', '2016-07-03 22:20:01', 2),
+(62, 1, 21, '', 2, 'outgo', -2299, '', '2016-07-02', '2016-07-03 22:20:21', 2),
+(63, 1, 21, '', 1, 'outgo', -500, '', '2016-07-04', '2016-07-04 18:14:52', 1),
+(64, 1, 21, '', 1, 'outgo', -450, '', '2016-07-05', '2016-07-05 19:33:04', 1),
+(65, 1, 27, '', 1, 'outgo', -210, 'Giấy vệ sinh', '2016-07-05', '2016-07-05 19:33:48', 1),
+(66, 1, 21, '', 1, 'outgo', -484, '', '2016-07-05', '2016-07-05 19:34:04', 1),
+(67, 1, 21, '', 1, 'outgo', -399, '', '2016-07-05', '2016-07-05 19:57:28', 1),
+(68, 1, 21, '', 2, 'outgo', -451, '', '2016-07-05', '2016-07-05 20:06:56', 1),
+(69, 1, 21, '', 2, 'outgo', -1035, '', '2016-07-05', '2016-07-05 20:07:10', 1),
+(70, 1, 21, '', 1, 'outgo', -630, '', '2016-07-06', '2016-07-06 18:35:34', 1),
+(71, 1, 21, '', 1, 'outgo', -338, '', '2016-07-06', '2016-07-06 19:58:21', 1),
+(72, 2, 25, '', 1, 'outgo', -2575, 'Điện', '2016-07-06', '2016-07-06 22:34:47', 1),
+(73, 1, 21, '', 2, 'outgo', -2527, '', '2016-07-06', '2016-07-06 22:35:29', 1),
+(74, 1, 21, '', 2, 'outgo', -316, '', '2016-07-06', '2016-07-07 09:17:12', 2),
+(75, 1, 21, '', 1, 'outgo', -520, '', '2016-07-07', '2016-07-07 12:35:16', 1),
+(76, 2, 24, '', 2, 'income', 70000, '', '2016-07-08', '2016-07-08 12:24:25', 2),
+(77, 2, 1, '2aa18665588b84adb7fad71752853c00', 2, 'drawer', -10000, '', '2016-07-08', '2016-07-08 12:25:45', 2),
+(78, 1, 2, '2aa18665588b84adb7fad71752853c00', 2, 'drawer', 10000, '', '2016-07-08', '2016-07-08 12:25:45', 2),
+(79, 1, 21, '', 2, 'outgo', -678, '', '2016-07-07', '2016-07-08 12:27:10', 2),
+(80, 1, 21, '', 2, 'outgo', -216, '', '2016-07-07', '2016-07-08 12:27:27', 2),
+(81, 1, 21, '', 1, 'outgo', -880, '', '2016-07-08', '2016-07-08 19:35:11', 1),
+(82, 1, 21, '', 2, 'outgo', -183, '', '2016-07-08', '2016-07-09 02:24:56', 2),
+(83, 1, 21, '', 2, 'outgo', -18, '', '2016-07-08', '2016-07-09 02:25:11', 2),
+(84, 2, 25, '', 1, 'outgo', -5883, 'Nước', '2016-07-07', '2016-07-09 08:43:16', 1),
+(86, 1, 23, '', 2, 'outgo', -1530, 'nhà Khanh Bông', '2016-07-09', '2016-07-09 17:24:20', 2),
+(87, 1, 23, '', 1, 'outgo', -500, 'nhà Khanh Bông', '2016-07-09', '2016-07-09 22:14:14', 1),
+(88, 1, 21, '', 1, 'outgo', -1348, '', '2016-07-09', '2016-07-09 23:25:55', 1),
+(96, 1, 21, '', 2, 'outgo', -1103, '', '2016-07-10', '2016-07-10 20:00:09', 2),
+(97, 2, 28, '', 1, 'outgo', -29252, '', '2016-07-26', '2016-07-10 23:22:36', 1),
+(98, 1, 21, '', 1, 'outgo', -580, '', '2016-07-11', '2016-07-11 12:47:31', 1),
+(99, 1, 21, '', 2, 'outgo', -2341, '', '2016-07-11', '2016-07-11 18:50:55', 2),
+(101, 1, 21, '', 1, 'outgo', -480, '', '2016-07-12', '2016-07-12 12:13:17', 1),
+(102, 2, 1, '76c77186fb08e61d45d28fdcead1bd00', 2, 'drawer', -10000, '', '2016-07-12', '2016-07-12 12:37:48', 2),
+(103, 1, 2, '76c77186fb08e61d45d28fdcead1bd00', 2, 'drawer', 10000, '', '2016-07-12', '2016-07-12 12:37:48', 2),
+(104, 1, 21, '', 1, 'outgo', -480, '', '2016-07-13', '2016-07-13 12:19:53', 1),
+(105, 1, 21, '', 2, 'outgo', -893, '', '2016-07-13', '2016-07-13 19:45:44', 2),
+(106, 1, 21, '', 1, 'outgo', -500, '', '2016-07-14', '2016-07-14 12:52:33', 1),
+(107, 1, 21, '', 1, 'outgo', -108, '', '2016-07-14', '2016-07-14 20:24:51', 2),
+(108, 1, 21, '', 2, 'outgo', -1417, '', '2016-07-15', '2016-07-15 10:23:39', 2),
+(109, 1, 21, '', 2, 'outgo', -3290, '', '2016-07-15', '2016-07-15 12:18:42', 2),
+(110, 1, 21, '', 1, 'outgo', -690, '', '2016-07-15', '2016-07-15 13:48:29', 1),
+(111, 1, 25, '', 2, 'outgo', -1414, 'Internet', '2016-07-16', '2016-07-16 13:41:13', 2),
+(112, 1, 21, '', 2, 'outgo', -246, '', '2016-07-16', '2016-07-16 13:41:24', 2),
+(113, 1, 21, '', 2, 'outgo', -2751, '', '2016-07-16', '2016-07-16 14:27:18', 2),
+(115, 2, 24, '', 1, 'income', 928, 'Công ty trả tiền đi lại', '2016-07-13', '2016-07-17 09:57:45', 1),
+(117, 1, 21, '', 2, 'outgo', -1775, '外食', '2016-07-17', '2016-07-18 00:21:44', 2),
+(118, 1, 21, '', 2, 'outgo', -1032, '', '2016-07-17', '2016-07-18 00:22:06', 2),
+(119, 1, 21, '', 2, 'outgo', -968, '', '2016-07-18', '2016-07-19 12:41:36', 2),
+(120, 1, 27, '', 2, 'outgo', -648, '', '2016-07-18', '2016-07-19 12:42:07', 2),
+(121, 1, 21, '', 2, 'outgo', -1547, '', '2016-07-19', '2016-07-19 23:34:03', 2),
+(122, 1, 21, '', 2, 'outgo', -646, '', '2016-07-20', '2016-07-21 11:57:47', 2),
+(123, 1, 21, '', 2, 'outgo', -900, '', '2016-07-22', '2016-07-22 22:00:37', 2),
+(124, 1, 32, '', 1, 'outgo', -480, 'In ảnh', '2016-07-23', '2016-07-23 11:30:43', 1),
+(125, 1, 32, '', 1, 'outgo', -432, 'Khung ảnh', '2016-07-23', '2016-07-23 11:31:19', 1),
+(126, 1, 5, '099f95a2d2142d460795bcf0bee7cbf6', 1, 'handover', -3000, '', '2016-07-23', '2016-07-23 17:06:34', 1),
+(127, 1, 6, '099f95a2d2142d460795bcf0bee7cbf6', 2, 'handover', 3000, '', '2016-07-23', '2016-07-23 17:06:34', 1),
+(128, 1, 21, '', 1, 'outgo', -278, 'Bánh mỳ', '2016-07-24', '2016-07-24 19:08:49', 1),
+(129, 2, 1, 'f8483d7859eca4ebe4a0ec29ea1c8fc5', 2, 'drawer', -20000, '', '2016-06-28', '2016-07-24 22:32:36', 1),
+(130, 1, 2, 'f8483d7859eca4ebe4a0ec29ea1c8fc5', 2, 'drawer', 20000, '', '2016-06-28', '2016-07-24 22:32:36', 1),
+(137, 1, 21, '', 1, 'outgo', -690, '', '2016-07-25', '2016-07-25 12:41:50', 1),
+(138, 1, 21, '', 2, 'outgo', -506, '', '2016-07-24', '2016-07-25 12:42:06', 2),
+(139, 1, 21, '', 2, 'outgo', -131, '', '2016-07-23', '2016-07-25 12:42:27', 2),
+(140, 1, 21, '', 2, 'outgo', -4780, '', '2016-07-23', '2016-07-25 12:43:19', 2),
+(141, 2, 1, 'ae0627ae44e48c732a3e0013ca6d68e7', 2, 'drawer', -30000, '', '2016-07-25', '2016-07-25 18:21:22', 2),
+(142, 1, 2, 'ae0627ae44e48c732a3e0013ca6d68e7', 2, 'drawer', 30000, '', '2016-07-25', '2016-07-25 18:21:22', 2),
+(143, 1, 21, '', 1, 'outgo', -600, '', '2016-07-25', '2016-07-25 23:04:35', 1),
+(144, 1, 21, '', 2, 'outgo', -2860, '', '2016-07-25', '2016-07-26 01:29:05', 2),
+(148, 1, 21, '', 2, 'outgo', -346, '', '2016-07-27', '2016-07-27 19:23:04', 2),
+(149, 1, 21, '', 1, 'outgo', -418, '', '2016-07-27', '2016-07-27 20:28:36', 1),
+(150, 1, 32, '', 2, 'outgo', -21000, 'Thuế 市民税', '2016-07-27', '2016-07-27 20:29:44', 1),
+(151, 1, 25, '', 2, 'outgo', -3050, 'Điện tháng 5', '2016-07-27', '2016-07-27 20:30:29', 1),
+(153, 1, 21, '', 2, 'outgo', -172, '', '2016-07-28', '2016-07-28 12:05:09', 2),
+(154, 1, 21, '', 1, 'outgo', -680, '', '2016-07-28', '2016-07-28 12:46:09', 1),
+(155, 1, 21, '', 2, 'outgo', -550, '', '2016-07-28', '2016-07-28 15:14:33', 2),
+(156, 1, 21, '', 1, 'outgo', -399, '', '2016-07-28', '2016-07-28 20:40:22', 1),
+(157, 1, 21, '', 1, 'outgo', -293, '', '2016-07-28', '2016-07-28 20:40:31', 1),
+(158, 1, 21, '', 1, 'outgo', -538, '', '2016-07-29', '2016-07-29 12:44:54', 1),
+(159, 1, 21, '', 2, 'outgo', -650, '', '2016-07-28', '2016-07-29 19:13:41', 2),
+(160, 1, 21, '', 2, 'outgo', -1460, '', '2016-07-28', '2016-07-29 19:14:05', 2),
+(161, 1, 21, '', 2, 'outgo', -1950, '', '2016-07-29', '2016-07-29 19:50:20', 2),
+(162, 1, 21, '', 1, 'outgo', -1000, '', '2016-07-30', '2016-07-30 22:03:44', 1),
+(163, 1, 21, '', 1, 'outgo', -1833, '', '2016-07-30', '2016-07-30 22:31:56', 1),
+(164, 1, 21, '', 1, 'outgo', -108, '', '2016-07-30', '2016-07-30 22:32:14', 1),
+(165, 1, 21, '', 1, 'outgo', -454, '', '2016-07-29', '2016-07-30 22:32:47', 1),
+(166, 2, 24, '', 1, 'income', 120000, '', '2016-08-01', '2016-07-30 22:36:56', 1),
+(167, 2, 1, '22d9a90c41c5edacf7207a8224597c8e', 1, 'drawer', -10000, '', '2016-07-30', '2016-07-30 22:38:17', 1),
+(168, 1, 2, '22d9a90c41c5edacf7207a8224597c8e', 1, 'drawer', 10000, '', '2016-07-30', '2016-07-30 22:38:17', 1),
+(169, 2, 1, 'edf8bcc719199223231d8ac6b18fa1e2', 2, 'drawer', -20000, '', '2016-07-30', '2016-07-30 22:38:31', 1),
+(170, 1, 2, 'edf8bcc719199223231d8ac6b18fa1e2', 2, 'drawer', 20000, '', '2016-07-30', '2016-07-30 22:38:31', 1),
+(176, 1, 21, '', 2, 'outgo', -950, '', '2016-07-31', '2016-07-31 19:42:35', 2),
+(177, 1, 21, '', 2, 'outgo', -101, '', '2016-07-31', '2016-07-31 19:42:49', 2),
+(178, 1, 21, '', 1, 'outgo', -100, 'Nước uống', '2016-08-01', '2016-08-01 12:38:23', 1),
+(179, 1, 21, '', 2, 'outgo', -2246, '', '2016-08-01', '2016-08-01 22:49:23', 1),
+(180, 1, 21, '', 1, 'outgo', -680, '', '2016-08-02', '2016-08-02 16:13:57', 1),
+(181, 1, 21, '', 2, 'outgo', -1120, '', '2016-08-02', '2016-08-02 22:10:51', 2),
+(182, 1, 21, '', 1, 'outgo', -590, '', '2016-08-03', '2016-08-03 20:16:22', 1),
+(183, 1, 21, '', 2, 'outgo', -1313, '', '2016-08-03', '2016-08-03 20:42:55', 1),
+(184, 1, 21, '', 1, 'outgo', -560, '', '2016-08-04', '2016-08-04 12:12:32', 1),
+(185, 1, 21, '', 1, 'outgo', -644, '', '2016-08-04', '2016-08-04 21:45:43', 1),
+(186, 1, 21, '', 2, 'outgo', -1535, '', '2016-08-05', '2016-08-05 20:10:25', 2),
+(187, 1, 21, '', 1, 'outgo', -1080, '', '2016-08-05', '2016-08-05 20:32:18', 1),
+(188, 1, 21, '', 1, 'outgo', -116, '', '2016-08-05', '2016-08-05 21:25:21', 1),
+(189, 1, 21, '', 2, 'outgo', -1712, '', '2016-08-06', '2016-08-06 11:27:06', 2),
+(190, 1, 21, '', 1, 'outgo', -680, '', '2016-08-07', '2016-08-07 20:44:00', 1),
+(191, 1, 23, '', 1, 'outgo', -9033, '', '2016-08-07', '2016-08-07 22:53:41', 1),
+(192, 2, 25, '', 1, 'outgo', -2286, 'Gas', '2016-08-01', '2016-08-07 23:10:16', 1),
+(193, 2, 25, '', 1, 'outgo', -4482, 'Internet', '2016-08-01', '2016-08-07 23:10:51', 1),
+(194, 2, 25, '', 1, 'outgo', -3297, 'Điện', '2016-08-05', '2016-08-07 23:11:58', 1),
+(195, 2, 24, '', 1, 'income', 622, 'Công ty trả tiền đi lại', '2016-08-05', '2016-08-07 23:12:34', 1),
+(197, 1, 21, '', 2, 'outgo', -1400, '', '2016-08-06', '2016-08-07 23:38:30', 2),
+(198, 1, 21, '', 2, 'outgo', -888, '', '2016-08-06', '2016-08-08 11:01:35', 2),
+(199, 1, 21, '', 2, 'outgo', -668, '', '2016-08-07', '2016-08-08 11:01:49', 2),
+(200, 1, 21, '', 2, 'outgo', -4282, '', '2016-08-08', '2016-08-08 11:03:05', 2),
+(206, 2, 1, '86ac8b911690d0052ad6bf29a572964e', 2, 'drawer', -20000, '', '2016-08-08', '2016-08-08 11:05:00', 2),
+(207, 1, 2, '86ac8b911690d0052ad6bf29a572964e', 2, 'drawer', 20000, '', '2016-08-08', '2016-08-08 11:05:00', 2),
+(208, 2, 24, '', 2, 'income', 90000, '', '2016-08-08', '2016-08-08 11:08:08', 2),
+(209, 2, 1, '345ca2655e89664c84d19aa7bf4cd638', 1, 'drawer', -20000, '', '2016-08-08', '2016-08-08 11:10:33', 2),
+(210, 1, 2, '345ca2655e89664c84d19aa7bf4cd638', 1, 'drawer', 20000, '', '2016-08-08', '2016-08-08 11:10:33', 2),
+(211, 1, 21, '', 2, 'outgo', -927, '', '2016-08-05', '2016-08-08 11:14:57', 1);
 
 -- --------------------------------------------------------
 
@@ -155,10 +275,12 @@ INSERT INTO `inout_records` (`iorid`, `account_id`, `category_id`, `pair_id`, `p
 -- テーブルの構造 `inout_types`
 --
 
-CREATE TABLE `inout_types` (
-  `iotid` tinyint(1) UNSIGNED NOT NULL,
-  `name` varchar(32) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Chi tiết phân loại thu chi';
+CREATE TABLE IF NOT EXISTS `inout_types` (
+  `iotid` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  PRIMARY KEY (`iotid`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Chi tiết phân loại thu chi' AUTO_INCREMENT=3 ;
 
 --
 -- テーブルのデータのダンプ `inout_types`
@@ -174,10 +296,11 @@ INSERT INTO `inout_types` (`iotid`, `name`) VALUES
 -- テーブルの構造 `settings`
 --
 
-CREATE TABLE `settings` (
+CREATE TABLE IF NOT EXISTS `settings` (
   `item` varchar(128) NOT NULL,
   `name` varchar(128) NOT NULL,
-  `value` varchar(512) NOT NULL
+  `value` varchar(512) NOT NULL,
+  PRIMARY KEY (`item`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='lưu các thiết lập hệ thống';
 
 --
@@ -185,7 +308,7 @@ CREATE TABLE `settings` (
 --
 
 INSERT INTO `settings` (`item`, `name`, `value`) VALUES
-('month_outgo_plans', 'Số tiền dự định chi trong tháng', '"7000"');
+('month_outgo_plans', 'Số tiền dự định chi trong tháng', '"70000"');
 
 -- --------------------------------------------------------
 
@@ -193,13 +316,15 @@ INSERT INTO `settings` (`item`, `name`, `value`) VALUES
 -- テーブルの構造 `users`
 --
 
-CREATE TABLE `users` (
-  `uid` tinyint(4) NOT NULL,
+CREATE TABLE IF NOT EXISTS `users` (
+  `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL,
   `fullname` varchar(128) NOT NULL,
   `label` varchar(50) NOT NULL COMMENT 'Class HTML',
-  `password` varchar(256) NOT NULL COMMENT 'sha512'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `password` varchar(256) NOT NULL COMMENT 'sha512',
+  PRIMARY KEY (`uid`),
+  UNIQUE KEY `name` (`username`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- テーブルのデータのダンプ `users`
@@ -210,118 +335,13 @@ INSERT INTO `users` (`uid`, `username`, `fullname`, `label`, `password`) VALUES
 (2, 'hiep', 'Hiệp', 'label-warning', '94bc0c204d0f1ed072f1b20fba90c698caaf70cbb5ec64d8538f8cc00c5dc287a90c654c91282265454c4d13e8b156fb2a296e253e3f546b3786193cbea19ecf');
 
 --
--- Indexes for dumped tables
---
-
---
--- Indexes for table `accounts`
---
-ALTER TABLE `accounts`
-  ADD PRIMARY KEY (`aid`),
-  ADD UNIQUE KEY `name` (`name`);
-
---
--- Indexes for table `bottles`
---
-ALTER TABLE `bottles`
-  ADD PRIMARY KEY (`bid`);
-
---
--- Indexes for table `bottle_records`
---
-ALTER TABLE `bottle_records`
-  ADD PRIMARY KEY (`iorid`,`bottle_id`),
-  ADD UNIQUE KEY `prid` (`iorid`),
-  ADD KEY `bid` (`bottle_id`);
-
---
--- Indexes for table `categories`
---
-ALTER TABLE `categories`
-  ADD PRIMARY KEY (`cid`),
-  ADD KEY `bid` (`bottle_id`),
-  ADD KEY `iotid` (`inout_type_id`);
-
---
--- Indexes for table `inout_records`
---
-ALTER TABLE `inout_records`
-  ADD PRIMARY KEY (`iorid`),
-  ADD KEY `category_id` (`category_id`) USING BTREE,
-  ADD KEY `account_id` (`account_id`) USING BTREE,
-  ADD KEY `user_id` (`player`) USING BTREE,
-  ADD KEY `created_by` (`created_by`);
-
---
--- Indexes for table `inout_types`
---
-ALTER TABLE `inout_types`
-  ADD PRIMARY KEY (`iotid`),
-  ADD UNIQUE KEY `name` (`name`);
-
---
--- Indexes for table `settings`
---
-ALTER TABLE `settings`
-  ADD PRIMARY KEY (`item`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`uid`),
-  ADD UNIQUE KEY `name` (`username`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `accounts`
---
-ALTER TABLE `accounts`
-  MODIFY `aid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `bottles`
---
-ALTER TABLE `bottles`
-  MODIFY `bid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT for table `categories`
---
-ALTER TABLE `categories`
-  MODIFY `cid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
---
--- AUTO_INCREMENT for table `inout_records`
---
-ALTER TABLE `inout_records`
-  MODIFY `iorid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
---
--- AUTO_INCREMENT for table `inout_types`
---
-ALTER TABLE `inout_types`
-  MODIFY `iotid` tinyint(1) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `uid` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
 -- ダンプしたテーブルの制約
 --
-
---
--- テーブルの制約 `bottle_records`
---
-ALTER TABLE `bottle_records`
-  ADD CONSTRAINT `bottle_records_ibfk_1` FOREIGN KEY (`iorid`) REFERENCES `inout_records` (`iorid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `bottle_records_ibfk_2` FOREIGN KEY (`bottle_id`) REFERENCES `bottles` (`bid`) ON UPDATE CASCADE;
 
 --
 -- テーブルの制約 `categories`
 --
 ALTER TABLE `categories`
-  ADD CONSTRAINT `categories_ibfk_1` FOREIGN KEY (`bottle_id`) REFERENCES `bottles` (`bid`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `categories_ibfk_2` FOREIGN KEY (`inout_type_id`) REFERENCES `inout_types` (`iotid`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
