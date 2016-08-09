@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- ホスト: localhost:3306
--- 生成日時: 2016 年 8 月 07 日 21:11
+-- 生成日時: 2016 年 8 月 08 日 19:01
 -- サーバのバージョン: 5.5.45-cll-lve
 -- PHP のバージョン: 5.4.31
 
@@ -27,10 +27,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `accounts` (
-  `aid` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
   `description` varchar(256) NOT NULL COMMENT 'Ghi chú cho tài khoản',
-  PRIMARY KEY (`aid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Phân loại các tài khoản ngân hàng' AUTO_INCREMENT=3 ;
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 -- テーブルのデータのダンプ `accounts`
 --
 
-INSERT INTO `accounts` (`aid`, `name`, `description`) VALUES
+INSERT INTO `accounts` (`id`, `name`, `description`) VALUES
 (1, 'Tiền mặt', ''),
 (2, 'Yucho', '');
 
@@ -49,13 +49,13 @@ INSERT INTO `accounts` (`aid`, `name`, `description`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `categories` (
-  `cid` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
   `sort` tinyint(3) unsigned NOT NULL,
   `inout_type_id` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'id quy định loại thu, chi, mượn, cho mượn',
   `month_fixed_money` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Có phải là tiền cố định hàng tháng không',
   `restrict_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'không cho delete',
-  PRIMARY KEY (`cid`),
+  PRIMARY KEY (`id`),
   KEY `iotid` (`inout_type_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
 
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- テーブルのデータのダンプ `categories`
 --
 
-INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `month_fixed_money`, `restrict_delete`) VALUES
+INSERT INTO `categories` (`id`, `name`, `sort`, `inout_type_id`, `month_fixed_money`, `restrict_delete`) VALUES
 (1, 'Rút tiền từ tài khoản*', 1, 2, 0, 1),
 (2, 'Rút tiền từ tài khoản*', 1, 1, 0, 1),
 (3, 'Nạp tiền vô tài khoản*', 2, 1, 0, 1),
@@ -90,7 +90,7 @@ INSERT INTO `categories` (`cid`, `name`, `sort`, `inout_type_id`, `month_fixed_m
 --
 
 CREATE TABLE IF NOT EXISTS `inout_records` (
-  `iorid` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` tinyint(4) NOT NULL,
   `category_id` tinyint(4) NOT NULL,
   `pair_id` varchar(32) NOT NULL COMMENT 'Chứa unique string có chiều dài 32 ký tự',
@@ -101,18 +101,18 @@ CREATE TABLE IF NOT EXISTS `inout_records` (
   `date` date NOT NULL,
   `created_on` datetime NOT NULL,
   `created_by` tinyint(4) NOT NULL,
-  PRIMARY KEY (`iorid`),
+  PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`) USING BTREE,
   KEY `account_id` (`account_id`) USING BTREE,
   KEY `user_id` (`player`) USING BTREE,
   KEY `created_by` (`created_by`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='ghi chép thu chi' AUTO_INCREMENT=212 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='ghi chép thu chi' AUTO_INCREMENT=213 ;
 
 --
 -- テーブルのデータのダンプ `inout_records`
 --
 
-INSERT INTO `inout_records` (`iorid`, `account_id`, `category_id`, `pair_id`, `player`, `cash_flow`, `amount`, `memo`, `date`, `created_on`, `created_by`) VALUES
+INSERT INTO `inout_records` (`id`, `account_id`, `category_id`, `pair_id`, `player`, `cash_flow`, `amount`, `memo`, `date`, `created_on`, `created_by`) VALUES
 (12, 2, 26, '', 2, 'income', 274848, 'Khởi tạo', '2016-06-26', '2016-06-26 23:26:28', 2),
 (13, 1, 32, '', 1, 'outgo', -1594, 'Khởi tạo', '2016-06-26', '2016-06-26 23:32:05', 1),
 (14, 1, 21, '', 1, 'outgo', -500, '', '2016-06-27', '2016-06-27 12:42:11', 1),
@@ -267,7 +267,8 @@ INSERT INTO `inout_records` (`iorid`, `account_id`, `category_id`, `pair_id`, `p
 (208, 2, 24, '', 2, 'income', 90000, '', '2016-08-08', '2016-08-08 11:08:08', 2),
 (209, 2, 1, '345ca2655e89664c84d19aa7bf4cd638', 1, 'drawer', -20000, '', '2016-08-08', '2016-08-08 11:10:33', 2),
 (210, 1, 2, '345ca2655e89664c84d19aa7bf4cd638', 1, 'drawer', 20000, '', '2016-08-08', '2016-08-08 11:10:33', 2),
-(211, 1, 21, '', 2, 'outgo', -927, '', '2016-08-05', '2016-08-08 11:14:57', 1);
+(211, 1, 21, '', 2, 'outgo', -927, '', '2016-08-05', '2016-08-08 11:14:57', 1),
+(212, 2, 28, '', 1, 'outgo', -52567, '', '2016-08-26', '2016-08-08 22:30:27', 1);
 
 -- --------------------------------------------------------
 
@@ -276,9 +277,9 @@ INSERT INTO `inout_records` (`iorid`, `account_id`, `category_id`, `pair_id`, `p
 --
 
 CREATE TABLE IF NOT EXISTS `inout_types` (
-  `iotid` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(1) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
-  PRIMARY KEY (`iotid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Chi tiết phân loại thu chi' AUTO_INCREMENT=3 ;
 
@@ -286,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `inout_types` (
 -- テーブルのデータのダンプ `inout_types`
 --
 
-INSERT INTO `inout_types` (`iotid`, `name`) VALUES
+INSERT INTO `inout_types` (`id`, `name`) VALUES
 (2, 'Chi'),
 (1, 'Thu');
 
@@ -317,12 +318,12 @@ INSERT INTO `settings` (`item`, `name`, `value`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
-  `uid` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL,
   `fullname` varchar(128) NOT NULL,
   `label` varchar(50) NOT NULL COMMENT 'Class HTML',
   `password` varchar(256) NOT NULL COMMENT 'sha512',
-  PRIMARY KEY (`uid`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
@@ -330,7 +331,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- テーブルのデータのダンプ `users`
 --
 
-INSERT INTO `users` (`uid`, `username`, `fullname`, `label`, `password`) VALUES
+INSERT INTO `users` (`id`, `username`, `fullname`, `label`, `password`) VALUES
 (1, 'bach', 'Bách', 'label-info', '94bc0c204d0f1ed072f1b20fba90c698caaf70cbb5ec64d8538f8cc00c5dc287a90c654c91282265454c4d13e8b156fb2a296e253e3f546b3786193cbea19ecf'),
 (2, 'hiep', 'Hiệp', 'label-warning', '94bc0c204d0f1ed072f1b20fba90c698caaf70cbb5ec64d8538f8cc00c5dc287a90c654c91282265454c4d13e8b156fb2a296e253e3f546b3786193cbea19ecf');
 
@@ -339,19 +340,13 @@ INSERT INTO `users` (`uid`, `username`, `fullname`, `label`, `password`) VALUES
 --
 
 --
--- テーブルの制約 `categories`
---
-ALTER TABLE `categories`
-  ADD CONSTRAINT `categories_ibfk_2` FOREIGN KEY (`inout_type_id`) REFERENCES `inout_types` (`iotid`) ON DELETE NO ACTION ON UPDATE CASCADE;
-
---
 -- テーブルの制約 `inout_records`
 --
 ALTER TABLE `inout_records`
-  ADD CONSTRAINT `inout_records_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`cid`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `inout_records_ibfk_2` FOREIGN KEY (`player`) REFERENCES `users` (`uid`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `inout_records_ibfk_6` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`aid`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `inout_records_ibfk_7` FOREIGN KEY (`created_by`) REFERENCES `users` (`uid`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `inout_records_ibfk_4` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `inout_records_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `inout_records_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `inout_records_ibfk_3` FOREIGN KEY (`player`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
