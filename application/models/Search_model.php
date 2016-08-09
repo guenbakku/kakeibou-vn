@@ -65,7 +65,7 @@ class Search_model extends App_Model {
     public function search()
     {        
         // Set dữ liệu cần lấy
-        $this->db->select('inout_records.iorid,
+        $this->db->select('inout_records.id,
                            inout_records.amount,
                            inout_records.memo,
                            inout_records.date,
@@ -76,10 +76,10 @@ class Search_model extends App_Model {
                            users.label AS player_label'
                          )
                  ->from('inout_records')
-                 ->join('accounts', 'accounts.aid = inout_records.account_id')
-                 ->join('categories', 'categories.cid = inout_records.category_id')
-                 ->join('inout_types', 'inout_types.iotid = categories.inout_type_id')
-                 ->join('users', 'users.uid = inout_records.player')
+                 ->join('accounts', 'accounts.id = inout_records.account_id')
+                 ->join('categories', 'categories.id = inout_records.category_id')
+                 ->join('inout_types', 'inout_types.id = categories.inout_type_id')
+                 ->join('users', 'users.id = inout_records.player')
                  ->order_by('inout_records.date', 'ASC')
                  ->order_by('categories.inout_type_id', 'ASC')
                  ->order_by('inout_records.created_on', 'ASC');

@@ -110,8 +110,8 @@ class Viewlist_model extends Inout_Model {
                                `accounts`.`name` as `account`, 
                                `users`.`fullname` as `player`
                         FROM `%s` 
-                        JOIN `accounts` ON `accounts`.`aid` = `inout_records`.`account_id`
-                        JOIN `users` ON `users`.`uid` = `inout_records`.`player`
+                        JOIN `accounts` ON `accounts`.`id` = `inout_records`.`account_id`
+                        JOIN `users` ON `users`.`id` = `inout_records`.`player`
                         GROUP BY `account_id`, `player`
                         ORDER BY `account_id` ASC, `player` ASC", self::TABLE);
                         
@@ -170,10 +170,10 @@ class Viewlist_model extends Inout_Model {
         $today = date("Y-m-d");
         $month = date("Y-m");
         
-        $sql = "SELECT SUM(`amount`) as `liquid_outgo_to_now`,
-                       SUM(CASE WHEN `date` = '{$today}' THEN `amount` ELSE 0 END) AS `liquid_outgo_today`
+        $sql = "SELECT SUM(`amount`) as `liqid_outgo_to_now`,
+                       SUM(CASE WHEN `date` = '{$today}' THEN `amount` ELSE 0 END) AS `liqid_outgo_today`
                 FROM `inout_records`
-                JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id`
+                JOIN `categories` ON `categories`.`id` = `inout_records`.`category_id`
                 WHERE DATE_FORMAT(`date`, '%Y-%m') = '{$month}'
                     AND `inout_type_id` = 2
                     AND `month_fixed_money` = 0
@@ -191,11 +191,11 @@ class Viewlist_model extends Inout_Model {
             }
             , array(
                 'today' => array(
-                    - $outgo['liquid_outgo_today'],
-                    floor(($month_outgo_plans + $outgo['liquid_outgo_to_now'] - $outgo['liquid_outgo_today'])/$remaining_days),
+                    - $outgo['liqid_outgo_today'],
+                    floor(($month_outgo_plans + $outgo['liqid_outgo_to_now'] - $outgo['liqid_outgo_today'])/$remaining_days),
                 ),
                 'month' => array(
-                    - $outgo['liquid_outgo_to_now'],
+                    - $outgo['liqid_outgo_to_now'],
                     $month_outgo_plans,
                 )
             )
@@ -220,7 +220,7 @@ class Viewlist_model extends Inout_Model {
                                SUM(CASE WHEN `categories`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
                                SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`
                         FROM `inout_records`
-                        JOIN `categories` ON `categories`.`cid` = `inout_records`.`category_id` 
+                        JOIN `categories` ON `categories`.`id` = `inout_records`.`category_id` 
                         WHERE DATE_FORMAT(`date`, '{$date_format_string}') >= '{$min_date}' 
                               AND DATE_FORMAT(`date`, '{$date_format_string}') <= '{$max_date}' 
                               AND `pair_id` = ''

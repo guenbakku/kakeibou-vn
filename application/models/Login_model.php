@@ -81,7 +81,7 @@ class Login_model extends App_Model {
                 throw new Exception('Username không hợp lệ');
             }
             
-            $dbInfo = $this->db->select('uid, username, password, fullname')
+            $dbInfo = $this->db->select('id, username, password, fullname')
                                ->from(self::TABLE)
                                ->where('username', $username)
                                ->limit(1)
@@ -114,7 +114,7 @@ class Login_model extends App_Model {
      */
     private function saveDbInfo($array)
     {
-        foreach (array('uid', 'username', 'password', 'fullname') as $key){
+        foreach (array('id', 'username', 'password', 'fullname') as $key){
             $this->dbInfo[$key] = isset($array[$key])? $array[$key] : null;
         }
     }

@@ -45,8 +45,8 @@ class Inout_model extends App_Model {
     
     public function get($id)
     {
-        return $this->db->where('iorid', $id)
-                        ->join('categories', 'categories.cid = inout_records.category_id')
+        return $this->db->where('inout_records.id', $id)
+                        ->join('categories', 'categories.id = inout_records.category_id')
                         ->limit(1)
                         ->get(self::TABLE)
                         ->row_array();
@@ -70,9 +70,9 @@ class Inout_model extends App_Model {
         }
         
         $this->db->trans_start();
-        foreach ($pair_data as $iorid => $inout_type_id){
+        foreach ($pair_data as $id => $inout_type_id){
             $data['amount'] = $this::$INOUT_TYPE_SIGN[$inout_type_id] * ABS($data['amount']);
-            $this->db->where('iorid', $iorid)->update(self::TABLE, $data);
+            $this->db->where('id', $id)->update(self::TABLE, $data);
         }
         $this->db->trans_complete();
     }
@@ -86,8 +86,8 @@ class Inout_model extends App_Model {
         }
         
         $this->db->trans_start();
-        foreach ($pair_data as $iorid => $inout_type_id){
-            $this->db->where('iorid', $iorid)->delete(self::TABLE);
+        foreach ($pair_data as $id => $inout_type_id){
+            $this->db->where('id', $id)->delete(self::TABLE);
         }
         $this->db->trans_complete();
     }
@@ -110,12 +110,12 @@ class Inout_model extends App_Model {
     {
         $data['cash_flow']  = $type;
         $data['created_on'] = date('Y-m-d H:i:s');
-        $data['created_by'] = $this->login_model->getInfo('uid');
+        $data['created_by'] = $this->login_model->getInfo('id');
         
         $pair[0] = $data;
         $pair[0]['amount']  = $this->getInoutTypeCode($type)==1? $pair[0]['amount'] : 0-$pair[0]['amount'];
         
-        // Không phải loại theo tác tạo ra pair dữ liệu
+        // Không phải loại thao tác tạo ra dữ liệu lưu động nội bộ
         if (in_array($type, array('outgo', 'income'))){
             return $pair;
         }
@@ -151,12 +151,12 @@ class Inout_model extends App_Model {
      */
     private function getPairId($id)
     {
-        $res = $this->db->select('inout_records.iorid')
+        $res = $this->db->select('inout_records.id')
                         ->select('inout_records.pair_id')
                         ->select('categories.inout_type_id')
                         ->from('inout_records')
-                        ->join('categories', 'categories.cid = inout_records.category_id')
-                        ->where('iorid', $id)
+                        ->join('categories', 'categories.id = inout_records.category_id')
+                        ->where('inout_records.id', $id)
                         ->limit(1)
                         ->get()->result_array();
         
@@ -168,16 +168,16 @@ class Inout_model extends App_Model {
         // Nếu là dữ liệu lưu động nội bộ thì lấy dữ liệu của item còn lại
         $pair_id = $res[0]['pair_id'];
         if (!empty($pair_id)){
-            $res = $this->db->select('inout_records.iorid')
+            $res = $this->db->select('inout_records.id')
                             ->select('categories.inout_type_id')
                             ->from('inout_records')
-                            ->join('categories', 'categories.cid = inout_records.category_id')
+                            ->join('categories', 'categories.id = inout_records.category_id')
                             ->where('pair_id', $pair_id)
                             ->limit(2)
                             ->get()->result_array();
         }
 
-        return array_column($res, 'inout_type_id', 'iorid');
+        return array_column($res, 'inout_type_id', 'id');
     }
     
     /*

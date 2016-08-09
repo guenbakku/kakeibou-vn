@@ -50,19 +50,19 @@ class App_model extends CI_Model {
         $table  = ''; 
         switch ($name){
             case 'account_id':
-                $select = array('aid', 'name');
+                $select = array('id', 'name');
                 $table  = 'accounts';
                 break;
             case 'user_id':
-                $select = array('uid', 'fullname');
+                $select = array('id', 'fullname');
                 $table  = 'users';
                 break;
             case 'inout_type_id':
-                $select = array('iotid', 'name');
+                $select = array('id', 'name');
                 $table  = 'inout_types';
                 break;
             case 'category_id':
-                $select = array('cid', 'name');
+                $select = array('id', 'name');
                 $table  = 'categories';
                 $this->db->where('inout_type_id', $option);
                 $this->db->where('restrict_delete', '0');
