@@ -94,7 +94,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                             <?=form_dropdown(
                                 $field_name = 'player', 
                                 $select['players'], 
-                                set_value($field_name, $this->login_model->getInfo('uid')), 
+                                set_value($field_name, $this->login_model->getInfo('id')), 
                                 array(
                                     'class' => 'form-control',
                                 )
@@ -115,7 +115,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                             <?=form_dropdown(
                                 $field_name = 'player[0]', 
                                 $select['players'], 
-                                set_value($field_name, $this->login_model->getInfo('uid')), 
+                                set_value($field_name, $this->login_model->getInfo('id')), 
                                 array(
                                     'class' => 'form-control',
                                 ) + $disabled_attr
@@ -125,7 +125,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                             <?=form_dropdown(
                                 $field_name = 'player[1]', 
                                 $select['players'], 
-                                set_value($field_name, 3-$this->login_model->getInfo('uid')), 
+                                set_value($field_name, 3-$this->login_model->getInfo('id')), 
                                 array(
                                     'class' => 'form-control',
                                 ) + $disabled_attr
