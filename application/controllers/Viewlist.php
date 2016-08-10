@@ -15,8 +15,9 @@ class Viewlist extends CI_Controller {
     
     public function index()
     {
-        $this->template->write_view('MAIN', 'viewlist/menu');
-        $this->template->render();
+        // $this->template->write_view('MAIN', 'viewlist/menu');
+        // $this->template->render();
+        redirect(base_url().'viewlist/summary/day');
     }
     
     public function summary($mode=null)
@@ -49,9 +50,7 @@ class Viewlist extends CI_Controller {
                 'month' => array_combine(range(1,12), range(1,12)),
             );
             $view_data['form_url'] = my_site_url(__CLASS__, __FUNCTION__, $mode);
-            
-            // $view_data = call_user_func(array($this, __FUNCTION__ . '_by_' . $mode));
-            
+
             $this->template->write_view('MAIN', 'viewlist/summary', $view_data);
             $this->template->render();
         }
