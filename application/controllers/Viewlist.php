@@ -1,15 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Viewlist extends CI_Controller {
+class Viewlist extends MY_Controller {
     
     public function __construct()
     {   
         parent::__construct();
-        if ($this->login_model->isLogin() === false){
-            redirect($this->login_model->getLoginUrl());
-        }
-        
         $this->load->model('viewlist_model');
     }
     

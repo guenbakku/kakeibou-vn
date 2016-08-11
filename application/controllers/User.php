@@ -45,7 +45,7 @@ class User extends CI_Controller {
         $this->template->render();
     }
     
-    public function doLogout()
+    public function logout()
     {
         $this->login_model->delConnection();
         $this->flash->success('Đăng xuất thành công');

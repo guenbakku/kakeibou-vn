@@ -1,16 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Inout extends CI_Controller {
-    
-    public function __construct()
-    {   
-        parent::__construct();
-        if ($this->login_model->isLogin() === false){
-            redirect($this->login_model->getLoginUrl());
-        }
-    }    
-    
+class Inout extends MY_Controller {
+        
     public function index()
     {
         $this->template->write_view('MAIN', 'inout/menu');

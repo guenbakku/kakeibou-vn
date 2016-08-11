@@ -8,11 +8,11 @@
                     <?=$this->login_model->getInfo('fullname')?> 
                     (Logout)
                 </a>
-                <?php echo form_open(base_url().'user/dologout', array('id' => 'logOut', 'class' => 'pull-right')) ?>
-                </form>
+                
+                <?php echo form_open(base_url().'user/logout', array('id' => 'logout', 'class' => 'pull-right')) ?></form>
                 
                 <script type="text/javascript">               
-                    function logout(){$('form#logOut').submit()}
+                    function logout(){$('form#logout').submit()}
                 </script>
             <?php endif ?>
         </span>
