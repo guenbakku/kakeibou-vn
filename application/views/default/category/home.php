@@ -51,6 +51,8 @@
                     </td>
                 </tr>
             </table>
+            
+            <?php if (count($categories) > 0): ?>
             <table id="sortable" class="table table-bordered table-ex">
                 <?php foreach ($categories as $i => $item): ?>
                 <tr class="sort">
@@ -82,6 +84,10 @@
                     </td>
                 </tr>
             </table>
+            <?php else: ?>
+            <p class="text-center" style="margin-top:10px">Chưa có dữ liệu</p>
+            <?php endif ?>
+            
         </div>
     </form>
 </div>
