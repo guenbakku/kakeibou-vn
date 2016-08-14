@@ -9,8 +9,6 @@ class Category extends MY_Controller {
     {
         parent::__construct();
         $this->load->model('category_model');
-        
-        // d($this->session->userdata($this->referer::SESSION_NAME));
     }
     
 	public function index()
@@ -52,7 +50,6 @@ class Category extends MY_Controller {
             catch (Exception $e) {
                 $this->flash->error($e->getMessage());
             }
-            
         }
         else {
             // Lưu referer của page access đến form
