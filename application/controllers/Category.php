@@ -21,12 +21,13 @@ class Category extends MY_Controller {
         }
         
         $inout_type_id = (int)$this->input->get('inout_type_id');
-        if(!in_array($inout_type_id, array(1,2))){
+        if(!in_array($inout_type_id, array(1, 2))){
             $inout_type_id = 1;
         }
         
         $view_data['categories'] = $this->category_model->get(null, array('inout_type_id' => $inout_type_id));
         $view_data['form_url'] = base_url().$this->uri->uri_string();
+        $view_data['inout_type_id'] = $inout_type_id;
         $this->template->write_view('MAIN', 'category/home', $view_data);
         $this->template->render();
 	}
@@ -56,8 +57,10 @@ class Category extends MY_Controller {
             $this->referer->saveSession();
         }
         
-        $view_data['form_url'] = $this->base_url().'add/';
-        $view_data['title']    = 'Thêm danh mục';
+        $_POST['inout_type_id'] = $this->input->get('inout_type_id');
+        
+        $view_data['form_url']      = $this->base_url().'add/';
+        $view_data['title']         = 'Thêm danh mục';
         $view_data['select']   = array(
             'inout_types' => $this->inout_type_model->getSelectTagData(),
         );

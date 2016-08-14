@@ -51,7 +51,7 @@
                             <a class="btn btn-default" href="?inout_type_id=1">Thu</a>
                             <a class="btn btn-default" href="?inout_type_id=2">Chi</a>
                         </div>
-                        <a class="btn btn-default pull-right" href="<?=base_url().$this->uri->uri_string()?>/add">Thêm</a>
+                        <a class="btn btn-default pull-right" href="<?=base_url().$this->uri->uri_string()?>/add/?inout_type_id=<?=$inout_type_id?>">Thêm</a>
                     </td>
                 </tr>
             </table>

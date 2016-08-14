@@ -16,7 +16,7 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
                             <?=form_dropdown(
                                 $field_name = 'inout_type_id', 
                                 $select['inout_types'], 
-                                set_value($field_name, 0), 
+                                set_value($field_name, 1), 
                                 array(
                                     'class' => 'form-control',
                                 ) + $disabled_attr
