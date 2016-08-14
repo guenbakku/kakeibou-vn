@@ -55,9 +55,8 @@ class Category extends MY_Controller {
         else {
             // Lưu referer của page access đến form
             $this->referer->saveSession();
+            $_POST['inout_type_id'] = $this->input->get('inout_type_id');
         }
-        
-        $_POST['inout_type_id'] = $this->input->get('inout_type_id');
         
         $view_data['form_url']      = $this->base_url().'add/';
         $view_data['title']         = 'Thêm danh mục';
