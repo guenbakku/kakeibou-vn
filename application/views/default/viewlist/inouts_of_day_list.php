@@ -6,7 +6,7 @@
                 <div class="list-group">
             <?php endif ?>
                     <!-- Item -->
-                    <a class="list-group-item" href="<?=base_url()?>inout/edit/<?=$list[$i]['id']?>">
+                    <a class="list-group-item" href="<?=sprintf($url['edit'], $list[$i]['id'])?>">
                         <div style="padding-right:15px; position:absolute; right:0px">
                             <span class="glyphicon glyphicon-menu-right"></span>
                         </div>

@@ -72,8 +72,11 @@ class Category_model extends App_Model {
         foreach($arr as $i => $item){
             if(isset($item['id'], $item['order_no'])){
                 $update_data[] = array(
-                    'id'       => $item['id'],
-                    'order_no' => $item['order_no'],
+                    'id'                => $item['id'],
+                    'order_no'          => $item['order_no'],
+                    'month_fixed_money' => isset($item['month_fixed_money'])
+                                           ? (bool)$item['month_fixed_money'] 
+                                           : false,
                 );
             }
         }

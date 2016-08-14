@@ -9,7 +9,7 @@
 <div class="container">
     <h4 class="text-center"><?=$date?></h4>
     <div class="well">
-        <?=form_open($form_url, array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
+        <?=form_open($url['form'], array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
             <div class="row">
                 <div class="col-xs-6">
                     <label>Tài khoản</label>

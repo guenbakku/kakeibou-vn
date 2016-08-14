@@ -42,7 +42,7 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
                     </div>
                 </div>
                 
-                <div class="form-group">
+                <div id="month_fixed_money" class="form-group">
                     <label>
                         <input type="hidden" value="0" name="<?=$field_name = 'month_fixed_money'?>">
                         <?=form_checkbox(
@@ -66,15 +66,34 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
     </form>
 </div>
 
+
+
 <?php if ($this->router->fetch_method() == 'edit'): ?>
-    <script type="text/javascript">
-        function del_category(){
-            if (confirm('Muốn xóa danh mục này?')){
-                $('#delCategory').submit();
-            }
-        }
-    </script>
-    
-    <?php echo form_open($url['del'], array('id' => 'delCategory', 'class' => 'form-vertical sr-only'))?>
-    </form>
+    <?php echo form_open($url['del'], array('id' => 'delCategory', 'class' => 'form-vertical sr-only'))?></form>
 <?php endif ?> 
+
+<script type="text/javascript">
+    
+    display_month_fixed_money_checkbox();
+    $('select[name=inout_type_id]').change(function(){
+        display_month_fixed_money_checkbox();
+    });
+    
+    function display_month_fixed_money_checkbox()
+    {
+        if ($('select[name=inout_type_id]').val() == 2){
+            $('#month_fixed_money').show();
+        }
+        else {
+            $('#month_fixed_money').hide();
+        }
+    }
+    
+    function del_category()
+    {
+        if (confirm('Muốn xóa danh mục này?')){
+            $('#delCategory').submit();
+        }
+    }
+    
+</script>

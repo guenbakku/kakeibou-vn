@@ -48,13 +48,13 @@ class Viewlist extends MY_Controller {
                 'month' => array_combine(range(1,12), range(1,12)),
             );
             $view_data['url'] = array(
-                'form'          => $this->base_url(). __FUNCTION__ .'/'. $mode,
+                'form'          => $this->base_url(array(__FUNCTION__, $mode)),
                 'subNav'        => array(
-                    $this->base_url(). __FUNCTION__ .'/day',
-                    $this->base_url(). __FUNCTION__ .'/month',
-                    $this->base_url(). __FUNCTION__ .'/year',
+                    $this->base_url(array(__FUNCTION__, 'day')),
+                    $this->base_url(array(__FUNCTION__, 'month')),
+                    $this->base_url(array(__FUNCTION__, 'year')),
                 ),
-                'inouts_of_day' => $this->base_url().'inouts_of_day/%s',
+                'inouts_of_day' => $this->base_url(array('inouts_of_day', '%s')),
             );
             
             $this->template->write_view('MAIN', 'viewlist/summary', $view_data);
@@ -70,8 +70,8 @@ class Viewlist extends MY_Controller {
     {
         try 
         {
-            if ( !preg_match('/^\d{4}(\-\d{2})?(\-\d{2})?$/', $date)
-                 || !strtotime($date) )
+            if (!preg_match('/^\d{4}(\-\d{2})?(\-\d{2})?$/', $date)
+                || !strtotime($date) )
             {
                 throw new Exception(Constants::ERR_BAD_REQUEST);
             }
@@ -108,10 +108,13 @@ class Viewlist extends MY_Controller {
             $view_data['account'] = $account;
             $view_data['player']  = $player;
             $view_data['total_items'] = count($view_data['list']);
-            $view_data['form_url'] = my_site_url(__CLASS__, __FUNCTION__, $date);
             $view_data['select']   = array(
                 'accounts' => $this->account_model->getSelectTagData(),
                 'players'  => $this->user_model->getSelectTagData(),
+            );
+            $view_data['url'] = array(
+                'form'  => $this->base_url(array(__FUNCTION__, $date)),
+                'edit'  => base_url(array('inout', 'edit', '%s')),
             );
             
             $this->template->write_view('MAIN', 'viewlist/inouts_of_day', $view_data);

@@ -14,6 +14,7 @@ class MY_Controller extends CI_Controller {
     {   
         parent::__construct();
         
+        // Nếu chưa đăng nhập thì chuyển về trang login
         if (!in_array($this->uri->uri_string(), $this->allowable_uris)){
             if ($this->login_model->isLogin() === false){
                 redirect(base_url().Login_model::LOGIN_URL);
@@ -21,10 +22,16 @@ class MY_Controller extends CI_Controller {
         }
     }
     
-    public function base_url(){
-        $base       = $this->ctrl_base_url;
+    public function base_url($uris=null, $protocol=null){
+        $base       = strtolower($this->ctrl_base_url);
         $base       = empty($base)? '' : rtrim($base, '/').'/';
-        $class_name = get_class($this);
-        return base_url().strtolower($base.$class_name).'/';
+        $class_name = strtolower(get_class($this));
+        
+        if(is_array($uris)){
+            $uris = implode('/', $uris);
+        }
+        $uris = $base.$class_name . '/' . $uris;
+        
+        return base_url($uris, $protocol);
     }
 }

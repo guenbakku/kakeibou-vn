@@ -66,14 +66,17 @@ class Search extends MY_Controller {
         
         $view_data['list']        = $result;
         $view_data['total_items'] = count($view_data['list']);
-        $view_data['form_url']    = base_url().strtolower(__CLASS__);
         $view_data['title']       = 'Tìm kiếm chi tiêu';
-        $view_data['show_form']   = $result===null? true : false;
         $view_data['select']      = array(
             'players'     => array(0=> 'Tất cả') + $this->user_model->getSelectTagData(),
             'inout_types' => array(0=> 'Tất cả') + $this->inout_type_model->getSelectTagData(),
         );
-		$this->template->write_view('MAIN', 'search/search', $view_data);
+        $view_data['url'] = array(
+            'form'  => $this->base_url(),
+            'edit'  => base_url(array('inout', 'edit', '%s')),
+        );
+        
+		$this->template->write_view('MAIN', 'search/home', $view_data);
         $this->template->render();
 	}
     

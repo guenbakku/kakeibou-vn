@@ -21,7 +21,7 @@ class Constants extends CI_Model {
     
     const SUCC_EDIT_CATEGORY = 'Sửa danh mục thành công';
     
-    const SUCC_EDIT_CATEGORY_ORDER = 'Lưu thứ tự danh mục thành công';
+    const SUCC_EDIT_CATEGORY_ORDER = 'Sửa danh sách danh mục thành công';
     
     const SUCC_ADD_CATEGORY = 'Thêm danh mục thành công';
     

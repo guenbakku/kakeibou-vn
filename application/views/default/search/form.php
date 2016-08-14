@@ -5,7 +5,7 @@
 </script>
 
 <div class="container">
-    <?php echo form_open($form_url, array('method' => 'get', 'class' => 'form-vertical'))?>
+    <?php echo form_open($url['form'], array('method' => 'get', 'class' => 'form-vertical'))?>
         <div class="panel panel-default">
             <div class="panel-heading"><strong><?=$title?></strong></div>
             <div class="panel-body">
@@ -100,7 +100,7 @@
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Tìm</button>
-                <button type="button" class="btn btn-default" onclick="toggle_collapse_form()">Tìm chi tiết</button>
+                <a onclick="toggle_collapse_form()">Tìm chi tiết</a>
             </div>
         </div>
     </form>

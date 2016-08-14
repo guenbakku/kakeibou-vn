@@ -25,13 +25,16 @@ class Category extends MY_Controller {
             $inout_type_id = 1;
         }
         
-        $view_data['categories'] = $this->category_model->get(null, array('inout_type_id' => $inout_type_id));
+        $view_data['categories']    = $this->category_model->get(null, array('inout_type_id' => $inout_type_id));
+        $view_data['inout_type_id'] = $inout_type_id;
         $view_data['url']   = array(
-            'form'              => $this->base_url(),
-            'thu_btn'           => $this->base_url().'?inout_type_id=1',
-            'chi_btn'           => $this->base_url().'?inout_type_id=2',
-            'add_btn'           => $this->base_url().'add/?inout_type_id='.$inout_type_id,
-            'edit_btn'          => $this->base_url().'edit/%s',
+            'form'   => $this->base_url(),
+            'subNav' => array(
+                $this->base_url().'?inout_type_id=1',
+                $this->base_url().'?inout_type_id=2',
+            ),
+            'add'    => $this->base_url('add/?inout_type_id=').$inout_type_id,
+            'edit'   => $this->base_url('edit/%s'),
         );
         $this->template->write_view('MAIN', 'category/home', $view_data);
         $this->template->render();
@@ -68,7 +71,7 @@ class Category extends MY_Controller {
             'inout_types' => $this->inout_type_model->getSelectTagData(),
         );
         $view_data['url']   = array(
-            'form'              => $this->base_url(). __FUNCTION__,
+            'form'              => $this->base_url(__FUNCTION__),
         );
         
         $this->template->write_view('MAIN', 'category/form', $view_data);
@@ -119,8 +122,8 @@ class Category extends MY_Controller {
                 'inout_types' => $this->inout_type_model->getSelectTagData(),
             );
             $view_data['url']   = array(
-                'form'              => $this->base_url(). __FUNCTION__ .'/'.$id,
-                'del'               => $this->base_url(). 'del/' . $id,
+                'form'      => $this->base_url(array(__FUNCTION__, $id)),
+                'del'       => $this->base_url(array('del', $id)),
             );
             
             $this->template->write_view('MAIN', 'category/form', $view_data);

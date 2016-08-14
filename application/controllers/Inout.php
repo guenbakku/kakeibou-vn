@@ -46,7 +46,7 @@ class Inout extends MY_Controller {
             'categories' => $this->category_model->getSelectTagData($this->inout_model->getInoutTypeCode($type)),
         );
         $view_data['url']   = array(
-            'form'      => $this->base_url(). __FUNCTION__ .'/'.$type,
+            'form'      => $this->base_url(array(__FUNCTION__, $type)),
         );
 
 		$this->template->write_view('MAIN', 'inout/form', $view_data);
@@ -105,8 +105,8 @@ class Inout extends MY_Controller {
             'categories' => $this->category_model->getSelectTagData($this->inout_model->getInoutTypeCode($type)),
         );
         $view_data['url']   = array(
-            'form'      => $this->base_url(). __FUNCTION__ .'/'.$id,
-            'del'       => $this->base_url(). 'del/'.$id,
+            'form'      => $this->base_url(array(__FUNCTION__, $id)),
+            'del'       => $this->base_url(array('del', $id)),
         );
         
 		$this->template->write_view('MAIN', 'inout/form', $view_data);

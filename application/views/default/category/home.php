@@ -31,10 +31,6 @@
                 }
             },
         });
-        
-        $('input').click(function(){
-            $(this).focus();
-        });
     });
 </script>
 
@@ -43,15 +39,15 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <strong>Quản lý danh mục</strong>
+                <a class="btn btn-default btn-xs pull-right" href="<?=$url['add']?>"><span class="glyphicon glyphicon-plus"></span></a>
             </div>
             <table class="table table-bordered" style="border-bottom:1px solid; border-color:inherit">
                 <tr>
                     <td>
                         <div id="subNav" class="btn-group">
-                            <a class="btn btn-default" href="<?=$url['thu_btn']?>">Thu</a>
-                            <a class="btn btn-default" href="<?=$url['chi_btn']?>">Chi</a>
+                            <a class="btn btn-default" href="<?=$url['subNav'][0]?>">Thu</a>
+                            <a class="btn btn-default" href="<?=$url['subNav'][1]?>">Chi</a>
                         </div>
-                        <a class="btn btn-default pull-right" href="<?=$url['add_btn']?>">Thêm</a>
                     </td>
                 </tr>
             </table>
@@ -60,18 +56,29 @@
                 <tr class="sort">
                     <td style="width:30px"><span class="handle glyphicon glyphicon-menu-hamburger"></span></td>
                     <td>
+                        <a class="btn btn-block btn-default" href="<?=sprintf($url['edit'], $item['id'])?>"><?=$item['name']?></a>
                         <input type="hidden" name="categories[<?=$item['id']?>][id]" value="<?=$item['id']?>">
                         <input type="hidden" name="categories[<?=$item['id']?>][order_no]" data-role="order_no" value="<?=$item['order_no']?>">
-                        <?=$item['name']?>
                     </td>
-                    <td style="width:50px"><a class="btn btn-xs btn-info" href="<?=sprintf($url['edit_btn'], $item['id'])?>">Sửa</a></td>
+                    <?php if ($inout_type_id == 2): ?>
+                    <td style="width:30px">
+                        <input type="hidden" value="0" name="<?=$field_name = 'categories['.$item['id'].'][month_fixed_money]'?>">
+                        <?=form_checkbox(
+                            array(
+                                'name'      => $field_name,
+                                'value'     => '1',
+                                'checked'   => (bool)$item['month_fixed_money'],
+                            )
+                        )?>
+                    </td>
+                    <?php endif ?>
                 </tr>
                 <?php endforeach ?>
             </table>
             <table class="table table-bordered" style="border-top:1px solid; border-color:inherit">
                 <tr>
                     <td>
-                        <input type="submit" class="btn btn-primary" value="Lưu thứ tự">
+                        <input type="submit" class="btn btn-primary" value="Lưu">
                     </td>
                 </tr>
             </table>
