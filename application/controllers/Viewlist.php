@@ -47,8 +47,16 @@ class Viewlist extends MY_Controller {
                 'year' => array_combine($yearsInDB, $yearsInDB),
                 'month' => array_combine(range(1,12), range(1,12)),
             );
-            $view_data['form_url'] = my_site_url(__CLASS__, __FUNCTION__, $mode);
-
+            $view_data['url'] = array(
+                'form'          => $this->base_url(). __FUNCTION__ .'/'. $mode,
+                'subNav'        => array(
+                    $this->base_url(). __FUNCTION__ .'/day',
+                    $this->base_url(). __FUNCTION__ .'/month',
+                    $this->base_url(). __FUNCTION__ .'/year',
+                ),
+                'inouts_of_day' => $this->base_url().'inouts_of_day/%s',
+            );
+            
             $this->template->write_view('MAIN', 'viewlist/summary', $view_data);
             $this->template->render();
         }

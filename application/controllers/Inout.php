@@ -39,12 +39,14 @@ class Inout extends MY_Controller {
         
         $view_data['type']            = $type;
         $view_data['title']           = $cashFlowName;
-        $view_data['form_url']        = base_url().$this->uri->uri_string();
         $view_data['inout_type_sign'] = $this->inout_model->getInoutTypeSign($type);
         $view_data['select']   = array(
             'accounts'   => $this->account_model->getSelectTagData(),
             'players'    => $this->user_model->getSelectTagData(),
             'categories' => $this->category_model->getSelectTagData($this->inout_model->getInoutTypeCode($type)),
+        );
+        $view_data['url']   = array(
+            'form'      => $this->base_url(). __FUNCTION__ .'/'.$type,
         );
 
 		$this->template->write_view('MAIN', 'inout/form', $view_data);
@@ -96,13 +98,15 @@ class Inout extends MY_Controller {
         $view_data                    = $ioRecord;
         $view_data['type']            = $type;
         $view_data['title']           = 'Chỉnh sửa';
-        $view_data['form_url']        = base_url()."inout/edit/".$id;
-        $view_data['del_url']         = base_url()."inout/del/".$id;
         $view_data['inout_type_sign'] = $this->inout_model->getInoutTypeSign($ioRecord['inout_type_id']);
         $view_data['select']   = array(
             'accounts'   => $this->account_model->getSelectTagData(),
             'players'    => $this->user_model->getSelectTagData(),
             'categories' => $this->category_model->getSelectTagData($this->inout_model->getInoutTypeCode($type)),
+        );
+        $view_data['url']   = array(
+            'form'      => $this->base_url(). __FUNCTION__ .'/'.$id,
+            'del'       => $this->base_url(). 'del/'.$id,
         );
         
 		$this->template->write_view('MAIN', 'inout/form', $view_data);

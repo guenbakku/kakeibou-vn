@@ -5,7 +5,7 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
 ?>
 
 <div class="container">
-    <?php echo form_open($form_url, array('class' => 'form-vertical'))?>
+    <?php echo form_open($url['form'], array('class' => 'form-vertical'))?>
         <div class="panel panel-default">
             <div class="panel-heading"><strong><?=$title?></strong></div>
             <div class="panel-body">
@@ -75,6 +75,6 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
         }
     </script>
     
-    <?php echo form_open($del_url, array('id' => 'delCategory', 'class' => 'form-vertical sr-only'))?>
+    <?php echo form_open($url['del'], array('id' => 'delCategory', 'class' => 'form-vertical sr-only'))?>
     </form>
 <?php endif ?> 

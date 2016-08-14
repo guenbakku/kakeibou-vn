@@ -10,9 +10,9 @@
 
 <div class="container">
     <div id="subNav" class="btn-group btn-group-justified">
-        <a class="btn btn-default" href="<?=base_url().$this->router->fetch_class().'/'.$this->router->fetch_method()?>/day">Ngày</a>
-        <a class="btn btn-default" href="<?=base_url().$this->router->fetch_class().'/'.$this->router->fetch_method()?>/month">Tháng</a>
-        <a class="btn btn-default" href="<?=base_url().$this->router->fetch_class().'/'.$this->router->fetch_method()?>/year">Năm</a>
+        <a class="btn btn-default" href="<?=$url['subNav'][0]?>">Ngày</a>
+        <a class="btn btn-default" href="<?=$url['subNav'][1]?>">Tháng</a>
+        <a class="btn btn-default" href="<?=$url['subNav'][2]?>">Năm</a>
     </div>
 </div>
 <br>
@@ -20,7 +20,7 @@
 <?php if (in_array($mode, array('day', 'week', 'month'))): ?>
 <div class="container">
     <div class="well">
-        <?=form_open($form_url, array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
+        <?=form_open($url['form'], array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
             <div class="row">
                 <div class="col-xs-6">
                     <label>Năm</label>
@@ -56,7 +56,7 @@
     <div class="panel panel-default">
         <div class="list-group">
             <?php foreach($list as $k => $v) : ?>
-            <a class="list-group-item" href="<?=base_url().'viewlist/inouts_of_day/'.$k?>">
+            <a class="list-group-item" href="<?=sprintf($url['inouts_of_day'], $k)?>">
                 <div class="row">
                     <div class="pull-right" style="padding-right:15px; position:absolute; right:0px">
                         <span class="glyphicon glyphicon-menu-right"></span>

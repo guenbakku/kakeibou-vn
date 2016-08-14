@@ -54,4 +54,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 // Route giúp main menu được highlight đúng
-$route['setting/category(.*)'] = 'category$1';
+$route['(?i)setting/category(.*)'] = 'category$1';

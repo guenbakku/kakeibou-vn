@@ -8,6 +8,9 @@ class Home extends MY_Controller {
         $view_data['month_sum'] = current($this->viewlist_model->getSumListFromDB('%Y-%m', date('Y-m'), date('Y-m')));
         $view_data['liquidOutgoStatus'] = $this->viewlist_model->getLiquidOutgoStatus();
         $view_data['remaining'] = $this->viewlist_model->getRemaining();
+        $view_data['url'] = array(
+            'month_inout_list' => base_url().'viewlist/summary',
+        );    
 		$this->template->write_view('MAIN', 'home', $view_data);
         $this->template->render();
 	}

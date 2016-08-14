@@ -23,7 +23,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
 </script>
 
 <div class="container">
-    <?php echo form_open($form_url, array('id' => 'addCashFlow', 'class' => 'form-vertical'))?>
+    <?php echo form_open($url['form'], array('id' => 'addCashFlow', 'class' => 'form-vertical'))?>
         <div class="panel panel-default">
             <div class="panel-heading"><strong><?=$title?></strong></div>
             <div class="panel-body">
@@ -154,7 +154,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
     </form>
 </div>
 
-<?php if ($this->uri->segment(2) == 'edit'): ?>
+<?php if ($this->router->fetch_method() == 'edit'): ?>
     <script type="text/javascript">
         function del_record(){
             if (confirm('Muốn xóa ghi chép này?')){
@@ -163,6 +163,6 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
         }
     </script>
     
-    <?php echo form_open($del_url, array('id' => 'delCashFlow', 'class' => 'form-vertical sr-only'))?>
+    <?php echo form_open($url['del'], array('id' => 'delCashFlow', 'class' => 'form-vertical sr-only'))?>
     </form>
 <?php endif ?> 

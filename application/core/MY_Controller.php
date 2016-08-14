@@ -22,6 +22,9 @@ class MY_Controller extends CI_Controller {
     }
     
     public function base_url(){
-        return base_url() . rtrim($this->ctrl_base_url, '/').'/';
+        $base       = $this->ctrl_base_url;
+        $base       = empty($base)? '' : rtrim($base, '/').'/';
+        $class_name = get_class($this);
+        return base_url().strtolower($base.$class_name).'/';
     }
 }

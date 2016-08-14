@@ -39,7 +39,7 @@
 </script>
 
 <div class="container">
-    <?php echo form_open($form_url)?>
+    <?php echo form_open($url['form'])?>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <strong>Quản lý danh mục</strong>
@@ -48,10 +48,10 @@
                 <tr>
                     <td>
                         <div id="subNav" class="btn-group">
-                            <a class="btn btn-default" href="?inout_type_id=1">Thu</a>
-                            <a class="btn btn-default" href="?inout_type_id=2">Chi</a>
+                            <a class="btn btn-default" href="<?=$url['thu_btn']?>">Thu</a>
+                            <a class="btn btn-default" href="<?=$url['chi_btn']?>">Chi</a>
                         </div>
-                        <a class="btn btn-default pull-right" href="<?=base_url().$this->uri->uri_string()?>/add/?inout_type_id=<?=$inout_type_id?>">Thêm</a>
+                        <a class="btn btn-default pull-right" href="<?=$url['add_btn']?>">Thêm</a>
                     </td>
                 </tr>
             </table>
@@ -64,7 +64,7 @@
                         <input type="hidden" name="categories[<?=$item['id']?>][order_no]" data-role="order_no" value="<?=$item['order_no']?>">
                         <?=$item['name']?>
                     </td>
-                    <td style="width:50px"><a class="btn btn-xs btn-info" href="edit/<?=$item['id']?>">Sửa</a></td>
+                    <td style="width:50px"><a class="btn btn-xs btn-info" href="<?=sprintf($url['edit_btn'], $item['id'])?>">Sửa</a></td>
                 </tr>
                 <?php endforeach ?>
             </table>

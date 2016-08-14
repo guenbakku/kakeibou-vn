@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Category extends MY_Controller {
     
-    public $ctrl_base_url = 'setting/category/';
+    protected $ctrl_base_url = 'setting';
     
     public function __construct()
     {
@@ -26,8 +26,13 @@ class Category extends MY_Controller {
         }
         
         $view_data['categories'] = $this->category_model->get(null, array('inout_type_id' => $inout_type_id));
-        $view_data['form_url'] = base_url().$this->uri->uri_string();
-        $view_data['inout_type_id'] = $inout_type_id;
+        $view_data['url']   = array(
+            'form'              => $this->base_url(),
+            'thu_btn'           => $this->base_url().'?inout_type_id=1',
+            'chi_btn'           => $this->base_url().'?inout_type_id=2',
+            'add_btn'           => $this->base_url().'add/?inout_type_id='.$inout_type_id,
+            'edit_btn'          => $this->base_url().'edit/%s',
+        );
         $this->template->write_view('MAIN', 'category/home', $view_data);
         $this->template->render();
 	}
@@ -58,10 +63,12 @@ class Category extends MY_Controller {
             $_POST['inout_type_id'] = $this->input->get('inout_type_id');
         }
         
-        $view_data['form_url']      = $this->base_url().'add/';
         $view_data['title']         = 'Thêm danh mục';
         $view_data['select']   = array(
             'inout_types' => $this->inout_type_model->getSelectTagData(),
+        );
+        $view_data['url']   = array(
+            'form'              => $this->base_url(). __FUNCTION__,
         );
         
         $this->template->write_view('MAIN', 'category/form', $view_data);
@@ -107,11 +114,13 @@ class Category extends MY_Controller {
                 $this->referer->saveSession();
             }
 
-            $view_data['form_url'] = $this->base_url().'edit/'.$id;
-            $view_data['del_url']  = $this->base_url().'del/'.$id;
             $view_data['title']    = 'Sửa danh mục';
             $view_data['select']   = array(
                 'inout_types' => $this->inout_type_model->getSelectTagData(),
+            );
+            $view_data['url']   = array(
+                'form'              => $this->base_url(). __FUNCTION__ .'/'.$id,
+                'del'               => $this->base_url(). 'del/' . $id,
             );
             
             $this->template->write_view('MAIN', 'category/form', $view_data);
