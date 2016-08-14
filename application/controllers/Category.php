@@ -9,6 +9,8 @@ class Category extends MY_Controller {
     {
         parent::__construct();
         $this->load->model('category_model');
+        
+        // d($this->session->userdata($this->referer::SESSION_NAME));
     }
     
 	public function index()
@@ -16,12 +18,8 @@ class Category extends MY_Controller {
         if(!empty($this->input->post()))
         {
             $this->category_model->editOrderNo($this->input->post('categories'));
-            
-            // Redirect tới page được ghi trong $_GET['goto']
-            $goto = base64_decode($this->input->get('goto'));
-            if ($goto == null) $goto = base_url();
-            redirect($goto);
-            return;
+            $this->flash->success(Constants::SUCC_EDIT_CATEGORY_ORDER);
+            return redirect($this->referer->get());
         }
         
         $inout_type_id = (int)$this->input->get('inout_type_id');
@@ -29,11 +27,8 @@ class Category extends MY_Controller {
             $inout_type_id = 1;
         }
         
-        // Lấy link HTTP_REFERER
-        $http_referer = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : null;
-        
         $view_data['categories'] = $this->category_model->get(null, array('inout_type_id' => $inout_type_id));
-        $view_data['form_url'] = base_url().$this->uri->uri_string().'?goto='.base64_encode($http_referer);
+        $view_data['form_url'] = base_url().$this->uri->uri_string();
         $this->template->write_view('MAIN', 'category/home', $view_data);
         $this->template->render();
 	}
@@ -51,27 +46,23 @@ class Category extends MY_Controller {
                 }
                 
                 $this->category_model->add($this->input->post());
-                
                 $this->flash->success(Constants::SUCC_ADD_CATEGORY);
-                // Redirect tới page được ghi trong $_GET['goto']
-                $goto = base64_decode($this->input->get('goto'));
-                if ($goto == null) $goto = base_url();
-                redirect($goto);
-                return;
+                return redirect($this->referer->getSession());
             }
             catch (Exception $e) {
                 $this->flash->error($e->getMessage());
             }
             
         }
+        else {
+            // Lưu referer của page access đến form
+            $this->referer->saveSession();
+        }
         
-        // Lấy link HTTP_REFERER
-        $http_referer = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : null;
-        
-        $view_data['form_url'] = $this->base_url().'add/?goto='.base64_encode($http_referer);
+        $view_data['form_url'] = $this->base_url().'add/';
         $view_data['title']    = 'Thêm danh mục';
         $view_data['select']   = array(
-            'inout_types' => $this->app_model->getSelectTagData('inout_type_id'),
+            'inout_types' => $this->inout_type_model->getSelectTagData(),
         );
         
         $this->template->write_view('MAIN', 'category/form', $view_data);
@@ -98,12 +89,7 @@ class Category extends MY_Controller {
                     
                     $this->category_model->edit($id, $this->input->post());
                     $this->flash->success(Constants::SUCC_EDIT_CATEGORY);
-                    
-                    // Redirect tới page được ghi trong $_GET['goto']
-                    $goto = base64_decode($this->input->get('goto'));
-                    if ($goto == null) $goto = base_url();
-                    redirect($goto);
-                    return;
+                    return redirect($this->referer->getSession());
                 }
                 catch (Exception $e)
                 {
@@ -113,21 +99,20 @@ class Category extends MY_Controller {
             else {
                 $category_data = $this->category_model->get($id);
                 
-                if (empty($category_data))
-                {
+                if (empty($category_data)){
                     throw new Exception(Constants::ERR_NOT_FOUND);
                 }
                 $_POST = $category_data;
+                
+                // Lưu referer của page access đến form
+                $this->referer->saveSession();
             }
-            
-            // Lấy link HTTP_REFERER
-            $http_referer = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : null;
 
-            $view_data['form_url'] = $this->base_url().'edit/'.$id.'?goto='.base64_encode($http_referer);
-            $view_data['del_url']  = $this->base_url().'del/'.$id.'?goto='.base64_encode($http_referer);
+            $view_data['form_url'] = $this->base_url().'edit/'.$id;
+            $view_data['del_url']  = $this->base_url().'del/'.$id;
             $view_data['title']    = 'Sửa danh mục';
             $view_data['select']   = array(
-                'inout_types' => $this->app_model->getSelectTagData('inout_type_id'),
+                'inout_types' => $this->inout_type_model->getSelectTagData(),
             );
             
             $this->template->write_view('MAIN', 'category/form', $view_data);
@@ -149,18 +134,13 @@ class Category extends MY_Controller {
             
             $this->category_model->del($id);
             $this->flash->success(Constants::SUCC_DEL_CATEGORY);
-            
-            // Redirect tới page được ghi trong $_GET['goto']
-            $goto = base64_decode($this->input->get('goto'));
-            if ($goto == null) $goto = base_url();
-            redirect($goto);
-            return;
         }
         catch (Exception $e)
         {
             $this->flash->error($e->getMessage());
-            redirect(base_url(). strtolower(__CLASS__ . '/edit/' . $id));
         }
+        
+        return redirect($this->referer->getSession());
     }
     
 }

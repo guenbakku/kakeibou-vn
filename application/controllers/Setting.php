@@ -16,21 +16,18 @@ class Setting extends MY_Controller {
         }
         
         if (!empty($this->input->post())){
-                
+
             $this->setting_model->edit($this->input->post());
-            
             $this->flash->success(Constants::SUCC_EDIT_SETTING);
-            
-            // Redirect tới danh sách detail (được ghi trong $_GET['goto'])
-            $goto = base64_decode($this->input->get('goto'));
-            if ($goto == null) $goto = base_url();
-            redirect($goto);
-            exit();
+            return redirect($this->referer->getSession());
+        }
+        else {
+            // Lưu referer của page access đến form 
+            $this->referer->saveSession();
         }
         
         $view_data['setting'] = current($data);
         $this->template->write_view('MAIN', 'setting/form', $view_data);
         $this->template->render();
     }
-    
 }

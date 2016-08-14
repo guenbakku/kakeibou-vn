@@ -34,6 +34,8 @@ class Viewlist extends MY_Controller {
             $month = $this->input->get('month');
             $month = $month === null? date('m') : (int)$month;
             
+            $yearsInDB = $this->viewlist_model->getYearsListInDB();
+            
             $view_data['list'] = call_user_func_array(
                 array($this->viewlist_model, __FUNCTION__ . '_by_' . $mode), 
                 array($year, $month)
@@ -42,7 +44,7 @@ class Viewlist extends MY_Controller {
             $view_data['month'] = $month;
             $view_data['mode'] = $mode;
             $view_data['select'] = array(
-                'year' => $this->app_model->getSelectTagData('yearsInDB'),
+                'year' => array_combine($yearsInDB, $yearsInDB),
                 'month' => array_combine(range(1,12), range(1,12)),
             );
             $view_data['form_url'] = my_site_url(__CLASS__, __FUNCTION__, $mode);
@@ -100,8 +102,8 @@ class Viewlist extends MY_Controller {
             $view_data['total_items'] = count($view_data['list']);
             $view_data['form_url'] = my_site_url(__CLASS__, __FUNCTION__, $date);
             $view_data['select']   = array(
-                'accounts' => $this->app_model->getSelectTagData('account_id'),
-                'players'  => $this->app_model->getSelectTagData('user_id'),
+                'accounts' => $this->account_model->getSelectTagData(),
+                'players'  => $this->user_model->getSelectTagData(),
             );
             
             $this->template->write_view('MAIN', 'viewlist/inouts_of_day', $view_data);

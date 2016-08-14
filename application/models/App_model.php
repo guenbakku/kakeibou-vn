@@ -3,8 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class App_model extends CI_Model {
     
-    protected $error = array(); // Chứa lỗi xảy ra trong quá trình thực thi các model con
-            
+    // Tên column cần lấy dữ liệu để tạo tag HTML Select
+    protected $columnNamesforSelectTagMethod = array('id', 'name');
+    
+    // Chứa lỗi xảy ra trong quá trình thực thi các model con
+    protected $error = array();
+    
     public function __construct()
     {
         parent::__construct();
@@ -38,68 +42,23 @@ class App_model extends CI_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Lấy dữ liệu từ CSDL để xuất select tag
+     * Lấy dữ liệu từ CSDL để tạo select tag
      *
      * @param   string  : name của select tag
      * @return  array   : dữ liệu để xuất option
      *--------------------------------------------------------------------
-     */
-    public function getSelectTagData($name=null, $option=null)
+     */    
+    public function getSelectTagData($option=null)
     {
-        $select = array();
-        $table  = ''; 
-        switch ($name){
-            case 'account_id':
-                $select = array('id', 'name');
-                $table  = 'accounts';
-                break;
-            case 'user_id':
-                $select = array('id', 'fullname');
-                $table  = 'users';
-                break;
-            case 'inout_type_id':
-                $select = array('id', 'name');
-                $table  = 'inout_types';
-                break;
-            case 'category_id':
-                $select = array('id', 'name');
-                $table  = 'categories';
-                $this->db->where('inout_type_id', $option);
-                $this->db->where('restrict_delete', '0');
-                break;
-            case 'yearsInDB': 
-                $yearList = $this->getYearsListInDB();
-                return array_combine($yearList, $yearList);
-            default:
-                return false;
-        }
+        $select = $this->columnNamesforSelectTagMethod;
+        $table  = $this::TABLE;
         
         return array_column(
-                        $this->db->select($select)
-                                 ->order_by($select[0], 'asc')
-                                 ->get($table)->result_array(), 
-                        $select[1],
-                        $select[0] 
-                    );
-    }
-    
-    /*
-     *--------------------------------------------------------------------
-     * Lấy danh sách tất cả năm có trong table inout_record
-     * 
-     * @param   void
-     * @return  array
-     *--------------------------------------------------------------------
-     */
-    public function getYearsListInDB()
-    {
-        $table = 'inout_records';
-        $range = $this->db->select("DATE_FORMAT(MIN(`date`), '%Y') as `min`, 
-                                    DATE_FORMAT(MAX(`date`), '%Y') as `max`", false)
-                          ->get($table)->row_array();
-                          
-        return $full_list = array_map(function($year){
-                    return sprintf('%04d', $year);
-               }, range($range['min'], $range['max']));
+            $this->db->select($select)
+                     ->order_by($select[0], 'asc')
+                     ->get($table)->result_array(), 
+            $select[1],
+            $select[0] 
+        );
     }
 }

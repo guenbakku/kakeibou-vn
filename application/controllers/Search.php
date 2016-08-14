@@ -70,8 +70,8 @@ class Search extends MY_Controller {
         $view_data['title']       = 'Tìm kiếm chi tiêu';
         $view_data['show_form']   = $result===null? true : false;
         $view_data['select']      = array(
-            'players'     => array(0=> 'Tất cả') + $this->app_model->getSelectTagData('user_id'),
-            'inout_types' => array(0=> 'Tất cả') + $this->app_model->getSelectTagData('inout_type_id'),
+            'players'     => array(0=> 'Tất cả') + $this->user_model->getSelectTagData(),
+            'inout_types' => array(0=> 'Tất cả') + $this->inout_type_model->getSelectTagData(),
         );
 		$this->template->write_view('MAIN', 'search/search', $view_data);
         $this->template->render();

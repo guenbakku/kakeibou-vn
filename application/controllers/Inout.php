@@ -29,8 +29,7 @@ class Inout extends MY_Controller {
                 $this->inout_model->add($type, $this->input->post());
                 
                 $this->flash->success(sprintf(Constants::SUCC_ADD_INOUT_RECORD, $this->inout_model->getCashFlowName($type)));
-                redirect(base_url());
-                return;
+                return redirect(base_url());
             }
             catch (Exception $e) {
                 $this->flash->error($e->getMessage());
@@ -43,11 +42,11 @@ class Inout extends MY_Controller {
         $view_data['form_url']        = base_url().$this->uri->uri_string();
         $view_data['inout_type_sign'] = $this->inout_model->getInoutTypeSign($type);
         $view_data['select']   = array(
-            'accounts'   => $this->app_model->getSelectTagData('account_id'),
-            'players'    => $this->app_model->getSelectTagData('user_id'),
-            'categories' => $this->app_model->getSelectTagData('category_id', $this->inout_model->getInoutTypeCode($type)),
+            'accounts'   => $this->account_model->getSelectTagData(),
+            'players'    => $this->user_model->getSelectTagData(),
+            'categories' => $this->category_model->getSelectTagData($this->inout_model->getInoutTypeCode($type)),
         );
-        
+
 		$this->template->write_view('MAIN', 'inout/form', $view_data);
         $this->template->render();
 	}
@@ -75,26 +74,21 @@ class Inout extends MY_Controller {
                 }
                 
                 $this->inout_model->edit($id, $this->input->post());
-                
                 $this->flash->success(Constants::SUCC_EDIT_INOUT_RECORD);
-                
-                // Redirect tới danh sách detail (được ghi trong $_GET['goto'])
-                $goto = base64_decode($this->input->get('goto'));
-                if ($goto == null) $goto = base_url();
-                redirect($goto);
-                return;
+                return redirect($this->referer->getSession());
             }
             catch (Exception $e){
                 $this->flash->error($e->getMessage());
             }
         }
+        else {
+            // Lưu referer của page access đến form 
+            $this->referer->saveSession();
+        }
         
         if ($ioRecord['cash_flow'] == 'handover'){
             $ioRecord['player'] = $this->inout_model->setPlayersForHandoverEdit($ioRecord);
         }
-        
-        // Lấy link HTTP_REFERER
-        $http_referer = isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER'] : null;
         
         $ioRecord['amount'] = abs($ioRecord['amount']);
         $_POST = $ioRecord;
@@ -102,13 +96,13 @@ class Inout extends MY_Controller {
         $view_data                    = $ioRecord;
         $view_data['type']            = $type;
         $view_data['title']           = 'Chỉnh sửa';
-        $view_data['form_url']        = base_url()."inout/edit/".$id."?goto=".base64_encode($http_referer);
-        $view_data['del_url']         = base_url()."inout/del/".$id."?goto=".base64_encode($http_referer);
+        $view_data['form_url']        = base_url()."inout/edit/".$id;
+        $view_data['del_url']         = base_url()."inout/del/".$id;
         $view_data['inout_type_sign'] = $this->inout_model->getInoutTypeSign($ioRecord['inout_type_id']);
         $view_data['select']   = array(
-            'accounts'   => $this->app_model->getSelectTagData('account_id'),
-            'players'    => $this->app_model->getSelectTagData('user_id'),
-            'categories' => $this->app_model->getSelectTagData('category_id', $this->inout_model->getInoutTypeCode($type)),
+            'accounts'   => $this->account_model->getSelectTagData(),
+            'players'    => $this->user_model->getSelectTagData(),
+            'categories' => $this->category_model->getSelectTagData($this->inout_model->getInoutTypeCode($type)),
         );
         
 		$this->template->write_view('MAIN', 'inout/form', $view_data);
@@ -122,13 +116,8 @@ class Inout extends MY_Controller {
         }
         
         $this->inout_model->del($id);
-        
         $this->flash->success(Constants::SUCC_DELETE_INOUT_RECORD);
-        
-        // Redirect tới link được ghi trong $_GET['goto']
-        $goto = base64_decode($this->input->get('goto'));
-        if ($goto == null) $goto = base_url();
-        redirect($goto);
+        redirect($this->referer->getSession());
     }
     
     public function searchMemo($q)

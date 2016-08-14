@@ -92,4 +92,13 @@ class Category_model extends App_Model {
         
         $this->db->where('id', $id)->delete(self::TABLE);
     }
+    
+    public function getSelectTagData($inout_type_id=null)
+    {
+        $this->db->where('inout_type_id', $inout_type_id)
+                 ->where('restrict_delete', '0')
+                 ->order_by('order_no', 'asc');
+        
+        return parent::getSelectTagData();
+    }
 }

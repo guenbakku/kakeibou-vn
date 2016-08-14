@@ -232,6 +232,26 @@ class Viewlist_model extends Inout_Model {
     
     /*
      *--------------------------------------------------------------------
+     * Lấy danh sách tất cả năm có trong table inout_record
+     * 
+     * @param   void
+     * @return  array
+     *--------------------------------------------------------------------
+     */
+    public function getYearsListInDB()
+    {
+        $table = 'inout_records';
+        $range = $this->db->select("DATE_FORMAT(MIN(`date`), '%Y') as `min`, 
+                                    DATE_FORMAT(MAX(`date`), '%Y') as `max`", false)
+                          ->get($table)->row_array();
+                          
+        return $full_list = array_map(function($year){
+                    return sprintf('%04d', $year);
+               }, range($range['min'], $range['max']));
+    }
+    
+    /*
+     *--------------------------------------------------------------------
      * Gắn từng item từ List (lấy từ CSDL) vào danh sách thời gian đầy đủ
      *
      * @param   array   : danh sách thời gian đầy đủ
