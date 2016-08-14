@@ -16,7 +16,7 @@ $config = array(
         ),
     ),
     
-    // For inout add
+    // For inout
     'inout/add'=> array(
         array(
             'field' => 'amount',
@@ -40,6 +40,23 @@ $config = array(
             'field' => 'memo',
             'label' => 'Ghi chú',
             'rules' => 'strip_tags',
+        ),
+    ),
+    
+    // For category
+    'category/add' => array(
+        array(
+            'field' => 'name',
+            'label' => 'Tên danh mục',
+            'rules' => 'required|trim|xss_clean',
+        ),
+    ),
+    
+    'category/edit' => array(
+        array(
+            'field' => 'name',
+            'label' => 'Tên danh mục',
+            'rules' => 'required|trim|xss_clean',
         ),
     ),
 );

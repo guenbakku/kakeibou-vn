@@ -5,6 +5,7 @@
             <?php foreach ($this->setting_model->get(null, 'name') as $key => $item): ?>
             <a class="list-group-item" href="edit/<?=$key?>"><span class="glyphicon glyphicon-menu-right pull-right"></span><?=$item?></a>
             <?php endforeach ?>
+            <a class="list-group-item" href="category/"><span class="glyphicon glyphicon-menu-right pull-right"></span>Quản lý danh mục</a>
        </div>
     </div>
 </div>

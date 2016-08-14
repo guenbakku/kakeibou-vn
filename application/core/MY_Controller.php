@@ -3,6 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MY_Controller extends CI_Controller {
     
+    protected $ctrl_base_url = '';
+    
     // Những link có thể truy cập mà không cần đăng nhập
     protected $allowable_uris = array(
                                     'user/login',
@@ -19,4 +21,7 @@ class MY_Controller extends CI_Controller {
         }
     }
     
+    public function base_url(){
+        return base_url() . rtrim($this->ctrl_base_url, '/').'/';
+    }
 }

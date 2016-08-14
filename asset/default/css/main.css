@@ -106,3 +106,7 @@ input[type="color"] {
     background:url('../images/indicator.gif') no-repeat;
     background-position: right 10px center;
 }
+
+.table-ex td{
+    vertical-align: middle !important;
+}

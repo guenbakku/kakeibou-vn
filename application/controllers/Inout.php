@@ -12,7 +12,7 @@ class Inout extends MY_Controller {
 	public function add($type=null)
     {   
         
-        if (! $cashFlowName = $this->inout_model->getCashFlowName($type)){
+        if (!$cashFlowName = $this->inout_model->getCashFlowName($type)){
             show_error(Constants::ERR_BAD_REQUEST);
         }
         
@@ -30,7 +30,7 @@ class Inout extends MY_Controller {
                 
                 $this->flash->success(sprintf(Constants::SUCC_ADD_INOUT_RECORD, $this->inout_model->getCashFlowName($type)));
                 redirect(base_url());
-                exit();
+                return;
             }
             catch (Exception $e) {
                 $this->flash->error($e->getMessage());
@@ -82,7 +82,7 @@ class Inout extends MY_Controller {
                 $goto = base64_decode($this->input->get('goto'));
                 if ($goto == null) $goto = base_url();
                 redirect($goto);
-                exit();
+                return;
             }
             catch (Exception $e){
                 $this->flash->error($e->getMessage());

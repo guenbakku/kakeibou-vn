@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- ホスト: localhost:3306
--- 生成日時: 2016 年 8 月 08 日 19:01
+-- 生成日時: 2016 年 8 月 11 日 07:55
 -- サーバのバージョン: 5.5.45-cll-lve
 -- PHP のバージョン: 5.4.31
 
@@ -51,7 +51,7 @@ INSERT INTO `accounts` (`id`, `name`, `description`) VALUES
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` tinyint(4) NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL,
-  `sort` tinyint(3) unsigned NOT NULL,
+  `order_no` tinyint(3) unsigned NOT NULL,
   `inout_type_id` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT 'id quy định loại thu, chi, mượn, cho mượn',
   `month_fixed_money` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Có phải là tiền cố định hàng tháng không',
   `restrict_delete` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'không cho delete',
@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- テーブルのデータのダンプ `categories`
 --
 
-INSERT INTO `categories` (`id`, `name`, `sort`, `inout_type_id`, `month_fixed_money`, `restrict_delete`) VALUES
+INSERT INTO `categories` (`id`, `name`, `order_no`, `inout_type_id`, `month_fixed_money`, `restrict_delete`) VALUES
 (1, 'Rút tiền từ tài khoản*', 1, 2, 0, 1),
 (2, 'Rút tiền từ tài khoản*', 1, 1, 0, 1),
 (3, 'Nạp tiền vô tài khoản*', 2, 1, 0, 1),
@@ -80,7 +80,7 @@ INSERT INTO `categories` (`id`, `name`, `sort`, `inout_type_id`, `month_fixed_mo
 (28, 'Trả thẻ credit', 0, 2, 1, 0),
 (29, 'Áo quần, giày dép', 0, 2, 0, 0),
 (30, 'Điện thoại', 0, 2, 1, 0),
-(31, 'Bảo hiểm', 0, 2, 1, 0),
+(31, 'Bảo hiểm, thuế', 0, 2, 1, 0),
 (32, 'Khác', 0, 2, 0, 0);
 
 -- --------------------------------------------------------
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `inout_records` (
   KEY `account_id` (`account_id`) USING BTREE,
   KEY `user_id` (`player`) USING BTREE,
   KEY `created_by` (`created_by`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='ghi chép thu chi' AUTO_INCREMENT=213 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='ghi chép thu chi' AUTO_INCREMENT=227 ;
 
 --
 -- テーブルのデータのダンプ `inout_records`
@@ -268,7 +268,16 @@ INSERT INTO `inout_records` (`id`, `account_id`, `category_id`, `pair_id`, `play
 (209, 2, 1, '345ca2655e89664c84d19aa7bf4cd638', 1, 'drawer', -20000, '', '2016-08-08', '2016-08-08 11:10:33', 2),
 (210, 1, 2, '345ca2655e89664c84d19aa7bf4cd638', 1, 'drawer', 20000, '', '2016-08-08', '2016-08-08 11:10:33', 2),
 (211, 1, 21, '', 2, 'outgo', -927, '', '2016-08-05', '2016-08-08 11:14:57', 1),
-(212, 2, 28, '', 1, 'outgo', -52567, '', '2016-08-26', '2016-08-08 22:30:27', 1);
+(212, 2, 28, '', 1, 'outgo', -52567, '', '2016-08-26', '2016-08-08 22:30:27', 1),
+(217, 1, 30, '', 2, 'outgo', -8333, '', '2016-07-26', '2016-08-09 11:40:25', 1),
+(218, 1, 21, '', 2, 'outgo', -1217, '', '2016-08-09', '2016-08-09 21:43:09', 2),
+(219, 2, 31, '', 2, 'outgo', -44980, 'T8,9,10,11', '2016-08-09', '2016-08-09 21:43:50', 2),
+(220, 2, 1, 'eb4987c06214fb307bee74f4ffa97ab3', 2, 'drawer', -5020, '', '2016-08-09', '2016-08-09 21:46:14', 2),
+(221, 1, 2, 'eb4987c06214fb307bee74f4ffa97ab3', 2, 'drawer', 5020, '', '2016-08-09', '2016-08-09 21:46:14', 2),
+(222, 1, 21, '', 1, 'outgo', -580, '', '2016-08-10', '2016-08-10 12:10:45', 2),
+(223, 1, 31, '', 2, 'outgo', -20000, 'Thuế 市民税', '2016-08-10', '2016-08-10 12:44:25', 2),
+(224, 2, 1, 'ade15d5f7464df4097cf8a3b698b6b0b', 2, 'drawer', -20000, '', '2016-08-10', '2016-08-10 12:44:46', 2),
+(225, 1, 2, 'ade15d5f7464df4097cf8a3b698b6b0b', 2, 'drawer', 20000, '', '2016-08-10', '2016-08-10 12:44:46', 2);
 
 -- --------------------------------------------------------
 
