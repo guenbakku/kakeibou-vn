@@ -100,7 +100,7 @@
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Tìm</button>
-                <a onclick="toggle_collapse_form()">Tìm chi tiết</a>
+                <a href="" onclick="toggle_collapse_form(); return false">Tìm chi tiết</a>
             </div>
         </div>
     </form>
