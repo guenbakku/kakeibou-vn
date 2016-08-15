@@ -56,11 +56,8 @@
             <table id="sortable" class="table table-bordered table-ex">
                 <?php foreach ($categories as $i => $item): ?>
                 <tr class="sort">
-                    <td style="width:30px"><span class="handle glyphicon glyphicon-menu-hamburger"></span></td>
-                    <td>
-                        <a class="btn btn-block btn-default" href="<?=sprintf($url['edit'], $item['id'])?>"><?=$item['name']?></a>
-                        <input type="hidden" name="categories[<?=$item['id']?>][id]" value="<?=$item['id']?>">
-                        <input type="hidden" name="categories[<?=$item['id']?>][order_no]" data-role="order_no" value="<?=$item['order_no']?>">
+                    <td style="width:30px" class="handle">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </td>
                     <?php if ($inout_type_id == 2): ?>
                     <td style="width:30px">
@@ -74,6 +71,16 @@
                         )?>
                     </td>
                     <?php endif ?>
+                    <td>
+                        <div class="pull-right">
+                            <span class="glyphicon glyphicon-menu-right"></span>
+                        </div>
+                        <a href="<?=sprintf($url['edit'], $item['id'])?>" style="display:block; padding-right:15px; color:inherit">
+                            <?=$item['name']?>
+                        </a>
+                        <input type="hidden" name="categories[<?=$item['id']?>][id]" value="<?=$item['id']?>">
+                        <input type="hidden" name="categories[<?=$item['id']?>][order_no]" data-role="order_no" value="<?=$item['order_no']?>">
+                    </td>
                 </tr>
                 <?php endforeach ?>
             </table>
