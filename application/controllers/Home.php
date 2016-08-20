@@ -11,7 +11,7 @@ class Home extends MY_Controller {
         $view_data['url'] = array(
             'month_inout_list' => base_url(array('viewlist', 'summary')),
         );    
-		$this->template->write_view('MAIN', 'home', $view_data);
+		$this->template->write_view('MAIN', 'home/home', $view_data);
         $this->template->render();
 	}
     

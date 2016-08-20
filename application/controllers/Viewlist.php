@@ -21,12 +21,14 @@ class Viewlist extends MY_Controller {
         try 
         {
             if ($mode==null){
-                redirect(my_site_url(__CLASS__, __FUNCTION__, 'day'));
+                redirect($this->base_url(array(__FUNCTION__, 'day')));
             }
             
             if (!in_array($mode, array('day', 'month', 'year'))){
                 throw new Exception(Constants::ERR_BAD_REQUEST);
             }
+            
+            
             
             // Lấy biến từ $_GET;
             $year = $this->input->get('year');
@@ -40,6 +42,7 @@ class Viewlist extends MY_Controller {
                 array($this->viewlist_model, __FUNCTION__ . '_by_' . $mode), 
                 array($year, $month)
             );
+            $view_data['page_scroll_target'] = $this->_page_scroll_target($mode);
             $view_data['year'] = $year;
             $view_data['month'] = $month;
             $view_data['mode'] = $mode;
@@ -123,6 +126,28 @@ class Viewlist extends MY_Controller {
         catch (Exception $e)
         {
             show_error($e->getMessage());
+        }
+    }
+
+    /*
+     *--------------------------------------------------------------------
+     * Tạo page-scroll target đến ngày/tháng/năm hiện tại tùy vào kiểu danh sách
+     *
+     * @param   string  : kiểu danh sách
+     * @param   string  : thời điểm hiện tại để scroll đến
+     *--------------------------------------------------------------------
+     */
+    private function _page_scroll_target($mode)
+    {
+        switch($mode){
+            case 'day':
+                return date('Y-m-d');
+            case 'month':
+                return date('Y-m');
+            case 'year':
+                return date('Y');
+            default:
+                return false;
         }
     }
 }

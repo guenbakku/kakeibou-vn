@@ -1,14 +1,15 @@
 <script type="text/javascript">
     $(function(){
+        $('.scrollToFixed').scrollToFixed({marginTop: 70});
         $('.submit-on-change').change(function(){
             $(this).parents('form').submit();
         });
     });
 </script>
 
-<div class="container">
-    <h4 class="text-center"><?=$date?></h4>
-    <div class="well">
+<div class="container scrollToFixed" style="background: #fff; margin-top:-20px; padding-top:20px;">
+    <h4 class="text-center" style="margin-top:0"><?=$date?></h4>
+    <div class="well well-sm">
         <?=form_open($url['form'], array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
             <div class="row">
                 <div class="col-xs-6">
@@ -38,6 +39,6 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container" style="margin-top:-20px">
     <?=$this->template->get_view('viewlist/inouts_of_day_list')?>
 </div>

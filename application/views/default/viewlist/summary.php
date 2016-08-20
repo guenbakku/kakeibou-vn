@@ -1,62 +1,66 @@
 <script type="text/javascript">
     navigation('#subNav');
-    
+    pageScroll('<?=$page_scroll_target?>', -205);
+
     $(function(){
+        $('.scrollToFixed').scrollToFixed({marginTop: 70});
         $('.submit-on-change').change(function(){
             $(this).parents('form').submit();
         });
     });
 </script>
 
-<div class="container">
-    <div id="subNav" class="btn-group btn-group-justified">
-        <a class="btn btn-default" href="<?=$url['subNav'][0]?>">Ngày</a>
-        <a class="btn btn-default" href="<?=$url['subNav'][1]?>">Tháng</a>
-        <a class="btn btn-default" href="<?=$url['subNav'][2]?>">Năm</a>
+<div class="scrollToFixed" style="background: #fff; margin-top:-20px; padding-top:20px;">
+    <div class="container">
+        <div id="subNav" class="btn-group btn-group-justified">
+            <a class="btn btn-default" href="<?=$url['subNav'][0]?>">Ngày</a>
+            <a class="btn btn-default" href="<?=$url['subNav'][1]?>">Tháng</a>
+            <a class="btn btn-default" href="<?=$url['subNav'][2]?>">Năm</a>
+        </div>
     </div>
-</div>
-<br>
+    <br>
 
-<?php if (in_array($mode, array('day', 'week', 'month'))): ?>
-<div class="container">
-    <div class="well">
-        <?=form_open($url['form'], array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
-            <div class="row">
-                <div class="col-xs-6">
-                    <label>Năm</label>
-                    <?=form_dropdown(
-                        $field_name = 'year', 
-                        $select['year'], 
-                        $year, 
-                        array(
-                            'class' => 'form-control submit-on-change',
-                        )
-                    )?>
+    <?php if (in_array($mode, array('day', 'week', 'month'))): ?>
+    <div class="container">
+        <div class="well well-sm">
+            <?=form_open($url['form'], array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <label>Năm</label>
+                        <?=form_dropdown(
+                            $field_name = 'year', 
+                            $select['year'], 
+                            $year, 
+                            array(
+                                'class' => 'form-control submit-on-change',
+                            )
+                        )?>
+                    </div>
+                    <?php if ($mode == 'day'): ?>
+                    <div class="col-xs-6">
+                        <label>Tháng</label>
+                        <?=form_dropdown(
+                            $field_name = 'month', 
+                            $select['month'], 
+                            $month, 
+                            array(
+                                'class' => 'form-control submit-on-change',
+                            )
+                        )?>
+                    </div>
+                    <?php endif ?>
                 </div>
-                <?php if ($mode == 'day'): ?>
-                <div class="col-xs-6">
-                    <label>Tháng</label>
-                    <?=form_dropdown(
-                        $field_name = 'month', 
-                        $select['month'], 
-                        $month, 
-                        array(
-                            'class' => 'form-control submit-on-change',
-                        )
-                    )?>
-                </div>
-                <?php endif ?>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
+    <?php endif ?>
 </div>
-<?php endif ?>
 
-<div class="container">
+<div class="container" style="margin-top:-20px">
     <div class="panel panel-default">
         <div class="list-group">
             <?php foreach($list as $k => $v) : ?>
-            <a class="list-group-item" href="<?=sprintf($url['inouts_of_day'], $k)?>">
+            <a class="list-group-item" page-scroll="<?=$k?>" href="<?=sprintf($url['inouts_of_day'], $k)?>">
                 <div class="row">
                     <div class="pull-right" style="padding-right:15px; position:absolute; right:0px">
                         <span class="glyphicon glyphicon-menu-right"></span>
