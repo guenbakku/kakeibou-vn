@@ -68,7 +68,7 @@ class Viewlist_model extends Inout_Model {
                 
         $db_list = $this->getSumListFromDB('%Y', $full_list_keys[0], $full_list_keys[count($full_list_keys)-1]);
         
-        return array_reverse($this->combineList($full_list_keys, $db_list), true);
+        return $this->combineList($full_list_keys, $db_list);
     }
     
     /*
@@ -225,7 +225,8 @@ class Viewlist_model extends Inout_Model {
                               AND DATE_FORMAT(`date`, '{$date_format_string}') <= '{$max_date}' 
                               AND `pair_id` = ''
                         GROUP BY DATE_FORMAT(`date`, '{$date_format_string}')
-                     ) AS t";
+                     ) AS t
+                ORDER BY `key` ASC";
         
         return $this->db->query($sql)->result_array(); 
     }
@@ -246,8 +247,8 @@ class Viewlist_model extends Inout_Model {
                           ->get($table)->row_array();
                           
         return $full_list = array_map(function($year){
-                    return sprintf('%04d', $year);
-               }, range($range['min'], $range['max']));
+                                return sprintf('%04d', $year);
+                            }, range($range['min'], $range['max']));
     }
     
     /*

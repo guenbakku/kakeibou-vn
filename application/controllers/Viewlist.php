@@ -28,8 +28,6 @@ class Viewlist extends MY_Controller {
                 throw new Exception(Constants::ERR_BAD_REQUEST);
             }
             
-            
-            
             // Lấy biến từ $_GET;
             $year = $this->input->get('year');
             $year = $year === null? date('Y') : (int)$year;

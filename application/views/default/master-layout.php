@@ -2,8 +2,7 @@
 
 <!-- Mobile version -->
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html lang="vi">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vi">
 	<head>
 		<title><?=$_page_title?></title>
         <meta http-equiv="Content-Type" content="Text/html; charset=utf-8" />
@@ -26,7 +25,6 @@
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery-1.12.3.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery.scrolltofixed.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery.navigation.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery.page-scroll.js"></script>
         <?=$_scripts?>
