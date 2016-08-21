@@ -8,7 +8,7 @@ $(function(){
 
 <div class="container">
     <div class="panel panel-default">
-        <a class="panel-heading" href="<?=$url['month_inout_list']?>" style="display:block">
+        <a class="panel-heading" href="<?=$url['viewlist_summary_this_month']?>" style="display:block">
             <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Thu chi tháng này (<?=date('Y-m')?>)</strong>
         </a>
         <table class="table table-bordered" style="border-bottom:1px solid; border-color:inherit">
@@ -31,7 +31,9 @@ $(function(){
         </div>
         <table class="table table-bordered">
             <tr>
-                <th style="width:33.3%">Hôm nay</th>
+                <th style="width:33.3%">
+                    <a href="<?=$url['inouts_of_today']?>">Hôm nay</a>
+                </th>
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">
                         <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['today'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['today'][1]>0? $liquidOutgoStatus['today'][2] : 100?>%">
@@ -41,7 +43,9 @@ $(function(){
                 </td>
             </tr>
             <tr>
-                <th>Tháng này</th>
+                <th>
+                    <a href="<?=$url['viewlist_summary_this_month']?>">Tháng này</a>
+                </th>
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">
                         <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['month'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['month'][2]?>%">
