@@ -16,13 +16,14 @@ class MY_Controller extends CI_Controller {
         
         // Nếu chưa đăng nhập thì chuyển về trang login
         if (!in_array($this->uri->uri_string(), $this->allowable_uris)){
-            if ($this->login_model->isLogin() === false){
+            if (!$this->login_model->isLogin()){
                 redirect(base_url().Login_model::LOGIN_URL);
             }
         }
     }
     
-    public function base_url($uris=null, $protocol=null){
+    public function base_url($uris=null, $protocol=null)
+    {
         $base       = strtolower($this->ctrl_base_url);
         $base       = empty($base)? '' : rtrim($base, '/').'/';
         $class_name = strtolower(get_class($this));
