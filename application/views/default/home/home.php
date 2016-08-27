@@ -25,8 +25,8 @@ $(function(){
         </table>
         
         <?php if ($liquidOutgoStatus['month'][1] > 0): ?>
-        <div class="panel-heading"">
-            <strong>Tỷ lệ Chi thực tế / Dự định</strong><br>
+        <div class="panel-heading">
+            <strong>Chi thực tế / Dự định</strong><br>
             <span class="small text-muted"><em>(Không tính các khoản chi cố định)</em></span>
         </div>
         <table class="table table-bordered">
