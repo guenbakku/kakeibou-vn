@@ -9,6 +9,10 @@ body{
     padding-top:70px;
 }
 
+a.clean{
+    color: inherit !important;
+}
+
 .w10, .w20, .w30, .w40, .w50, .w60, .w70, .w80, .w90 {
     display: inline-block;
 }

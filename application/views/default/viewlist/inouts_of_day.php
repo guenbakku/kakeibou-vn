@@ -7,7 +7,11 @@
 </script>
 
 <div class="container">
-    <h4 class="text-center" style="margin-top:0"><?=$date?></h4>
+    <h4 class="text-center" style="margin-top:0">
+        <a class="glyphicon glyphicon-chevron-left clean" href="<?=$url['prev']?>"></a> 
+        <?=$date?> 
+        <a class="glyphicon glyphicon-chevron-right clean" href="<?=$url['next']?>"></a>
+    </h4>
     <div class="well well-sm">
         <?=form_open($url['form'], array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
             <div class="row">

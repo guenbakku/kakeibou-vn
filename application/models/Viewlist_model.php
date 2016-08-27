@@ -253,6 +253,74 @@ class Viewlist_model extends Inout_Model {
     
     /*
      *--------------------------------------------------------------------
+     * Tính ngày giới hạn khi xem danh sách thu chi theo ngày
+     *
+     * @param   string  : chuỗi quy định thời gian: yyyy-mm-dd, yyyy-mm, yyyy
+     * @return  array   : ngày đầu và cuối của khoảng thời gian đó
+     *--------------------------------------------------------------------
+     */
+    public function getBoundaryDate($time)
+    {
+        $mdate = str_replace('-', '', $time);
+        if (preg_match('/^\d{8}$/', $mdate)){
+            return array(
+                date('Y-m-d', strtotime($mdate)), 
+                date('Y-m-d', strtotime($mdate)), 
+            );
+        }
+        elseif (preg_match('/^\d{6}$/', $mdate)){
+            return array(
+                date('Y-m-d', strtotime("{$mdate}01")),
+                date('Y-m-t', strtotime("{$mdate}01")),
+            );
+        }
+        elseif (preg_match('/^\d{4}$/', $mdate)){
+            return array(
+                date('Y-m-d', strtotime($mdate.'0101')),
+                date('Y-m-d', strtotime($mdate.'1231')),
+            );
+        }
+        else {
+            return false;
+        }
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Tính ngày, tháng hoặc năm trước và sau của dữ liệu nhập vào
+     * Nếu dữ liệu nhập vào là dạng ngày  -> ngày trước và sau
+     *                              tháng -> tháng trước và sau
+     *                              năm   -> năm trước và sau  
+     *--------------------------------------------------------------------
+     */
+    public function getPrevNextTime($time)
+    {
+        $mdate = str_replace('-', '', $time);
+        if (preg_match('/^\d{8}$/', $mdate)){
+            return array(
+                date('Y-m-d', strtotime($mdate . ' -1 day')), 
+                date('Y-m-d', strtotime($mdate . ' +1 day')), 
+            );
+        }
+        elseif (preg_match('/^\d{6}$/', $mdate)){
+            return array(
+                date('Y-m', strtotime("{$mdate}01" . ' -1 month')),
+                date('Y-m', strtotime("{$mdate}01" . ' +1 month')),
+            );
+        }
+        elseif (preg_match('/^\d{4}$/', $mdate)){
+            return array(
+                date('Y', strtotime($mdate.'0101' . ' -1 year')),
+                date('Y', strtotime($mdate.'1231' . ' +1 year')),
+            );
+        }
+        else {
+            return false;
+        }
+    }
+    
+    /*
+     *--------------------------------------------------------------------
      * Gắn từng item từ List (lấy từ CSDL) vào danh sách thời gian đầy đủ
      *
      * @param   array   : danh sách thời gian đầy đủ

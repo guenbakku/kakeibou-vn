@@ -71,31 +71,8 @@ class Viewlist extends MY_Controller {
     {
         try 
         {
-            if (!preg_match('/^\d{4}(\-\d{2})?(\-\d{2})?$/', $date)
-                || !strtotime($date) )
-            {
+            if (false === $range = $this->viewlist_model->getBoundaryDate($date)){
                 throw new Exception(Constants::ERR_BAD_REQUEST);
-            }
-
-            // Tính giới hạn thời gian
-            $mdate = str_replace('-', '', $date);
-            if (preg_match('/^\d{8}$/', $mdate)){
-                $range = array(
-                    date('Y-m-d', strtotime($mdate)), 
-                    date('Y-m-d', strtotime($mdate)), 
-                );
-            }
-            elseif (preg_match('/^\d{6}$/', $mdate)){
-                $range = array(
-                    date('Y-m-d', strtotime("{$mdate}01")),
-                    date('Y-m-t', strtotime("{$mdate}01")),
-                );
-            }
-            elseif (preg_match('/^\d{4}$/', $mdate)){
-                $range = array(
-                    date('Y-m-d', strtotime($mdate.'0101')),
-                    date('Y-m-d', strtotime($mdate.'1231')),
-                );
             }
             
             // Lấy thông tin về tài khoản và loại thu chi
@@ -104,6 +81,8 @@ class Viewlist extends MY_Controller {
             if ($account === null) $account = 0;
             if ($player === null) $player = 0;
             
+            $prevNext = $this->viewlist_model->getPrevNextTime($date);
+
             $view_data['date'] = $date;
             $view_data['list'] = $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account, $player);
             $view_data['account'] = $account;
@@ -116,6 +95,8 @@ class Viewlist extends MY_Controller {
             $view_data['url'] = array(
                 'form'  => $this->base_url(array(__FUNCTION__, $date)),
                 'edit'  => base_url(array('inout', 'edit', '%s')),
+                'prev'  => $this->base_url(array(__FUNCTION__, $prevNext[0])),
+                'next'  => $this->base_url(array(__FUNCTION__, $prevNext[1])),
             );
             
             $this->template->write_view('MAIN', 'viewlist/inouts_of_day', $view_data);
@@ -148,4 +129,6 @@ class Viewlist extends MY_Controller {
                 return false;
         }
     }
+    
+    
 }
