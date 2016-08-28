@@ -95,8 +95,8 @@ class Viewlist extends MY_Controller {
             $view_data['url'] = array(
                 'form'  => $this->base_url(array(__FUNCTION__, $date)),
                 'edit'  => base_url(array('inout', 'edit', '%s')),
-                'prev'  => $this->base_url(array(__FUNCTION__, $prevNext[0])),
-                'next'  => $this->base_url(array(__FUNCTION__, $prevNext[1])),
+                'prev'  => $this->base_url(array(__FUNCTION__, $prevNext[0])).query_string(),
+                'next'  => $this->base_url(array(__FUNCTION__, $prevNext[1])).query_string(),
             );
             
             $this->template->write_view('MAIN', 'viewlist/inouts_of_day', $view_data);
