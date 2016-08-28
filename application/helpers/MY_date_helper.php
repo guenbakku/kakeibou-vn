@@ -10,7 +10,7 @@
  */
 function day_of_week($date)
 {
-    $days = array('Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy', 'Chủ Nhật');
+    $days = array('Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy');
     
     if (!is_numeric($date)){
         $date = strtotime($date);
@@ -19,8 +19,6 @@ function day_of_week($date)
     if ($date === false){
         return false;
     }
-    
-    $day_index = date('N', $date) - 1;
-    
-    return $days[$day_index];
+        
+    return $days[date('w', $date)];
 }
