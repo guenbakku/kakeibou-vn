@@ -1,10 +1,12 @@
 <script type="text/javascript">
-    navigation('#mainNav', 2);
+    $(function(){
+        $('.navigation').navigation();
+    });
 </script>
 
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container fluid" style="padding-left:0">
-        <div class="navbtn-group" id="mainNav">
+        <div class="navbtn-group navigation">
             <a href="<?=base_url()?>"><span class="glyphicon glyphicon-home" style="padding:0 5px"></span></a>
             <?php if($this->login_model->isLogin()):?>
             <span class="dropdown"href="<?=base_url()?>inout/"> <!-- For navigation color -->

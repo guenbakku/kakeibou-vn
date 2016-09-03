@@ -1,5 +1,4 @@
 <script type="text/javascript">
-    navigation('#subNav');
     pageScroll('<?=$page_scroll_target?>', -50);
 
     $(function(){
@@ -10,7 +9,7 @@
 </script>
 
 <div class="container">
-    <div id="subNav" class="btn-group btn-group-justified">
+    <div class="btn-group btn-group-justified navigation">
         <a class="btn btn-default" href="<?=$url['subNav'][0]?>">Ngày</a>
         <a class="btn btn-default" href="<?=$url['subNav'][1]?>">Tháng</a>
         <a class="btn btn-default" href="<?=$url['subNav'][2]?>">Năm</a>

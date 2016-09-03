@@ -5,13 +5,20 @@
  *      asset/upload/js/jquery-1.10.2.min.js (or higher version)
  */
 
-function navigation(selector, defaultIndex){
-    
-    // Index của nút sẽ bật mặc định nếu không tìm được nút nào phù hợp
-    defaultIndex = (typeof(defaultIndex) !== 'undefined')? defaultIndex : -1;
-    
-    $(document).ready(function(){
-        var navGroup = $(selector);
+(function($) {
+    $.fn.navigation = function(options){
+        
+        var ini = {
+            'defautIndex' : -1,
+            'scanAttr' : 'href',
+            'activeClass' : 'active',
+        };
+        
+        // Set giá trị mặc định cho options
+        extractOptions();
+        
+        // Áp dụng script cho từng item nếu đối tượng truyền vào có nhiều item
+        var navGroup = this;
         for (var i=0; i < navGroup.length; i++){
             var navObj  = navGroup.eq(i);
             var buttons = navObj.children(); 
@@ -24,33 +31,46 @@ function navigation(selector, defaultIndex){
                 });
             }
         }
-    })
-    
-    // Tìm index của nút có href trùng với 1 phần (toàn bộ) của url trên trình duyệt
-    // Nếu có nhiều hơn một nút trùng thì lấy index của nút có href dài hơn (cấp nhỏ hơn)
-    function findActiveIndex(buttons){
-    
-        var current_url = window.location.href;
-        var activeIndex = -1;
-        for (var i=0; i<buttons.length; i++){
-            var href = buttons.eq(i).attr('href').replace(/(\/*#.*$)|(\/+$)/, ''); //replace: xóa bỏ các phần không cần thiết để có thể đối chiếu chính xác
-            if(current_url.indexOf(href) > -1){
-                activeHrefLength = (activeIndex < 0)? -1 : buttons.eq(activeIndex).attr('href').length;
-                nowHrefLength    = buttons.eq(i).attr('href').length;
-                activeIndex      = (nowHrefLength > activeHrefLength)? i : activeIndex;
+        
+        function extractOptions(){
+            
+            if(typeof(options) === 'undefined'){
+                return false;
+            }
+            
+            for(var key in ini){
+                if(typeof(options.key) !== 'undefined'){
+                    ini.key = options.key;
+                }
             }
         }
         
-        return activeIndex;
+        // Tìm index của nút có href trùng với 1 phần (toàn bộ) của url trên trình duyệt
+        // Nếu có nhiều hơn một nút trùng thì lấy index của nút có href dài hơn (cấp nhỏ hơn)
+        function findActiveIndex(buttons){
         
-    }
-    
-    // Set class active cho nút tìm được
-    function setActiveButton(buttons, index){
-    
-        index = (index < 0)? defaultIndex : index;
+            var current_url = window.location.href;
+            var activeIndex = -1;
+            for (var i=0; i<buttons.length; i++){
+                var href = buttons.eq(i).attr(ini.scanAttr).replace(/(\/*#.*$)|(\/+$)/, ''); //replace: xóa bỏ các phần không cần thiết để có thể đối chiếu chính xác
+                if(current_url.indexOf(href) > -1){
+                    activeHrefLength = (activeIndex < 0)? -1 : buttons.eq(activeIndex).attr(ini.scanAttr).length;
+                    nowHrefLength    = buttons.eq(i).attr(ini.scanAttr).length;
+                    activeIndex      = (nowHrefLength > activeHrefLength)? i : activeIndex;
+                }
+            }
+            
+            return activeIndex;
+        }
         
-        if (index >= 0){
+        // Set class active cho nút tìm được
+        function setActiveButton(buttons, index){
+            
+            if (index < 0){
+                return;
+            }
+            
+            // Dành cho thẻ select
             if (buttons.eq(0).is('option')){
                 for (var i=0; i<buttons.length; i++){
                     if (i == index){
@@ -61,23 +81,24 @@ function navigation(selector, defaultIndex){
                     }
                 }
             }
+            // Dành cho các thẻ khác
             else {
                 for (var i=0; i<buttons.length; i++){
                     if (i == index){
-                        buttons.eq(i).addClass('active');
+                        buttons.eq(i).addClass(ini.activeClass);
                     }
                     else {
-                        buttons.eq(i).removeClass('active');
+                        buttons.eq(i).removeClass(ini.activeClass);
                     }
                 }
             }
+            
         }
-    }
-    
-    // Chuyển trang đối với navigation bằng nút select
-    function changePage(navObj){
-        var href = navObj.find('option:selected').attr('href');
-        location.href = decodeURIComponent(href);
-    }
-
-}
+        
+        // Chuyển trang đối với navigation bằng nút select
+        function changePage(navObj){
+            var href = navObj.find('option:selected').attr(ini.scanAttr);
+            location.href = decodeURIComponent(href);
+        }
+    };
+})( jQuery );
