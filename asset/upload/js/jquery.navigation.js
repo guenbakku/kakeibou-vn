@@ -9,13 +9,15 @@
     $.fn.navigation = function(options){
         
         var ini = {
-            'defautIndex' : -1,
+            'defaultIndex' : -1,
             'scanAttr' : 'href',
             'activeClass' : 'active',
         };
         
         // Set giá trị mặc định cho options
         extractOptions();
+        
+        console.log(ini.defaultIndex);
         
         // Áp dụng script cho từng item nếu đối tượng truyền vào có nhiều item
         var navGroup = this;
@@ -32,6 +34,7 @@
             }
         }
         
+        // Lấy giá trị Options
         function extractOptions(){
             
             if(typeof(options) === 'undefined'){
@@ -39,8 +42,8 @@
             }
             
             for(var key in ini){
-                if(typeof(options.key) !== 'undefined'){
-                    ini.key = options.key;
+                if(typeof(options[key]) !== 'undefined'){
+                    ini[key] = options[key];
                 }
             }
         }
@@ -60,7 +63,7 @@
                 }
             }
             
-            return activeIndex;
+            return activeIndex < 0? ini.defaultIndex : activeIndex;
         }
         
         // Set class active cho nút tìm được

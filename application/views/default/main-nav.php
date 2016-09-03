@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $(function(){
-        $('.navigation').navigation();
+        $('.navigation').navigation({'defaultIndex':0});
     });
 </script>
 

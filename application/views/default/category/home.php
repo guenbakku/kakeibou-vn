@@ -1,7 +1,5 @@
 <script type="text/javascript" src="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery.ui.touch-punch.min.js"></script>
 <script type="text/javascript">
-    navigation('#subNav', 0);
-
     $(function(){
         $('#sortable').sortable({
             handle: '.handle',
@@ -44,7 +42,7 @@
             <table class="table table-bordered" style="border-bottom:1px solid; border-color:inherit">
                 <tr>
                     <td>
-                        <div id="subNav" class="btn-group">
+                        <div id="subNav" class="btn-group navigation">
                             <a class="btn btn-default" href="<?=$url['subNav'][0]?>">Thu</a>
                             <a class="btn btn-default" href="<?=$url['subNav'][1]?>">Chi</a>
                         </div>
