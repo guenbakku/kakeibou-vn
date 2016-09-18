@@ -7,8 +7,10 @@ class Login_model extends App_Model {
     const COOKIE_NAME  = 'bhcb_loginAuth';
     const SESSION_NAME = 'bhcb_loginAuth';
     const LOGIN_URL    = 'user/login';
+    const LOGIN_ATTEMPS_MAX = 5;
+    const LOCK_INTERVAL_MIN = 300; // 300 giây
     
-    public $dbInfo    = array(); // Thông tin login của User lấy từ DB
+    protected $user = array(); // Thông tin login của User lấy từ DB
     
     public function __construct()
     {
@@ -74,28 +76,40 @@ class Login_model extends App_Model {
      */
     private function validate($username, $password)
     {   
-        
         try {
             
             if (empty($username) || strlen($username) > 32){
-                throw new Exception('Username không hợp lệ');
+                throw new Exception(Constants::ERR_LOGIN_INFO_INVALID);
             }
             
-            $dbInfo = $this->db->select('id, username, password, fullname')
+            $user = $this->db->select('id, username, password, fullname, locked_on, lock_interval, login_attemps')
                                ->from(self::TABLE)
                                ->where('username', $username)
                                ->limit(1)
                                ->get()->row_array();
-                            
-            if (empty($dbInfo)){
-                throw new Exception('Username không tồn tại');
+                               
+            // Tài khoản không tồn tại
+            if (empty($user)){
+                throw new Exception(Constants::ERR_LOGIN_INFO_INVALID);
             }
             
-            if ($dbInfo['password'] !== $password){
-                throw new Exception('Password không đúng');
+            // Tài khoản bị khóa
+            if ($user['lock_interval'] > 0) {
+                $locked_to = strtotime($user['locked_on']) + $user['lock_interval'];
+                $current = time();
+                if ($locked_to > $current) {
+                    throw new Exception(sprintf(Constants::ERR_ACCOUNT_LOCKED, (int)(($locked_to - $current) / 60)));
+                }
             }
             
-            $this->saveDbInfo($dbInfo);
+            // Password không chính xác
+            if ($user['password'] !== $password){
+                $this->lockAccount($user);
+                throw new Exception(Constants::ERR_LOGIN_INFO_INVALID);
+            }
+            
+            $this->saveDbInfo($user);
+            $this->resetLockAccount($user);
             
             return true;
         }
@@ -108,6 +122,50 @@ class Login_model extends App_Model {
     
     /*
      *--------------------------------------------------------------------
+     * Xử lý khóa tài khoản nếu password bị sai
+     *
+     * @param   array: dữ liệu user lấy từ db
+     * @return  void
+     *--------------------------------------------------------------------
+     */
+    private function lockAccount($user)
+    {
+        $data = array();
+        $data['login_attemps'] = $user['login_attemps']+1;
+        if ($data['login_attemps'] % self::LOGIN_ATTEMPS_MAX == 0) {
+            $data['locked_on'] = date('Y-m-d H:i:s');
+            $data['lock_interval'] = $user['lock_interval']
+                                     ? $user['lock_interval'] * 2
+                                     : self::LOCK_INTERVAL_MIN;
+        }
+        $this->db->where('id', $user['id'])
+                 ->set($data)
+                 ->update(self::TABLE);
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Reset lại thông tin khóa tài khoản nếu đăng nhập thành công
+     *
+     * @param   array: dữ liệu user lấy từ db
+     * @return  void
+     *--------------------------------------------------------------------
+     */
+    private function resetLockAccount($user)
+    {
+        $data = array(
+            'login_attemps' => 0,
+            'locked_on'     => null,
+            'lock_interval' => 0,
+        );
+        
+        $this->db->where('id', $user['id'])
+                 ->set($data)
+                 ->update(self::TABLE);
+    }
+    
+    /*
+     *--------------------------------------------------------------------
      * Thiết lập giá trị cho biến $this->info
      *
      *--------------------------------------------------------------------
@@ -115,7 +173,7 @@ class Login_model extends App_Model {
     private function saveDbInfo($array)
     {
         foreach (array('id', 'username', 'password', 'fullname') as $key){
-            $this->dbInfo[$key] = isset($array[$key])? $array[$key] : null;
+            $this->user[$key] = isset($array[$key])? $array[$key] : null;
         }
     }
     
@@ -129,15 +187,15 @@ class Login_model extends App_Model {
     {   
         try {
             
-            if (empty($this->dbInfo)){
-                throw new Exception('Biến dbInfo rỗng');
+            if (empty($this->user)){
+                throw new Exception('Biến user rỗng');
             }
             
             $this->load->library('encryption');
             
             $infoJson = json_encode(array(
-                'username' => $this->dbInfo['username'], 
-                'password' => $this->dbInfo['password'],
+                'username' => $this->user['username'], 
+                'password' => $this->user['password'],
             ));
             $infoJsonEncrypt = $this->encryption->encrypt($infoJson);
             
@@ -192,11 +250,11 @@ class Login_model extends App_Model {
     {   
         try {
             
-            if (empty($this->dbInfo)){
-                throw new Exception('Biến dbInfo rỗng');
+            if (empty($this->user)){
+                throw new Exception('Biến user rỗng');
             }
             
-            $this->session->set_userdata(self::SESSION_NAME, $this->dbInfo);
+            $this->session->set_userdata(self::SESSION_NAME, $this->user);
             
         }
         catch (Exception $e){

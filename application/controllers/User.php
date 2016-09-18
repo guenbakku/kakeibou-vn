@@ -10,6 +10,11 @@ class User extends CI_Controller {
     
     public function login()
     {
+        // Already Login
+        if ($this->login_model->isLogin()){
+            return redirect(base_url());
+        }
+        
         // Do Login
         if (!empty($this->input->post())){
 
@@ -29,16 +34,12 @@ class User extends CI_Controller {
                     throw new Exception($this->login_model->getError());
                 }
                 
-                redirect(base_url());
+                return redirect(base_url());
             }
             catch (Exception $e){
                 $this->flash->error($e->getMessage());
             }
             
-        }
-        // Already Login
-        elseif ($this->login_model->isLogin()){
-            redirect(base_url());
         }
         
 		$this->template->write_view('MAIN', 'user/login');

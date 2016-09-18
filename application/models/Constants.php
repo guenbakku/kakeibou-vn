@@ -9,6 +9,10 @@ class Constants extends CI_Model {
     
     const ERR_NOT_FOUND = 'Không tìm thấy dữ liệu';
     
+    const ERR_LOGIN_INFO_INVALID = 'Username hoặc password không đúng';
+    
+    const ERR_ACCOUNT_LOCKED = 'Tài khoản đã bị khóa do nhập sai mật khẩu quá số lần quy định.<br>Vui lòng thử lại sau khoản %s phút nữa.';
+    
     const ERR_CATEGORY_NOT_EMPTY = 'Không xóa được danh mục.<br>Cần xóa hết dữ liệu thu chi của danh mục này trước khi xóa danh mục.';
     
     const SUCC_ADD_INOUT_RECORD = 'Thêm ghi chép <strong>%s</strong> thành công';
