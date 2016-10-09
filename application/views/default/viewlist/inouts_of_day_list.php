@@ -16,7 +16,7 @@
                                 <div class="small text-muted"><em><?=$list[$i]['memo']?></em></div>
                             </div>
                             <div class="col-xs-4 text-right">
-                                <div class="<?=$list[$i]['inout_type']=='Thu'? 'text-blue' : 'text-red'?>"><?=currency($list[$i]['amount'])?></div>
+                                <div class="<?=$list[$i]['inout_type']=='Thu'? 'text-income' : 'text-outgo'?>"><?=currency($list[$i]['amount'])?></div>
                                 <div class="label <?=$list[$i]['player_label']?>"><?=$list[$i]['player']?></div><br>
                             </div>
                         </div>

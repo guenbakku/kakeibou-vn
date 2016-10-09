@@ -77,10 +77,10 @@ a.clean{
     padding-bottom:5px !important;
 }
 
-.text-red {
+.text-outgo {
     color: red;
 }
-.text-blue {
+.text-income {
     color: #0000ff;
 }
 
