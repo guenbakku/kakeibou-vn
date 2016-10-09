@@ -17,8 +17,6 @@
         // Set giá trị mặc định cho options
         extractOptions();
         
-        console.log(ini.defaultIndex);
-        
         // Áp dụng script cho từng item nếu đối tượng truyền vào có nhiều item
         var navGroup = this;
         for (var i=0; i < navGroup.length; i++){
