@@ -15,6 +15,7 @@
         <link rel="shortcut icon" href="<?=template_url()?>images/favicon.gif" type="image/gif">
         <link rel="apple-touch-icon" href="<?=template_url()?>images/favicon.gif" />
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/font-awesome-4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.min.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.structure.min.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.theme.min.css">

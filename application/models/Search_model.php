@@ -70,7 +70,8 @@ class Search_model extends App_Model {
                            inout_records.memo,
                            inout_records.date,
                            inout_types.name AS inout_type,
-                           accounts.name AS account, 
+                           accounts.name AS account,
+                           accounts.id AS account_id,
                            categories.name AS category,
                            users.fullname AS player,
                            users.label AS player_label'

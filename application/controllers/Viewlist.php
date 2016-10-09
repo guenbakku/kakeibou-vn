@@ -129,6 +129,4 @@ class Viewlist extends MY_Controller {
                 return false;
         }
     }
-    
-    
 }

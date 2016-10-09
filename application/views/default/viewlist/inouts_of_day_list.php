@@ -11,13 +11,13 @@
                             <span class="glyphicon glyphicon-menu-right"></span>
                         </div>
                         <div class="row">
-                            <div class="col-xs-7">
+                            <div class="col-xs-7" style="padding-right:0">
                                 <div><?=$list[$i]['category']?></div>
-                                <div class="small text-muted"><em><?=$list[$i]['memo']?></em></div>
+                                <div class="small text-muted"><span class="fa <?=Account_model::$ICONS[$list[$i]['account_id']]?>"></span> <em><?=$list[$i]['memo']?></em></div>
                             </div>
                             <div class="col-xs-4 text-right">
                                 <div class="<?=$list[$i]['inout_type']=='Thu'? 'text-income' : 'text-outgo'?>"><?=currency($list[$i]['amount'])?></div>
-                                <div class="label <?=$list[$i]['player_label']?>"><?=$list[$i]['player']?></div><br>
+                                <div class="label <?=$list[$i]['player_label']?>"><?=$list[$i]['player']?></div>
                             </div>
                         </div>
                     </a>
