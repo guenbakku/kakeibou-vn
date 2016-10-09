@@ -5,6 +5,7 @@ class Account_model extends App_Model {
     
     const TABLE = 'accounts';
     
+    // Icon cho các loại tài khoản (tiền mặt và tài khoản ngân hàng)
     public static $ICONS = array(
         1 => 'fa-money',
         2 => 'fa-bank',
