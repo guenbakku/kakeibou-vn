@@ -8,7 +8,7 @@ class Inout_model extends App_Model {
     // ID của Account Tiền mặt trong Table Categories (chú ý kiểu String)
     const ACCOUNT_CASH_ID = '1'; 
     
-    // Mốc đánh dấu ID bắt đầu của category fix
+    // Mốc đánh dấu ID kết thúc của category fix
     const FIX_CATEGORY_ID_MAX = '20';
     
     // Tên của loại thu chi
@@ -23,12 +23,14 @@ class Inout_model extends App_Model {
         2 => -1,
     );
     
-    // Tên và phân loại thu chi cho từng loại dòng tiền
-    // Thứ tự từng Item trong array:
-    //      Tên đầy đủ
-    //      Phân loại khoản thu chi (nếu là 1 pair thu chi thì là của item đầu tiên)
-    //      ID của Category đại diện (nếu là 1 pair thu chi thì là của item đầu tiên, nếu 0: không có Category đại diện)
-    // Nếu trong pair có 1 item là tài khoản ngân hàng thì mặc định đó là item đầu tiên
+    /**
+     * Tên và phân loại thu chi cho từng loại dòng tiền
+     * Thứ tự từng Item trong array:
+     *      Tên đầy đủ
+     *      Phân loại khoản thu chi (nếu là 1 pair thu chi thì là của item đầu tiên)
+     *      ID của Category đại diện (nếu là 1 pair thu chi thì là của item đầu tiên, nếu 0: không có Category đại diện)
+     * Nếu trong pair có 1 item là tài khoản ngân hàng thì mặc định đó là item đầu tiên
+     */
     public static $CASH_FLOW_NAMES = array(
         'outgo'     => array('Thêm khoản chi', 2, 0),
         'income'    => array('Thêm khoản thu', 1, 0),
@@ -53,7 +55,11 @@ class Inout_model extends App_Model {
     }
     
     public function add($type, $data)
-    {
+    {   
+        $data['cash_flow']  = $type;
+        $data['created_on'] = $data['modified_on'] = date('Y-m-d H:i:s');
+        $data['created_by'] = $data['modified_by'] = $this->login_model->getInfo('id');
+        
         $this->db->trans_start();
         foreach ($this->setPairAddData($type, $data) as $item){
             $this->db->insert(self::TABLE, $item);
@@ -68,6 +74,9 @@ class Inout_model extends App_Model {
         if ($pair_data === false){
             throw new Exception($Constants::ERR_BAD_REQUEST);
         }
+        
+        $data['modified_on'] = date('Y-m-d H:i:s');
+        $data['modified_by'] = $this->login_model->getInfo('id');
         
         $this->db->trans_start();
         foreach ($pair_data as $id => $inout_type_id){
@@ -106,12 +115,14 @@ class Inout_model extends App_Model {
         return array_column($this->db->query($sql)->result_array(), 'memo');
     }
     
+    /*
+     *--------------------------------------------------------------------
+     * Tạo pair dữ liệu nếu type của dữ liệu tạo mới là loại lưu động nội bộ
+     * 
+     *--------------------------------------------------------------------
+     */
     private function setPairAddData($type, $data)
     {
-        $data['cash_flow']  = $type;
-        $data['created_on'] = date('Y-m-d H:i:s');
-        $data['created_by'] = $this->login_model->getInfo('id');
-        
         $pair[0] = $data;
         $pair[0]['amount']  = $this->getInoutTypeCode($type)==1? $pair[0]['amount'] : 0-$pair[0]['amount'];
         
@@ -127,10 +138,10 @@ class Inout_model extends App_Model {
         $pair[0]['category_id'] = $this->getFixCategoryCode($type);
         $pair[1]['category_id'] = $pair[0]['category_id']+1;
         
-        if ($type == 'drawer' || $type == 'deposit'){
+        if ($type == 'drawer' || $type == 'deposit') {
             $pair[1]['account_id']  = self::ACCOUNT_CASH_ID;
         }
-        elseif ($type == 'handover'){
+        elseif ($type == 'handover') {
             $pair[0]['account_id'] = $pair[1]['account_id'] = self::ACCOUNT_CASH_ID;
             $pair[0]['player'] = $data['player'][0];
             $pair[1]['player'] = $data['player'][1];
