@@ -55,12 +55,12 @@
                     </div>
                     
                     <div class="form-group">
-                        <label>Thời gian:</label>
+                        <label>Thời gian thu chi:</label>
                         <div class="input-group" style="width:100%">
                             <span class="input-group-addon" style="min-width:60px">Từ</span>
                             <?=form_input(
                                 array(
-                                    'name' => $field_name = 'from',
+                                    'name' => $field_name = 'inout_from',
                                     'type' => 'date',
                                 ),
                                 set_value($field_name, null),
@@ -73,7 +73,37 @@
                             <span class="input-group-addon" style="min-width:60px">Đến</span>
                             <?=form_input(
                                 array(
-                                    'name' => $field_name = 'to',
+                                    'name' => $field_name = 'inout_to',
+                                    'type' => 'date',
+                                ),
+                                set_value($field_name, null),
+                                array(
+                                    'class' => 'form-control',
+                                )
+                            )?>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Thời gian nhập/chỉnh sửa:</label>
+                        <div class="input-group" style="width:100%">
+                            <span class="input-group-addon" style="min-width:60px">Từ</span>
+                            <?=form_input(
+                                array(
+                                    'name' => $field_name = 'modified_from',
+                                    'type' => 'date',
+                                ),
+                                set_value($field_name, null),
+                                array(
+                                    'class' => 'form-control',
+                                )
+                            )?>
+                        </div>
+                        <div class="input-group" style="width:100%">
+                            <span class="input-group-addon" style="min-width:60px">Đến</span>
+                            <?=form_input(
+                                array(
+                                    'name' => $field_name = 'modified_to',
                                     'type' => 'date',
                                 ),
                                 set_value($field_name, null),

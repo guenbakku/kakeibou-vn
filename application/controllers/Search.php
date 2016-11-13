@@ -21,10 +21,12 @@ class Search extends MY_Controller {
                 // bắt buộc được nhập mới thực hiện tìm kiếm 
                 $condition_keys = array(
                     'memo_or_amount'    => true,
-                    'player'            => true, 
-                    'inout_type'        => true, 
-                    'from'              => true, 
-                    'to'                => true,
+                    'player'            => true,
+                    'inout_type'        => true,
+                    'inout_from'        => true,
+                    'inout_to'          => true,
+                    'modified_from'     => true,
+                    'modified_to'       => true,
                     'hide_pair_inout'   => false,
                 );
                 $can_excute_search = false;
@@ -68,8 +70,8 @@ class Search extends MY_Controller {
         $view_data['total_items'] = count($view_data['list']);
         $view_data['title']       = 'Tìm kiếm chi tiêu';
         $view_data['select']      = array(
-            'players'     => array(0=> 'Tất cả') + $this->user_model->getSelectTagData(),
-            'inout_types' => array(0=> 'Tất cả') + $this->inout_type_model->getSelectTagData(),
+            'players'     => array(0 => 'Tất cả') + $this->user_model->getSelectTagData(),
+            'inout_types' => array(0 => 'Tất cả') + $this->inout_type_model->getSelectTagData(),
         );
         $view_data['url'] = array(
             'form'  => $this->base_url(),

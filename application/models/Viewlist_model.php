@@ -85,8 +85,8 @@ class Viewlist_model extends Inout_Model {
     {
         $this->load->model('search_model');
         
-        $this->search_model->from            = $from;
-        $this->search_model->to              = $to;
+        $this->search_model->inout_from      = $from;
+        $this->search_model->inout_to        = $to;
         $this->search_model->account         = $account;
         $this->search_model->player          = $player;
         $this->search_model->hide_pair_inout = $account == 0? true : false;

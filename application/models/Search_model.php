@@ -5,14 +5,29 @@ class Search_model extends App_Model {
     
     private $amount          = null;
     private $memo            = null;
-    private $from            = null;
-    private $to              = null;
+    private $inout_from      = null;
+    private $inout_to        = null;
     private $inout_type      = null;
+    private $modified_from   = null;
+    private $modified_to     = null;
     private $account         = null;
     private $player          = null;
     private $hide_pair_inout = false;
     
-    private $result     = array();
+    private $result = array();
+    
+    private $acceptable_keys = array(
+        'amount',
+        'memo',
+        'inout_from',
+        'inout_to',
+        'inout_type',
+        'modified_to',
+        'modified_from', 
+        'account',
+        'player',
+        'hide_pair_inout'
+    );
     
     public function __set($name, $val)
     {
@@ -20,8 +35,7 @@ class Search_model extends App_Model {
             return false;
         }
         
-        $acceptable_keys = array('amount', 'memo', 'from', 'to', 'inout_type', 'account', 'player', 'hide_pair_inout');
-        if (!in_array($name, $acceptable_keys, true)){
+        if (!in_array($name, $this->acceptable_keys, true)){
             throw new InvalidArgumentException($name . ' không tồn tại hoặc không được phép thay đổi');
         }
         
@@ -45,12 +59,10 @@ class Search_model extends App_Model {
                 throw new InvalidArgumentException('Dữ liệu loại tài khoản không hợp lệ');
             }
         }
-        else if ($name === 'from' || $name === 'to'){
+        else if (in_array($name, array('inout_from', 'inout_to', 'modified_from', 'modified_to'))){
             // Quăng ngoại lệ nếu val không có dạng yyyy-mm-dd
             // hoặc không phải là ngày tháng năm có nghĩa
-            if (!preg_match('/^\d{4}(\-\d{2})?(\-\d{2})?$/', $val)
-                || !strtotime($val) )
-            {
+            if (!preg_match('/^\d{4}(\-\d{2})?(\-\d{2})?$/', $val) || !strtotime($val) ) {
                 throw new InvalidArgumentException('Dữ liệu ngày tháng ('.$name.') không hợp lệ');
             }
         }
@@ -109,11 +121,17 @@ class Search_model extends App_Model {
         if (!empty($this->player)){
             $this->db->where('inout_records.player', $this->player);
         }
-        if (!empty($this->from)){
-            $this->db->where('inout_records.date >=', $this->from);
+        if (!empty($this->inout_from)){
+            $this->db->where('inout_records.date >=', $this->inout_from);
         }
-        if (!empty($this->to)){
-            $this->db->where('inout_records.date <=', $this->to);
+        if (!empty($this->inout_to)){
+            $this->db->where('inout_records.date <=', $this->inout_to);
+        }
+        if (!empty($this->modified_from)){
+            $this->db->where('inout_records.modified_on >=', date('Y-m-d H:i:s', strtotime($this->modified_from)));
+        }
+        if (!empty($this->modified_to)){
+            $this->db->where('inout_records.modified_on <', date('Y-m-d H:i:s', strtotime($this->modified_to . ' +1 days')));
         }
         if ($this->hide_pair_inout === true){
             $this->db->where('inout_records.pair_id', '');
