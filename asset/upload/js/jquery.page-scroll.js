@@ -31,5 +31,6 @@ function pageScroll(target, offset, anchorName){
         targetDOM.css('background-color', blinkColor).stop().animate({'backgroundColor' : orgColor}, {
             'duration' : 1200,
         });
+        setTimeout(function(){targetDOM.css('background-color', '')}, 1300);
     }
 }
