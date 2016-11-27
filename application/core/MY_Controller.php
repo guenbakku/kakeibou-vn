@@ -15,6 +15,7 @@ class MY_Controller extends CI_Controller {
         parent::__construct();
         
         $this->output->set_header('Access-Control-Allow-Origin: '.base_url());
+        $this->output->remove_headers(array('X-Powered-By'));
         
         // Nếu chưa đăng nhập thì chuyển về trang login
         if (!in_array($this->uri->uri_string(), $this->allowable_uris)){
