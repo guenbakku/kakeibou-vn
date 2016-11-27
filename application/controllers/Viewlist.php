@@ -30,9 +30,9 @@ class Viewlist extends MY_Controller {
             
             // Lấy biến từ $_GET;
             $year = $this->input->get('year');
-            $year = $year === null? date('Y') : (int)$year;
             $month = $this->input->get('month');
-            $month = $month === null? date('m') : (int)$month;
+            if ($year === null) $year = date('Y');
+            if ($month === null) $month = date('m');
             
             $yearsInDB = $this->viewlist_model->getYearsListInDB();
             
@@ -106,6 +106,13 @@ class Viewlist extends MY_Controller {
         {
             show_error($e->getMessage());
         }
+    }
+    
+    public function summary_chart($mode=null) 
+    {   
+        $view_data = null;
+        $this->template->write_view('MAIN', 'viewlist/chart_summary', $view_data);
+        $this->template->render();
     }
 
     /*
