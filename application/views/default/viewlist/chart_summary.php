@@ -52,15 +52,13 @@
         "synchronizeGrid":true,
         "valueAxes": [{
             "id":"v1",
-            "axisColor": "#DADADA",
-            "labelsEnabled": true,
+            "axisColor": "#333",
+            "labelsEnabled": false,
             "inside": true,
             "axisThickness": 1,
             "gridThickness": 0,
             "axisAlpha": 1,
             "position": "left",
-            "showFirstLabel": true,
-            "showLastLabel": true,
         }],
         "graphs": [{
             "valueAxis": "v1",
@@ -101,7 +99,8 @@
             "parseDates": true,
             "minPeriod": "DD",
             // "dateFormats": [{"period":"fff","format":"JJ:NN:SS"},{"period":"ss","format":"JJ:NN:SS"},{"period":"mm","format":"JJ:NN"},{"period":"hh","format":"JJ:NN"},{"period":"DD","format":"MM-DD"},{"period":"WW","format":"MMM DD"},{"period":"MM","format":"MMM"},{"period":"YYYY","format":"YYYY"}],
-            "axisColor": "#DADADA",
+            "axisColor": "#333",
+            "axisAlpha": 1,
             "gridThickness": 0,
             "minorGridEnabled": true
         },
