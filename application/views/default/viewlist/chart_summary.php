@@ -46,7 +46,9 @@
         "type": "serial",
         "theme": "light",
         "legend": {
-            "useGraphSettings": true
+            "useGraphSettings": true,
+            "valueWidth": 60,
+            "align": "left",
         },
         "dataProvider": chartData,
         "synchronizeGrid":true,
@@ -63,7 +65,7 @@
         "graphs": [{
             "valueAxis": "v1",
             "lineColor": "#FF6600",
-            "bullet": false,
+            "bullet": true,
             "bulletBorderThickness": 1,
             "hideBulletsCount": 30,
             "title": "Thu",
@@ -88,10 +90,10 @@
             "valueField": "views",
             "fillAlphas": 0
         }],
-        "chartScrollbar": {
-        },
+        "chartScrollbar": {},
         "chartCursor": {
-            "cursorPosition": "mouse"
+            "cursorPosition": "mouse",
+            "bulletsEnabled": true,
         },
         "categoryField": 'date',
         "dataDateFormat": "YYYY-MM-DD",
@@ -105,7 +107,7 @@
             "minorGridEnabled": true
         },
         "export": {
-            "enabled": true,
+            "enabled": false,
             "position": "bottom-right"
         }
     });
@@ -130,8 +132,8 @@
             newDate = i<9? '2016-11-0' : '2016-11-';
             newDate = newDate + (i+1);
     
-            var visits = Math.round(Math.random()) * (100000 - 0) + 0;
-            var hits = Math.round(Math.random()) * (0 - 100000) - 100000;
+            var visits = Math.round(Math.random()) * (1000000 - 0) + 0;
+            var hits = Math.round(Math.random()) * (0 - 1000000) - 1000000;
             var views = visits + hits;
     
             chartData.push({

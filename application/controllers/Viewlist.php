@@ -18,14 +18,13 @@ class Viewlist extends MY_Controller {
     
     public function summary($mode=null)
     {   
+        d($this->router->fetch_method());
         try 
-        {
-            if ($mode==null){
-                redirect($this->base_url(array(__FUNCTION__, 'day')));
-            }
+        {   
+            $mode = strtolower($mode);
             
             if (!in_array($mode, array('day', 'month', 'year'))){
-                throw new Exception(Constants::ERR_BAD_REQUEST);
+                redirect($this->base_url(array($this->router->fetch_method(), 'day')));
             }
             
             // Lấy biến từ $_GET;
@@ -34,10 +33,11 @@ class Viewlist extends MY_Controller {
             if ($year === null) $year = date('Y');
             if ($month === null) $month = date('m');
             
-            $yearsInDB = $this->viewlist_model->getYearsListInDB();
+            $yearsInDB  = $this->viewlist_model->getYearsListInDB();
+            $monthsList = range(1, 12);
             
             $view_data['list'] = call_user_func_array(
-                array($this->viewlist_model, __FUNCTION__ . '_by_' . $mode), 
+                array($this->viewlist_model, 'summary_by_' . $mode), 
                 array($year, $month)
             );
             $view_data['page_scroll_target'] = $this->_page_scroll_target($mode);
@@ -46,18 +46,17 @@ class Viewlist extends MY_Controller {
             $view_data['mode'] = $mode;
             $view_data['select'] = array(
                 'year' => array_combine($yearsInDB, $yearsInDB),
-                'month' => array_combine(range(1,12), range(1,12)),
+                'month' => array_combine($monthsList, $monthsList),
             );
             $view_data['url'] = array(
-                'form'          => $this->base_url(array(__FUNCTION__, $mode)),
+                'form'          => $this->base_url(array($this->router->fetch_method(), $mode)),
                 'subNav'        => array(
-                    $this->base_url(array(__FUNCTION__, 'day')),
-                    $this->base_url(array(__FUNCTION__, 'month')),
-                    $this->base_url(array(__FUNCTION__, 'year')),
+                    $this->base_url(array($this->router->fetch_method(), 'day')),
+                    $this->base_url(array($this->router->fetch_method(), 'month')),
+                    $this->base_url(array($this->router->fetch_method(), 'year')),
                 ),
                 'inouts_of_day' => $this->base_url(array('inouts_of_day', '%s')),
             );
-            
             $this->template->write_view('MAIN', 'viewlist/summary', $view_data);
             $this->template->render();
         }
@@ -93,10 +92,10 @@ class Viewlist extends MY_Controller {
                 'players'  => $this->user_model->getSelectTagData(),
             );
             $view_data['url'] = array(
-                'form'  => $this->base_url(array(__FUNCTION__, $date)),
+                'form'  => $this->base_url(array($this->router->fetch_method(), $date)),
                 'edit'  => base_url(array('inout', 'edit', '%s')),
-                'prev'  => $this->base_url(array(__FUNCTION__, $prevNext[0])).query_string(),
-                'next'  => $this->base_url(array(__FUNCTION__, $prevNext[1])).query_string(),
+                'prev'  => $this->base_url(array($this->router->fetch_method(), $prevNext[0])).query_string(),
+                'next'  => $this->base_url(array($this->router->fetch_method(), $prevNext[1])).query_string(),
             );
             
             $this->template->write_view('MAIN', 'viewlist/inouts_of_day', $view_data);
@@ -112,7 +111,7 @@ class Viewlist extends MY_Controller {
     {   
         $view_data = null;
         $this->template->write_view('MAIN', 'viewlist/chart_summary', $view_data);
-        $this->template->render();
+        $this->template->render();        
     }
 
     /*
