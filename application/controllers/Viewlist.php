@@ -18,7 +18,6 @@ class Viewlist extends MY_Controller {
     
     public function summary($mode=null)
     {   
-        d($this->router->fetch_method());
         try 
         {   
             $mode = strtolower($mode);
@@ -57,6 +56,7 @@ class Viewlist extends MY_Controller {
                 ),
                 'inouts_of_day' => $this->base_url(array('inouts_of_day', '%s')),
             );
+            
             $this->template->write_view('MAIN', 'viewlist/summary', $view_data);
             $this->template->render();
         }

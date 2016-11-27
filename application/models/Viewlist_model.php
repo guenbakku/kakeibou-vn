@@ -214,9 +214,9 @@ class Viewlist_model extends Inout_Model {
      */
     public function getSumListFromDB($date_format_string, $min_date, $max_date)
     {
-        $sql = "SELECT `key`, `thu`, `chi`, (`thu` + `chi`) AS `tong`
+        $sql = "SELECT `date`, `thu`, `chi`, (`thu` + `chi`) AS `tong`
                 FROM (
-                        SELECT DATE_FORMAT(`date`, '{$date_format_string}') as `key`, 
+                        SELECT DATE_FORMAT(`date`, '{$date_format_string}') as `date`, 
                                SUM(CASE WHEN `categories`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
                                SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`
                         FROM `inout_records`
@@ -226,7 +226,7 @@ class Viewlist_model extends Inout_Model {
                               AND `pair_id` = ''
                         GROUP BY DATE_FORMAT(`date`, '{$date_format_string}')
                      ) AS t
-                ORDER BY `key` ASC";
+                ORDER BY `date` ASC";
         
         return $this->db->query($sql)->result_array(); 
     }
@@ -330,20 +330,21 @@ class Viewlist_model extends Inout_Model {
      */
     private function combineList($full_list_keys=array(), $db_list=array())
     {
-        $empty_item = array('tong' => 0, 'thu' => 0, 'chi' => 0, 'empty' => true);
+        $empty_item = array('tong' => 0, 'thu' => 0, 'chi' => 0, 'date' => null);
         $full_list = array();
         
-        foreach ($full_list_keys as $k){
-            $item = current($db_list);
-            if ($k == $item['key']){
-                unset($item['key']);
-                $item['empty'] = false;
-                $full_list[$k] = $item;
+        foreach ($full_list_keys as $k) {
+            $db_item = current($db_list);
+            
+            if ($k == $db_item['date']){
+                $item = $db_item;
                 next($db_list);
             }
             else {
-                $full_list[$k] = $empty_item;
+                $item = $empty_item;
             }
+            
+            $full_list[] = array_merge($item, array('date' => $k));
         }
         
         return $full_list;
