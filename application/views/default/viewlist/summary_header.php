@@ -16,6 +16,7 @@ $(function(){
 <br>
 
 <div class="container">
+    <?php if (in_array($mode, array('day', 'month'))): ?>
     <div class="well well-sm">
         <?=form_open($url['form'], array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
             <div class="row">
@@ -46,6 +47,7 @@ $(function(){
             </div>
         </form>
     </div>
+    <?php endif ?>
 
     <ul class="nav nav-tabs navigation">
         <li href="<?=$url['navTabs']['list']?>"><a href="<?=$url['navTabs']['list']?>">Danh sách</a></li>

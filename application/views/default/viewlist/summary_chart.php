@@ -12,7 +12,6 @@
     <!-- Resources -->
     <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/amcharts.js"></script>
     <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/serial.js"></script>
-    <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/themes/light.js"></script>
     
     <!-- Chart code -->
     <script type="text/javascript">
@@ -22,7 +21,7 @@
             
             var chart = AmCharts.makeChart("chartdiv", {
                 "type": "serial",
-                "theme": "light",
+                "theme": "none",
                 "legend": {
                     "useGraphSettings": true,
                     "valueWidth": 60,
@@ -56,7 +55,7 @@
                     "lineColor": "blue",
                     "dashLength": 2,
                     "lineThickness": 1,
-                    "bullet": true,
+                    "bullet": false,
                     "bulletBorderThickness": 1,
                     "hideBulletsCount": 30,
                     "title": "Thu",
@@ -92,7 +91,6 @@
                 },
                 "export": {
                     "enabled": false,
-                    "position": "bottom-right"
                 }
             });
             
