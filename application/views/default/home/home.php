@@ -1,11 +1,3 @@
-<script type="text/javascript">
-$(function(){
-    $('.toggle').click(function(){
-        $('.toggle-target').toggleClass('hide');        
-    });
-});
-</script>
-
 <div class="container">
     <div class="panel panel-default">
         <a class="panel-heading" href="<?=$url['summary_this_month']?>" style="display:block">
