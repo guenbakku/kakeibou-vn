@@ -42,6 +42,17 @@
                 }],
                 "graphs": [{
                     "valueAxis": "v1",
+                    "lineColor": "black",
+                    "dashLength": 0,
+                    "lineThickness": 2,
+                    "bullet": false,
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": "Tổng",
+                    "valueField": "tong",
+                    "fillAlphas": 0
+                }, {
+                    "valueAxis": "v1",
                     "lineColor": "blue",
                     "dashLength": 2,
                     "lineThickness": 1,
@@ -61,17 +72,6 @@
                     "hideBulletsCount": 30,
                     "title": "Chi",
                     "valueField": "chi",
-                    "fillAlphas": 0
-                }, {
-                    "valueAxis": "v1",
-                    "lineColor": "black",
-                    "dashLength": 0,
-                    "lineThickness": 2,
-                    "bullet": false,
-                    "bulletBorderThickness": 1,
-                    "hideBulletsCount": 30,
-                    "title": "Tổng",
-                    "valueField": "tong",
                     "fillAlphas": 0
                 }],
                 "chartScrollbar": {},
