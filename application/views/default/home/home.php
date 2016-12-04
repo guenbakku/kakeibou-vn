@@ -11,7 +11,7 @@ $(function(){
         <a class="panel-heading" href="<?=$url['summary_this_month']?>" style="display:block">
             <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Thu chi tháng này (<?=date('Y-m')?>)</strong>
         </a>
-        <table class="table table-bordered" style="border-bottom:1px solid; border-color:inherit">
+        <table class="table table-bordered">
             <tr>
                 <th style="width:33.3%" class="text-center">Thu</th>
                 <th style="width:33.3%" class="text-center">Chi</th>
@@ -60,9 +60,7 @@ $(function(){
         </table>
     </div>
     <?php endif ?>
-</div>
-
-<div class="container">
+    
     <div class="panel panel-default">
         <div class="panel-heading"><strong>Tiền còn lại</strong></div>
         <table class="table table-bordered">
