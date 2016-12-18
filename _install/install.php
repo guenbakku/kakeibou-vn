@@ -42,9 +42,9 @@ $replaces = array(
     $APP_PATH,
     $APP_URL,
     'production',
-    'nvb-online_kakeibou',
-    'nvb-online',
-    'matkhauMYSQL',
+    'kakeibou',
+    'guest',
+    'm4tkh4uDatabase',
     '',
 );
 
