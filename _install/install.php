@@ -16,7 +16,6 @@ $APP_URL  = 'http://'.$DOMAIN.$APP_PATH;
 // Đường dẫn tương đối so với file php này.
 $files = array(
     '../.htaccess' => array(
-        "#CI_ENV (.*)#"         => 'production',
         "#RewriteBase (.*)#"    => $APP_PATH,
     ),
 );
