@@ -5,6 +5,8 @@ class Home extends MY_Controller {
     
 	public function index()
     {           
+        d($this->config->item('base_url'));
+        d(ENVIRONMENT);
         $view_data['month_sum'] = current($this->viewlist_model->getSumListFromDB('%Y-%m', date('Y-m'), date('Y-m')));
         $view_data['liquidOutgoStatus'] = $this->viewlist_model->getLiquidOutgoStatus();
         $view_data['remaining'] = $this->viewlist_model->getRemaining();

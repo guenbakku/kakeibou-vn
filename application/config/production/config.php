@@ -20,7 +20,7 @@ date_default_timezone_set('Asia/Tokyo');
 | environments.
 |
 */
-$config['base_url'] = 'http://kakeibou.localhost.centos';
+$config['base_url'] = 'http://kakeibou.nvb-online.com';
 
 /*
 |--------------------------------------------------------------------------
@@ -210,7 +210,7 @@ $config['directory_trigger'] = 'd';
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 0;
+$config['log_threshold'] = 1;
 
 /*
 |--------------------------------------------------------------------------
