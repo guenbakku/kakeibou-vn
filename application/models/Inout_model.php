@@ -28,12 +28,12 @@ class Inout_model extends App_Model {
      * Thứ tự từng Item trong array:
      *      Tên đầy đủ
      *      Phân loại khoản thu chi (nếu là 1 pair thu chi thì là của item đầu tiên)
-     *      ID của Category đại diện (nếu là 1 pair thu chi thì là của item đầu tiên, nếu 0: không có Category đại diện)
+     *      ID của Category đại diện (nếu là 1 pair thu chi thì là của item đầu tiên, nếu null: không có Category đại diện)
      * Nếu trong pair có 1 item là tài khoản ngân hàng thì mặc định đó là item đầu tiên
      */
     public static $CASH_FLOW_NAMES = array(
-        'outgo'     => array('Thêm khoản chi', 2, 0),
-        'income'    => array('Thêm khoản thu', 1, 0),
+        'outgo'     => array('Thêm khoản chi', 2, null),
+        'income'    => array('Thêm khoản thu', 1, null),
         'drawer'    => array('Rút tiền từ tài khoản*', 2, 1),
         'deposit'   => array('Nạp tiền vô tài khoản*', 1, 3),
         'handover'  => array('Chuyển tiền qua tay*', 2, 5),
@@ -220,7 +220,7 @@ class Inout_model extends App_Model {
     public function getCashFlowName($type)
     {
         if (!isset(self::$CASH_FLOW_NAMES[$type])){
-            return false;
+            return null;
         }
         
         return self::$CASH_FLOW_NAMES[$type][0];
@@ -229,45 +229,39 @@ class Inout_model extends App_Model {
     public function getInoutTypeCode($type)
     {      
         if (!isset(self::$CASH_FLOW_NAMES[$type])){
-            return false;
+            return null;
         }
         
         return self::$CASH_FLOW_NAMES[$type][1];
     }
     
-    public function getInoutTypeSign($type){
-        
+    public function getInoutTypeSign($type)
+    {   
         if (!is_numeric($type) && is_string($type)){
-            
-            if (!isset(self::$CASH_FLOW_NAMES[$type])){
-                return false;
-            }
-            
-            return $this->getInoutTypeCode($type) == array_flip(self::$INOUT_TYPE)['Thu']
-                    ? '+' : '-';
-        }
-        elseif (is_numeric($type)){
-
-            if (!isset(self::$INOUT_TYPE[$type])){
-                return false;
-            }
-            
-            return $type == array_flip(self::$INOUT_TYPE)['Thu']
-                    ? '+' : '-';
+            $type = $this->getInoutTypeCode($type);
         }
 
-        return false;
+        if (!is_numeric($type) || !isset(self::$INOUT_TYPE[$type])){
+            return null;
+        }
+        
+        return $type === array_flip(self::$INOUT_TYPE)['Thu']
+               ? '+' : '-';
     }
     
+    /*
+     *--------------------------------------------------------------------
+     * Lấy code của category cố định dành cho các loại thu chi phát sinh pair
+     *
+     * @param   string: 
+     *--------------------------------------------------------------------
+     */
     public function getFixCategoryCode($type)
     {
         if (!isset(self::$CASH_FLOW_NAMES[$type])){
-            return false;
+            return null;
         }
-        if (self::$CASH_FLOW_NAMES[$type][2]==0){
-            return false;
-        }
-        
-        return self::$CASH_FLOW_NAMES[$type][2];    
+
+        return element(2, self::$CASH_FLOW_NAMES[$type]);
     }
 }
