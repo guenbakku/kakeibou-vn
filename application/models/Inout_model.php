@@ -244,8 +244,8 @@ class Inout_model extends App_Model {
         if (!is_numeric($type) || !isset(self::$INOUT_TYPE[$type])){
             return null;
         }
-        
-        return $type === array_flip(self::$INOUT_TYPE)['Thu']
+
+        return intval($type) === array_flip(self::$INOUT_TYPE)['Thu']
                ? '+' : '-';
     }
     
