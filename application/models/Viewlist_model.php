@@ -245,10 +245,18 @@ class Viewlist_model extends Inout_Model {
         $range = $this->db->select("DATE_FORMAT(MIN(`date`), '%Y') as `min`, 
                                     DATE_FORMAT(MAX(`date`), '%Y') as `max`", false)
                           ->get($table)->row_array();
-                          
-        return $full_list = array_map(function($year){
-                                return sprintf('%04d', $year);
-                            }, range($range['min'], $range['max']));
+        
+        // Thêm năm hiện tại nếu max_year nhỏ hơn năm hiện tại
+        $thisYear = date('Y');
+        if ($range['max'] < $thisYear) {
+            $range['max'] = $thisYear;
+        }
+        
+        $full_list = array_map(function($year){
+            return sprintf('%04d', $year);
+        }, range($range['min'], $range['max']));
+        
+        return $full_list;
     }
     
     /*
