@@ -1,5 +1,5 @@
 <div class="container">
-    <?php echo form_open($form_url="", array('id' => 'addCashFlow', 'class' => 'form-vertical'))?>
+    <?php echo form_open($url['form'], array('id' => 'editSetting', 'class' => 'form-vertical'))?>
         <div class="panel panel-default">
             <div class="panel-heading"><strong><?=$setting['name']?></strong></div>
             <div class="panel-body">
