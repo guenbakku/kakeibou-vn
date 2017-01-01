@@ -1,5 +1,11 @@
-RewriteEngine on
+RewriteEngine On
 RewriteBase /
+
+# exclude any paths that are not codeigniter-app related
+RewriteCond %{REQUEST_URI} !^/server-status
+RewriteCond %{REQUEST_URI} !^/server-info
+RewriteCond %{REQUEST_URI} !^/docs
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond $1 !^(index\.php|robots\.txt)
