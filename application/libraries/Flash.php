@@ -26,7 +26,7 @@ class Flash {
      */
     public function success($msg)
     {
-        $this->set_session('success', $msg);
+        $this->set_session($msg, 'success');
     }
     
     /*
@@ -37,7 +37,7 @@ class Flash {
      */
     public function error($msg)
     {
-        $this->set_session('danger', $msg);
+        $this->set_session($msg, 'danger');
     }
     
     /*
@@ -47,8 +47,11 @@ class Flash {
      *--------------------------------------------------------------------
      */
     public function output()
-    {
-        if (null === $data = $this->CI->session->userdata(self::SESSION_NAME)){
+    {   
+        $data = $this->CI->session->userdata(self::SESSION_NAME);
+        unset($_SESSION[self::SESSION_NAME]);
+
+        if ($data === null) {
             return null;
         }
         
@@ -56,8 +59,6 @@ class Flash {
         $html .= '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';
         $html .= $data['msg'];
         $html .= '</div>';
-        
-        unset($_SESSION[self::SESSION_NAME]);
         
         return $html;
     }
@@ -68,7 +69,7 @@ class Flash {
      *
      *--------------------------------------------------------------------
      */
-    private function set_session($status, $msg)
+    protected function set_session($msg, $status)
     {
         $this->CI->session->set_userdata(
             self::SESSION_NAME, 
