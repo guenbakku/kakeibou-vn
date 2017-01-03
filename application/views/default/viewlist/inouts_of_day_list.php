@@ -57,7 +57,7 @@
             <?php endfor ?>
         <?php else: ?>
             <div class="panel-body">
-                Không tìm thấy dữ liệu
+                <?=Constants::ERR_NOT_FOUND?>
             </div>
         <?php endif ?>
     </div>
