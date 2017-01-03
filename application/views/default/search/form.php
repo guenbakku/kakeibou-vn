@@ -26,6 +26,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label>
+                        <input type="hidden" value="0" name="<?=$field_name = 'hide_pair_inout'?>">
+                        <?=form_checkbox(
+                            array(
+                                'name'      => $field_name,
+                                'value'     => '1',
+                                'checked'   => (bool)set_value($field_name, TRUE),
+                            )
+                        )?>
+                        Ẩn dữ liệu lưu động nội bộ
+                    </label>
+                </div>
                 <div class="advance-search collapse">
                     <div class="form-group">
                         <div class="row">
@@ -112,20 +125,6 @@
                                 )
                             )?>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>
-                            <input type="hidden" value="0" name="<?=$field_name = 'hide_pair_inout'?>">
-                            <?=form_checkbox(
-                                array(
-                                    'name'      => $field_name,
-                                    'value'     => '1',
-                                    'checked'   => (bool)set_value($field_name, TRUE),
-                                )
-                            )?>
-                            Ẩn dữ liệu lưu động nội bộ
-                        </label>
                     </div>
                 </div>
                 

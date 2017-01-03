@@ -35,13 +35,25 @@ class MY_Controller extends CI_Controller {
     public function base_url($uris=null, $protocol=null)
     {
         $base       = strtolower($this->ctrl_base_url);
-        $base       = empty($base)? '' : rtrim($base, '/').'/';
+        $base       = empty($base)? '' : trim($base, '/');
         $class_name = strtolower(get_class($this));
         
-        if(is_array($uris)){
-            $uris = implode('/', $uris);
+        if(!is_array($uris)){
+            $uris = array($uris);
         }
-        $uris = $base.$class_name . '/' . $uris;
+        
+        // Xóa slash ở 2 đầu mỗi string (nếu có) trong $uris
+        $uris = array_map(function($uri){
+            return trim($uri, '/');
+        }, $uris);
+        
+        // Nối base, current class name, $uris lại với nhau
+        $combined_uris = array_filter(
+            array_merge(array($base), array($class_name), $uris),
+            function($uri){return (!empty($uri) && is_string($uri)) || $uri == '0';}
+        );
+        
+        $uris = implode('/', $combined_uris);
         
         return base_url($uris, $protocol);
     }

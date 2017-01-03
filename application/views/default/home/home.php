@@ -1,17 +1,9 @@
-<script type="text/javascript">
-$(function(){
-    $('.toggle').click(function(){
-        $('.toggle-target').toggleClass('hide');        
-    });
-});
-</script>
-
 <div class="container">
     <div class="panel panel-default">
-        <a class="panel-heading" href="<?=$url['viewlist_summary_this_month']?>" style="display:block">
+        <a class="panel-heading" href="<?=$url['summary_this_month']?>" style="display:block">
             <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Thu chi tháng này (<?=date('Y-m')?>)</strong>
         </a>
-        <table class="table table-bordered" style="border-bottom:1px solid; border-color:inherit">
+        <table class="table table-bordered">
             <tr>
                 <th style="width:33.3%" class="text-center">Thu</th>
                 <th style="width:33.3%" class="text-center">Chi</th>
@@ -23,8 +15,11 @@ $(function(){
                 <td class="text-right"><?=currency($month_sum['tong'])?></td>
             </tr>
         </table>
+    </div>
         
-        <?php if ($liquidOutgoStatus['month'][1] > 0): ?>
+    <?php // Chỉ hiện bảng Chi thực tế/Dự định nếu có setting "Dự định chi tháng này" ?>
+    <?php if ($liquidOutgoStatus['month'][1] > 0): ?>
+    <div class="panel panel-default">
         <div class="panel-heading">
             <strong>Chi thực tế / Dự định</strong><br>
             <span class="small text-muted"><em>(Không tính các khoản chi cố định)</em></span>
@@ -44,7 +39,7 @@ $(function(){
             </tr>
             <tr>
                 <th>
-                    <a href="<?=$url['viewlist_summary_this_month']?>">Tháng này</a>
+                    <a href="<?=$url['summary_this_month']?>">Tháng này</a>
                 </th>
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">
@@ -55,12 +50,9 @@ $(function(){
                 </td>
             </tr>
         </table>
-        <?php endif ?>
-        
     </div>
-</div>
-
-<div class="container">
+    <?php endif ?>
+    
     <div class="panel panel-default">
         <div class="panel-heading"><strong>Tiền còn lại</strong></div>
         <table class="table table-bordered">

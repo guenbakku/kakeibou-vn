@@ -27,6 +27,9 @@ class Setting extends MY_Controller {
         }
         
         $view_data['setting'] = current($data);
+        $view_data['url'] = array(
+            'form'  => $this->base_url(array(__FUNCTION__, $item)),
+        );
         $this->template->write_view('MAIN', 'setting/form', $view_data);
         $this->template->render();
     }

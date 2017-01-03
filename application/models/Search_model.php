@@ -86,8 +86,7 @@ class Search_model extends App_Model {
                            accounts.id AS account_id,
                            categories.name AS category,
                            users.fullname AS player,
-                           users.label AS player_label'
-                         )
+                           users.label AS player_label')
                  ->from('inout_records')
                  ->join('accounts', 'accounts.id = inout_records.account_id')
                  ->join('categories', 'categories.id = inout_records.category_id')

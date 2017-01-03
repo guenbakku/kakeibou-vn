@@ -20,7 +20,7 @@ date_default_timezone_set('Asia/Tokyo');
 | environments.
 |
 */
-$config['base_url'] = BASEURL;
+$config['base_url'] = 'http://kakeibou.localhost.centos';
 
 /*
 |--------------------------------------------------------------------------

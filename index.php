@@ -38,23 +38,6 @@
 
 /*
  *---------------------------------------------------------------
- * [MOD] ĐỊNH NGHĨA URL GỐC
- *---------------------------------------------------------------
- *
- * Định nghĩa tại đây để có thể gọi được base url mà không cần dùng hàm base_url()
- * tránh trường hợp application không chạy được từ đầu (ví dụ khi trang 404_error gốc)
- * BASEURL có dạng theo định của CodeIgniter như sau:
- *
- * 'http://example.com/'
- * 
- * NOTE: nếu có định nghĩa tại đây thì nên sửa lại chỗ $base_url trong 
- * application/config/config.php lấy giá trị từ đây.
- */
- 
-  define('BASEURL', 'http://kakeibou.localhost.centos/');
-
-/*
- *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
  *---------------------------------------------------------------
  *
