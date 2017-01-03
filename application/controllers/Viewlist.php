@@ -29,7 +29,7 @@ class Viewlist extends MY_Controller {
      * @return   void
      *--------------------------------------------------------------------
      */
-    public function summary($view=null, $mode=null) 
+    public function summary($view = null, $mode = null) 
     {   
         try 
         {
@@ -72,39 +72,24 @@ class Viewlist extends MY_Controller {
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function inouts_of_day($date)
+    public function inouts_of_day($view = null, $date = null)
     {
         try 
-        {
-            if (false === $range = $this->viewlist_model->getBoundaryDate($date)){
+        {   
+            $view = strtolower($view);
+            
+            if (!in_array($view, array('list', 'chart'))) {
                 throw new Exception(Constants::ERR_BAD_REQUEST);
             }
             
-            // Lấy thông tin về tài khoản và loại thu chi
-            $account = $this->input->get('account');
-            $player  = $this->input->get('player');
-            if ($account === null) $account = 0;
-            if ($player === null) $player = 0;
+            if (empty($date)) {
+                throw new Exception(Constants::ERR_BAD_REQUEST);
+            }
             
-            $prevNext = $this->viewlist_model->getPrevNextTime($date);
-
-            $view_data['date'] = $date;
-            $view_data['list'] = $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account, $player);
-            $view_data['account'] = $account;
-            $view_data['player']  = $player;
-            $view_data['total_items'] = count($view_data['list']);
-            $view_data['select']   = array(
-                'accounts' => $this->account_model->getSelectTagData(),
-                'players'  => $this->user_model->getSelectTagData(),
-            );
-            $view_data['url'] = array(
-                'form'  => $this->base_url(array($this->router->fetch_method(), $date)),
-                'edit'  => base_url(array('inout', 'edit', '%s')),
-                'prev'  => $this->base_url(array($this->router->fetch_method(), $prevNext[0])).query_string(),
-                'next'  => $this->base_url(array($this->router->fetch_method(), $prevNext[1])).query_string(),
-            );
+            $view_data = $this->_inouts_of_day_view_data($view, $date);
             
-            $this->template->write_view('MAIN', 'viewlist/inouts_of_day', $view_data);
+            $this->template->write_view('MAIN', 'viewlist/inouts_of_day_header', $view_data);
+            $this->template->write_view('MAIN', 'viewlist/inouts_of_day_'.$view, $view_data);
             $this->template->render();
         }
         catch (Exception $e)
@@ -159,11 +144,49 @@ class Viewlist extends MY_Controller {
                 'list'  => $this->base_url(array($this->router->fetch_method(), 'list', $mode)).query_string(),
                 'chart' => $this->base_url(array($this->router->fetch_method(), 'chart', $mode)).query_string(),
             ),
-            'inouts_of_day' => $this->base_url(array('inouts_of_day', '%s')),
+            'inouts_of_day' => $this->base_url(array('inouts_of_day', '%s', '%s')),
         );
         
         return $view_data;
 	}
+    
+    protected function _inouts_of_day_view_data(string $view, string $date) : array 
+    {
+        if (false === $range = $this->viewlist_model->getBoundaryDate($date)){
+            throw new Exception(Constants::ERR_BAD_REQUEST);
+        }
+        
+        // Lấy thông tin về tài khoản và loại thu chi
+        $account = $this->input->get('account')?? 0;
+        $player  = $this->input->get('player')?? 0;
+        
+        $dateChange = $this->viewlist_model->getPrevNextTime($date);
+        
+        $view_data = array();
+        $view_data['date'] = $date;
+        $view_data['list'] = $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account, $player);
+        $view_data['account'] = $account;
+        $view_data['player']  = $player;
+        $view_data['total_items'] = count($view_data['list']);
+        $view_data['select']   = array(
+            'accounts' => $this->account_model->getSelectTagData(),
+            'players'  => $this->user_model->getSelectTagData(),
+        );
+        $view_data['url'] = array(
+            'form'       => $this->base_url(array($this->router->fetch_method(), $date)),
+            'edit'       => base_url(array('inout', 'edit', '%s')),
+            'dateChange' => array(
+                'prev'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
+                'next'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
+            ),
+            'navTabs'    => array(
+                'list'   => $this->base_url(array($this->router->fetch_method(), 'list', $date)),
+                'chart'  => $this->base_url(array($this->router->fetch_method(), 'chart', $date)),
+            ),
+        );
+        
+        return $view_data;
+    }
 
     /*
      *--------------------------------------------------------------------
