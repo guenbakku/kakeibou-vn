@@ -8,7 +8,7 @@ class Viewlist_model extends Inout_Model {
      * Lấy danh sách tổng chi tiêu theo ngày (trong một tháng)
      *--------------------------------------------------------------------
      */
-    public function summary_by_day($year, $month)
+    public function summary_inout_types_by_day($year, $month)
     {
         $year = (int)$year;
         $month = (int)$month;
@@ -22,7 +22,7 @@ class Viewlist_model extends Inout_Model {
             date('Y-m-t', strtotime("{$year}-{$month}-01"))
         );
        
-        $db_list = $this->summary('%Y-%m-%d', $range[0], $range[1]);
+        $db_list = $this->summary_inout_types('%Y-%m-%d', $range[0], $range[1]);
         
         $full_list_keys = date_range($range[0], $range[1]);
         
@@ -35,7 +35,7 @@ class Viewlist_model extends Inout_Model {
      * Lấy danh sách tổng chi tiêu theo tháng (trong một năm)
      *--------------------------------------------------------------------
      */
-    public function summary_by_month($year=0)
+    public function summary_inout_types_by_month($year=0)
     {
         $year = (int)$year;
         
@@ -48,7 +48,7 @@ class Viewlist_model extends Inout_Model {
             date('Y-12', strtotime("{$year}-12"))
         );
 
-        $db_list = $this->summary('%Y-%m', $range[0], $range[1]);
+        $db_list = $this->summary_inout_types('%Y-%m', $range[0], $range[1]);
         
         $full_list_keys = array_map(function($month) use($year){
             return sprintf('%04d-%02d', $year, $month);
@@ -62,11 +62,11 @@ class Viewlist_model extends Inout_Model {
      * Lấy danh sách tổng chi tiêu theo năm
      *--------------------------------------------------------------------
      */
-    public function summary_by_year()
+    public function summary_inout_types_by_year()
     {
         $full_list_keys = $this->getYearsList();
                 
-        $db_list = $this->summary('%Y', $full_list_keys[0], $full_list_keys[count($full_list_keys)-1]);
+        $db_list = $this->summary_inout_types('%Y', $full_list_keys[0], $full_list_keys[count($full_list_keys)-1]);
         
         return $this->combineList($full_list_keys, $db_list);
     }
@@ -204,7 +204,7 @@ class Viewlist_model extends Inout_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Lấy danh sách tổng, thu, chi trong một khoảng thời gian
+     * Tính tổng thu, chi, chênh lệch trong một khoảng thời gian
      *
      * @param   string  : format date dùng trong SQL WHERE & GROUP
      * @param   string  : min date
@@ -212,7 +212,7 @@ class Viewlist_model extends Inout_Model {
      * @return  array 
      *--------------------------------------------------------------------
      */
-    public function summary($date_format_string, $min_date, $max_date)
+    public function summary_inout_types($date_format_string, $min_date, $max_date)
     {
         $sql = "SELECT `date`, `thu`, `chi`, (`thu` + `chi`) AS `tong`
                 FROM (

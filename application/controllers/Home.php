@@ -5,7 +5,7 @@ class Home extends MY_Controller {
     
 	public function index()
     {           
-        $view_data['month_sum'] = current($this->viewlist_model->summary('%Y-%m', date('Y-m'), date('Y-m')));
+        $view_data['month_sum'] = current($this->viewlist_model->summary_inout_types('%Y-%m', date('Y-m'), date('Y-m')));
         $view_data['liquidOutgoStatus'] = $this->viewlist_model->getLiquidOutgoStatus();
         $view_data['remaining'] = $this->viewlist_model->getRemaining();
         $view_data['url'] = array(

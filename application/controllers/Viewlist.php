@@ -122,7 +122,7 @@ class Viewlist extends MY_Controller {
         $monthsList = range(1, 12);
         
         $view_data['list'] = call_user_func_array(
-            array($this->viewlist_model, 'summary_by_' . $mode), 
+            array($this->viewlist_model, 'summary_inout_types_by_' . $mode), 
             array($year, $month)
         );
         $view_data['page_scroll_target'] = $this->_page_scroll_target($mode);
