@@ -110,20 +110,18 @@ class Viewlist extends MY_Controller {
      * @return   array
      *--------------------------------------------------------------------
      */
-    protected function _summary_view_data($view, $mode): array
+    protected function _summary_view_data(string $view, string $mode): array
     {   
         // Lấy biến từ $_GET;
-        $year = $this->input->get('year');
-        $month = $this->input->get('month');
-        if ($year === null) $year = date('Y');
-        if ($month === null) $month = date('m');
+        $year = $this->input->get('year')?? date('Y');
+        $month = $this->input->get('month')?? date('m');
         
         $yearsInDB  = $this->viewlist_model->getYearsList();
         $monthsList = range(1, 12);
         
         $view_data['list'] = call_user_func_array(
-            array($this->viewlist_model, 'summary_inout_types_by_' . $mode), 
-            array($year, $month)
+            array($this->viewlist_model, 'summaryInoutTypesBy' . ucfirst($mode)), 
+            array(intval($year), intval($month))
         );
         $view_data['page_scroll_target'] = $this->_page_scroll_target($mode);
         $view_data['year'] = $year;
@@ -164,7 +162,7 @@ class Viewlist extends MY_Controller {
      */
     protected function _inouts_of_day_view_data(string $view, string $date): array 
     {
-        if (false === $range = $this->viewlist_model->getBoundaryDate($date)){
+        if (empty($range = $this->viewlist_model->getBoundaryDate($date))){
             throw new Exception(Constants::ERR_BAD_REQUEST);
         }
         
@@ -211,7 +209,7 @@ class Viewlist extends MY_Controller {
      * @param   string  : thời điểm hiện tại để scroll đến
      *--------------------------------------------------------------------
      */
-    private function _page_scroll_target($mode)
+    private function _page_scroll_target(string $mode)
     {
         switch($mode){
             case 'day':
