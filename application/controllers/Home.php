@@ -15,5 +15,4 @@ class Home extends MY_Controller {
 		$this->template->write_view('MAIN', 'home/home', $view_data);
         $this->template->render();
 	}
-    
 }

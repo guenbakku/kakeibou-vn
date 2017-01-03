@@ -79,17 +79,18 @@ class Viewlist_model extends Inout_Model {
      * @param   string  : 'yyyy-mm-dd'
      * @param   int     : id loại tài khoản, nếu là 0 -> tất cả account
      * @param   int     : id người phụ trách, nếu là 0 -> tất cả member
+     * @return  array
      *--------------------------------------------------------------------
      */
-    public function getInoutsOfDay($from, $to, $account, $player)
+    public function getInoutsOfDay(string $from, string $to, int $account_id, int $player_id): array
     {
         $this->load->model('search_model');
         
         $this->search_model->inout_from      = $from;
         $this->search_model->inout_to        = $to;
-        $this->search_model->account         = $account;
-        $this->search_model->player          = $player;
-        $this->search_model->hide_pair_inout = $account == 0? true : false;
+        $this->search_model->account         = $account_id;
+        $this->search_model->player          = $player_id;
+        $this->search_model->hide_pair_inout = $account_id == 0? true : false;
         
         return $this->search_model->search(); 
     }
@@ -212,7 +213,7 @@ class Viewlist_model extends Inout_Model {
      * @return  array 
      *--------------------------------------------------------------------
      */
-    public function summary_inout_types($date_format_string, $min_date, $max_date)
+    public function summary_inout_types($date_format_string, $min_date, $max_date): array
     {
         $sql = "SELECT `date`, `thu`, `chi`, (`thu` + `chi`) AS `tong`
                 FROM (
@@ -229,6 +230,42 @@ class Viewlist_model extends Inout_Model {
                 ORDER BY `date` ASC";
         
         return $this->db->query($sql)->result_array(); 
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Tính tổng thu chi theo từng category
+     * Không tính các category được set restrict_delete
+     *
+     * @param   string  : 'yyyy-mm-dd'
+     * @param   string  : 'yyyy-mm-dd'
+     * @param   int     : của inout_type
+     * @return  array
+     *--------------------------------------------------------------------
+     */
+    public function summaryCategories(string $from, string $to, int $inout_type_id): array
+    {
+        $main_query = $this->db->select('categories.id AS category_id,
+                                         ABS(SUM(`inout_records`.`amount`)) AS total')
+                               ->from('inout_records')
+                               ->where('categories.inout_type_id', $inout_type_id)
+                               ->where('categories.restrict_delete != ', 1)
+                               ->where('inout_records.date >=', $from)
+                               ->where('inout_records.date <=', $to)
+                               ->join('categories', 'categories.id = inout_records.category_id')
+                               ->group_by('categories.id', 'categories.name')
+                               ->get_compiled_select();
+        
+        return $this->db->select('categories.id AS category_id,
+                                  categories.name AS category_name,
+                                  IFNULL(t1.total, 0 ) AS total')
+                        ->from("($main_query) t1")
+                        ->where('categories.inout_type_id', $inout_type_id)
+                        ->where('categories.restrict_delete != ', 1)
+                        ->join('categories', 'categories.id = t1.category_id', 'right outer')
+                        ->order_by('categories.order_no')
+                        ->get()->result_array();
+                 
     }
     
     /*

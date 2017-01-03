@@ -7,7 +7,7 @@
                     <?=form_dropdown(
                         'account', 
                         $select['accounts'] + array('0' => 'Thực thu chi'), 
-                        $account, 
+                        $account_id, 
                         array(
                             'class' => 'form-control submit-on-change',
                         )
@@ -18,7 +18,7 @@
                     <?=form_dropdown(
                         'player', 
                         $select['players'] + array('0' => 'Tất cả'), 
-                        $player, 
+                        $player_id, 
                         array(
                             'class' => 'form-control submit-on-change',
                         )

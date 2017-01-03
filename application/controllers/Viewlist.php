@@ -107,10 +107,10 @@ class Viewlist extends MY_Controller {
      *                       - ngày trong tháng, 
      *                       - tháng trong năm, 
      *                       - năm
-     * @return   void
+     * @return   array
      *--------------------------------------------------------------------
      */
-    protected function _summary_view_data($view, $mode)
+    protected function _summary_view_data($view, $mode): array
     {   
         // Lấy biến từ $_GET;
         $year = $this->input->get('year');
@@ -149,25 +149,40 @@ class Viewlist extends MY_Controller {
         
         return $view_data;
 	}
-    
-    protected function _inouts_of_day_view_data(string $view, string $date) : array 
+
+    /**
+     *--------------------------------------------------------------------
+     * Tạo view_data cho method "inouts_of_day"
+     *
+     * @param    string: hiển thị theo list hay chart
+     * @param    string: đối tượng tổng kết: 
+     *                       - ngày (yyyy-mm-dd)
+     *                       - tháng (yyyy-mm)
+     *                       - năm (yyyy)
+     * @return   array
+     *--------------------------------------------------------------------
+     */
+    protected function _inouts_of_day_view_data(string $view, string $date): array 
     {
         if (false === $range = $this->viewlist_model->getBoundaryDate($date)){
             throw new Exception(Constants::ERR_BAD_REQUEST);
         }
         
         // Lấy thông tin từ request parameter
-        $account     = $this->input->get('account')?? 0;
-        $player      = $this->input->get('player')?? 0;
-        $inout_type  = $this->input->get('inout_type')?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
+        $account_id     = $this->input->get('account')?? 0;
+        $player_id      = $this->input->get('player')?? 0;
+        $inout_type_id  = $this->input->get('inout_type')?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
         
         $dateChange = $this->viewlist_model->getPrevNextTime($date);
         
         $view_data = array();
+        $view_data = array_merge($view_data, compact('account_id', 'player_id', 'inout_type_id'));
         $view_data['date'] = $date;
-        $view_data['list'] = $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account, $player);
+        $view_data['list'] = $view === 'list'
+                             ? $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account_id, $player_id)
+                             : $this->viewlist_model->summaryCategories($range[0], $range[1], $inout_type_id);
         $view_data['total_items'] = count($view_data['list']);
-        $view_data['select']   = array(
+        $view_data['select'] = array(
             'accounts'    => $this->account_model->getSelectTagData(),
             'players'     => $this->user_model->getSelectTagData(),
             'inout_types' => $this->inout_type_model->getSelectTagData(), 
@@ -184,7 +199,6 @@ class Viewlist extends MY_Controller {
                 'chart'  => $this->base_url(array($this->router->fetch_method(), 'chart', $date)),
             ),
         );
-        $view_data = array_merge($view_data, compact('account', 'player', 'inout_type'));
         
         return $view_data;
     }
