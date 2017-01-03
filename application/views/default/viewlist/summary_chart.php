@@ -20,6 +20,7 @@
             var dateFormat = genDateFormat(chartData);
             
             var chart = AmCharts.makeChart("chartdiv", {
+                "fontFamily": "Arial",
                 "type": "serial",
                 "theme": "none",
                 "legend": {

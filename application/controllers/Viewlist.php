@@ -156,24 +156,24 @@ class Viewlist extends MY_Controller {
             throw new Exception(Constants::ERR_BAD_REQUEST);
         }
         
-        // Lấy thông tin về tài khoản và loại thu chi
-        $account = $this->input->get('account')?? 0;
-        $player  = $this->input->get('player')?? 0;
+        // Lấy thông tin từ request parameter
+        $account     = $this->input->get('account')?? 0;
+        $player      = $this->input->get('player')?? 0;
+        $inout_type  = $this->input->get('inout_type')?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
         
         $dateChange = $this->viewlist_model->getPrevNextTime($date);
         
         $view_data = array();
         $view_data['date'] = $date;
         $view_data['list'] = $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account, $player);
-        $view_data['account'] = $account;
-        $view_data['player']  = $player;
         $view_data['total_items'] = count($view_data['list']);
         $view_data['select']   = array(
-            'accounts' => $this->account_model->getSelectTagData(),
-            'players'  => $this->user_model->getSelectTagData(),
+            'accounts'    => $this->account_model->getSelectTagData(),
+            'players'     => $this->user_model->getSelectTagData(),
+            'inout_types' => $this->inout_type_model->getSelectTagData(), 
         );
         $view_data['url'] = array(
-            'form'       => $this->base_url(array($this->router->fetch_method(), $date)),
+            'form'       => $this->base_url(array($this->router->fetch_method(), $view, $date)),
             'edit'       => base_url(array('inout', 'edit', '%s')),
             'dateChange' => array(
                 'prev'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
@@ -184,6 +184,7 @@ class Viewlist extends MY_Controller {
                 'chart'  => $this->base_url(array($this->router->fetch_method(), 'chart', $date)),
             ),
         );
+        $view_data = array_merge($view_data, compact('account', 'player', 'inout_type'));
         
         return $view_data;
     }

@@ -1,6 +1,6 @@
 <div class="container">
     <div class="well well-sm">
-        <?=form_open($url['form'], array('method'=>'get', 'id' => 'addCashFlow', 'class' => 'form-horizon'))?>
+        <?=form_open($url['form'], array('method'=>'get', 'id' => 'form', 'class' => 'form-horizon'))?>
             <div class="row">
                 <div class="col-xs-6">
                     <label>Tài khoản</label>
