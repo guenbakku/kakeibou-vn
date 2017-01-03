@@ -22,7 +22,7 @@ class Viewlist_model extends Inout_Model {
             date('Y-m-t', strtotime("{$year}-{$month}-01"))
         );
        
-        $db_list = $this->getSumListFromDB('%Y-%m-%d', $range[0], $range[1]);
+        $db_list = $this->summary('%Y-%m-%d', $range[0], $range[1]);
         
         $full_list_keys = date_range($range[0], $range[1]);
         
@@ -48,7 +48,7 @@ class Viewlist_model extends Inout_Model {
             date('Y-12', strtotime("{$year}-12"))
         );
 
-        $db_list = $this->getSumListFromDB('%Y-%m', $range[0], $range[1]);
+        $db_list = $this->summary('%Y-%m', $range[0], $range[1]);
         
         $full_list_keys = array_map(function($month) use($year){
             return sprintf('%04d-%02d', $year, $month);
@@ -64,9 +64,9 @@ class Viewlist_model extends Inout_Model {
      */
     public function summary_by_year()
     {
-        $full_list_keys = self::getYearsListInDB();
+        $full_list_keys = $this->getYearsList();
                 
-        $db_list = $this->getSumListFromDB('%Y', $full_list_keys[0], $full_list_keys[count($full_list_keys)-1]);
+        $db_list = $this->summary('%Y', $full_list_keys[0], $full_list_keys[count($full_list_keys)-1]);
         
         return $this->combineList($full_list_keys, $db_list);
     }
@@ -212,7 +212,7 @@ class Viewlist_model extends Inout_Model {
      * @return  array 
      *--------------------------------------------------------------------
      */
-    public function getSumListFromDB($date_format_string, $min_date, $max_date)
+    public function summary($date_format_string, $min_date, $max_date)
     {
         $sql = "SELECT `date`, `thu`, `chi`, (`thu` + `chi`) AS `tong`
                 FROM (
@@ -239,7 +239,7 @@ class Viewlist_model extends Inout_Model {
      * @return  array
      *--------------------------------------------------------------------
      */
-    public function getYearsListInDB()
+    public function getYearsList()
     {
         $table = 'inout_records';
         $range = $this->db->select("DATE_FORMAT(MIN(`date`), '%Y') as `min`, 

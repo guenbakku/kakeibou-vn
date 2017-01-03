@@ -118,7 +118,7 @@ class Viewlist extends MY_Controller {
         if ($year === null) $year = date('Y');
         if ($month === null) $month = date('m');
         
-        $yearsInDB  = $this->viewlist_model->getYearsListInDB();
+        $yearsInDB  = $this->viewlist_model->getYearsList();
         $monthsList = range(1, 12);
         
         $view_data['list'] = call_user_func_array(

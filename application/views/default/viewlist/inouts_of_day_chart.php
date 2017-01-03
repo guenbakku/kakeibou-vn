@@ -20,6 +20,8 @@
                 "type": "pie",
                 "startDuration": 0,
                 "labelsEnabled": false,
+                "marginLeft": 10,
+                "marginRight": 10,
                 "pullOutRadius": 0,
                 "legend":{
                     "position":"bottom",
