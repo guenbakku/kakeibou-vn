@@ -111,6 +111,7 @@ class Viewlist extends MY_Controller {
         $extractedDate = extract_date_string($date);
         $mode = $this->_summary_inout_types_mode($extractedDate);
         
+        $dateChange = prev_next_time($date);
         $yearsInDB  = $this->viewlist_model->getYearsList();
         $monthsList = range(1, 12);
         
@@ -121,17 +122,20 @@ class Viewlist extends MY_Controller {
         $view_data['page_scroll_target'] = $this->_page_scroll_target($mode);
         $view_data['year']  = $extractedDate['y'];
         $view_data['month'] = $extractedDate['m'];
-        $view_data['mode'] = $mode;
         $view_data['select'] = array(
             'year' => array_combine($yearsInDB, $yearsInDB),
             'month' => array_combine($monthsList, $monthsList),
         );
         $view_data['url'] = array(
-            'form'     => $this->base_url(array($this->router->fetch_method(), $view, $mode)),
+            'form'     => $this->base_url(array($this->router->fetch_method(), $view)),
             'btnGroup' => array(
                 'day'   => $this->base_url(array($this->router->fetch_method(), $view, 'day')),
                 'month' => $this->base_url(array($this->router->fetch_method(), $view, 'month')),
                 'year'  => $this->base_url(array($this->router->fetch_method(), $view, 'year')),
+            ),
+            'dateChange' => array(
+                'prev'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
+                'next'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
             ),
             'navTabs'  => array(
                 'list'  => $this->base_url(array($this->router->fetch_method(), 'list', $date)).query_string(),
@@ -139,6 +143,7 @@ class Viewlist extends MY_Controller {
             ),
             'inouts_of_day' => $this->base_url(array('inouts_of_day', '%s', '%s')),
         );
+        $view_data = array_merge($view_data, compact('mode', 'date'));
         
         return $view_data;
 	}
@@ -166,11 +171,8 @@ class Viewlist extends MY_Controller {
         $player_id      = $this->input->get('player')?? 0;
         $inout_type_id  = $this->input->get('inout_type')?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
         
-        $dateChange = $this->viewlist_model->getPrevNextTime($date);
+        $dateChange = prev_next_time($date);
         
-        $view_data = array();
-        $view_data = array_merge($view_data, compact('account_id', 'player_id', 'inout_type_id'));
-        $view_data['date'] = $date;
         $view_data['list'] = $view === 'list'
                              ? $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account_id, $player_id)
                              : $this->viewlist_model->summaryCategories($range[0], $range[1], $inout_type_id);
@@ -192,6 +194,7 @@ class Viewlist extends MY_Controller {
                 'chart'  => $this->base_url(array($this->router->fetch_method(), 'chart', $date)),
             ),
         );
+        $view_data = array_merge($view_data, compact('date', 'account_id', 'player_id', 'inout_type_id'));
         
         return $view_data;
     }

@@ -28,31 +28,52 @@ function day_of_week($date): ?string
  * Tách chuỗi date thành array('y' => yyyy, 'm' => mm, 'd' => đd)
  *
  * @param   string: bắt buộc phải có ký tự ngăn cách giữa yyyy-mm-dd
+ * @param   bool: có lấy cả những item null không
  * @param   array
  *--------------------------------------------------------------------
  */
-function extract_date_string($date): array
+function extract_date_string(?string $date, bool $includeNullItem = true): array
 {
     $date = preg_replace('/[^\d]+/', '-', $date);
     @list($year, $month, $day) = explode('-', $date);
     
     $extracted = array('y' => null, 'm' => null, 'd' => null);
     if (!preg_match('/^\d{1,4}$/', $year)) {
-        return $extracted;
+        goto OUTPUT;
     }
     
     $extracted['y'] = sprintf('%04d', $year);
     if (!preg_match('/^\d{1,2}$/', $month)) {
-        return $extracted;
+        goto OUTPUT;
     }
     
     $extracted['m'] = sprintf('%02d', $month);
     if (!preg_match('/^\d{1,2}$/', $day)) {
-        return $extracted;
+        goto OUTPUT;
     }
     
     $extracted['d'] = sprintf('%02d', $day);
-    return $extracted;
+    
+    OUTPUT:
+    return $includeNullItem
+           ? $extracted
+           : array_filter($extracted, function($item){return $item !== null;});
+}
+
+/*
+ *--------------------------------------------------------------------
+ * Tạo chuỗi date từ array 
+ * Có thể xem đây là hàm ngược của hàm extract_date_string()
+ *
+ * @param   array: array chứa year, month, day
+ * @param   string: chuỗi để nối
+ * return   string: chuỗi date đã nối
+ *--------------------------------------------------------------------
+ */
+function combine_date_string(array $date, string $glue = '-'): ?string
+{
+    $date = array_slice($date, 0, 3);
+    return implode($glue, array_filter($date, function($item){return $item !== null;}));
 }
 
 /*
@@ -69,7 +90,7 @@ function extract_date_string($date): array
  * @return  array : ngày đầu và cuối của khoảng thời gian đó
  *--------------------------------------------------------------------
  */
-function boundary_date(string $year, int $month = null, int $day = null): array
+function boundary_date(?string $year, int $month = null, int $day = null): array
 {
     // Tách parameter đầu tiên thành year, month, day 
     // nếu parameter đầu tiên là chuỗi format kiểu date
@@ -103,4 +124,37 @@ function boundary_date(string $year, int $month = null, int $day = null): array
         date('Y-m-d', strtotime($year.'-'.$month.'-'.$day)),
     );
     return $range;
+}
+
+/*
+ *--------------------------------------------------------------------
+ * Tính ngày, tháng hoặc năm trước và sau của dữ liệu nhập vào
+ * Nếu dữ liệu nhập vào là dạng ngày  -> ngày trước và sau
+ *                              tháng -> tháng trước và sau
+ *                              năm   -> năm trước và sau  
+ *--------------------------------------------------------------------
+ */
+function prev_next_time(?string $date): array
+{
+    $extracted = extract_date_string($date, false);
+    
+    switch (count($extracted)) {
+        case 1:
+            return array(
+                $extracted['y'] - 1,
+                $extracted['y'] + 1,
+            );
+        case 2:
+            return array(
+                date('Y-m', strtotime(implode('-', $extracted).'-01' . ' -1 month')),
+                date('Y-m', strtotime(implode('-', $extracted).'-01' . ' +1 month')),
+            );
+        case 3:
+            return array(
+                date('Y-m-d', strtotime(implode('-', $extracted). ' -1 day')),
+                date('Y-m-d', strtotime(implode('-', $extracted). ' +1 day')),
+            );
+        default:
+            return array(null, null);
+    }
 }

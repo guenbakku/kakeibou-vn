@@ -28,6 +28,7 @@
         <script type="text/javascript" src="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery.navigation.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery.page-scroll.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/utilities.js"></script>
         <?=$_scripts?>
 	</head>
 

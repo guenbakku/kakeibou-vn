@@ -278,40 +278,6 @@ class Viewlist_model extends Inout_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Tính ngày, tháng hoặc năm trước và sau của dữ liệu nhập vào
-     * Nếu dữ liệu nhập vào là dạng ngày  -> ngày trước và sau
-     *                              tháng -> tháng trước và sau
-     *                              năm   -> năm trước và sau  
-     *--------------------------------------------------------------------
-     */
-    public function getPrevNextTime($str)
-    {
-        $mdate = preg_replace('/[^\d]/', '', $str);
-        if (preg_match('/^\d{8}$/', $mdate)){
-            return array(
-                date('Y-m-d', strtotime($mdate . ' -1 day')), 
-                date('Y-m-d', strtotime($mdate . ' +1 day')), 
-            );
-        }
-        elseif (preg_match('/^\d{6}$/', $mdate)){
-            return array(
-                date('Y-m', strtotime("{$mdate}01" . ' -1 month')),
-                date('Y-m', strtotime("{$mdate}01" . ' +1 month')),
-            );
-        }
-        elseif (preg_match('/^\d{4}$/', $mdate)){
-            return array(
-                date('Y', strtotime($mdate.'0101' . ' -1 year')),
-                date('Y', strtotime($mdate.'1231' . ' +1 year')),
-            );
-        }
-        else {
-            return false;
-        }
-    }
-    
-    /*
-     *--------------------------------------------------------------------
      * Gắn từng item từ List (lấy từ CSDL) vào danh sách thời gian đầy đủ
      *
      * @param   array   : danh sách thời gian đầy đủ
