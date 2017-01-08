@@ -6,7 +6,7 @@
                     <span class="glyphicon glyphicon-calendar"></span>
                 </a>
             </div>
-            <div class="col-xs-10 text-center">
+            <div class="col-xs-10">
                 <?php if(in_array($mode, array('dayInMonth', 'monthInYear'))): ?>
                 <div class="btn-group">
                     <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['prev']?>">
@@ -34,7 +34,7 @@
 <!-- Date selecting modal -->
 <div class="modal fade" id="date-selection" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <?=form_open($url['form'], array('method'=>'get', 'id' => 'form', 'class' => 'form-horizon'))?>
+        <?=form_open($url['form'], array('method'=>'get', 'id'=>'date-selection-form', 'class'=>'form-horizon'))?>
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -42,26 +42,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xs-12">
-                            <label>Kiểu danh sách</label>
-                            <?=form_dropdown(
-                                $field_name = null,
-                                array_column($this->viewlist_model::$summaryInoutTypeModes, 'full', 'mode'),
-                                $mode, 
-                                array(
-                                    'id' => 'date-selection-mode',
-                                    'class' => 'form-control',
-                                )
-                            )?>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
                         <div class="col-xs-6" id="date-selection-year">
                             <label>Năm</label>
                             <?=form_dropdown(
-                                $field_name = null, 
-                                $select['year'], 
+                                $field_name = 'year', 
+                                array('' => '') + $select['year'], 
                                 $year?? date('Y'), 
                                 array(
                                     'class' => 'form-control',
@@ -71,8 +56,8 @@
                         <div class="col-xs-6" id="date-selection-month">
                             <label>Tháng</label>
                             <?=form_dropdown(
-                                $field_name = null, 
-                                $select['month'], 
+                                $field_name = 'month', 
+                                array('' => '') + $select['month'], 
                                 $month?? date('m'), 
                                 array(
                                     'class' => 'form-control',
@@ -92,37 +77,12 @@
 
 <script type="text/javascript">
     $(function(){     
-        $('#date-selection-mode').change(function(){
-            switch($(this).val()) {
-                case 'dayInMonth': 
-                    $('#date-selection-year')
-                        .show()
-                        .find('select').prop('disabled', false);
-                    $('#date-selection-month')
-                        .show()
-                        .find('select').prop('disabled', false);
-                    break;
-                case 'monthInYear':
-                    $('#date-selection-year')
-                        .show()
-                        .find('select').prop('disabled', false);
-                    $('#date-selection-month')
-                        .hide()
-                        .find('select').prop('disabled', true);
-                    break;
-                default:
-                    $('#date-selection-year')
-                        .hide()
-                        .find('select').prop('disabled', true);
-                    $('#date-selection-month')
-                        .hide()
-                        .find('select').prop('disabled', true);
-            }
-            
-            return false;
-        }).trigger('change');
+        $('#date-selection-form [name=year]').switcher({
+            targets         : ['#date-selection-form [name=month]'],
+            disableValues   : [''],
+        });
         
-        $('#form [type=submit]').click(function(evt){
+        $('#date-selection-form [type=submit]').click(function(evt){
             evt.preventDefault();
             
             var form = $(this).parents('form');
@@ -133,12 +93,12 @@
             ];
             
             dateArr = dateArr.filter(function(item){
-                return typeof item !== 'undefined';
+                return typeof item !== 'undefined' && item !== '';
             });
             
             var url = form.attr('action');
-            form.attr('action', url + '/' + dateArr.join('-'));
-            form.submit();
+            url = url + '/' + dateArr.join('-');
+            window.location.href = url;
         });
     });
 </script>

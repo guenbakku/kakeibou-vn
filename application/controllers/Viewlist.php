@@ -112,7 +112,7 @@ class Viewlist extends MY_Controller {
         $mode = $this->_summary_inout_types_mode($extractedDate);
         
         $dateChange = prev_next_time($date);
-        $yearsInDB  = $this->viewlist_model->getYearsList();
+        $yearsList  = $this->viewlist_model->getYearsList();
         $monthsList = months_list();
         
         $view_data['list'] = call_user_func_array(
@@ -120,10 +120,10 @@ class Viewlist extends MY_Controller {
             $extractedDate
         );
         $view_data['pageScrollTarget'] = $this->_page_scroll_target($mode);
-        $view_data['year']  = $extractedDate['y'];
-        $view_data['month'] = $extractedDate['m'];
+        $view_data['year']  = $extractedDate['y']?? '';
+        $view_data['month'] = $extractedDate['m']?? '';
         $view_data['select'] = array(
-            'year' => array_combine($yearsInDB, $yearsInDB),
+            'year' => array_combine($yearsList, $yearsList),
             'month' => array_combine($monthsList, $monthsList),
         );
         $view_data['url'] = array(
@@ -166,19 +166,29 @@ class Viewlist extends MY_Controller {
         $player_id      = $this->input->get('player')?? 0;
         $inout_type_id  = $this->input->get('inout_type')?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
         
-        $dateChange = prev_next_time($date);
+        $extractedDate = extract_date_string($date);
+        $dateChange    = prev_next_time($date);
+        $yearsList     = $this->viewlist_model->getYearsList();
+        $monthsList    = months_list();
+        $daysList      = days_list();
         
         $view_data['list'] = $view === 'list'
                              ? $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account_id, $player_id)
                              : $this->viewlist_model->summaryCategories($range[0], $range[1], $inout_type_id);
+        $view_data['year']  = $extractedDate['y']?? '';
+        $view_data['month'] = $extractedDate['m']?? '';
+        $view_data['day']   = $extractedDate['d']?? '';
         $view_data['total_items'] = count($view_data['list']);
         $view_data['select'] = array(
             'accounts'    => $this->account_model->getSelectTagData(),
             'players'     => $this->user_model->getSelectTagData(),
-            'inout_types' => $this->inout_type_model->getSelectTagData(), 
+            'inout_types' => $this->inout_type_model->getSelectTagData(),
+            'year'        => array_combine($yearsList, $yearsList),
+            'month'       => array_combine($monthsList, $monthsList),
+            'day'         => array_combine($daysList, $daysList),
         );
         $view_data['url'] = array(
-            'form'       => $this->base_url(array($this->router->fetch_method(), $view, $date)),
+            'form'       => $this->base_url(array($this->router->fetch_method(), $view)),
             'edit'       => base_url(array('inout', 'edit', '%s')),
             'dateChange' => array(
                 'prev'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
