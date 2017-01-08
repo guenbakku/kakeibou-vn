@@ -2,18 +2,18 @@
     <div class="well well-sm">
         <div class="row">
             <div class="col-xs-2">
-                <a class="btn btn-primary btn-sm pull-left" data-toggle="modal" data-target="#date-selection">
+                <a class="btn btn-primary pull-left" data-toggle="modal" data-target="#date-selection">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </a>
             </div>
             <div class="col-xs-10">
                 <?php if(in_array($mode, array('dayInMonth', 'monthInYear'))): ?>
                 <div class="btn-group">
-                    <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['prev']?>">
+                    <a class="btn btn-primary" href="<?=$url['dateChange']['prev']?>">
                         <span class="glyphicon glyphicon-chevron-left"></span>
                     </a>
-                    <span class="btn btn-default btn-sm disabled"><?=$date?></span>
-                    <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['next']?>">
+                    <span class="btn btn-default disabled"><?=$date?></span>
+                    <a class="btn btn-primary" href="<?=$url['dateChange']['next']?>">
                         <span class="glyphicon glyphicon-chevron-right"></span>
                     </a>
                 </div>
