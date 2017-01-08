@@ -13,7 +13,8 @@ class Viewlist extends MY_Controller {
     {
         // $this->template->write_view('MAIN', 'viewlist/menu');
         // $this->template->render();
-        return redirect($this->base_url('summary/list/day'));
+        $thisMonth = date('Y-m');
+        return redirect($this->base_url(array('summary/list/', $thisMonth)));
     }
     
     /**
@@ -29,28 +30,23 @@ class Viewlist extends MY_Controller {
      * @return   void
      *--------------------------------------------------------------------
      */
-    public function summary($view = null, $mode = null) 
+    public function summary(string $view = null, string $date = null): void
     {   
         try 
         {
             $view = strtolower($view);
-            $mode = strtolower($mode);
             $redirect = false;
+            
             if (!in_array($view, array('list', 'chart'))) {
                 $view = 'list';
                 $redirect = true;
             }
             
-            if (!in_array($mode, array('day', 'month', 'year'))){
-                $mode = 'day';
-                $redirect = true;
-            }
-            
             if ($redirect === true) {
-                redirect($this->base_url(array(__FUNCTION__, $view, $mode)));
+                redirect($this->base_url(array(__FUNCTION__, $view, $date)));
             }
             
-            $view_data = $this->_summary_view_data($view, $mode);
+            $view_data = $this->_view_data_summary($view, $date);
             $this->template->write_view('MAIN', 'viewlist/summary_header', $view_data);
             $this->template->write_view('MAIN', 'viewlist/summary_'.$view, $view_data);
             $this->template->render();
@@ -86,7 +82,7 @@ class Viewlist extends MY_Controller {
                 throw new Exception(Constants::ERR_BAD_REQUEST);
             }
             
-            $view_data = $this->_inouts_of_day_view_data($view, $date);
+            $view_data = $this->_view_data_inouts_of_day($view, $date);
             
             $this->template->write_view('MAIN', 'viewlist/inouts_of_day_header', $view_data);
             $this->template->write_view('MAIN', 'viewlist/inouts_of_day_'.$view, $view_data);
@@ -110,22 +106,21 @@ class Viewlist extends MY_Controller {
      * @return   array
      *--------------------------------------------------------------------
      */
-    protected function _summary_view_data(string $view, string $mode): array
+    protected function _view_data_summary(string $view, ?string $date): array
     {   
-        // Lấy biến từ $_GET;
-        $year = $this->input->get('year')?? date('Y');
-        $month = $this->input->get('month')?? date('m');
+        $extractedDate = extract_date_string($date);
+        $mode = $this->_summary_inout_types_mode($extractedDate);
         
         $yearsInDB  = $this->viewlist_model->getYearsList();
         $monthsList = range(1, 12);
         
         $view_data['list'] = call_user_func_array(
             array($this->viewlist_model, 'summaryInoutTypesBy' . ucfirst($mode)), 
-            array(intval($year), intval($month))
+            $extractedDate
         );
         $view_data['page_scroll_target'] = $this->_page_scroll_target($mode);
-        $view_data['year'] = $year;
-        $view_data['month'] = $month;
+        $view_data['year']  = $extractedDate['y'];
+        $view_data['month'] = $extractedDate['m'];
         $view_data['mode'] = $mode;
         $view_data['select'] = array(
             'year' => array_combine($yearsInDB, $yearsInDB),
@@ -139,8 +134,8 @@ class Viewlist extends MY_Controller {
                 'year'  => $this->base_url(array($this->router->fetch_method(), $view, 'year')),
             ),
             'navTabs'  => array(
-                'list'  => $this->base_url(array($this->router->fetch_method(), 'list', $mode)).query_string(),
-                'chart' => $this->base_url(array($this->router->fetch_method(), 'chart', $mode)).query_string(),
+                'list'  => $this->base_url(array($this->router->fetch_method(), 'list', $date)).query_string(),
+                'chart' => $this->base_url(array($this->router->fetch_method(), 'chart', $date)).query_string(),
             ),
             'inouts_of_day' => $this->base_url(array('inouts_of_day', '%s', '%s')),
         );
@@ -148,7 +143,7 @@ class Viewlist extends MY_Controller {
         return $view_data;
 	}
 
-    /**
+    /*
      *--------------------------------------------------------------------
      * Tạo view_data cho method "inouts_of_day"
      *
@@ -160,9 +155,9 @@ class Viewlist extends MY_Controller {
      * @return   array
      *--------------------------------------------------------------------
      */
-    protected function _inouts_of_day_view_data(string $view, string $date): array 
+    protected function _view_data_inouts_of_day(string $view, string $date): array 
     {
-        if (empty($range = $this->viewlist_model->getBoundaryDate($date))){
+        if (empty($range = boundary_date($date))){
             throw new Exception(Constants::ERR_BAD_REQUEST);
         }
         
@@ -200,7 +195,32 @@ class Viewlist extends MY_Controller {
         
         return $view_data;
     }
-
+    
+    /*
+     *--------------------------------------------------------------------
+     * Lấy mode summary của xử lý summary theo inout type
+     * 
+     * @param   array: array chứa year, month, day đã tách ra từ date string.
+     * @return  string: mode để tạo tên method đầy đủ.
+     *--------------------------------------------------------------------
+     */
+    protected function _summary_inout_types_mode(array $extractedDate): string
+    {
+        $notNullCount = count(array_filter($extractedDate, function($item){
+            return $item !== null;
+        }));
+        
+        switch ($notNullCount) {
+            case 0:
+                return 'year';
+            case 1:
+                return 'monthInYear';
+            case 2:
+            case 3:
+                return 'dayInMonth';
+        }
+    }
+    
     /*
      *--------------------------------------------------------------------
      * Tạo page-scroll target đến ngày/tháng/năm hiện tại tùy vào kiểu danh sách
@@ -209,7 +229,7 @@ class Viewlist extends MY_Controller {
      * @param   string  : thời điểm hiện tại để scroll đến
      *--------------------------------------------------------------------
      */
-    private function _page_scroll_target(string $mode)
+    protected function _page_scroll_target(string $mode): ?string
     {
         switch($mode){
             case 'day':
@@ -219,7 +239,7 @@ class Viewlist extends MY_Controller {
             case 'year':
                 return date('Y');
             default:
-                return false;
+                return null;
         }
     }
 }
