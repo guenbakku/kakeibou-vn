@@ -2,9 +2,11 @@
     <div class="well well-sm">
         <div class="row">
             <div class="col-xs-2">
-                <span class="btn btn-default btn-sm pull-left disabled">Ngày</span>
+                <a class="btn btn-primary btn-sm pull-left" data-toggle="modal" data-target="#date-selection">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </a>
             </div>
-            <div class="col-xs-8 text-center">
+            <div class="col-xs-10 text-center">
                 <?php if(in_array($mode, array('dayInMonth', 'monthInYear'))): ?>
                 <div class="btn-group">
                     <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['prev']?>">
@@ -17,17 +19,7 @@
                 </div>
                 <?php endif ?>
             </div>
-            <div class="col-xs-2">
-                <a class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#date-selection">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </a>
-            </div>
         </div>
-        <!-- <div class="btn-group btn-group-justified navigation">
-            <a class="btn btn-default" href="<?=$url['btnGroup']['day']?>">Ngày</a>
-            <a class="btn btn-default" href="<?=$url['btnGroup']['month']?>">Tháng</a>
-            <a class="btn btn-default" href="<?=$url['btnGroup']['year']?>">Năm</a>
-        </div> -->
     </div>
 </div>
 
@@ -53,12 +45,8 @@
                         <div class="col-xs-12">
                             <label>Kiểu danh sách</label>
                             <?=form_dropdown(
-                                $field_name = 'mode',
-                                array(
-                                    'dayInMonth' => 'Ngày trong tháng',
-                                    'monthInYear' => 'Tháng trong năm',
-                                    'year' => 'Năm',
-                                ), 
+                                $field_name = null,
+                                array_column($this->viewlist_model::$summaryInoutTypeModes, 'full', 'mode'),
                                 $mode, 
                                 array(
                                     'id' => 'date-selection-mode',
@@ -72,7 +60,7 @@
                         <div class="col-xs-6" id="date-selection-year">
                             <label>Năm</label>
                             <?=form_dropdown(
-                                $field_name = 'year', 
+                                $field_name = null, 
                                 $select['year'], 
                                 $year?? date('Y'), 
                                 array(
@@ -83,7 +71,7 @@
                         <div class="col-xs-6" id="date-selection-month">
                             <label>Tháng</label>
                             <?=form_dropdown(
-                                $field_name = 'month', 
+                                $field_name = null, 
                                 $select['month'], 
                                 $month?? date('m'), 
                                 array(
@@ -150,7 +138,7 @@
             
             var url = form.attr('action');
             form.attr('action', url + '/' + dateArr.join('-'));
-            window.location.href = url + '/' + dateArr.join('-');
+            form.submit();
         });
     });
 </script>

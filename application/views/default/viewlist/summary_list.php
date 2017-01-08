@@ -25,5 +25,5 @@
 </div>
 
 <script type="text/javascript">
-    pageScroll('<?=$page_scroll_target?>', -50);
+    pageScroll('<?=$pageScrollTarget?>', -50);
 </script>

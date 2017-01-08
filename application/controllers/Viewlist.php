@@ -113,13 +113,13 @@ class Viewlist extends MY_Controller {
         
         $dateChange = prev_next_time($date);
         $yearsInDB  = $this->viewlist_model->getYearsList();
-        $monthsList = range(1, 12);
+        $monthsList = months_list();
         
         $view_data['list'] = call_user_func_array(
             array($this->viewlist_model, 'summaryInoutTypesBy' . ucfirst($mode)), 
             $extractedDate
         );
-        $view_data['page_scroll_target'] = $this->_page_scroll_target($mode);
+        $view_data['pageScrollTarget'] = $this->_page_scroll_target($mode);
         $view_data['year']  = $extractedDate['y'];
         $view_data['month'] = $extractedDate['m'];
         $view_data['select'] = array(
@@ -128,11 +128,6 @@ class Viewlist extends MY_Controller {
         );
         $view_data['url'] = array(
             'form'     => $this->base_url(array($this->router->fetch_method(), $view)),
-            'btnGroup' => array(
-                'day'   => $this->base_url(array($this->router->fetch_method(), $view, 'day')),
-                'month' => $this->base_url(array($this->router->fetch_method(), $view, 'month')),
-                'year'  => $this->base_url(array($this->router->fetch_method(), $view, 'year')),
-            ),
             'dateChange' => array(
                 'prev'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
                 'next'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),

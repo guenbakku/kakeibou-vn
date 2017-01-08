@@ -158,3 +158,19 @@ function prev_next_time(?string $date): array
             return array(null, null);
     }
 }
+
+function months_list(): array
+{
+    return array_map(
+        function($item){return sprintf('%02d', $item);}, 
+        range(1, 12)
+    );
+}
+
+function days_list(): array
+{
+    return array_map(
+        function($item){return sprintf('%02d', $item);}, 
+        range(1, 31)
+    );
+}

@@ -3,6 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Viewlist_model extends Inout_Model {
     
+    public static $summaryInoutTypeModes = array(
+        'dayInMonth'  => array('mode' => 'dayInMonth',  'full' => 'Ngày trong tháng', 'short' => 'Ngày'),
+        'monthInYear' => array('mode' => 'monthInYear', 'full' => 'Tháng trong năm',  'short' => 'Tháng'),
+        'year'        => array('mode' => 'year',        'full' => 'Năm',              'short' => 'Năm'),
+    );
+    
     /*
      *--------------------------------------------------------------------
      * Lấy danh sách tổng chi tiêu theo ngày (trong một tháng)
