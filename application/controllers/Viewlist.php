@@ -119,7 +119,7 @@ class Viewlist extends MY_Controller {
             array($this->viewlist_model, 'summaryInoutTypesBy' . ucfirst($mode)), 
             $extractedDate
         );
-        $view_data['pageScrollTarget'] = $this->_page_scroll_target($mode);
+        $view_data['pageScrollTarget'] = $this->_page_scroll_target($extractedDate);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['select'] = array(
@@ -212,7 +212,7 @@ class Viewlist extends MY_Controller {
      * @return  string: mode để tạo tên method đầy đủ.
      *--------------------------------------------------------------------
      */
-    protected function _summary_inout_types_mode(array $extractedDate): string
+    protected function _summary_inout_types_mode(array $extractedDate): ?string
     {
         $notNullCount = count(array_filter($extractedDate, function($item){
             return $item !== null;
@@ -226,6 +226,8 @@ class Viewlist extends MY_Controller {
             case 2:
             case 3:
                 return 'dayInMonth';
+            default:
+                return null;
         }
     }
     
@@ -237,15 +239,20 @@ class Viewlist extends MY_Controller {
      * @param   string  : thời điểm hiện tại để scroll đến
      *--------------------------------------------------------------------
      */
-    protected function _page_scroll_target(string $mode): ?string
+    protected function _page_scroll_target(array $extractedDate): ?string
     {
-        switch($mode){
-            case 'day':
-                return date('Y-m-d');
-            case 'month':
-                return date('Y-m');
-            case 'year':
+        $notNullCount = count(array_filter($extractedDate, function($item){
+            return $item !== null;
+        }));
+        
+        switch ($notNullCount) {
+            case 0:
                 return date('Y');
+            case 1:
+                return date('Y-m');
+            case 2:
+            case 3:
+                return date('Y-m-d');
             default:
                 return null;
         }
