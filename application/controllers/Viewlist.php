@@ -128,6 +128,7 @@ class Viewlist extends MY_Controller {
         );
         $view_data['url'] = array(
             'dateSelectionForm' => $this->base_url(array($this->router->fetch_method(), $view)),
+            'back'              => base_url(),
             'dateChange'        => array(
                 'prev'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
                 'next'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
@@ -171,6 +172,7 @@ class Viewlist extends MY_Controller {
         $yearsList     = $this->viewlist_model->getYearsList();
         $monthsList    = months_list();
         $daysList      = days_list();
+        $outerDate     = $this->_outer_date($extractedDate);
         
         $view_data['list'] = $view === 'list'
                              ? $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account_id, $player_id)
@@ -190,6 +192,7 @@ class Viewlist extends MY_Controller {
         $view_data['url'] = array(
             'dateSelectionForm' => $this->base_url(array($this->router->fetch_method(), $view)),
             'subForm'           => $this->base_url(array($this->router->fetch_method(), $view, $date)),
+            'back'              => $this->base_url(array('summary', 'list', $outerDate)),
             'edit'              => base_url(array('inout', 'edit', '%s')),
             'dateChange'        => array(
                 'prev'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
@@ -230,6 +233,26 @@ class Viewlist extends MY_Controller {
             default:
                 return null;
         }
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Tính thời gian bao ngoài của một thời điểm
+     * 
+     * @param   array: array chứa year, month, day đã tách ra từ date string.
+     * @param   string: glue
+     * @return  string: thời gian bao ngoài
+     *--------------------------------------------------------------------
+     */
+    protected function _outer_date(array $extractedDate, $glue='-'): string
+    {
+        $notNullItems = array_filter($extractedDate, function($item){
+            return $item !== null;
+        });
+        
+        array_pop($notNullItems);
+        
+        return implode($glue, $notNullItems);
     }
     
     /*

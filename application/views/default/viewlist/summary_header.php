@@ -2,22 +2,29 @@
     <div class="well well-sm">
         <div class="row">
             <div class="col-xs-2">
-                <a class="btn btn-primary pull-left" data-toggle="modal" data-target="#date-selection">
-                    <span class="glyphicon glyphicon-calendar"></span>
+                <a class="btn btn-default btn-sm pull-left" href="<?=$url['back']?>">
+                    <span class="glyphicon glyphicon-menu-left"></span>
                 </a>
             </div>
-            <div class="col-xs-10">
+            <div class="col-xs-8 text-center">
                 <?php if(in_array($mode, array('dayInMonth', 'monthInYear'))): ?>
                 <div class="btn-group">
-                    <a class="btn btn-primary" href="<?=$url['dateChange']['prev']?>">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
+                    <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['prev']?>">
+                        <span class="glyphicon glyphicon-triangle-left"></span>
                     </a>
-                    <span class="btn btn-default disabled"><?=$date?></span>
-                    <a class="btn btn-primary" href="<?=$url['dateChange']['next']?>">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="btn btn-default btn-sm disabled">
+                        <?=$date?>
+                    </span>
+                    <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['next']?>">
+                        <span class="glyphicon glyphicon-triangle-right"></span>
                     </a>
                 </div>
                 <?php endif ?>
+            </div>
+            <div class="col-xs-2">
+                <a class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#date-selection">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </a>
             </div>
         </div>
     </div>
