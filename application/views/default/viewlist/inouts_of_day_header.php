@@ -1,11 +1,3 @@
-<script type="text/javascript">
-    $(function(){
-        $('.submit-on-change').change(function(){
-            $(this).parents('form').submit();
-        });
-    });
-</script>
-
 <div class="container">
     <div class="well well-sm">
         <div class="row">
@@ -40,7 +32,7 @@
 <!-- Date selecting modal -->
 <div class="modal fade" id="date-selection" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <?=form_open($url['form'], array('method'=>'get', 'id'=>'date-selection-form', 'class'=>'form-horizon'))?>
+        <?=form_open($url['dateSelectionForm'], array('method'=>'get', 'id'=>'dateSelectionForm', 'class'=>'form-horizon'))?>
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -48,7 +40,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xs-4" style="padding-right:0px" id="date-selection-year">
+                        <div class="col-xs-4" style="padding-right:0px">
                             <label>Năm</label>
                             <?=form_dropdown(
                                 $field_name = 'year', 
@@ -59,7 +51,7 @@
                                 )
                             )?>
                         </div>
-                        <div class="col-xs-4" style="padding-right:7.5px" id="date-selection-month">
+                        <div class="col-xs-4" style="padding-right:7.5px">
                             <label>Tháng</label>
                             <?=form_dropdown(
                                 $field_name = 'month', 
@@ -70,7 +62,7 @@
                                 )
                             )?>
                         </div>
-                        <div class="col-xs-4" style="padding-left:7.5px" id="date-selection-day">
+                        <div class="col-xs-4" style="padding-left:7.5px">
                             <label>Ngày</label>
                             <?=form_dropdown(
                                 $field_name = 'day', 
@@ -94,20 +86,20 @@
 
 <script type="text/javascript">
     $(function(){     
-        $('#date-selection-form [name=month]').switcher({
-            targets         : ['#date-selection-form [name=day]'],
+        $('#dateSelectionForm [name=month]').switcher({
+            targets         : ['#dateSelectionForm [name=day]'],
             disableValues   : [''],
         });
         
-        $('#date-selection-form [type=submit]').click(function(evt){
+        $('#dateSelectionForm [type=submit]').click(function(evt){
             evt.preventDefault();
             
             var form = $(this).parents('form');
             
             var dateArr = [
-                $('#date-selection-year').find('select:enabled').val(),
-                $('#date-selection-month').find('select:enabled').val(),
-                $('#date-selection-day').find('select:enabled').val(),
+                form.find('select[name=year]:enabled').val(),
+                form.find('select[name=month]:enabled').val(),
+                form.find('select[name=day]:enabled').val(),
             ];
             
             dateArr = dateArr.filter(function(item){

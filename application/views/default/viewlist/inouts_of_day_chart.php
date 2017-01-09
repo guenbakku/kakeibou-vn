@@ -1,6 +1,6 @@
 <div class="container">    
     <div class="well well-sm">
-        <?=form_open($url['form'], array('method'=>'get', 'id' => 'form', 'class' => 'form-horizon'))?>
+        <?=form_open($url['subForm'], array('method'=>'get', 'id' => 'subForm', 'class' => 'form-horizon'))?>
             <div class="row">
                 <div class="col-xs-6">
                     <label>Loại</label>

@@ -127,16 +127,16 @@ class Viewlist extends MY_Controller {
             'month' => array_combine($monthsList, $monthsList),
         );
         $view_data['url'] = array(
-            'form'     => $this->base_url(array($this->router->fetch_method(), $view)),
-            'dateChange' => array(
-                'prev'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
-                'next'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
+            'dateSelectionForm' => $this->base_url(array($this->router->fetch_method(), $view)),
+            'dateChange'        => array(
+                'prev'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
+                'next'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
             ),
-            'navTabs'  => array(
-                'list'  => $this->base_url(array($this->router->fetch_method(), 'list', $date)).query_string(),
-                'chart' => $this->base_url(array($this->router->fetch_method(), 'chart', $date)).query_string(),
+            'navTabs'           => array(
+                'list'          => $this->base_url(array($this->router->fetch_method(), 'list', $date)).query_string(),
+                'chart'         => $this->base_url(array($this->router->fetch_method(), 'chart', $date)).query_string(),
             ),
-            'inouts_of_day' => $this->base_url(array('inouts_of_day', '%s', '%s')),
+            'inouts_of_day'     => $this->base_url(array('inouts_of_day', '%s', '%s')),
         );
         $view_data = array_merge($view_data, compact('mode', 'date'));
         
@@ -188,15 +188,16 @@ class Viewlist extends MY_Controller {
             'day'         => array_combine($daysList, $daysList),
         );
         $view_data['url'] = array(
-            'form'       => $this->base_url(array($this->router->fetch_method(), $view)),
-            'edit'       => base_url(array('inout', 'edit', '%s')),
-            'dateChange' => array(
-                'prev'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
-                'next'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
-            ),
-            'navTabs'    => array(
-                'list'   => $this->base_url(array($this->router->fetch_method(), 'list', $date)),
-                'chart'  => $this->base_url(array($this->router->fetch_method(), 'chart', $date)),
+            'dateSelectionForm' => $this->base_url(array($this->router->fetch_method(), $view)),
+            'subForm'           => $this->base_url(array($this->router->fetch_method(), $view, $date)),
+            'edit'              => base_url(array('inout', 'edit', '%s')),
+            'dateChange'        => array(
+                'prev'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
+                'next'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
+            ),      
+            'navTabs'           => array(
+                'list'          => $this->base_url(array($this->router->fetch_method(), 'list', $date)),
+                'chart'         => $this->base_url(array($this->router->fetch_method(), 'chart', $date)),
             ),
         );
         $view_data = array_merge($view_data, compact('date', 'account_id', 'player_id', 'inout_type_id'));

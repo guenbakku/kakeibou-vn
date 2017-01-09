@@ -34,7 +34,7 @@
 <!-- Date selecting modal -->
 <div class="modal fade" id="date-selection" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <?=form_open($url['form'], array('method'=>'get', 'id'=>'date-selection-form', 'class'=>'form-horizon'))?>
+        <?=form_open($url['dateSelectionForm'], array('method'=>'get', 'id'=>'dateSelectionForm', 'class'=>'form-horizon'))?>
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -77,19 +77,19 @@
 
 <script type="text/javascript">
     $(function(){     
-        $('#date-selection-form [name=year]').switcher({
-            targets         : ['#date-selection-form [name=month]'],
+        $('#dateSelectionForm [name=year]').switcher({
+            targets         : ['#dateSelectionForm [name=month]'],
             disableValues   : [''],
         });
         
-        $('#date-selection-form [type=submit]').click(function(evt){
+        $('#dateSelectionForm [type=submit]').click(function(evt){
             evt.preventDefault();
             
             var form = $(this).parents('form');
             
             var dateArr = [
-                $('#date-selection-year').find('select:enabled').val(),
-                $('#date-selection-month').find('select:enabled').val(),
+                form.find('select[name=year]:enabled').val(),
+                form.find('select[name=month]:enabled').val(),
             ];
             
             dateArr = dateArr.filter(function(item){
