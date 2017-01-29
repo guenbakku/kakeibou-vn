@@ -10,9 +10,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
 ?>
 
 <script type="text/javascript">
-    $(function(){
-        $(".autofocus").focus();
-        
+    $(function(){        
         $(".autocomplete").autocomplete({ 
             source: function(req, resp) {
                 $.getJSON("/inout/searchMemo/" + encodeURIComponent(req.term), resp);
@@ -39,7 +37,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                             ),
                             set_value($field_name, null),
                             array(
-                                'class' => 'form-control autofocus',
+                                'class' => 'form-control',
                             )
                         )?>
                         <span class="input-group-addon">¥</span>
@@ -145,24 +143,14 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                         )
                     )?>
                 </div>
-                <button type="submit" class="btn btn-primary">Nhập</button>
+                <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary">Nhập</button>
+                <?php if ($this->uri->segment(2) == 'add'): ?>
+                    <button type="button" onClick="Cashbook.submitbutton(this, 'continue')" class="btn btn-primary">Nhập & Tiếp tục</button>
+                <?php endif ?>
                 <?php if ($this->uri->segment(2) == 'edit'): ?>
-                    <button type="button" class="btn btn-danger pull-right" onclick="del_record()">Xóa</button>
+                    <button type="button" onClick="Cashbook.submitbutton(this, 'delete')" class="btn btn-danger pull-right">Xóa</button>
                 <?php endif ?>
             </div>
         </div>
     </form>
 </div>
-
-<?php if ($this->router->fetch_method() == 'edit'): ?>
-    <script type="text/javascript">
-        function del_record(){
-            if (confirm('Muốn xóa ghi chép này?')){
-                $('#delCashFlow').submit();
-            }
-        }
-    </script>
-    
-    <?php echo form_open($url['del'], array('id' => 'delCashFlow', 'class' => 'form-vertical sr-only'))?>
-    </form>
-<?php endif ?> 
