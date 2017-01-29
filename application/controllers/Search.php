@@ -76,6 +76,7 @@ class Search extends MY_Controller {
         $view_data['url'] = array(
             'form'  => $this->base_url(),
             'edit'  => base_url(array('inout', 'edit', '%s')),
+            'back'  => base_url(),
         );
         
 		$this->template->write_view('MAIN', 'search/home', $view_data);

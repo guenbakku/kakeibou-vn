@@ -50,9 +50,10 @@ class Inout extends MY_Controller {
         );
         $view_data['url']   = array(
             'form'      => $this->base_url(array(__FUNCTION__, $type)),
+            'back'      => base_url(),
         );
 
-		$this->template->write_view('MAIN', 'inout/add_edit', $view_data);
+		$this->template->write_view('MAIN', 'inout/form', $view_data);
         $this->template->render();
 	}
     
@@ -112,9 +113,10 @@ class Inout extends MY_Controller {
         );
         $view_data['url']   = array(
             'form'      => $this->base_url(array(__FUNCTION__, $id)),
+            'back'      => base_url(),
         );
         
-		$this->template->write_view('MAIN', 'inout/add_edit', $view_data);
+		$this->template->write_view('MAIN', 'inout/form', $view_data);
         $this->template->render();
     }
     

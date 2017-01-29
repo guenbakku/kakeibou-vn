@@ -35,6 +35,7 @@ class Category extends MY_Controller {
             ),
             'add'    => $this->base_url('add/?inout_type_id=').$inout_type_id,
             'edit'   => $this->base_url('edit/%s'),
+            'back'   => base_url('setting'),
         );
         $this->template->write_view('MAIN', 'category/home', $view_data);
         $this->template->render();
@@ -66,12 +67,13 @@ class Category extends MY_Controller {
             $_POST['inout_type_id'] = $this->input->get('inout_type_id');
         }
         
-        $view_data['title']         = 'Thêm danh mục';
+        $view_data['title']    = 'Thêm danh mục';
         $view_data['select']   = array(
             'inout_types' => $this->inout_type_model->getSelectTagData(),
         );
-        $view_data['url']   = array(
-            'form'              => $this->base_url(__FUNCTION__),
+        $view_data['url'] = array(
+            'form' => $this->base_url(__FUNCTION__),
+            'back' => $this->referer->get(),
         );
         
         $this->template->write_view('MAIN', 'category/form', $view_data);
@@ -124,6 +126,7 @@ class Category extends MY_Controller {
             $view_data['url']   = array(
                 'form'      => $this->base_url(array(__FUNCTION__, $id)),
                 'del'       => $this->base_url(array('del', $id)),
+                'back'      => $this->referer->get(),
             );
             
             $this->template->write_view('MAIN', 'category/form', $view_data);

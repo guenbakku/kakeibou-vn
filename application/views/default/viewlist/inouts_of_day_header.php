@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="well well-sm">
+    <div class="page-nav">
         <div class="row">
             <div class="col-xs-2">
                 <a class="btn btn-default btn-sm pull-left" href="<?=$url['back']?>">

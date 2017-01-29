@@ -33,12 +33,22 @@
 </script>
 
 <div class="container">
+
+    <div class="page-nav">
+        <div class="row">
+            <div class="col-xs-2">
+                <a class="btn btn-default btn-sm" href="<?=$url['back']?>">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                </a>
+            </div>
+            <div class="col-xs-10">
+                <strong>Quản lý danh mục</strong>
+            </div>
+        </div>
+    </div>
+    
     <?php echo form_open($url['form'])?>
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <strong>Quản lý danh mục</strong>
-                <a class="btn btn-default btn-xs pull-right" href="<?=$url['add']?>"><span class="glyphicon glyphicon-plus"></span></a>
-            </div>
             <table class="table table-bordered" style="border-bottom:1px solid; border-color:inherit">
                 <tr>
                     <td>
@@ -46,6 +56,7 @@
                             <a class="btn btn-default" href="<?=$url['subNav'][0]?>">Thu</a>
                             <a class="btn btn-default" href="<?=$url['subNav'][1]?>">Chi</a>
                         </div>
+                        <a class="btn btn-default pull-right" href="<?=$url['add']?>"><span class="glyphicon glyphicon-plus"></span></a>
                     </td>
                 </tr>
             </table>

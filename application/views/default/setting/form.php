@@ -1,7 +1,19 @@
 <div class="container">
+    <div class="page-nav">
+        <div class="row">
+            <div class="col-xs-2">
+                <a class="btn btn-default btn-sm" href="<?=$url['back']?>">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                </a>
+            </div>
+            <div class="col-xs-10">
+                <strong><?=$setting['name']?></strong>
+            </div>
+        </div>
+    </div>
+            
     <?php echo form_open($url['form'], array('id' => 'editSetting', 'class' => 'form-vertical'))?>
         <div class="panel panel-default">
-            <div class="panel-heading"><strong><?=$setting['name']?></strong></div>
             <div class="panel-body">
                 <?php if (!is_array($setting['value'])): ?>
                     <div class="form-group">

@@ -2,10 +2,6 @@
     $today = date('Y-m-d');
 ?>
 <div class="container">
-    <div class="well well-sm">
-        <?=day_of_week($today) . ', ' . $today?>
-    </div>
-    
     <?php // Chỉ hiện bảng Chi thực tế/Dự định nếu có setting "Dự định chi tháng này" ?>
     <?php if ($liquidOutgoStatus['month'][1] > 0): ?>
     <div class="panel panel-default">

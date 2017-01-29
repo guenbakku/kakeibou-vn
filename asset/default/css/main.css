@@ -140,3 +140,26 @@ input[type="color"] {
 .table-ex td{
     vertical-align: middle !important;
 }
+
+.page-nav {
+    line-height: 30px;
+    background-color: #f5f5f5;
+    padding: 0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.page-nav .col-xs-1, 
+.page-nav .col-xs-2, 
+.page-nav .col-xs-3, 
+.page-nav .col-xs-4, 
+.page-nav .col-xs-5, 
+.page-nav .col-xs-6, 
+.page-nav .col-xs-7, 
+.page-nav .col-xs-8, 
+.page-nav .col-xs-9, 
+.page-nav .col-xs-10, 
+.page-nav .col-xs-11, 
+.page-nav .col-xs-12 {
+    line-height: 30px;
+}

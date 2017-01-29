@@ -1,3 +1,18 @@
+<div class="container">
+    <div class="page-nav">
+        <div class="row">
+            <div class="col-xs-2">
+                <a class="btn btn-default btn-sm" href="<?=$url['back']?>">
+                    <span class="glyphicon glyphicon-menu-left"></span>
+                </a>
+            </div>
+            <div class="col-xs-10">
+                <strong><?=$title?></strong>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?=$this->template->get_view('search/form')?>
 
 <?php if ($list !== null):?>

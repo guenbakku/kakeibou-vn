@@ -97,15 +97,12 @@ class Referer {
     private function send_back($default)
     {
         if (!empty($this->http_referer)){
-            
             return $this->http_referer;
         }
         else if (is_string($default) && !empty($default)){
-            
             return $default;
         }
         else {
-            
             return base_url();
         }
     }
@@ -120,12 +117,10 @@ class Referer {
     private function set_http_referer($http_referer=null)
     {
         if (empty($http_referer)){
-            
             @$http_referer = $_SERVER['HTTP_REFERER'];
         }
         
         if(!empty($http_referer) && strpos($http_referer, base_url()) === 0){
-            
             $this->http_referer = $http_referer;
         }
         
