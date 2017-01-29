@@ -1,27 +1,16 @@
+<?php 
+    $today = date('Y-m-d');
+?>
 <div class="container">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <strong>Thu chi tháng này (<?=date('Y-m')?>)</strong>
-        </div>
-        <table class="table table-bordered">
-            <tr>
-                <th style="width:33.3%" class="text-center">Thu</th>
-                <th style="width:33.3%" class="text-center">Chi</th>
-                <th style="width:33.3%" class="text-center">Chênh lệch</th>
-            </tr>
-            <tr>
-                <td class="text-right"><?=currency($month_sum['thu'])?></td>
-                <td class="text-right"><?=currency($month_sum['chi'])?></td>
-                <td class="text-right"><?=currency($month_sum['tong'])?></td>
-            </tr>
-        </table>
+    <div class="well well-sm">
+        <?=day_of_week($today) . ', ' . $today?>
     </div>
-        
+    
     <?php // Chỉ hiện bảng Chi thực tế/Dự định nếu có setting "Dự định chi tháng này" ?>
     <?php if ($liquidOutgoStatus['month'][1] > 0): ?>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <strong>Chi thực tế / Dự định</strong><br>
+            <strong>Chi thực tế / Dự định tháng này</strong><br>
             <span class="small text-muted"><em>(Không tính các khoản chi cố định)</em></span>
         </div>
         <table class="table table-bordered">
@@ -52,6 +41,24 @@
         </table>
     </div>
     <?php endif ?>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Thu chi tháng này</strong>
+        </div>
+        <table class="table table-bordered">
+            <tr>
+                <th style="width:33.3%" class="text-center">Thu</th>
+                <th style="width:33.3%" class="text-center">Chi</th>
+                <th style="width:33.3%" class="text-center">Chênh lệch</th>
+            </tr>
+            <tr>
+                <td class="text-right"><?=currency($month_sum['thu'])?></td>
+                <td class="text-right"><?=currency($month_sum['chi'])?></td>
+                <td class="text-right"><?=currency($month_sum['tong'])?></td>
+            </tr>
+        </table>
+    </div>
     
     <div class="panel panel-default">
         <div class="panel-heading"><strong>Tiền còn lại</strong></div>
