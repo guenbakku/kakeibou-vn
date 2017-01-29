@@ -69,9 +69,9 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
                     </label>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Nhập</button>
+                <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary">Nhập</button>
                 <?php if ($this->router->fetch_method() == 'edit'): ?>
-                    <button type="button" class="btn btn-danger pull-right" onclick="del_category()">Xóa</button>
+                    <button type="button" onClick="Cashbook.submitbutton(this, 'delete')" class="btn btn-danger pull-right">Xóa</button>
                 <?php endif ?>
                 
             </div>
@@ -92,20 +92,12 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
         display_month_fixed_money_checkbox();
     });
     
-    function display_month_fixed_money_checkbox()
-    {
+    function display_month_fixed_money_checkbox() {
         if ($('select[name=inout_type_id]').val() == 2){
             $('#month_fixed_money').show();
         }
         else {
             $('#month_fixed_money').hide();
-        }
-    }
-    
-    function del_category()
-    {
-        if (confirm('Muốn xóa danh mục này?')){
-            $('#delCategory').submit();
         }
     }
     

@@ -89,6 +89,10 @@ class Category extends MY_Controller {
             }
             
             if (!empty($this->input->post())){
+                // Chuyển sang xử lý xóa category nếu lựa chọn xóa
+                if ((bool)$this->input->get('delete') === true) {
+                    return $this->del($id);
+                }
                 
                 try
                 {
