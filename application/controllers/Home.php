@@ -10,7 +10,7 @@ class Home extends MY_Controller {
         $view_data['remaining'] = $this->viewlist_model->getRemaining();
         $view_data['url'] = array(
             'inouts_of_today' => base_url(array('viewlist', 'inouts_of_day', 'list', date('Y-m-d'))),
-            'summary_this_month' => base_url(array('viewlist', 'summary', 'list', 'day')),
+            'summary_this_month' => base_url(array('viewlist', 'summary', 'list', date('Y-m'))),
         );
 		$this->template->write_view('MAIN', 'home/home', $view_data);
         $this->template->render();

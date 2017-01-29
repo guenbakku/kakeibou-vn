@@ -1,8 +1,8 @@
 <div class="container">
     <div class="panel panel-default">
-        <a class="panel-heading" href="<?=$url['summary_this_month']?>" style="display:block">
-            <strong><span class="glyphicon glyphicon-menu-right pull-right"></span>Thu chi tháng này (<?=date('Y-m')?>)</strong>
-        </a>
+        <div class="panel-heading">
+            <strong>Thu chi tháng này (<?=date('Y-m')?>)</strong>
+        </div>
         <table class="table table-bordered">
             <tr>
                 <th style="width:33.3%" class="text-center">Thu</th>

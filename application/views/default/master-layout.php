@@ -26,8 +26,10 @@
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery-1.12.3.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery.navigation.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery.page-scroll.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.navigation.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.page-scroll.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.switcher.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.utilities.js"></script>
         <?=$_scripts?>
 	</head>
 

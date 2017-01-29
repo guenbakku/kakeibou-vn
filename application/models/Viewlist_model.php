@@ -2,15 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Viewlist_model extends Inout_Model {
-    
+        
     /*
      *--------------------------------------------------------------------
      * Lấy danh sách tổng chi tiêu theo ngày (trong một tháng)
      *--------------------------------------------------------------------
      */
-    public function summaryInoutTypesByDay(int $year, int $month): array
+    public function summaryInoutTypesByDayInMonth(int $year, int $month): array
     {       
-        $range = $this->getBoundaryDate($year, $month);
+        $range = boundary_date($year, $month);
         $db_list = $this->summaryInoutTypes($range[0], $range[1], '%Y-%m-%d');
         $full_list_keys = date_range($range[0], $range[1]);
         
@@ -22,9 +22,9 @@ class Viewlist_model extends Inout_Model {
      * Lấy danh sách tổng chi tiêu theo tháng (trong một năm)
      *--------------------------------------------------------------------
      */
-    public function summaryInoutTypesByMonth(int $year): array
+    public function summaryInoutTypesByMonthInYear(int $year): array
     {
-        $range = $this->getBoundaryDate($year);
+        $range = boundary_date($year);
         $db_list = $this->summaryInoutTypes($range[0], $range[1], '%Y-%m');
         $full_list_keys = array_map(function($month) use($year){
             return sprintf('%04d-%02d', $year, $month);
@@ -274,89 +274,6 @@ class Viewlist_model extends Inout_Model {
         }, range($range['min'], $range['max']));
         
         return $full_list;
-    }
-    
-    /*
-     *--------------------------------------------------------------------
-     * Tính ngày giới hạn khi xem danh sách thu chi theo ngày
-     *
-     * @param   int : year
-     * @param   int : month
-     * @param   int : day
-     * @return  array : ngày đầu và cuối của khoảng thời gian đó
-     *--------------------------------------------------------------------
-     */
-    public function getBoundaryDate(string $year, int $month = null, int $day = null): array
-    {
-        // Tách parameter đầu tiên thành year, month, day 
-        // nếu parameter đầu tiên là chuỗi format kiểu date
-        if (!is_numeric($year) && is_string($year)) {
-            $year = preg_replace('/[^\d]+/', '-', $year);
-            @list($year, $month, $day) = explode('-', $year);
-        }
-        
-        if (!is_numeric($year)) {
-            return array();
-        }
-        
-        $range = array(
-            date('Y-m-d', strtotime($year.'-01-01')),
-            date('Y-m-d', strtotime($year.'-12-31')),
-        );
-        
-        if (!is_numeric($month)) {
-            return $range;
-        }
-        
-        $range = array(
-            date('Y-m-d', strtotime($year.'-'.$month.'-01')),
-            date('Y-m-t', strtotime($year.'-'.$month.'-01')),
-        );
-        
-        if (!is_numeric($day)) {
-            return $range;
-        }
-        
-        $range = array(
-            date('Y-m-d', strtotime($year.'-'.$month.'-'.$day)),
-            date('Y-m-d', strtotime($year.'-'.$month.'-'.$day)),
-        );
-        
-        return $range;
-    }
-    
-    /*
-     *--------------------------------------------------------------------
-     * Tính ngày, tháng hoặc năm trước và sau của dữ liệu nhập vào
-     * Nếu dữ liệu nhập vào là dạng ngày  -> ngày trước và sau
-     *                              tháng -> tháng trước và sau
-     *                              năm   -> năm trước và sau  
-     *--------------------------------------------------------------------
-     */
-    public function getPrevNextTime($str)
-    {
-        $mdate = preg_replace('/[^\d]/', '', $str);
-        if (preg_match('/^\d{8}$/', $mdate)){
-            return array(
-                date('Y-m-d', strtotime($mdate . ' -1 day')), 
-                date('Y-m-d', strtotime($mdate . ' +1 day')), 
-            );
-        }
-        elseif (preg_match('/^\d{6}$/', $mdate)){
-            return array(
-                date('Y-m', strtotime("{$mdate}01" . ' -1 month')),
-                date('Y-m', strtotime("{$mdate}01" . ' +1 month')),
-            );
-        }
-        elseif (preg_match('/^\d{4}$/', $mdate)){
-            return array(
-                date('Y', strtotime($mdate.'0101' . ' -1 year')),
-                date('Y', strtotime($mdate.'1231' . ' +1 year')),
-            );
-        }
-        else {
-            return false;
-        }
     }
     
     /*

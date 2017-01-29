@@ -13,7 +13,8 @@ class Viewlist extends MY_Controller {
     {
         // $this->template->write_view('MAIN', 'viewlist/menu');
         // $this->template->render();
-        return redirect($this->base_url('summary/list/day'));
+        $thisMonth = date('Y-m');
+        return redirect($this->base_url(array('summary/list/', $thisMonth)));
     }
     
     /**
@@ -29,28 +30,23 @@ class Viewlist extends MY_Controller {
      * @return   void
      *--------------------------------------------------------------------
      */
-    public function summary($view = null, $mode = null) 
+    public function summary(string $view = null, string $date = null): void
     {   
         try 
         {
             $view = strtolower($view);
-            $mode = strtolower($mode);
             $redirect = false;
+            
             if (!in_array($view, array('list', 'chart'))) {
                 $view = 'list';
                 $redirect = true;
             }
             
-            if (!in_array($mode, array('day', 'month', 'year'))){
-                $mode = 'day';
-                $redirect = true;
-            }
-            
             if ($redirect === true) {
-                redirect($this->base_url(array(__FUNCTION__, $view, $mode)));
+                redirect($this->base_url(array(__FUNCTION__, $view, $date)));
             }
             
-            $view_data = $this->_summary_view_data($view, $mode);
+            $view_data = $this->_view_data_summary($view, $date);
             $this->template->write_view('MAIN', 'viewlist/summary_header', $view_data);
             $this->template->write_view('MAIN', 'viewlist/summary_'.$view, $view_data);
             $this->template->render();
@@ -86,7 +82,7 @@ class Viewlist extends MY_Controller {
                 throw new Exception(Constants::ERR_BAD_REQUEST);
             }
             
-            $view_data = $this->_inouts_of_day_view_data($view, $date);
+            $view_data = $this->_view_data_inouts_of_day($view, $date);
             
             $this->template->write_view('MAIN', 'viewlist/inouts_of_day_header', $view_data);
             $this->template->write_view('MAIN', 'viewlist/inouts_of_day_'.$view, $view_data);
@@ -110,45 +106,45 @@ class Viewlist extends MY_Controller {
      * @return   array
      *--------------------------------------------------------------------
      */
-    protected function _summary_view_data(string $view, string $mode): array
+    protected function _view_data_summary(string $view, ?string $date): array
     {   
-        // Lấy biến từ $_GET;
-        $year = $this->input->get('year')?? date('Y');
-        $month = $this->input->get('month')?? date('m');
+        $extractedDate = extract_date_string($date);
+        $mode = $this->_summary_inout_types_mode($extractedDate);
         
-        $yearsInDB  = $this->viewlist_model->getYearsList();
-        $monthsList = range(1, 12);
+        $dateChange = prev_next_time($date);
+        $yearsList  = $this->viewlist_model->getYearsList();
+        $monthsList = months_list();
         
         $view_data['list'] = call_user_func_array(
             array($this->viewlist_model, 'summaryInoutTypesBy' . ucfirst($mode)), 
-            array(intval($year), intval($month))
+            $extractedDate
         );
-        $view_data['page_scroll_target'] = $this->_page_scroll_target($mode);
-        $view_data['year'] = $year;
-        $view_data['month'] = $month;
-        $view_data['mode'] = $mode;
+        $view_data['pageScrollTarget'] = $this->_page_scroll_target($extractedDate);
+        $view_data['year']  = $extractedDate['y']?? '';
+        $view_data['month'] = $extractedDate['m']?? '';
         $view_data['select'] = array(
-            'year' => array_combine($yearsInDB, $yearsInDB),
+            'year' => array_combine($yearsList, $yearsList),
             'month' => array_combine($monthsList, $monthsList),
         );
         $view_data['url'] = array(
-            'form'     => $this->base_url(array($this->router->fetch_method(), $view, $mode)),
-            'btnGroup' => array(
-                'day'   => $this->base_url(array($this->router->fetch_method(), $view, 'day')),
-                'month' => $this->base_url(array($this->router->fetch_method(), $view, 'month')),
-                'year'  => $this->base_url(array($this->router->fetch_method(), $view, 'year')),
+            'dateSelectionForm' => $this->base_url(array($this->router->fetch_method(), $view)),
+            'back'              => base_url(),
+            'dateChange'        => array(
+                'prev'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
+                'next'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
             ),
-            'navTabs'  => array(
-                'list'  => $this->base_url(array($this->router->fetch_method(), 'list', $mode)).query_string(),
-                'chart' => $this->base_url(array($this->router->fetch_method(), 'chart', $mode)).query_string(),
+            'navTabs'           => array(
+                'list'          => $this->base_url(array($this->router->fetch_method(), 'list', $date)).query_string(),
+                'chart'         => $this->base_url(array($this->router->fetch_method(), 'chart', $date)).query_string(),
             ),
-            'inouts_of_day' => $this->base_url(array('inouts_of_day', '%s', '%s')),
+            'inouts_of_day'     => $this->base_url(array('inouts_of_day', '%s', '%s')),
         );
+        $view_data = array_merge($view_data, compact('mode', 'date'));
         
         return $view_data;
 	}
 
-    /**
+    /*
      *--------------------------------------------------------------------
      * Tạo view_data cho method "inouts_of_day"
      *
@@ -160,9 +156,9 @@ class Viewlist extends MY_Controller {
      * @return   array
      *--------------------------------------------------------------------
      */
-    protected function _inouts_of_day_view_data(string $view, string $date): array 
+    protected function _view_data_inouts_of_day(string $view, string $date): array 
     {
-        if (empty($range = $this->viewlist_model->getBoundaryDate($date))){
+        if (empty($range = boundary_date($date))){
             throw new Exception(Constants::ERR_BAD_REQUEST);
         }
         
@@ -171,36 +167,94 @@ class Viewlist extends MY_Controller {
         $player_id      = $this->input->get('player')?? 0;
         $inout_type_id  = $this->input->get('inout_type')?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
         
-        $dateChange = $this->viewlist_model->getPrevNextTime($date);
+        $extractedDate = extract_date_string($date);
+        $dateChange    = prev_next_time($date);
+        $yearsList     = $this->viewlist_model->getYearsList();
+        $monthsList    = months_list();
+        $daysList      = days_list();
+        $outerDate     = $this->_outer_date($extractedDate);
         
-        $view_data = array();
-        $view_data = array_merge($view_data, compact('account_id', 'player_id', 'inout_type_id'));
-        $view_data['date'] = $date;
         $view_data['list'] = $view === 'list'
                              ? $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account_id, $player_id)
                              : $this->viewlist_model->summaryCategories($range[0], $range[1], $inout_type_id);
+        $view_data['year']  = $extractedDate['y']?? '';
+        $view_data['month'] = $extractedDate['m']?? '';
+        $view_data['day']   = $extractedDate['d']?? '';
         $view_data['total_items'] = count($view_data['list']);
         $view_data['select'] = array(
             'accounts'    => $this->account_model->getSelectTagData(),
             'players'     => $this->user_model->getSelectTagData(),
-            'inout_types' => $this->inout_type_model->getSelectTagData(), 
+            'inout_types' => $this->inout_type_model->getSelectTagData(),
+            'year'        => array_combine($yearsList, $yearsList),
+            'month'       => array_combine($monthsList, $monthsList),
+            'day'         => array_combine($daysList, $daysList),
         );
         $view_data['url'] = array(
-            'form'       => $this->base_url(array($this->router->fetch_method(), $view, $date)),
-            'edit'       => base_url(array('inout', 'edit', '%s')),
-            'dateChange' => array(
-                'prev'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
-                'next'   => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
-            ),
-            'navTabs'    => array(
-                'list'   => $this->base_url(array($this->router->fetch_method(), 'list', $date)),
-                'chart'  => $this->base_url(array($this->router->fetch_method(), 'chart', $date)),
+            'dateSelectionForm' => $this->base_url(array($this->router->fetch_method(), $view)),
+            'subForm'           => $this->base_url(array($this->router->fetch_method(), $view, $date)),
+            'back'              => $this->base_url(array('summary', 'list', $outerDate)),
+            'edit'              => base_url(array('inout', 'edit', '%s')),
+            'dateChange'        => array(
+                'prev'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[0])).query_string(),
+                'next'          => $this->base_url(array($this->router->fetch_method(), $view, $dateChange[1])).query_string(),
+            ),      
+            'navTabs'           => array(
+                'list'          => $this->base_url(array($this->router->fetch_method(), 'list', $date)),
+                'chart'         => $this->base_url(array($this->router->fetch_method(), 'chart', $date)),
             ),
         );
+        $view_data = array_merge($view_data, compact('date', 'account_id', 'player_id', 'inout_type_id'));
         
         return $view_data;
     }
-
+    
+    /*
+     *--------------------------------------------------------------------
+     * Lấy mode summary của xử lý summary theo inout type
+     * 
+     * @param   array: array chứa year, month, day đã tách ra từ date string.
+     * @return  string: mode để tạo tên method đầy đủ.
+     *--------------------------------------------------------------------
+     */
+    protected function _summary_inout_types_mode(array $extractedDate): ?string
+    {
+        $notNullCount = count(array_filter($extractedDate, function($item){
+            return $item !== null;
+        }));
+        
+        switch ($notNullCount) {
+            case 0:
+                return 'year';
+            case 1:
+                return 'monthInYear';
+            case 2:
+            case 3:
+                return 'dayInMonth';
+            default:
+                return null;
+        }
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Tính thời gian bao ngoài của một thời điểm
+     * 
+     * @param   array: array chứa year, month, day đã tách ra từ date string.
+     * @param   string: glue
+     * @return  string: thời gian bao ngoài
+     *--------------------------------------------------------------------
+     */
+    protected function _outer_date(array $extractedDate, $glue='-'): string
+    {
+        $notNullItems = array_filter($extractedDate, function($item){
+            return $item !== null;
+        });
+        
+        array_pop($notNullItems);
+        
+        return implode($glue, $notNullItems);
+    }
+    
     /*
      *--------------------------------------------------------------------
      * Tạo page-scroll target đến ngày/tháng/năm hiện tại tùy vào kiểu danh sách
@@ -209,17 +263,22 @@ class Viewlist extends MY_Controller {
      * @param   string  : thời điểm hiện tại để scroll đến
      *--------------------------------------------------------------------
      */
-    private function _page_scroll_target(string $mode)
+    protected function _page_scroll_target(array $extractedDate): ?string
     {
-        switch($mode){
-            case 'day':
-                return date('Y-m-d');
-            case 'month':
-                return date('Y-m');
-            case 'year':
+        $notNullCount = count(array_filter($extractedDate, function($item){
+            return $item !== null;
+        }));
+        
+        switch ($notNullCount) {
+            case 0:
                 return date('Y');
+            case 1:
+                return date('Y-m');
+            case 2:
+            case 3:
+                return date('Y-m-d');
             default:
-                return false;
+                return null;
         }
     }
 }
