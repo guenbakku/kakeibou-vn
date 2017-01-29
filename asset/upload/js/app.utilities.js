@@ -1,8 +1,7 @@
 /**
  * Utilities
  */
-
-
+ 
 $(function(){
     /*
      * Xóa class 'active' của những item không được click trong cùng 1 button group

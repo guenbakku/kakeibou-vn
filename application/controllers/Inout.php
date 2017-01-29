@@ -11,15 +11,12 @@ class Inout extends MY_Controller {
     
 	public function add($type=null)
     {   
-        
         if (!$cashFlowName = $this->inout_model->getCashFlowName($type)){
             show_error(Constants::ERR_BAD_REQUEST);
         }
-        
+
         if (!empty($this->input->post())){
-            
             try {
-                
                 $this->load->library('form_validation');
                 
                 if ($this->form_validation->run() === false){
@@ -29,7 +26,13 @@ class Inout extends MY_Controller {
                 $this->inout_model->add($type, $this->input->post());
                 
                 $this->flash->success(sprintf(Constants::SUCC_ADD_INOUT_RECORD, $this->inout_model->getCashFlowName($type)));
-                return redirect(base_url());
+                
+                // Xét xem có nhập tiếp hay không
+                if ((bool)$this->input->get('continue') === false){
+                    return redirect(base_url());
+                } else {
+                    $this->form_validation->reset_field_data(['amount', 'memo']);
+                }
             }
             catch (Exception $e) {
                 $this->flash->error($e->getMessage());
@@ -49,7 +52,7 @@ class Inout extends MY_Controller {
             'form'      => $this->base_url(array(__FUNCTION__, $type)),
         );
 
-		$this->template->write_view('MAIN', 'inout/form', $view_data);
+		$this->template->write_view('MAIN', 'inout/add_edit', $view_data);
         $this->template->render();
 	}
     
@@ -66,9 +69,12 @@ class Inout extends MY_Controller {
         }
         
         if (!empty($this->input->post())){
+            // Chuyển sang xử lý xóa record nếu lựa chọn xóa
+            if ((bool)$this->input->get('delete') === true) {
+                return $this->del($id);
+            }
             
             try {
-                
                 $this->load->library('form_validation');
                 
                 if ($this->form_validation->run() === false){
@@ -106,10 +112,9 @@ class Inout extends MY_Controller {
         );
         $view_data['url']   = array(
             'form'      => $this->base_url(array(__FUNCTION__, $id)),
-            'del'       => $this->base_url(array('del', $id)),
         );
         
-		$this->template->write_view('MAIN', 'inout/form', $view_data);
+		$this->template->write_view('MAIN', 'inout/add_edit', $view_data);
         $this->template->render();
     }
     
