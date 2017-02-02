@@ -36,7 +36,7 @@ class Referer {
      *
      *--------------------------------------------------------------------
      */
-    public function get($default='')
+    public function get($default=null)
     {
         $this->http_referer = $this->set_http_referer();
         return $this->send_back($default);
@@ -48,10 +48,12 @@ class Referer {
      *
      *--------------------------------------------------------------------
      */
-    public function getSession($default='')
+    public function getSession($default=null, $reset=true)
     {
         $this->http_referer = $this->CI->session->userdata(self::SESSION_NAME);
-        $this->emptySession();
+        if ($reset === true){
+            $this->emptySession();
+        }
         return $this->send_back($default);
     }
     
@@ -94,7 +96,7 @@ class Referer {
      *
      *--------------------------------------------------------------------
      */
-    private function send_back($default)
+    protected function send_back($default)
     {
         if (!empty($this->http_referer)){
             return $this->http_referer;
@@ -114,7 +116,7 @@ class Referer {
      *
      *--------------------------------------------------------------------
      */
-    private function set_http_referer($http_referer=null)
+    protected function set_http_referer($http_referer=null)
     {
         if (empty($http_referer)){
             @$http_referer = $_SERVER['HTTP_REFERER'];

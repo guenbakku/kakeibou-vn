@@ -44,9 +44,8 @@ class Category extends MY_Controller {
     public function add()
     {
         if (!empty($this->input->post())){
-            
-            try {
-                
+            try 
+            {
                 $this->load->library('form_validation');
                 
                 if ($this->form_validation->run() === false){
@@ -73,7 +72,7 @@ class Category extends MY_Controller {
         );
         $view_data['url'] = array(
             'form' => $this->base_url(__FUNCTION__),
-            'back' => $this->referer->get(),
+            'back' => $this->referer->getSession(null, false),
         );
         
         $this->template->write_view('MAIN', 'category/form', $view_data);
@@ -130,7 +129,7 @@ class Category extends MY_Controller {
             $view_data['url']   = array(
                 'form'      => $this->base_url(array(__FUNCTION__, $id)),
                 'del'       => $this->base_url(array('del', $id)),
-                'back'      => $this->referer->get(),
+                'back'      => $this->referer->getSession(null, false),
             );
             
             $this->template->write_view('MAIN', 'category/form', $view_data);
