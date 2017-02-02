@@ -44,7 +44,7 @@
                     <div class="list-group">
                 <?php endif ?>
                         <!-- Item -->
-                        <a class="list-group-item" href="<?=sprintf($url['edit_template'], $list[$i]['id'])?>">
+                        <a class="list-group-item" href="<?=sprintf($url['editTemplate'], $list[$i]['id'])?>">
                             <div style="padding-right:15px; position:absolute; right:0px">
                                 <span class="glyphicon glyphicon-menu-right"></span>
                             </div>

@@ -10,7 +10,7 @@
     <div class="panel panel-default">
         <div class="list-group">
             <?php foreach($list as $k => $v) : ?>
-            <a class="list-group-item" page-scroll="<?=$v['date']?>" href="<?=sprintf($url['detail_template'], $v['date'])?>">
+            <a class="list-group-item" page-scroll="<?=$v['date']?>" href="<?=sprintf($url['detailTemplate'], $v['date'])?>">
                 <div class="row">
                     <div class="pull-right" style="padding-right:15px; position:absolute; right:0px">
                         <span class="glyphicon glyphicon-menu-right"></span>

@@ -80,7 +80,7 @@ class Viewlist extends MY_Controller {
                 'next'          => $this->base_url([$this->router->fetch_method(), $dateChange[1]]).query_string(),
             ],
             'viewchart'         => base_url(['chart', $this->router->fetch_method(), $date]),
-            'detail_template'   => $this->base_url(['detail', '%s']),
+            'detailTemplate'   => $this->base_url(['detail', '%s']),
         ];
         $view_data = array_merge($view_data, compact('mode', 'date'));
         
@@ -137,7 +137,7 @@ class Viewlist extends MY_Controller {
             'dateSelectionForm' => $this->base_url([$this->router->fetch_method()]),
             'subForm'           => $this->base_url([$this->router->fetch_method(), $date]),
             'back'              => $this->base_url('?mode=detail'),
-            'edit_template'     => base_url(['inout', 'edit', '%s']),
+            'editTemplate'     => base_url(['inout', 'edit', '%s']),
             'dateChange'        => [
                 'prev'          => $this->base_url([$this->router->fetch_method(), $dateChange[0]]).query_string(),
                 'next'          => $this->base_url([$this->router->fetch_method(), $dateChange[1]]).query_string(),
