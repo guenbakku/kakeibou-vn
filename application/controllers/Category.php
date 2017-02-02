@@ -33,8 +33,8 @@ class Category extends MY_Controller {
                 $this->base_url().'?inout_type_id=1',
                 $this->base_url().'?inout_type_id=2',
             ),
-            'add'    => $this->base_url('add/?inout_type_id=').$inout_type_id,
-            'edit'   => $this->base_url('edit/%s'),
+            'add'    => $this->base_url(['add', '?inout_type_id=']).$inout_type_id,
+            'edit'   => $this->base_url(['edit', '%s']),
             'back'   => base_url('setting'),
         );
         $this->template->write_view('MAIN', 'category/home', $view_data);

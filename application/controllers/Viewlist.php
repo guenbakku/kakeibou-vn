@@ -9,11 +9,11 @@ class Viewlist extends MY_Controller {
         $this->load->model('viewlist_model');
     }
     
-    public function index(string $date_selection_form = 'summary')
+    public function index()
     {           
-        $date_selection_form = strtolower($date_selection_form);
+        $date_selection_form = strtolower($this->input->get('mode'));
         if (!in_array($date_selection_form, ['summary', 'detail'])){
-            show_error(Constants::ERR_BAD_REQUEST);
+            $date_selection_form = 'summary';
         }
         
         $yearsList  = $this->viewlist_model->getYearsList();
@@ -29,8 +29,8 @@ class Viewlist extends MY_Controller {
             'dateSelectionForm' => $this->base_url($date_selection_form),
             'back'              => base_url(),
             'navTabs'           => [
-                'summary' => $this->base_url([$this->router->fetch_method(), 'summary']),
-                'detail' => $this->base_url([$this->router->fetch_method(), 'detail']),
+                'summary' => $this->base_url('?mode=summary'),
+                'detail' => $this->base_url('?mode=detail'),
             ]
         ];
         $view_data = array_merge($view_data, compact('date_selection_form'));
@@ -74,7 +74,7 @@ class Viewlist extends MY_Controller {
         ];
         $view_data['url'] = [
             'dateSelectionForm' => $this->base_url($this->router->fetch_method()),
-            'back'              => $this->base_url(['index', 'summary']),
+            'back'              => $this->base_url('?mode=summary'),
             'dateChange'        => [
                 'prev'          => $this->base_url([$this->router->fetch_method(), $dateChange[0]]).query_string(),
                 'next'          => $this->base_url([$this->router->fetch_method(), $dateChange[1]]).query_string(),
@@ -136,7 +136,7 @@ class Viewlist extends MY_Controller {
         $view_data['url'] = [
             'dateSelectionForm' => $this->base_url([$this->router->fetch_method()]),
             'subForm'           => $this->base_url([$this->router->fetch_method(), $date]),
-            'back'              => $this->base_url(['index', 'detail']),
+            'back'              => $this->base_url('?mode=detail'),
             'edit_template'     => base_url(['inout', 'edit', '%s']),
             'dateChange'        => [
                 'prev'          => $this->base_url([$this->router->fetch_method(), $dateChange[0]]).query_string(),
