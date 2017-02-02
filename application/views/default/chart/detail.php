@@ -1,3 +1,11 @@
+<?=$this->template->get_view('elements/viewlist/detail_header')?>
+
+<div class="container">
+    <div class="form-group">
+        <a class="btn btn-default btn-sm" href="<?=$url['viewlist']?>">Danh sách</a>
+    </div>
+</div>
+
 <div class="container">    
     <div class="well well-sm">
         <?=form_open($url['subForm'], array('method'=>'get', 'id' => 'subForm', 'class' => 'form-horizon'))?>

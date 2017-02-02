@@ -1,8 +1,16 @@
+<?=$this->template->get_view('elements/viewlist/summary_header')?>
+
+<div class="container">
+    <div class="form-group">
+        <a class="btn btn-default btn-sm" href="<?=$url['viewchart']?>">Biểu đồ</a>
+    </div>
+</div>
+
 <div class="container">
     <div class="panel panel-default">
         <div class="list-group">
             <?php foreach($list as $k => $v) : ?>
-            <a class="list-group-item" page-scroll="<?=$v['date']?>" href="<?=sprintf($url['inouts_of_day'], 'list', $v['date'])?>">
+            <a class="list-group-item" page-scroll="<?=$v['date']?>" href="<?=sprintf($url['detail_template'], $v['date'])?>">
                 <div class="row">
                     <div class="pull-right" style="padding-right:15px; position:absolute; right:0px">
                         <span class="glyphicon glyphicon-menu-right"></span>

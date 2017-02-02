@@ -1,3 +1,11 @@
+<?=$this->template->get_view('elements/viewlist/detail_header')?>
+
+<div class="container">
+    <div class="form-group">
+        <a class="btn btn-default btn-sm" href="<?=$url['viewchart']?>">Biểu đồ</a>
+    </div>
+</div>
+
 <div class="container">
     <div class="well well-sm">
         <?=form_open($url['subForm'], array('method'=>'get', 'id' => 'subForm', 'class' => 'form-horizon'))?>
@@ -36,7 +44,7 @@
                     <div class="list-group">
                 <?php endif ?>
                         <!-- Item -->
-                        <a class="list-group-item" href="<?=sprintf($url['edit'], $list[$i]['id'])?>">
+                        <a class="list-group-item" href="<?=sprintf($url['edit_template'], $list[$i]['id'])?>">
                             <div style="padding-right:15px; position:absolute; right:0px">
                                 <span class="glyphicon glyphicon-menu-right"></span>
                             </div>

@@ -1,3 +1,11 @@
+<?=$this->template->get_view('elements/viewlist/summary_header')?>
+
+<div class="container">
+    <div class="form-group">
+        <a class="btn btn-default btn-sm" href="<?=$url['viewlist']?>">Danh sách</a>
+    </div>
+</div>
+
 <div class="container">
 
     <!-- Styles -->

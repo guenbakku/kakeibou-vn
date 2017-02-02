@@ -7,7 +7,7 @@
                 </a>
             </div>
             <div class="col-xs-10">
-                <strong>Xem danh sách</strong>
+                <strong>Xem biểu đồ</strong>
             </div>
         </div>
     </div>
