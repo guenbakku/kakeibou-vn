@@ -55,3 +55,4 @@ $route['translate_uri_dashes'] = FALSE;
 
 // Route giúp main menu được highlight đúng
 $route['(?i)setting/category(.*)'] = 'category$1';
+$route['(?i)viewlist/chart(.*)'] = 'chart$1';

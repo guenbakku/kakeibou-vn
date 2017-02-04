@@ -1,10 +1,5 @@
-<?=$this->template->get_view('elements/viewlist/detail_header')?>
-
-<div class="container">
-    <div class="form-group">
-        <a class="btn btn-default btn-sm" href="<?=$url['viewchart']?>">Biểu đồ</a>
-    </div>
-</div>
+<?=$this->template->get_view('elements/viewlist/header_ymd')?>
+<?=$this->template->get_view('elements/viewlist/button_group')?>
 
 <div class="container">
     <div class="well well-sm">

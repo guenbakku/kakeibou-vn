@@ -77,6 +77,33 @@ function combine_date_string(array $date, string $glue = '-'): ?string
 }
 
 /*
+ * Trả về loại format của một chuỗi ký tự kiểu date.
+ * Hàm này sẽ cố gắng dùng regex để chuyển chuỗi về đúng format chuẩn
+ * trước khi xét.
+ * Ví dụ: 2016-12-31 -> 'ymd'
+ *        2016/02    -> 'ym'
+ *        2016       -> 'y'
+ *        other      -> null
+ *
+ * @param   string
+ * @return  string/null
+ */
+function date_format_type_of_string(?string $date): ?string
+{
+    $extracted_arr = extract_date_string($date, false);
+    switch(count($extracted_arr)) {
+        case 3:
+            return 'ymd';
+        case 2:
+            return 'ym';
+        case 1:
+            return 'y';
+        default:
+            return null;
+    }
+}
+
+/*
  *--------------------------------------------------------------------
  * Tính ngày giới hạn (bắt đầu và kết thúc) của một khoảng thời gian
  * Ví dụ 
@@ -159,6 +186,14 @@ function prev_next_time(?string $date): array
     }
 }
 
+/*
+ *--------------------------------------------------------------------
+ * Tạo danh sách 12 tháng
+ * 
+ * @param   void
+ * @return  array
+ *--------------------------------------------------------------------
+ */
 function months_list(): array
 {
     return array_map(
@@ -167,6 +202,14 @@ function months_list(): array
     );
 }
 
+/*
+ *--------------------------------------------------------------------
+ * Tạo danh sách 31 ngày
+ * 
+ * @param   void
+ * @return  array
+ *--------------------------------------------------------------------
+ */
 function days_list(): array
 {
     return array_map(

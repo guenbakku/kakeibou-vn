@@ -7,6 +7,7 @@
                 </a>
             </div>
             <div class="col-xs-8 text-center">
+                <?php if(in_array($dateFormatType, array('ym', 'y'))): ?>
                 <div class="btn-group">
                     <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['prev']?>">
                         <span class="glyphicon glyphicon-triangle-left"></span>
@@ -18,6 +19,7 @@
                         <span class="glyphicon glyphicon-triangle-right"></span>
                     </a>
                 </div>
+                <?php endif ?>
             </div>
             <div class="col-xs-2">
                 <a class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#date-selection">
@@ -38,7 +40,7 @@
                     <h4 class="modal-title">Lựa chọn thời gian</h4>
                 </div>
                 <div class="modal-body">
-                    <?=$this->template->get_view('elements/viewlist/date_selection_detail')?>
+                    <?=$this->template->get_view('elements/viewlist/date_selection_ym')?>
                 </div>
                 <div class="modal-footer" style="text-align:center">
                     <button type="submit" class="btn btn-primary">Chọn</button>

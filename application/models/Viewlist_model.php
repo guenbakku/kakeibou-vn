@@ -2,7 +2,27 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Viewlist_model extends Inout_Model {
-        
+    
+    
+    /*
+     *--------------------------------------------------------------------
+     * Dựa vào year, month được truyền vào để tự động lựa method 
+     * lấy danh sách tổng chi tiêu thích hợp
+     *--------------------------------------------------------------------
+     */
+    public function summaryInoutTypesAutoDetect(?int $year, ?int $month): array
+    {
+        if ($year !== null && $month !== null) {
+            return $this->summaryInoutTypesByDayInMonth($year, $month);
+        }
+        else if ($year !== null) {
+            return $this->summaryInoutTypesByMonthInYear($year);
+        }
+        else {
+            return $this->summaryInoutTypesByYear();
+        }
+    }
+    
     /*
      *--------------------------------------------------------------------
      * Lấy danh sách tổng chi tiêu theo ngày (trong một tháng)

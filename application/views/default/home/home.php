@@ -12,7 +12,7 @@
         <table class="table table-bordered">
             <tr>
                 <th style="width:33.3%">
-                    <a href="<?=$url['inouts_of_today']?>">Hôm nay</a>
+                    <a href="<?=$url['detailToday']?>">Hôm nay</a>
                 </th>
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">
@@ -24,7 +24,7 @@
             </tr>
             <tr>
                 <th>
-                    <a href="<?=$url['summary_this_month']?>">Tháng này</a>
+                    <a href="<?=$url['summaryThisMonth']?>">Tháng này</a>
                 </th>
                 <td class="text-center">
                     <div class="progress" style="margin-bottom:0">

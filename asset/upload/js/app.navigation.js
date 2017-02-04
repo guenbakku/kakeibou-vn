@@ -34,7 +34,6 @@
         
         // Lấy giá trị Options
         function extractOptions(){
-            
             if(typeof(options) === 'undefined'){
                 return false;
             }
@@ -66,7 +65,6 @@
         
         // Set class active cho nút tìm được
         function setActiveButton(buttons, index){
-            
             if (index < 0){
                 return;
             }
