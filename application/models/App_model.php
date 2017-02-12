@@ -44,11 +44,11 @@ class App_model extends CI_Model {
      *--------------------------------------------------------------------
      * Lấy dữ liệu từ CSDL để tạo select tag
      *
-     * @param   string  : name của select tag
-     * @return  array   : dữ liệu để xuất option
+     * @param   void
+     * @return  array : dữ liệu để xuất option
      *--------------------------------------------------------------------
      */    
-    public function getSelectTagData($option=null)
+    public function getSelectTagData()
     {
         $select = $this->columnNamesforSelectTagMethod;
         $table  = $this::TABLE;
