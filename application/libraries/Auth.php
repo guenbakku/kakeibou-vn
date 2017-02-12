@@ -81,7 +81,10 @@ class Auth {
             return false;
         }
         
-        $this->save_session($this->CI->auth_model->user);
+        $user = $this->CI->auth_model->user;
+        $this->add_token_to_db($user['id']);
+        $this->save_session($user);
+        
         return true;
     }
    
@@ -140,14 +143,14 @@ class Auth {
      */
     protected function save_session(array $user)
     {   
-        $save_data = [
+        $data = [
+            'token' => $this->token,
             'id' => null,
             'username' => null,
-            'password' => null,
             'fullname' => null,
         ];
-        $save_data = array_intersect_key($user, $save_data);
-        $this->CI->session->set_userdata($this->session_name, $save_data);
+        $data = array_update($data, $user);
+        $this->CI->session->set_userdata($this->session_name, $data);
     }
 }
 
