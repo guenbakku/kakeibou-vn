@@ -4,8 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Login_model extends App_Model {
     
     const TABLE        = 'users';
-    const COOKIE_NAME  = 'bhcb_loginAuth';
-    const SESSION_NAME = 'bhcb_loginAuth';
+    const COOKIE_NAME  = 'bhcb_auth';
+    const SESSION_NAME = 'bhcb_auth';
     const LOGIN_URL    = 'user/login';
     const LOGIN_ATTEMPS_MAX = 5;
     const LOCK_INTERVAL_MIN = 300; // 300 giây
@@ -82,7 +82,7 @@ class Login_model extends App_Model {
                 throw new Exception(Constants::ERR_LOGIN_INFO_INVALID);
             }
             
-            $user = $this->db->select('id, username, password, fullname, locked_on, lock_interval, login_attemps')
+            $user = $this->db->select('id, username, password, fullname, locked_on, lock_duration, login_attemps')
                                ->from(self::TABLE)
                                ->where('username', $username)
                                ->limit(1)
@@ -94,8 +94,8 @@ class Login_model extends App_Model {
             }
             
             // Tài khoản bị khóa
-            if ($user['lock_interval'] > 0) {
-                $locked_to = strtotime($user['locked_on']) + $user['lock_interval'];
+            if ($user['lock_duration'] > 0) {
+                $locked_to = strtotime($user['locked_on']) + $user['lock_duration'];
                 $current = time();
                 if ($locked_to > $current) {
                     throw new Exception(sprintf(Constants::ERR_ACCOUNT_LOCKED, (int)(($locked_to - $current) / 60)));
@@ -134,8 +134,8 @@ class Login_model extends App_Model {
         $data['login_attemps'] = $user['login_attemps']+1;
         if ($data['login_attemps'] % self::LOGIN_ATTEMPS_MAX == 0) {
             $data['locked_on'] = date('Y-m-d H:i:s');
-            $data['lock_interval'] = $user['lock_interval']
-                                     ? $user['lock_interval'] * 2
+            $data['lock_duration'] = $user['lock_duration']
+                                     ? $user['lock_duration'] * 2
                                      : self::LOCK_INTERVAL_MIN;
         }
         $this->db->where('id', $user['id'])
@@ -156,7 +156,7 @@ class Login_model extends App_Model {
         $data = array(
             'login_attemps' => 0,
             'locked_on'     => null,
-            'lock_interval' => 0,
+            'lock_duration' => 0,
         );
         
         $this->db->where('id', $user['id'])

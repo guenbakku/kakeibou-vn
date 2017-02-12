@@ -17,7 +17,6 @@ class User extends CI_Controller {
         
         // Do Login
         if (!empty($this->input->post())){
-
             try {
             
                 $this->load->library('form_validation');
