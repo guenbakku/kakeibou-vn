@@ -7,7 +7,7 @@
                 </a>
             </div>
             <div class="col-xs-10">
-                <strong><?=$title?></strong>
+                <strong>Tìm kiếm thu chi</strong>
             </div>
         </div>
     </div>
