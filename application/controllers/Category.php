@@ -25,18 +25,19 @@ class Category extends MY_Controller {
             $inout_type_id = 1;
         }
         
-        $view_data['categories']    = $this->category_model->get(null, array('inout_type_id' => $inout_type_id));
+        $view_data['title'] = 'Quản lý danh mục';
+        $view_data['categories']    = $this->category_model->get(null, ['inout_type_id' => $inout_type_id]);
         $view_data['inout_type_id'] = $inout_type_id;
-        $view_data['url']   = array(
+        $view_data['url'] = [
             'form'   => $this->base_url(),
-            'subNav' => array(
+            'subNav' => [
                 $this->base_url().'?inout_type_id=1',
                 $this->base_url().'?inout_type_id=2',
-            ),
+            ],
             'add'    => $this->base_url(['add', '?inout_type_id=']).$inout_type_id,
             'edit'   => $this->base_url(['edit', '%s']),
             'back'   => base_url('setting'),
-        );
+        ];
         $this->template->write_view('MAIN', 'category/home', $view_data);
         $this->template->render();
 	}
@@ -66,14 +67,14 @@ class Category extends MY_Controller {
             $_POST['inout_type_id'] = $this->input->get('inout_type_id');
         }
         
-        $view_data['title']    = 'Thêm danh mục';
-        $view_data['select']   = array(
+        $view_data['title'] = 'Thêm danh mục';
+        $view_data['select'] = [
             'inout_types' => $this->inout_type_model->getSelectTagData(),
-        );
-        $view_data['url'] = array(
+        ];
+        $view_data['url'] = [
             'form' => $this->base_url(__FUNCTION__),
             'back' => $this->referer->getSession(null, false),
-        );
+        ];
         
         $this->template->write_view('MAIN', 'category/form', $view_data);
         $this->template->render();
@@ -81,82 +82,67 @@ class Category extends MY_Controller {
     
     public function edit($id=null)
     {
-        try
-        {
-            if (!is_numeric($id)){
-                throw new Exception(Constants::ERR_BAD_REQUEST);
+        if (!is_numeric($id)){
+            show_error(Constants::ERR_BAD_REQUEST);
+        }
+        
+        if (!empty($this->input->post())){
+            // Chuyển sang xử lý xóa category nếu lựa chọn xóa
+            if ((bool)$this->input->get('delete') === true) {
+                return $this->del($id);
             }
             
-            if (!empty($this->input->post())){
-                // Chuyển sang xử lý xóa category nếu lựa chọn xóa
-                if ((bool)$this->input->get('delete') === true) {
-                    return $this->del($id);
+            try
+            {
+                $this->load->library('form_validation');
+            
+                if ($this->form_validation->run() === false){
+                    throw new Exception(validation_errors());
                 }
                 
-                try
-                {
-                    $this->load->library('form_validation');
-                
-                    if ($this->form_validation->run() === false){
-                        throw new Exception(validation_errors());
-                    }
-                    
-                    $this->category_model->edit($id, $this->input->post());
-                    $this->flash->success(Constants::SUCC_EDIT_CATEGORY);
-                    return redirect($this->referer->getSession());
-                }
-                catch (Exception $e)
-                {
-                    $this->flash->error($e->getMessage());
-                }
+                $this->category_model->edit($id, $this->input->post());
+                $this->flash->success(Constants::SUCC_EDIT_CATEGORY);
+                return redirect($this->referer->getSession());
             }
-            else {
-                $category_data = $this->category_model->get($id);
-                
-                if (empty($category_data)){
-                    throw new Exception(Constants::ERR_NOT_FOUND);
-                }
-                $_POST = $category_data;
-                
-                // Lưu referer của page access đến form
-                $this->referer->saveSession();
+            catch (Exception $e)
+            {
+                $this->flash->error($e->getMessage());
             }
+        }
+        else {
+            $category_data = $this->category_model->get($id);
+            
+            if (empty($category_data)){
+                show_error(Constants::ERR_NOT_FOUND);
+            }
+            $_POST = $category_data;
+            
+            // Lưu referer của page access đến form
+            $this->referer->saveSession();
+        }
 
-            $view_data['title']    = 'Sửa danh mục';
-            $view_data['select']   = array(
-                'inout_types' => $this->inout_type_model->getSelectTagData(),
-            );
-            $view_data['url']   = array(
-                'form'      => $this->base_url(array(__FUNCTION__, $id)),
-                'del'       => $this->base_url(array('del', $id)),
-                'back'      => $this->referer->getSession(null, false),
-            );
-            
-            $this->template->write_view('MAIN', 'category/form', $view_data);
-            $this->template->render();
-        }
-        catch (Exception $e)
-        {
-            show_error($e->getMessage());
-        }
+        $view_data['title'] = 'Sửa danh mục';
+        $view_data['select'] = [
+            'inout_types' => $this->inout_type_model->getSelectTagData(),
+        ];
+        $view_data['url'] = [
+            'form'      => $this->base_url([__FUNCTION__, $id]),
+            'del'       => $this->base_url(['del', $id]),
+            'back'      => $this->referer->getSession(null, false),
+        ];
+        
+        $this->template->write_view('MAIN', 'category/form', $view_data);
+        $this->template->render();
     }
     
     public function del($id)
     {
-        try
-        {
-            if (!is_numeric($id)){
-                throw new Exception(Constants::ERR_BAD_REQUEST);
-            }
-            
-            $this->category_model->del($id);
-            $this->flash->success(Constants::SUCC_DEL_CATEGORY);
-        }
-        catch (Exception $e)
-        {
-            $this->flash->error($e->getMessage());
+        if (!is_numeric($id)){
+            show_error(Constants::ERR_BAD_REQUEST);
         }
         
+        $this->category_model->del($id);
+        $this->flash->success(Constants::SUCC_DEL_CATEGORY);
         return redirect($this->referer->getSession());
     }
     

@@ -68,6 +68,7 @@ class Search extends MY_Controller {
         
         $view_data['list']        = $result;
         $view_data['total_items'] = count($view_data['list']);
+        $view_data['title']       = 'Tìm kiếm chi tiêu';
         $view_data['select']      = array(
             'players'     => array(0 => 'Tất cả') + $this->user_model->getSelectTagData(),
             'inout_types' => array(0 => 'Tất cả') + $this->inout_type_model->getSelectTagData(),

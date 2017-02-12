@@ -5,9 +5,10 @@ class Setting extends MY_Controller {
         
 	public function index()
     {   
-        $view_data['url'] = array(
+        $view_data['title'] = 'Thay đổi thiết đặt';
+        $view_data['url'] = [
             'back'  => base_url(),
-        );
+        ];
         $this->template->write_view('MAIN', 'setting/menu', $view_data);
         $this->template->render();
 	}
@@ -30,10 +31,11 @@ class Setting extends MY_Controller {
         }
         
         $view_data['setting'] = current($data);
-        $view_data['url'] = array(
-            'form'  => $this->base_url(array(__FUNCTION__, $item)),
+        $view_data['title'] = $view_data['setting']['name'];
+        $view_data['url'] = [
+            'form'  => $this->base_url([__FUNCTION__, $item]),
             'back'  => $this->base_url(),
-        );
+        ];
         $this->template->write_view('MAIN', 'setting/form', $view_data);
         $this->template->render();
     }

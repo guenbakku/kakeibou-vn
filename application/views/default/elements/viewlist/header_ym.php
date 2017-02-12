@@ -1,12 +1,10 @@
 <div class="container">
     <div class="page-nav">
         <div class="row">
-            <div class="col-xs-2">
+            <div class="col-xs-12 text-center">
                 <a class="btn btn-default btn-sm pull-left" href="<?=$url['back']?>">
                     <span class="glyphicon glyphicon-menu-left"></span>
                 </a>
-            </div>
-            <div class="col-xs-8 text-center">
                 <?php if(in_array($dateFormatType, array('ym', 'y'))): ?>
                 <div class="btn-group">
                     <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['prev']?>">
@@ -20,8 +18,6 @@
                     </a>
                 </div>
                 <?php endif ?>
-            </div>
-            <div class="col-xs-2">
                 <a class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#date-selection">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </a>
