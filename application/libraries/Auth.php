@@ -222,8 +222,8 @@ class Auth {
             $this->CI->router->fetch_class(),
             $this->CI->router->fetch_method()
         ]);
-        $allowed_url = array_merge($this->allowed, [$this->settings['login_url']]);
-        return in_array($identifier, $allowed_url);
+        $this->allow($this->settings['login_url']);
+        return in_array($identifier, $this->allowed);
     }
     
     /*
@@ -357,7 +357,7 @@ class Auth {
     {
         $token_existed = function($token) {
             $query = $this->CI->db
-                          ->select('id')
+                          ->select('token')
                           ->where('token', $token)
                           ->limit(1)
                           ->get($this->settings['remember_table']);
