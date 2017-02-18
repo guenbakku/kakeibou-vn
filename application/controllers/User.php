@@ -5,7 +5,7 @@ class User extends MY_Controller {
         
 	public function index()
     {   
-        redirect(base_url($this->auth->login_url));
+        redirect(base_url($this->auth->login_url()));
 	}
     
     public function login()
@@ -30,8 +30,7 @@ class User extends MY_Controller {
                     'password' => $this->input->post('password'),
                     'remember' => $this->input->post('remember')==='1'? true : false,
                 ];
-                $this->auth->set_auth_info($auth_info);
-                if ($this->auth->authenticate() === false){
+                if ($this->auth->auth_info($auth_info)->authenticate() === false){
                     throw new Exception($this->auth->error);
                 }
                 
@@ -50,6 +49,6 @@ class User extends MY_Controller {
     public function logout()
     {
         $this->auth->logout();
-        redirect(base_url($this->auth->login_url));
+        redirect(base_url($this->auth->login_url()));
     }
 }

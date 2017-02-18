@@ -15,7 +15,7 @@ class MY_Controller extends CI_Controller {
         $this->load->library('auth');
         // Nếu chưa đăng nhập thì chuyển về trang login
         if (!$this->auth->is_allowed() && !$this->auth->is_authenticated()){
-            redirect(base_url($this->auth->login_url));
+            redirect(base_url($this->auth->login_url()));
         }
     }
     

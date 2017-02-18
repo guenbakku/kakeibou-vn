@@ -18,36 +18,30 @@
 class Auth {
    
     protected $CI;
-    
-    public $cookie_name = 'bhcb_auth';
-    public $session_name = 'bhcb_auth';
-    public $user_table = 'users';
-    public $remember_table = 'remember';
-    
     public $error = '';
     
-    // Thời gian ghi nhớ đăng nhập (seconds)
-    public $remember_duration = 31536000;
-    
-    public $login_url = 'user/login';
-    
-    // Danh sách controller và action cho phép truy cập không cần authenticate
-    // Format: [
-    //      'controller1' => [action1, action2],
-    // ]
-    public $allowed = [
-        'user' => ['login'],
+    protected $settings = [
+        'cookie_name'       => 'bhcb_auth',
+        'session_name'      => 'bhcb_auth',
+        'user_table'        => 'users',
+        'remember_table'    => 'remember',
+        'remember_duration' => 31536000,
+        'login_url'         => 'user/login',
+        
+        // Số lần nhập sai mật khẩu liên tiếp tối đa.
+        // Nếu số lần nhập sai mật khẩu liên tiếp vượt quá giá trị này, 
+        // tài khoản sẽ bị khóa.
+        'login_attemps_max' => 5,
+        
+        // Thời gian khóa tài khoản tối thiểu.
+        // Thời gian này sẽ tăng theo cấp số cộng nếu sau khi hết thời gian khóa
+        // vẫn nhập sai mật khẩu.
+        'lock_duration_min' => 300,
     ];
     
-    // Số lần nhập sai mật khẩu liên tiếp tối đa.
-    // Nếu số lần nhập sai mật khẩu liên tiếp vượt quá giá trị này, 
-    // tài khoản sẽ bị khóa.
-    public $login_attemps_max = 5;
-    
-    // Thời gian khóa tài khoản tối thiểu.
-    // Thời gian này sẽ tăng theo cấp số cộng nếu sau khi hết thời gian khóa
-    // vẫn nhập sai mật khẩu.
-    public $lock_duration_min = 300;
+    // Danh sách controller và action cho phép truy cập không cần authenticate
+    // Format: ['controller/action', ...]
+    protected $allowed = [];
     
     // Thông tin dùng để đăng nhập
     protected $auth_info = [
@@ -68,35 +62,80 @@ class Auth {
         $this->CI =& get_instance();
         $this->CI->load->library('session');
         $this->CI->load->helper('string');
+        $this->CI->load->model('app_model');
         $this->CI->load->model('auth_model');
-        
-        $this->CI->auth_model->config([
-            'login_attemps_max' => $this->login_attemps_max,
-            'lock_duration_min' => $this->lock_duration_min,
-        ]);
-        
+
         $this->try_to_remember();
     }
     
-    public function set_auth_info(array $auth_info) {
+    /*
+     *--------------------------------------------------------------------
+     * Config cho auth
+     *
+     * @param   array
+     * @return  object: class
+     *--------------------------------------------------------------------
+     */
+    public function config(array $settings) {
+        $this->settings = array_update($this->settings, $settings);
+        return $this;
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Set thông tin xác thực.
+     * Thông tin này sẽ được check ở method authenticate.
+     *
+     * @param   array
+     * @return  object: class
+     *--------------------------------------------------------------------
+     */
+    public function auth_info(array $auth_info) {
         $this->auth_info = array_update($this->auth_info, $auth_info);
         return $this;
     }
     
+    /*
+     *--------------------------------------------------------------------
+     * Thực hiện logout
+     *
+     * @param   void
+     * @return  void
+     *--------------------------------------------------------------------
+     */
+    public function logout()
+    {
+        if ($this->is_authenticated()) {
+            $session_name = $this->settings['session_name'];
+            $token = $this->CI->session->userdata($session_name)['token'];
+            $this->CI->db->where('token', $token)->delete($this->settings['remember_table']);
+            $this->CI->session->sess_destroy();
+        }
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Thực hiện xác thực tài khoản
+     *
+     * @param   void
+     * @return  boolean: xác thực thành công hay không
+     *--------------------------------------------------------------------
+     */
     public function authenticate(): bool
     {
         $this->del_expired_token_in_db();
         
+        $this->CI->auth_model->config($this->settings);
+        
         $username = $this->auth_info['username'];
         $password = $this->auth_info['password'];
-        $remember = $this->auth_info['remember'];
         
         if (!$this->CI->auth_model->verify($username, $password)) {
             $this->error = $this->CI->auth_model->getError();
             return false;
         }
         
-        $this->user = $this->CI->auth_model->user;
+        $this->user = $this->get_user_from_db(['users.username' => $this->auth_info['username']]);
         $this->token = $this->add_token_to_db($this->user['id']);
         $this->set_session();
         $this->set_cookie();
@@ -104,13 +143,30 @@ class Auth {
         return true;
     }
     
-    public function logout()
+    /*
+     *--------------------------------------------------------------------
+     * Cố gắng khôi phục lại thông tin đăng nhập từ token
+     *
+     * @param   void
+     * @return  void
+     *--------------------------------------------------------------------
+     */
+    public function try_to_remember()
     {
-        if ($this->is_authenticated()) {
-            $token = $this->CI->session->userdata($this->session_name)['token'];
-            $this->CI->db->where('token', $token)->delete($this->remember_table);
-            $this->CI->session->sess_destroy();
+        if ($this->is_authenticated()){
+            return null;
         }
+        
+        $token = $this->CI->input->cookie($this->settings['cookie_name']);
+        
+        if (!$this->verify_token($token)){
+            return null;
+        }
+        
+        $this->user = $this->get_user_from_db(['remember.token' => $token]);
+        $this->token = $this->renew_token_in_db($token);
+        $this->set_session();
+        $this->set_cookie();        
     }
     
     /*
@@ -123,7 +179,8 @@ class Auth {
      */
     public function user(string $key = null)
     {   
-        $user = $this->CI->session->userdata($this->session_name);
+        $session_name = $this->settings['session_name'];
+        $user = $this->CI->session->userdata($session_name);
         if ($key === null) {
             return $user;
         }
@@ -144,7 +201,8 @@ class Auth {
      */
     public function is_authenticated()
     {
-        if ($this->CI->session->userdata($this->session_name) !== null) {
+        $session_name = $this->settings['session_name'];
+        if ($this->CI->session->userdata($session_name) !== null) {
             return true;
         }
         return false;
@@ -160,41 +218,71 @@ class Auth {
      */
     public function is_allowed(): bool
     {
-        $controller = $this->CI->router->fetch_class();
-        $method = $this->CI->router->fetch_method();
-        if (!isset($this->allowed[$controller])) {
-            return false;
-        }
-        if (!in_array($method, $this->allowed[$controller])) {
-            return false;
-        }
-        return true;
+        $identifier = implode('/', [
+            $this->CI->router->fetch_class(),
+            $this->CI->router->fetch_method()
+        ]);
+        $allowed_url = array_merge($this->allowed, [$this->settings['login_url']]);
+        return in_array($identifier, $allowed_url);
     }
     
     /*
      *--------------------------------------------------------------------
-     * Cố gắng khôi phục lại thông tin đăng nhập từ token
+     * Thêm identifier vào danh sách allowed url
      *
-     * @param   void
+     * @param   string/array: 
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function try_to_remember()
+    public function allow($identifiers)
     {
-        if ($this->is_authenticated()){
-            return null;
+        if (!is_array($identifiers)) {
+            $identifiers = [$identifiers];
         }
         
-        $token = $this->CI->input->cookie($this->cookie_name);
-        
-        if (!$this->verify_token($token)){
-            return null;
+        foreach ($identifiers as $identifier) {
+            if (!is_string($identifier)) {
+                throw new InvalidArgumentException('Allowed identifier must be string');
+            }
+            $identifier = trim($identifier, '/');
+            $identifier = strtolower($identifier);
+            $this->allowed[] = $identifier;
         }
-        
-        $this->token = $this->renew_token_in_db($token);
-        $this->user = $this->get_user_by_token($this->token);
-        $this->set_session();
-        $this->set_cookie();        
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Trả về login url trong settings
+     *
+     * @param   void
+     * @return  string
+     *--------------------------------------------------------------------
+     */
+    public function login_url(): string
+    {
+        return $this->settings['login_url'];
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Lấy thông tin user đăng nhập từ token
+     *
+     * @param   string: token
+     * @return  array
+     *--------------------------------------------------------------------
+     */
+    protected function get_user_from_db(array $where): ?array
+    {   
+        $select = [
+            'users.id', 'users.username', 'users.fullname'
+        ];
+        return  $this->CI->db
+                         ->select($select)
+                         ->where($where)
+                         ->from($this->settings['user_table'])
+                         ->join($this->settings['remember_table'], 'users.id = remember.user_id', 'left')
+                         ->limit(1)
+                         ->get()->row_array();
     }
     
     /*
@@ -205,11 +293,11 @@ class Auth {
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function del_expired_token_in_db()
+    protected function del_expired_token_in_db()
     {
         $this->CI->db
                  ->where('expire_on <', date('Y-m-d H:i:s'))
-                 ->delete($this->remember_table);
+                 ->delete($this->settings['remember_table']);
     }
     
     /*
@@ -220,7 +308,7 @@ class Auth {
      * @return  string: token vừa mới thêm vào db
      *--------------------------------------------------------------------
      */
-    public function add_token_to_db(int $user_id): string
+    protected function add_token_to_db(int $user_id): string
     {
         $new_token = $this->gen_token();
         $now = time();
@@ -230,10 +318,10 @@ class Auth {
             'user_agent' => $this->CI->input->user_agent(),
             'expire_on'  => $this->auth_info['remember'] === false
                             ? date('Y-m-d H:i:s', $now) 
-                            : date('Y-m-d H:i:s', $now + $this->remember_duration),
+                            : date('Y-m-d H:i:s', $now + $this->settings['remember_duration']),
             'created_on' => date('Y-m-d H:i:s', $now),
         ];
-        $this->CI->db->insert($this->remember_table, $data);
+        $this->CI->db->insert($this->settings['remember_table'], $data);
         return $new_token;
     }
     
@@ -245,13 +333,14 @@ class Auth {
      * @return  string: token mới
      *--------------------------------------------------------------------
      */
-    public function renew_token_in_db(string $old_token): string
+    protected function renew_token_in_db(string $old_token): string
     {
         $new_token = $this->gen_token();
         $this->CI->db
                  ->set('token', $new_token)
+                 ->set('user_agent', $this->CI->input->user_agent())
                  ->where('token', $old_token)
-                 ->update($this->remember_table);
+                 ->update($this->settings['remember_table']);
         return $new_token;
     }
      
@@ -264,14 +353,14 @@ class Auth {
      * @return  string
      *--------------------------------------------------------------------
      */
-    public function gen_token(): string
+    protected function gen_token(): string
     {
         $token_existed = function($token) {
             $query = $this->CI->db
                           ->select('id')
                           ->where('token', $token)
                           ->limit(1)
-                          ->get($this->remember_table);
+                          ->get($this->settings['remember_table']);
             return $query->num_rows() > 0;
         };
         $token = random_string('sha1');
@@ -289,7 +378,7 @@ class Auth {
      * @return  bool
      *--------------------------------------------------------------------
      */
-    public function verify_token(?string $token): bool
+    protected function verify_token(?string $token): bool
     {
         if (empty($token)) {
             return false;
@@ -299,7 +388,8 @@ class Auth {
                          ->select('expire_on')
                          ->where('token', $token)
                          ->limit(1)
-                         ->get($this->remember_table)->row_array();
+                         ->get($this->settings['remember_table'])
+                         ->row_array();
                          
         if (empty($data)) {
             return false;
@@ -311,42 +401,6 @@ class Auth {
         }
         
         return true;
-    }
-    
-    /*
-     *--------------------------------------------------------------------
-     * Lấy token từ cookie
-     *
-     * @param   void
-     * @return  string
-     *--------------------------------------------------------------------
-     */
-    public function get_token_from_cookie(): string
-    {
-        return $this->CI->input->cookie($this->cookie_name);
-    }
-    
-    /*
-     *--------------------------------------------------------------------
-     * Lấy thông tin user đăng nhập từ token
-     *
-     * @param   string: token
-     * @return  array
-     *--------------------------------------------------------------------
-     */
-    public function get_user_by_token(string $token): ?array
-    {   
-        $select = [
-            'remember.token', 'users.id', 'users.username', 'users.fullname'
-        ];
-        $user = $this->CI->db
-                         ->select($select)
-                         ->where('remember.token', $token)
-                         ->from($this->remember_table)
-                         ->join($this->user_table, 'users.id = remember.user_id')
-                         ->limit(1)
-                         ->get()->row_array();
-        return $user;
     }
     
     /*
@@ -366,7 +420,8 @@ class Auth {
             'fullname' => null,
         ];
         $data = array_update($data, $this->user);
-        $this->CI->session->set_userdata($this->session_name, $data);
+        $session_name = $this->settings['session_name'];
+        $this->CI->session->set_userdata($session_name, $data);
     }
     
     /*
@@ -377,12 +432,12 @@ class Auth {
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function set_cookie()
+    protected function set_cookie()
     {
         $this->CI->input->set_cookie(array(
-            'name'      => $this->cookie_name,
+            'name'      => $this->settings['cookie_name'],
             'value'     => $this->token,
-            'expire'    => $this->remember_duration,
+            'expire'    => $this->settings['remember_duration'],
         ));
     }
 }
