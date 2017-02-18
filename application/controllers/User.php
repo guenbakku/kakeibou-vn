@@ -1,17 +1,17 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class User extends CI_Controller {
+class User extends MY_Controller {
         
 	public function index()
     {   
-        redirect($this->login_model->getLoginUrl());
+        redirect(base_url($this->auth->login_url));
 	}
     
     public function login()
     {
         // Already Login
-        if ($this->login_model->isLogin()){
+        if ($this->auth->is_authenticated()){
             return redirect(base_url());
         }
         
@@ -25,12 +25,14 @@ class User extends CI_Controller {
                     throw new Exception(validation_errors());
                 }
                 
-                $username = $this->input->post('username');
-                $password = $this->input->post('password');
-                $remember = $this->input->post('remember')==='1'? true : false;
-                
-                if ($this->login_model->excuteLogin($username, $password, $remember) === false){
-                    throw new Exception($this->login_model->getError());
+                $auth_info = [
+                    'username' => $this->input->post('username'),
+                    'password' => $this->input->post('password'),
+                    'remember' => $this->input->post('remember')==='1'? true : false,
+                ];
+                $this->auth->set_auth_info($auth_info);
+                if ($this->auth->authenticate() === false){
+                    throw new Exception($this->auth->error);
                 }
                 
                 return redirect(base_url());
@@ -47,9 +49,7 @@ class User extends CI_Controller {
     
     public function logout()
     {
-        $this->login_model->delConnection();
-        $this->flash->success('Đăng xuất thành công');
-        redirect(base_url());
+        $this->auth->logout();
+        redirect(base_url($this->auth->login_url));
     }
-    
 }

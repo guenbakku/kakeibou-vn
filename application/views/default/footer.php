@@ -3,9 +3,9 @@
         <span class="text-muted">
             BH Cash Book V<?=Constants::VERSION?> &copy; <?=date('Y')?>
             <br>
-            <?php if ($this->login_model->isLogin()):?>
+            <?php if ($this->auth->is_authenticated()):?>
                 <a onclick="logout(); return false" href="">
-                    <?=$this->login_model->getInfo('fullname')?> 
+                    <?=$this->auth->user('fullname')?> 
                     (Logout)
                 </a>
                 

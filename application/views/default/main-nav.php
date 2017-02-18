@@ -8,7 +8,7 @@
     <div class="container fluid" style="padding-left:0">
         <div class="navbtn-group navigation">
             <a href="<?=base_url()?>"><span class="glyphicon glyphicon-home" style="padding:0 5px"></span></a>
-            <?php if($this->login_model->isLogin()):?>
+            <?php if($this->auth->is_authenticated()):?>
             <span class="dropdown" href="<?=base_url()?>inout/"> <!-- For navigation color -->
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
                     <span class="glyphicon glyphicon-edit" style="padding:0 5px">
