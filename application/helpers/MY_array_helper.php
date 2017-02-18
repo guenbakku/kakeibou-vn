@@ -45,5 +45,26 @@ function array_gen_key($arr=null, $key=null, $val=null){
     
 }
 
+/*
+ *----------------------------------------------------------------------------------------------
+ * Update key của array_1 bằng key của array_2.
+ * Chỉ update những key có mặt ở cả array_1 và array_2.
+ * Những key có ở array_1 nhưng không có ở array_2 sẽ được giữ nguyên giá trị.
+ *
+ * @param   array: array gốc
+ * @paran   array: array chứa nội dung muốn thay đổi cho array_1
+ *
+ * @return  array: array_1 đã được update 
+ *----------------------------------------------------------------------------------------------
+ */
+function array_update($array1, $array2) {
+    foreach ($array1 as $key => $val) {
+        if (isset($array2[$key])) {
+            $array1[$key] = $array2[$key];
+        }
+    }
+    return $array1;
+}
+
 /* End of file MY_date_helper.php */
 /* Location: ./application/helpers/MY_date_helper.php */

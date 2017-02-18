@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('template', 'flash', 'referer');
+$autoload['libraries'] = array('appexception', 'template', 'flash', 'referer');
 
 /*
 | -------------------------------------------------------------------
@@ -129,7 +129,7 @@ $autoload['language'] = array();
 $autoload['model'] = array('constants', 
                            'app_model', 
                            'setting_model', 
-                           'login_model', 
+                           'auth_model', 
                            'inout_model', 
                            'viewlist_model', 
                            'account_model', 

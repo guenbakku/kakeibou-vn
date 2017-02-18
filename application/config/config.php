@@ -366,7 +366,7 @@ $config['encryption_key'] = hex2bin('20621a2acfaa2b50f927398a454b5382');
 */
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'bhcb_session';
-$config['sess_expiration'] = 7200;
+$config['sess_expiration'] = 0;
 $config['sess_save_path'] = FCPATH.'application/session';
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;

@@ -5,11 +5,6 @@ class MY_Controller extends CI_Controller {
     
     protected $ctrl_base_url = '';
     
-    // Những link có thể truy cập mà không cần đăng nhập
-    protected $allowable_uris = array(
-                                    'user/login',
-                                );
-    
     public function __construct()
     {   
         parent::__construct();
@@ -17,11 +12,10 @@ class MY_Controller extends CI_Controller {
         $this->output->set_header('Access-Control-Allow-Origin: '.base_url());
         $this->output->remove_headers(array('X-Powered-By'));
         
+        $this->load->library('auth');
         // Nếu chưa đăng nhập thì chuyển về trang login
-        if (!in_array($this->uri->uri_string(), $this->allowable_uris)){
-            if (!$this->login_model->isLogin()){
-                redirect(base_url().Login_model::LOGIN_URL);
-            }
+        if (!$this->auth->is_allowed() && !$this->auth->is_authenticated()){
+            redirect(base_url($this->auth->login_url()));
         }
     }
     

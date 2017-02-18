@@ -58,7 +58,7 @@ class Inout_model extends App_Model {
     {   
         $data['cash_flow']  = $type;
         $data['created_on'] = $data['modified_on'] = date('Y-m-d H:i:s');
-        $data['created_by'] = $data['modified_by'] = $this->login_model->getInfo('id');
+        $data['created_by'] = $data['modified_by'] = $this->auth->user('id');
         
         $this->db->trans_start();
         foreach ($this->setPairAddData($type, $data) as $item){
@@ -76,7 +76,7 @@ class Inout_model extends App_Model {
         }
         
         $data['modified_on'] = date('Y-m-d H:i:s');
-        $data['modified_by'] = $this->login_model->getInfo('id');
+        $data['modified_by'] = $this->auth->user('id');
         
         $this->db->trans_start();
         foreach ($pair_data as $id => $inout_type_id){

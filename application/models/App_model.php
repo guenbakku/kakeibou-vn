@@ -7,7 +7,10 @@ class App_model extends CI_Model {
     protected $columnNamesforSelectTagMethod = array('id', 'name');
     
     // Chứa lỗi xảy ra trong quá trình thực thi các model con
-    protected $error = array();
+    protected $error = [];
+    
+    // Chứa những settings cần thiết cho model
+    protected $settings = [];
     
     public function __construct()
     {
@@ -16,13 +19,30 @@ class App_model extends CI_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Lưu lại lỗi xảy ra 
+     * Merge settings của model với thông tin được truyền vào 
      *
+     * @param   array: setting
+     * @return  object: $this
      *--------------------------------------------------------------------
      */
-    public function setError($msg)
+    public function config(array $settings)
+    {   
+        $this->settings = array_update($this->settings, $settings);
+        return $this;
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Lưu lại lỗi xảy ra 
+     *
+     * @param   string: thông tin muốn lưu
+     * @return  object: $this
+     *--------------------------------------------------------------------
+     */
+    protected function setError(string $msg)
     {
         $this->error[] = $msg;
+        return $this;
     }
     
     /*
@@ -35,7 +55,7 @@ class App_model extends CI_Model {
      * @return  string/array
      *--------------------------------------------------------------------
      */
-    public function getError($glue='<br>')
+    public function getError(string $glue='<br>')
     {
         return $glue===false? $this->error : implode($glue, $this->error);
     }
