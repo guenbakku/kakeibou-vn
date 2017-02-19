@@ -17,6 +17,44 @@ class User extends MY_Controller {
         call_user_func([$this, 'edit_'.$mode]);
     }
     
+    /*
+     *--------------------------------------------------------------------
+     * Thay đổi thông tin cá nhân của user
+     *
+     * @param   void
+     * @return  void
+     *--------------------------------------------------------------------
+     */
+    public function edit_info()
+    {
+        // Do edit info
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            try {
+                $this->load->library('form_validation');
+                if ($this->form_validation->run() === false){
+                    throw new AppException(validation_errors());
+                }
+                
+                $user_id = $this->auth->user('id');
+                $this->user_model->edit($user_id, $this->input->post());
+                $this->auth->update_session();
+                
+                $this->flash->success('Thay đổi thông tin cá nhân thành công');
+            }
+            catch (AppException $e) {
+                $this->flash->error($e->getMessage());
+            }
+        }
+
+        $_POST = $this->auth->user();
+        $view_data['title'] = 'Thông tin cá nhân';
+        $view_data['url'] = [
+            'back' => base_url('setting'),
+        ];
+        $this->template->write_view('MAIN', 'user/edit_info', $view_data);
+        $this->template->render();
+    }
+    
     public function edit_password()
     {
         // Do edit password

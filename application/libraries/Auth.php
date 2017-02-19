@@ -274,17 +274,38 @@ class Auth {
     }
     
     /*
-    *--------------------------------------------------------------------
+     *----------------------------------------------------------------------
+     * Update lại thông tin user lưu trong session hiện tại.
+     * Sử dụng user_id trong session để lấy thông tin user mới từ db
+     *
+     * @param   void
+     * @return  void
+     *---------------------------------------------------------------------
+     */
+    public function update_session() 
+    {
+        if ($this->is_authenticated()) {
+            $this->user = $this->get_user_from_db(['users.id' => $this->user('id')]);
+            $this->token = $this->user('token');
+            $this->set_session();
+        }
+    }
+    
+    /*
+    *----------------------------------------------------------------------
      * Xóa tất cả token của user hiện có trong db trừ token của session hiện tại.
      * Chủ yếu sử dụng khi thay đổi mật khẩu đăng nhập.
      *
      * @param   int: user id    
      * @param   void
-     *--------------------------------------------------------------------ư
+     *---------------------------------------------------------------------
      */
-    public function delete_all_other_tokens_of_user(int $user_id)
+    public function delete_all_other_tokens_of_user(int $user_id = null)
     {
         if ($this->is_authenticated()) {
+            if ($user_id === null) {
+                $user_id = $this->user('id');
+            }
             $current_token = $this->user('token');
             $this->CI->db->where('token !=', $current_token)
                          ->where('user_id', $user_id)
