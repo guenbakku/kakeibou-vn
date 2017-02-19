@@ -8,13 +8,21 @@ class User extends MY_Controller {
         redirect(base_url($this->auth->login_url()));
 	}
     
-    public function edit(string $mode)
+    /*
+     *--------------------------------------------------------------------
+     * Dispatcher của những method edit bên dưới
+     *
+     * @param   string: mode
+     * @return  void
+     *--------------------------------------------------------------------
+     */
+    public function edit(string $method)
     {   
-        $method = 'edit_'.$mode;
+        $method = 'edit_'.$method;
         if (!is_callable([$this, $method])) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
-        call_user_func([$this, 'edit_'.$mode]);
+        call_user_func([$this, $method]);
     }
     
     /*
@@ -54,7 +62,15 @@ class User extends MY_Controller {
         $this->template->write_view('MAIN', 'user/edit_info', $view_data);
         $this->template->render();
     }
-    
+
+    /*
+     *--------------------------------------------------------------------
+     * Thay đổi mật khẩu của user
+     *
+     * @param   void
+     * @return  void
+     *--------------------------------------------------------------------
+     */
     public function edit_password()
     {
         // Do edit password
