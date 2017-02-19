@@ -82,7 +82,7 @@ class User extends MY_Controller {
                 }
                 $new_password = $this->input->post('new_password');
                 $user_id = $this->auth->user('id');
-                $this->user_model->change_password($new_password, $user_id);
+                $this->user_model->edit($user_id, ['password' => $new_password]);
                 $this->auth->delete_all_other_tokens_of_user($user_id);
                 
                 $this->flash->success('Thay đổi mật khẩu thành công');

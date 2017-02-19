@@ -40,27 +40,16 @@ class User_model extends App_Model {
     public function edit(int $user_id, array $data)
     {
         unset($data['id']);
+        
+        // Hash password
+        if (isset($data['password'])) {
+            $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+        }
+        
         $this->db
              ->set($data)
              ->where('id', $user_id)
              ->update(self::TABLE);
-    }
-    
-    /*
-     *--------------------------------------------------------------------
-     * Thay đổi mật khẩu của user
-     *
-     * @param   string: mật khẩu mới
-     * @param   int: user id
-     * @return  void
-     *--------------------------------------------------------------------
-     */
-    public function change_password(string $password, int $user_id)
-    {
-        $password_hash = password_hash($password, PASSWORD_DEFAULT);
-        $this->db->set('password', $password_hash)
-                 ->where('id', $user_id)
-                 ->update(self::TABLE);
     }
     
     /*
