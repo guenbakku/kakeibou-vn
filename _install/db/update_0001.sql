@@ -12,7 +12,7 @@ CREATE TABLE `remember` (
   `user_agent` varchar(512) DEFAULT NULL,
   `expire_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `modified_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `remember` ADD PRIMARY KEY (`token`);
 ALTER TABLE `remember` ADD INDEX(`user_id`);
