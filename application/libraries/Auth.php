@@ -21,12 +21,17 @@ class Auth {
     public $error = '';
     
     protected $settings = [
-        'cookie_name'       => 'bhcb_auth',
-        'session_name'      => 'bhcb_auth',
-        'user_table'        => 'users',
-        'remember_table'    => 'remember',
-        'remember_duration' => 31536000,
-        'login_url'         => 'user/login',
+        'cookie_name'        => 'bhcb_auth',
+        'session_name'       => 'bhcb_auth',
+        'user_table'         => 'users',
+        'remember_table'     => 'remember',
+        'login_url'          => 'user/login',
+        
+        // Thời gian hiệu lực tối đa của token.
+        // Nếu khi đăng nhập có chọn "remember" thì thời gian hiệu lực
+        // của token sẽ là giá trị này.
+        // Ngược lại token sẽ có hiệu lực trong 1 ngày.
+        'token_duration_max' => 31536000,
         
         // Số lần nhập sai mật khẩu liên tiếp tối đa.
         // Nếu số lần nhập sai mật khẩu liên tiếp vượt quá giá trị này, 
@@ -97,20 +102,19 @@ class Auth {
     
     /*
      *--------------------------------------------------------------------
-     * Thực hiện logout
+     * Destroy tất cả thông tin đăng nhập của session hiện tại.
+     * Chủ yếu sử dụng khi muốn logout.
      *
      * @param   void
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function logout()
+    public function destroy()
     {
-        if ($this->is_authenticated()) {
-            $session_name = $this->settings['session_name'];
-            $token = $this->CI->session->userdata($session_name)['token'];
-            $this->CI->db->where('token', $token)->delete($this->settings['remember_table']);
-            $this->CI->session->sess_destroy();
-        }
+        $session_name = $this->settings['session_name'];
+        $token = $this->CI->session->userdata($session_name)['token'];
+        $this->CI->db->where('token', $token)->delete($this->settings['remember_table']);
+        $this->CI->session->sess_destroy();
     }
     
     /*
@@ -153,13 +157,12 @@ class Auth {
      */
     public function try_to_remember()
     {
-        if ($this->is_authenticated()){
+        if ($this->is_authenticated() === true){
             return null;
         }
         
         $token = $this->CI->input->cookie($this->settings['cookie_name']);
-        
-        if (!$this->verify_token($token)){
+        if ($this->is_valid_token($token) === false){
             return null;
         }
         
@@ -193,7 +196,7 @@ class Auth {
 
     /*
      *--------------------------------------------------------------------
-     * Kiểm tra user đã đăng nhập hay chưa
+     * Kiểm tra user đã được chứng thực hay chưa (đã đăng nhập hay chưa)
      *
      * @param   void
      * @return  boolean
@@ -202,15 +205,22 @@ class Auth {
     public function is_authenticated()
     {
         $session_name = $this->settings['session_name'];
-        if ($this->CI->session->userdata($session_name) !== null) {
-            return true;
+        if ($this->CI->session->userdata($session_name) == null) {
+            return false;
         }
-        return false;
+        
+        $token = $this->user('token');
+        if ($this->is_valid_token($token) === false) {
+            return false;
+        }
+        
+        return true;
     }
     
     /*
      *--------------------------------------------------------------------
-     * Kiểm tra controller & action hiện tại có yêu cầu phải đăng nhập hay không
+     * Kiểm tra controller & action hiện tại có bắt buộc phải đăng nhập
+     * mới access được hay không.
      *
      * @param   void
      * @return  bool
@@ -264,6 +274,25 @@ class Auth {
     }
     
     /*
+    *--------------------------------------------------------------------
+     * Xóa tất cả token của user hiện có trong db trừ token của session hiện tại.
+     * Chủ yếu sử dụng khi thay đổi mật khẩu đăng nhập.
+     *
+     * @param   int: user id    
+     * @param   void
+     *--------------------------------------------------------------------ư
+     */
+    public function delete_all_other_tokens_of_user(int $user_id)
+    {
+        if ($this->is_authenticated()) {
+            $current_token = $this->user('token');
+            $this->CI->db->where('token !=', $current_token)
+                         ->where('user_id', $user_id)
+                         ->delete($this->settings['remember_table']);
+        }
+    }
+    
+    /*
      *--------------------------------------------------------------------
      * Lấy thông tin user đăng nhập từ token
      *
@@ -283,6 +312,23 @@ class Auth {
                          ->join($this->settings['remember_table'], 'users.id = remember.user_id', 'left')
                          ->limit(1)
                          ->get()->row_array();
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Trả về thời gian hiệu lục của token
+     *
+     * @param   void
+     * @return  int
+     *--------------------------------------------------------------------
+     */
+    protected function token_duration(): int
+    {
+        if ($this->auth_info['remember'] === true) {
+            return $this->settings['token_duration_max'];
+        } else {
+            return 86400; // 1 ngày
+        }
     }
     
     /*
@@ -313,13 +359,12 @@ class Auth {
         $new_token = $this->gen_token();
         $now = time();
         $data = [
-            'token'      => $new_token,
-            'user_id'    => $user_id,
-            'user_agent' => $this->CI->input->user_agent(),
-            'expire_on'  => $this->auth_info['remember'] === false
-                            ? date('Y-m-d H:i:s', $now) 
-                            : date('Y-m-d H:i:s', $now + $this->settings['remember_duration']),
-            'created_on' => date('Y-m-d H:i:s', $now),
+            'token'       => $new_token,
+            'user_id'     => $user_id,
+            'user_agent'  => $this->CI->input->user_agent(),
+            'expire_on'   => date('Y-m-d H:i:s', $now + $this->token_duration()),
+            'created_on'  => date('Y-m-d H:i:s', $now),
+            'modified_on' => date('Y-m-d H:i:s', $now),
         ];
         $this->CI->db->insert($this->settings['remember_table'], $data);
         return $new_token;
@@ -339,11 +384,11 @@ class Auth {
         $this->CI->db
                  ->set('token', $new_token)
                  ->set('user_agent', $this->CI->input->user_agent())
+                 ->set('modified_on', date('Y-m-d H:i:s'))
                  ->where('token', $old_token)
                  ->update($this->settings['remember_table']);
         return $new_token;
     }
-     
     
     /*
      *--------------------------------------------------------------------
@@ -378,7 +423,7 @@ class Auth {
      * @return  bool
      *--------------------------------------------------------------------
      */
-    protected function verify_token(?string $token): bool
+    protected function is_valid_token(?string $token): bool
     {
         if (empty($token)) {
             return false;
@@ -437,7 +482,7 @@ class Auth {
         $this->CI->input->set_cookie(array(
             'name'      => $this->settings['cookie_name'],
             'value'     => $this->token,
-            'expire'    => $this->settings['remember_duration'],
+            'expire'    => $this->settings['token_duration_max'],
         ));
     }
 }

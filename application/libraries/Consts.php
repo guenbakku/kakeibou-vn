@@ -30,4 +30,11 @@ class Consts {
     const SUCC_ADD_CATEGORY = 'Thêm danh mục thành công';
     
     const SUCC_DEL_CATEGORY = 'Xóa danh mục thành công';
+    
+    const LABEL = [
+        'submit' => 'Nhập',
+        'edit'   => 'Sửa',
+        'delete' => 'Xóa',
+        'login'  => 'Đăng nhập',
+    ];
 }

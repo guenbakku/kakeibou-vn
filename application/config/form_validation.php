@@ -3,6 +3,25 @@
 $config = array(
     
     // Validation for Login
+    'user/edit/password' => array(
+        array(
+            'field' => 'old_password',
+            'label' => 'Mật khẩu hiện tại',
+            'rules' => 'required|callback__password_matched',
+        ),
+        array(
+            'field' => 'new_password',
+            'label' => 'Mật khẩu mới',
+            'rules' => 'required|min_length[6]',
+        ),
+        array(
+            'field' => 'new_password_confirm',
+            'label' => 'Mật khẩu mới (xác nhận)',
+            'rules' => 'required|min_length[6]|matches[new_password]',
+        ),
+    ),
+    
+    // Validation for Login
     'user/login' => array(
         array(
             'field' => 'username',
@@ -12,7 +31,7 @@ $config = array(
         array(
             'field' => 'password',
             'label' => 'Password',
-            'rules' => 'required|max_length[32]|xss_clean|htmlspecialchars',
+            'rules' => 'required',
         ),
     ),
     
