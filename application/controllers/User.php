@@ -84,6 +84,7 @@ class User extends MY_Controller {
                 $user_id = $this->auth->user('id');
                 $this->user_model->edit($user_id, ['password' => $new_password]);
                 $this->auth->delete_all_other_tokens_of_user($user_id);
+                $this->form_validation->reset_field_data();
                 
                 $this->flash->success('Thay đổi mật khẩu thành công');
             }
