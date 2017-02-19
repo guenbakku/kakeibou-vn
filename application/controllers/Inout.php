@@ -12,7 +12,7 @@ class Inout extends MY_Controller {
 	public function add($type=null)
     {   
         if (!$cashFlowName = $this->inout_model->getCashFlowName($type)){
-            show_error(Constants::ERR_BAD_REQUEST);
+            show_error(Consts::ERR_BAD_REQUEST);
         }
 
         if (!empty($this->input->post())){
@@ -25,7 +25,7 @@ class Inout extends MY_Controller {
                 
                 $this->inout_model->add($type, $this->input->post());
                 
-                $this->flash->success(sprintf(Constants::SUCC_ADD_INOUT_RECORD, $this->inout_model->getCashFlowName($type)));
+                $this->flash->success(sprintf(Consts::SUCC_ADD_INOUT_RECORD, $this->inout_model->getCashFlowName($type)));
                 
                 // Xét xem có nhập tiếp hay không
                 if ((bool)$this->input->get('continue') === false){
@@ -60,13 +60,13 @@ class Inout extends MY_Controller {
     public function edit($id=null)
     {
         if (!is_numeric($id)){
-            show_error(Constants::ERR_BAD_REQUEST);
+            show_error(Consts::ERR_BAD_REQUEST);
         }
         
         $ioRecord = $this->inout_model->get($id);
         
         if (empty($ioRecord)){
-            show_error(Constants::ERR_NOT_FOUND);
+            show_error(Consts::ERR_NOT_FOUND);
         }
         
         if (!empty($this->input->post())){
@@ -83,7 +83,7 @@ class Inout extends MY_Controller {
                 }
                 
                 $this->inout_model->edit($id, $this->input->post());
-                $this->flash->success(Constants::SUCC_EDIT_INOUT_RECORD);
+                $this->flash->success(Consts::SUCC_EDIT_INOUT_RECORD);
                 return redirect($this->referer->getSession());
             }
             catch (Exception $e){
@@ -123,11 +123,11 @@ class Inout extends MY_Controller {
     public function del($id=null)
     {
         if (!is_numeric($id)){
-            show_error(Constants::ERR_BAD_REQUEST);
+            show_error(Consts::ERR_BAD_REQUEST);
         }
         
         $this->inout_model->del($id);
-        $this->flash->success(Constants::SUCC_DELETE_INOUT_RECORD);
+        $this->flash->success(Consts::SUCC_DELETE_INOUT_RECORD);
         redirect($this->referer->getSession());
     }
     

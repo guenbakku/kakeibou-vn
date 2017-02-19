@@ -8,6 +8,21 @@ class User extends MY_Controller {
         redirect(base_url($this->auth->login_url()));
 	}
     
+    public function edit(string $mode)
+    {   
+        $method = 'edit_'.$mode;
+        if (!is_callable([$this, $method])) {
+            show_error(Consts::ERR_BAD_REQUEST);
+        }
+        call_user_func([$this, 'edit_'.$mode]);
+    }
+    
+    public function edit_password()
+    {
+        d($this->router->fetch_class());
+        d($this->router->fetch_method());
+    }
+    
     public function login()
     {
         // Already Login

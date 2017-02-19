@@ -90,7 +90,7 @@ class Category_model extends App_Model {
                           ->count_all_results(self::TABLE);
 
         if ($count > 0){
-            throw new Exception(Constants::ERR_CATEGORY_NOT_EMPTY);
+            throw new Exception(Consts::ERR_CATEGORY_NOT_EMPTY);
         }
         
         $this->db->where('id', $id)->delete(self::TABLE);

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Constants extends CI_Model {
+class Consts {
     
     const VERSION = '3.0';
     

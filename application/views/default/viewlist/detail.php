@@ -60,7 +60,7 @@
             <?php endfor ?>
         <?php else: ?>
             <div class="panel-body">
-                <?=Constants::ERR_NOT_FOUND?>
+                <?=Consts::ERR_NOT_FOUND?>
             </div>
         <?php endif ?>
     </div>

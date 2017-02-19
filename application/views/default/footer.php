@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container">
         <span class="text-muted">
-            BH Cash Book V<?=Constants::VERSION?> &copy; <?=date('Y')?>
+            BH Cash Book V<?=Consts::VERSION?> &copy; <?=date('Y')?>
             <br>
             <?php if ($this->auth->is_authenticated()):?>
                 <a onclick="logout(); return false" href="">
