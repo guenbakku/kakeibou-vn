@@ -16,7 +16,7 @@ class Category extends MY_Controller {
         if(!empty($this->input->post()))
         {
             $this->category_model->editOrderNo($this->input->post('categories'));
-            $this->flash->success(Constants::SUCC_EDIT_CATEGORY_ORDER);
+            $this->flash->success(Consts::SUCC_EDIT_CATEGORY_ORDER);
             return redirect($this->referer->get());
         }
         
@@ -54,7 +54,7 @@ class Category extends MY_Controller {
                 }
                 
                 $this->category_model->add($this->input->post());
-                $this->flash->success(Constants::SUCC_ADD_CATEGORY);
+                $this->flash->success(Consts::SUCC_ADD_CATEGORY);
                 return redirect($this->referer->getSession());
             }
             catch (Exception $e) {
@@ -83,7 +83,7 @@ class Category extends MY_Controller {
     public function edit($id=null)
     {
         if (!is_numeric($id)){
-            show_error(Constants::ERR_BAD_REQUEST);
+            show_error(Consts::ERR_BAD_REQUEST);
         }
         
         if (!empty($this->input->post())){
@@ -101,7 +101,7 @@ class Category extends MY_Controller {
                 }
                 
                 $this->category_model->edit($id, $this->input->post());
-                $this->flash->success(Constants::SUCC_EDIT_CATEGORY);
+                $this->flash->success(Consts::SUCC_EDIT_CATEGORY);
                 return redirect($this->referer->getSession());
             }
             catch (Exception $e)
@@ -113,7 +113,7 @@ class Category extends MY_Controller {
             $category_data = $this->category_model->get($id);
             
             if (empty($category_data)){
-                show_error(Constants::ERR_NOT_FOUND);
+                show_error(Consts::ERR_NOT_FOUND);
             }
             $_POST = $category_data;
             
@@ -138,11 +138,11 @@ class Category extends MY_Controller {
     public function del($id)
     {
         if (!is_numeric($id)){
-            show_error(Constants::ERR_BAD_REQUEST);
+            show_error(Consts::ERR_BAD_REQUEST);
         }
         
         $this->category_model->del($id);
-        $this->flash->success(Constants::SUCC_DEL_CATEGORY);
+        $this->flash->success(Consts::SUCC_DEL_CATEGORY);
         return redirect($this->referer->getSession());
     }
     

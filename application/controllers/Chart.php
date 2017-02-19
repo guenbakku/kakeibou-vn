@@ -68,11 +68,11 @@ class Chart extends MY_Controller {
     public function pie(?string $date = null)
     {
         if (empty($date)) {
-            show_error(Constants::ERR_BAD_REQUEST);
+            show_error(Consts::ERR_BAD_REQUEST);
         }
         
         if (empty($range = boundary_date($date))){
-            show_error(Constants::ERR_BAD_REQUEST);
+            show_error(Consts::ERR_BAD_REQUEST);
         }
         
         // Lấy thông tin từ request parameter

@@ -22,7 +22,7 @@ class Auth_model extends App_Model {
     {
         try {
             if (empty($username) || strlen($username) > 32){
-                throw new AppException(Constants::ERR_LOGIN_INFO_INVALID);
+                throw new AppException(Consts::ERR_LOGIN_INFO_INVALID);
             }
             
             $this->user = $this->db->select('id, username, password, fullname, locked_on, lock_duration, login_attemps')
@@ -33,7 +33,7 @@ class Auth_model extends App_Model {
                             
             // Tài khoản không tồn tại
             if (empty($this->user)) {
-                throw new AppException(Constants::ERR_LOGIN_INFO_INVALID);
+                throw new AppException(Consts::ERR_LOGIN_INFO_INVALID);
             }
             
             // Tài khoản bị khóa
@@ -41,14 +41,14 @@ class Auth_model extends App_Model {
                 $locked_to = strtotime($this->user['locked_on']) + $this->user['lock_duration'];
                 $now = time();
                 if ($locked_to > $now) {
-                    throw new AppException(sprintf(Constants::ERR_ACCOUNT_LOCKED, (int)(($locked_to - $now) / 60)));
+                    throw new AppException(sprintf(Consts::ERR_ACCOUNT_LOCKED, (int)(($locked_to - $now) / 60)));
                 }
             }
             
             // Password không match
             if (!password_verify($password, $this->user['password'])) {
                 $this->lockAccount();
-                throw new AppException(Constants::ERR_LOGIN_INFO_INVALID);
+                throw new AppException(Consts::ERR_LOGIN_INFO_INVALID);
             }
             
             $this->resetLockAccount();

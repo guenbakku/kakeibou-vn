@@ -16,13 +16,13 @@ class Setting extends MY_Controller {
     public function edit($item)
     {
         if (empty($data = $this->setting_model->get($item))){
-            show_error(Constants::ERR_BAD_REQUEST);
+            show_error(Consts::ERR_BAD_REQUEST);
         }
         
         if (!empty($this->input->post())){
 
             $this->setting_model->edit($this->input->post());
-            $this->flash->success(Constants::SUCC_EDIT_SETTING);
+            $this->flash->success(Consts::SUCC_EDIT_SETTING);
             return redirect($this->referer->getSession());
         }
         else {

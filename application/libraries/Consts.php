@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Constants extends CI_Model {
+class Consts {
     
     const VERSION = '3.0';
     
@@ -30,4 +30,11 @@ class Constants extends CI_Model {
     const SUCC_ADD_CATEGORY = 'Thêm danh mục thành công';
     
     const SUCC_DEL_CATEGORY = 'Xóa danh mục thành công';
+    
+    const LABEL = [
+        'submit' => 'Nhập',
+        'edit'   => 'Sửa',
+        'delete' => 'Xóa',
+        'login'  => 'Đăng nhập',
+    ];
 }

@@ -9,9 +9,10 @@ DROP TABLE IF EXISTS `remember`;
 CREATE TABLE `remember` (
   `token` varchar(40) NOT NULL,
   `user_id` TINYINT(4) NOT NULL,
+  `user_agent` varchar(512) DEFAULT NULL,
   `expire_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `user_agent` varchar(512) DEFAULT NULL
+  `modified_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `remember` ADD PRIMARY KEY (`token`);
 ALTER TABLE `remember` ADD INDEX(`user_id`);

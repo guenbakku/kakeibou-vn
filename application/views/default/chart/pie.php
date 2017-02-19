@@ -68,7 +68,7 @@
     <?php else: ?>
         <div class="panel panel-default">
             <div class="panel-body">
-                <?=Constants::ERR_NOT_FOUND?>
+                <?=Consts::ERR_NOT_FOUND?>
             </div>
         </div>
     <?php endif ?>

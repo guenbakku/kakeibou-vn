@@ -72,7 +72,7 @@ class Inout_model extends App_Model {
         $pair_data = $this->getPairId($id);
         
         if ($pair_data === false){
-            throw new Exception($Constants::ERR_BAD_REQUEST);
+            throw new Exception(Consts::ERR_BAD_REQUEST);
         }
         
         $data['modified_on'] = date('Y-m-d H:i:s');
@@ -91,7 +91,7 @@ class Inout_model extends App_Model {
         $pair_data = $this->getPairId($id);
         
         if ($pair_data === false){
-            throw new Exception($Constants::ERR_BAD_REQUEST);
+            throw new Exception(Consts::ERR_BAD_REQUEST);
         }
         
         $this->db->trans_start();
