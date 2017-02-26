@@ -127,7 +127,7 @@
                     </div>
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Tìm</button>
+                <button type="submit" class="btn btn-primary"><?=Consts::LABEL['search']?></button>
                 <a href="" onclick="toggle_collapse_form(); return false">Tìm chi tiết</a>
             </div>
         </div>

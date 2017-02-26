@@ -27,7 +27,7 @@
                         </div>
                     <?php endforeach ?>
                 <?php endif ?>
-                <button type="submit" class="btn btn-primary">Nhập</button>
+                <button type="submit" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
             </div>
         </div>
     </form>

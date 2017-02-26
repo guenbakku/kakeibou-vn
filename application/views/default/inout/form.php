@@ -142,12 +142,12 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                         )
                     )?>
                 </div>
-                <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary">Nhập</button>
+                <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
                 <?php if ($this->uri->segment(2) == 'add'): ?>
-                    <button type="button" onClick="Cashbook.submitbutton(this, 'continue')" class="btn btn-primary">Nhập & Tiếp tục</button>
+                    <button type="button" onClick="Cashbook.submitbutton(this, 'continue')" class="btn btn-primary"><?=Consts::LABEL['submit_continue']?></button>
                 <?php endif ?>
                 <?php if ($this->uri->segment(2) == 'edit'): ?>
-                    <button type="button" onClick="Cashbook.submitbutton(this, 'delete')" class="btn btn-danger pull-right">Xóa</button>
+                    <button type="button" onClick="Cashbook.submitbutton(this, 'delete')" class="btn btn-danger pull-right"><?=Consts::LABEL['delete']?></button>
                 <?php endif ?>
             </div>
         </div>

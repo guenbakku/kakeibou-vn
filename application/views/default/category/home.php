@@ -83,7 +83,7 @@
             <table class="table table-bordered" style="border-top:1px solid; border-color:inherit">
                 <tr>
                     <td>
-                        <input type="submit" class="btn btn-primary" value="Lưu">
+                        <button type="submit" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
                     </td>
                 </tr>
             </table>

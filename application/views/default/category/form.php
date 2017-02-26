@@ -56,9 +56,9 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
                     </label>
                 </div>
                 
-                <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary">Nhập</button>
+                <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
                 <?php if ($this->router->fetch_method() == 'edit'): ?>
-                    <button type="button" onClick="Cashbook.submitbutton(this, 'delete')" class="btn btn-danger pull-right">Xóa</button>
+                    <button type="button" onClick="Cashbook.submitbutton(this, 'delete')" class="btn btn-danger pull-right"><?=Consts::LABEL['delete']?></button>
                 <?php endif ?>
                 
             </div>

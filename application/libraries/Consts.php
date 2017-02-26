@@ -32,9 +32,11 @@ class Consts {
     const SUCC_DEL_CATEGORY = 'Xóa danh mục thành công';
     
     const LABEL = [
-        'submit' => 'Nhập',
-        'edit'   => 'Sửa',
-        'delete' => 'Xóa',
-        'login'  => 'Đăng nhập',
+        'submit'            => 'Nhập',
+        'submit_continue'   => 'Nhập và tiếp tục',
+        'edit'              => 'Sửa',
+        'delete'            => 'Xóa',
+        'login'             => 'Đăng nhập',
+        'search'            => 'Tìm',
     ];
 }
