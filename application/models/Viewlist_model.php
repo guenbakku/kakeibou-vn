@@ -161,9 +161,9 @@ class Viewlist_model extends Inout_Model {
      */
     public function getLiquidOutgoStatus(): array
     {
-        $month_outgo_plans = current($this->setting_model->get('month_outgo_plans', 'value'));
+        $month_estimated_outgo = $this->category_model->get_month_estimated_outgo()['liquid'];
         
-        if ($month_outgo_plans < 0){
+        if ($month_estimated_outgo < 0){
             return false;
         }
         
@@ -186,17 +186,20 @@ class Viewlist_model extends Inout_Model {
         // Gắn dữ liệu vào vị trí tương ứng và thêm tỷ lệ phần trăm
         return array_map(
             function ($item){
-                $item[2] = $item[1]!=0? floor($item[0]/$item[1]*100) : 0;
+                $remain = $item['estimated'] - $item['elapsed'];
+                $item['remain'] = $remain > 0? $remain : 0;
+                $item['elapsed_percent'] = $item['estimated'] != 0? floor($item['elapsed']/$item['estimated']*100) : 0;
+                $item['remain_percent'] = $item['estimated'] != 0? floor($item['remain']/$item['estimated']*100) : 0;
                 return $item;
             }
             , array(
                 'today' => array(
-                    - $outgo['liqid_outgo_today'],
-                    floor(($month_outgo_plans + $outgo['liqid_outgo_to_now'] - $outgo['liqid_outgo_today'])/$remaining_days),
+                    'elapsed'   => - $outgo['liqid_outgo_today'],
+                    'estimated' => floor(($month_estimated_outgo + $outgo['liqid_outgo_to_now'] - $outgo['liqid_outgo_today'])/$remaining_days),
                 ),
                 'month' => array(
-                    - $outgo['liqid_outgo_to_now'],
-                    $month_outgo_plans,
+                    'elapsed'   => - $outgo['liqid_outgo_to_now'],
+                    'estimated' => $month_estimated_outgo,
                 )
             )
         );

@@ -15,19 +15,4 @@ class Home extends MY_Controller {
 		$this->template->write_view('MAIN', 'home/home', $view_data);
         $this->template->render();
 	}
-    
-    public function test()
-    {   
-        $this->load->library('auth');
-        $this->auth->set_verify_info(['username'=>'test', 'password'=>'test']);
-        d($this->auth->authenticate());
-        d($this->auth->add_token_to_db(1));
-        // d($this->auth->is_authenticated());
-    }
-    
-    public function test2()
-    {
-        d(random_string('sha1'));
-        d($this->session->userdata());
-    }
 }

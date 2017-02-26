@@ -55,18 +55,6 @@
                     <td style="width:30px" class="handle">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </td>
-                    <?php if ($inout_type_id == 2): ?>
-                    <td style="width:30px">
-                        <input type="hidden" value="0" name="<?=$field_name = 'categories['.$item['id'].'][month_fixed_money]'?>">
-                        <?=form_checkbox(
-                            array(
-                                'name'      => $field_name,
-                                'value'     => '1',
-                                'checked'   => (bool)$item['month_fixed_money'],
-                            )
-                        )?>
-                    </td>
-                    <?php endif ?>
                     <td>
                         <div class="pull-right">
                             <span class="glyphicon glyphicon-menu-right"></span>

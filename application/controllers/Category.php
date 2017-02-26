@@ -14,7 +14,8 @@ class Category extends MY_Controller {
 	public function index()
     {   
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
-            $this->category_model->editOrderNo($this->input->post('categories'));
+            $data = $this->input->post('categories');
+            $this->category_model->edit_batch($data, 'id');
             $this->flash->success(Consts::SUCC_EDIT_CATEGORY_ORDER);
             return redirect($this->referer->get());
         }
@@ -41,11 +42,50 @@ class Category extends MY_Controller {
         $this->template->render();
 	}
     
+    public function month_estimated_outgo()
+    {   
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            try {
+                $this->load->library('form_validation');
+                $data = $this->input->post('categories');
+                
+                // Validate form
+                foreach($data as $i => $category) {
+                    $this->form_validation->set_rules(
+                        sprintf('categories[%d][month_estimated_inout]', $i),
+                        sprintf('Dự định chi tháng này của %s', $category['name']),
+                        'required|trim|greater_than_equal_to[0]'
+                    );
+                }
+                if ($this->form_validation->run() === false) {
+                    throw new AppException(validation_errors());
+                }
+                
+                $this->category_model->edit_batch($data, 'id');
+                $this->flash->success(Consts::SUCC_EDIT_MONTH_ESTIMATED_OUTGO);
+                return redirect($this->referer->get());
+            }
+            catch (AppException $e) {
+                $this->flash->error($e->getMessage());
+            }
+        }
+        
+        $inout_type_id = array_flip($this->inout_model::$INOUT_TYPE)['Chi'];
+        $view_data['categories'] = $this->category_model->get(null, ['inout_type_id' => $inout_type_id]);
+        $view_data['title'] = 'Dự định chi tháng này';
+        $view_data['url'] = [
+            'form'      => $this->base_url([__FUNCTION__]),
+            'back'      => base_url('setting'),
+        ];
+        $_POST['categories'] = $view_data['categories'];
+        $this->template->write_view('MAIN', 'category/month_estimated_outgo', $view_data);
+        $this->template->render();
+    }
+    
     public function add()
     {
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
-            try 
-            {
+            try {
                 $this->load->library('form_validation');
                 
                 if ($this->form_validation->run() === false) {
@@ -144,5 +184,4 @@ class Category extends MY_Controller {
         $this->flash->success(Consts::SUCC_DEL_CATEGORY);
         return redirect($this->referer->getSession());
     }
-    
 }

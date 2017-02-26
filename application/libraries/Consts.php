@@ -27,6 +27,8 @@ class Consts {
     
     const SUCC_EDIT_CATEGORY_ORDER = 'Sửa danh sách danh mục thành công';
     
+    const SUCC_EDIT_MONTH_ESTIMATED_OUTGO = 'Sửa dự định chi tháng này thành công';
+    
     const SUCC_ADD_CATEGORY = 'Thêm danh mục thành công';
     
     const SUCC_DEL_CATEGORY = 'Xóa danh mục thành công';

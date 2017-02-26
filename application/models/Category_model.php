@@ -49,7 +49,6 @@ class Category_model extends App_Model {
         $add_data = array(
             'name'              => $data['name'],
             'inout_type_id'     => $data['inout_type_id'],
-            'month_fixed_money' => $data['month_fixed_money'],
             'order_no'          => $order_no,
         );
         
@@ -98,27 +97,33 @@ class Category_model extends App_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Sửa lại thứ tự sắp xếp các danh mục
-     *
-     * @param   array   : array([id, order_no], [id, order_no]...)
+     * Edit batch
+     * 
+     * @param   array: dữ liệu muốn update
+     * @param   string: column làm chuẩn
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function editOrderNo(array $arr)
+    public function edit_batch(array $arr, string $primary = 'id')
     {
-        $update_data = array();
-        foreach($arr as $i => $item){
-            if(isset($item['id'], $item['order_no'])){
-                $update_data[] = array(
-                    'id'                => $item['id'],
-                    'order_no'          => $item['order_no'],
-                    'month_fixed_money' => isset($item['month_fixed_money'])
-                                           ? (bool)$item['month_fixed_money'] 
-                                           : false,
-                );
-            }
-        }
-        $this->db->update_batch(self::TABLE, $update_data, 'id');
+        $this->db->update_batch(self::TABLE, $arr, $primary);
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Lấy dữ liệu dự định chi trong tháng này
+     * 
+     * @param   void
+     * @return  array
+     *--------------------------------------------------------------------
+     */
+    public function get_month_estimated_outgo(): array
+    {
+        return $this->db->select("SUM(`month_estimated_inout`) as `total`", false)
+                        ->select("SUM(CASE WHEN `month_fixed_money` = 0 THEN `month_estimated_inout` ELSE 0 END) AS `liquid`", false)
+                        ->select("SUM(CASE WHEN `month_fixed_money` = 1 THEN `month_estimated_inout` ELSE 0 END) AS `fixed`", false)
+                        ->where('inout_type_id', array_flip($this->inout_model::$INOUT_TYPE)['Chi'])
+                        ->get(self::TABLE)->row_array();
     }
     
     /*

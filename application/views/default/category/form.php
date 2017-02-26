@@ -41,21 +41,6 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
                         </div>
                     </div>
                 </div>
-                
-                <div id="month_fixed_money" class="form-group">
-                    <label>
-                        <input type="hidden" value="0" name="<?=$field_name = 'month_fixed_money'?>">
-                        <?=form_checkbox(
-                            array(
-                                'name'      => $field_name,
-                                'value'     => '1',
-                                'checked'   => (bool)set_value($field_name, FALSE),
-                            )
-                        )?>
-                        Khoản chi cố định hàng tháng
-                    </label>
-                </div>
-                
                 <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
                 <?php if ($this->router->fetch_method() == 'edit'): ?>
                     <button type="button" onClick="Cashbook.submitbutton(this, 'delete')" class="btn btn-danger pull-right"><?=Consts::LABEL['delete']?></button>
@@ -65,21 +50,3 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
         </div>
     </form>
 </div>
-
-<script type="text/javascript">
-    
-    display_month_fixed_money_checkbox();
-    $('select[name=inout_type_id]').change(function(){
-        display_month_fixed_money_checkbox();
-    });
-    
-    function display_month_fixed_money_checkbox() {
-        if ($('select[name=inout_type_id]').val() == 2){
-            $('#month_fixed_money').show();
-        }
-        else {
-            $('#month_fixed_money').hide();
-        }
-    }
-    
-</script>

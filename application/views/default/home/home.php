@@ -1,12 +1,31 @@
 <?php 
     $today = date('Y-m-d');
 ?>
+<script type="text/javascript">
+    $(function () {
+        /*
+         * Hiện popover cho phần "Số tiền có thể chi"
+         */
+        $('[data-toggle="popover"]').popover({
+            'html': true,
+            'container': 'body',
+            'placement': 'bottom',
+            'title': 'Chi tiết',
+            'content': function(){
+                var outgo_status = $(this).parent().find('div.outgo-status');
+                return outgo_status.html();
+            },
+        })
+    })
+    
+</script>
+
 <div class="container">
     <?php // Chỉ hiện bảng Chi thực tế/Dự định nếu có setting "Dự định chi tháng này" ?>
-    <?php if ($liquidOutgoStatus['month'][1] > 0): ?>
+    <?php if ($liquidOutgoStatus['month']['estimated'] > 0): ?>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <strong>Chi thực tế / Dự định tháng này</strong><br>
+            <strong>Số tiền có thể chi</strong><br>
             <span class="small text-muted"><em>(Không tính các khoản chi cố định)</em></span>
         </div>
         <table class="table table-bordered">
@@ -15,9 +34,28 @@
                     <a href="<?=$url['detailToday']?>">Hôm nay</a>
                 </th>
                 <td class="text-center">
-                    <div class="progress" style="margin-bottom:0">
-                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['today'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['today'][1]>0? $liquidOutgoStatus['today'][2] : 100?>%">
-                            <span><?=currency($liquidOutgoStatus['today'][0], false)?> / <?=currency($liquidOutgoStatus['today'][1], false)?> (<?=$liquidOutgoStatus['today'][2]?>%)</span>
+                    <div class="sr-only outgo-status">
+                        <table style="min-width:120px">
+                            <tr>
+                                <td>Dự định:</td> 
+                                <td class="text-right"><?=currency($liquidOutgoStatus['today']['estimated'], false)?></td> 
+                            </tr>
+                            <tr>
+                                <td>Đã chi:</td> 
+                                <td class="text-right"><?=currency($liquidOutgoStatus['today']['elapsed'], false)?></td> 
+                            </tr>
+                            <tr>
+                                <td>Còn lại:</td> 
+                                <td class="text-right"><?=currency($liquidOutgoStatus['today']['remain'], false)?></td> 
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="progress" style="margin-bottom:0" data-toggle="popover">
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                            aria-valuenow="<?=$liquidOutgoStatus['today']['remain_percent']?>" 
+                            aria-valuemin="0" aria-valuemax="100" 
+                            style="width: <?=$liquidOutgoStatus['today']['remain_percent']?>%">
+                            <span><?=currency($liquidOutgoStatus['today']['remain'], false)?></span>
                         </div>
                     </div>
                 </td>
@@ -27,9 +65,28 @@
                     <a href="<?=$url['summaryThisMonth']?>">Tháng này</a>
                 </th>
                 <td class="text-center">
-                    <div class="progress" style="margin-bottom:0">
-                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="<?=$liquidOutgoStatus['month'][2]?>" aria-valuemin="0" aria-valuemax="100" style="width: <?=$liquidOutgoStatus['month'][2]?>%">
-                            <span><?=currency($liquidOutgoStatus['month'][0], false)?> / <?=currency($liquidOutgoStatus['month'][1], false)?> (<?=$liquidOutgoStatus['month'][2]?>%)</span>
+                    <div class="sr-only outgo-status">
+                        <table style="min-width:120px">
+                            <tr>
+                                <td>Dự định:</td> 
+                                <td class="text-right"><?=currency($liquidOutgoStatus['month']['estimated'], false)?></td> 
+                            </tr>
+                            <tr>
+                                <td>Đã chi:</td> 
+                                <td class="text-right"><?=currency($liquidOutgoStatus['month']['elapsed'], false)?></td> 
+                            </tr>
+                            <tr>
+                                <td>Còn lại:</td> 
+                                <td class="text-right"><?=currency($liquidOutgoStatus['month']['remain'], false)?></td> 
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="progress" style="margin-bottom:0" data-toggle="popover" >
+                        <div class="progress-bar progress-bar-info" role="progressbar"
+                        aria-valuenow="<?=$liquidOutgoStatus['month']['remain_percent']?>" 
+                        aria-valuemin="0" aria-valuemax="100" 
+                        style="width: <?=$liquidOutgoStatus['month']['remain_percent']?>%">
+                            <span><?=currency($liquidOutgoStatus['month']['remain'], false)?></span>
                         </div>
                     </div>
                 </td>
