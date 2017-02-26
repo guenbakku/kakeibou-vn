@@ -1,0 +1,1 @@
+RENAME TABLE remember TO tokens;

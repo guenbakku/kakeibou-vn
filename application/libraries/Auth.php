@@ -21,11 +21,11 @@ class Auth {
     public $error = '';
     
     protected $settings = [
-        'cookie_name'        => 'bhcb_auth',
-        'session_name'       => 'bhcb_auth',
-        'user_table'         => 'users',
-        'remember_table'     => 'remember',
-        'login_url'          => 'user/login',
+        'cookie_name'   => 'bhcb_token',
+        'session_name'  => 'bhcb_auth',
+        'user_table'    => 'users',
+        'token_table'   => 'tokens',
+        'login_url'     => 'user/login',
         
         // Thời gian hiệu lực tối đa của token.
         // Nếu khi đăng nhập có chọn "remember" thì thời gian hiệu lực
@@ -113,7 +113,7 @@ class Auth {
     {
         $session_name = $this->settings['session_name'];
         $token = $this->CI->session->userdata($session_name)['token'];
-        $this->CI->db->where('token', $token)->delete($this->settings['remember_table']);
+        $this->CI->db->where('token', $token)->delete($this->settings['token_table']);
         $this->CI->session->sess_destroy();
     }
     
@@ -166,7 +166,7 @@ class Auth {
             return null;
         }
         
-        $this->user = $this->get_user_from_db(['remember.token' => $token]);
+        $this->user = $this->get_user_from_db(['tokens.token' => $token]);
         $this->token = $this->renew_token_in_db($token);
         $this->set_session();
         $this->set_cookie();        
@@ -309,7 +309,7 @@ class Auth {
             $current_token = $this->user('token');
             $this->CI->db->where('token !=', $current_token)
                          ->where('user_id', $user_id)
-                         ->delete($this->settings['remember_table']);
+                         ->delete($this->settings['token_table']);
         }
     }
     
@@ -330,7 +330,7 @@ class Auth {
                          ->select($select)
                          ->where($where)
                          ->from($this->settings['user_table'])
-                         ->join($this->settings['remember_table'], 'users.id = remember.user_id', 'left')
+                         ->join($this->settings['token_table'], 'users.id = tokens.user_id', 'left')
                          ->limit(1)
                          ->get()->row_array();
     }
@@ -364,7 +364,7 @@ class Auth {
     {
         $this->CI->db
                  ->where('expire_on <', date('Y-m-d H:i:s'))
-                 ->delete($this->settings['remember_table']);
+                 ->delete($this->settings['token_table']);
     }
     
     /*
@@ -387,7 +387,7 @@ class Auth {
             'created_on'  => date('Y-m-d H:i:s', $now),
             'modified_on' => date('Y-m-d H:i:s', $now),
         ];
-        $this->CI->db->insert($this->settings['remember_table'], $data);
+        $this->CI->db->insert($this->settings['token_table'], $data);
         return $new_token;
     }
     
@@ -407,7 +407,7 @@ class Auth {
                  ->set('user_agent', $this->CI->input->user_agent())
                  ->set('modified_on', date('Y-m-d H:i:s'))
                  ->where('token', $old_token)
-                 ->update($this->settings['remember_table']);
+                 ->update($this->settings['token_table']);
         return $new_token;
     }
     
@@ -426,7 +426,7 @@ class Auth {
                           ->select('token')
                           ->where('token', $token)
                           ->limit(1)
-                          ->get($this->settings['remember_table']);
+                          ->get($this->settings['token_table']);
             return $query->num_rows() > 0;
         };
         $token = random_string('sha1');
@@ -454,7 +454,7 @@ class Auth {
                          ->select('expire_on')
                          ->where('token', $token)
                          ->limit(1)
-                         ->get($this->settings['remember_table'])
+                         ->get($this->settings['token_table'])
                          ->row_array();
                          
         if (empty($data)) {
