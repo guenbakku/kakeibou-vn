@@ -26,17 +26,20 @@
                     </div>
                     <div class="row">
                         <div class="col-xs-10">
-                            <?=form_input(
-                                [
-                                    'name' => $field_name = sprintf('categories[%d][month_estimated_inout]', $i),
-                                    'type' => 'number',
-                                    'pattern' => '\d*',
-                                ],
-                                set_value($field_name, null),
-                                [
-                                    'class' => 'form-control',
-                                ]
-                            )?>
+                            <div class="input-group">
+                                <?=form_input(
+                                    [
+                                        'name' => $field_name = sprintf('categories[%d][month_estimated_inout]', $i),
+                                        'type' => 'number',
+                                        'pattern' => '\d*',
+                                    ],
+                                    set_value($field_name, null),
+                                    [
+                                        'class' => 'form-control',
+                                    ]
+                                )?>
+                                <span class="input-group-addon">¥</span>
+                            </div>
                         </div>
                         <div class="col-xs-2">
                             <input type="hidden" value="0" name="<?=$field_name = sprintf('categories[%d][month_fixed_money]', $i)?>">
