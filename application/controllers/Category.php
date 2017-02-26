@@ -13,15 +13,14 @@ class Category extends MY_Controller {
     
 	public function index()
     {   
-        if(!empty($this->input->post()))
-        {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             $this->category_model->editOrderNo($this->input->post('categories'));
             $this->flash->success(Consts::SUCC_EDIT_CATEGORY_ORDER);
             return redirect($this->referer->get());
         }
         
         $inout_type_id = (int)$this->input->get('inout_type_id');
-        if(!in_array($inout_type_id, array(1, 2))){
+        if (!in_array($inout_type_id, array(1, 2))) {
             $inout_type_id = 1;
         }
         
@@ -44,12 +43,12 @@ class Category extends MY_Controller {
     
     public function add()
     {
-        if (!empty($this->input->post())){
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try 
             {
                 $this->load->library('form_validation');
                 
-                if ($this->form_validation->run() === false){
+                if ($this->form_validation->run() === false) {
                     throw new Exception(validation_errors());
                 }
                 
@@ -82,11 +81,11 @@ class Category extends MY_Controller {
     
     public function edit($id=null)
     {
-        if (!is_numeric($id)){
+        if (!is_numeric($id)) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
         
-        if (!empty($this->input->post())){
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             // Chuyển sang xử lý xóa category nếu lựa chọn xóa
             if ((bool)$this->input->get('delete') === true) {
                 return $this->del($id);
@@ -96,7 +95,7 @@ class Category extends MY_Controller {
             {
                 $this->load->library('form_validation');
             
-                if ($this->form_validation->run() === false){
+                if ($this->form_validation->run() === false) {
                     throw new Exception(validation_errors());
                 }
                 
@@ -112,7 +111,7 @@ class Category extends MY_Controller {
         else {
             $category_data = $this->category_model->get($id);
             
-            if (empty($category_data)){
+            if (empty($category_data)) {
                 show_error(Consts::ERR_NOT_FOUND);
             }
             $_POST = $category_data;
@@ -137,7 +136,7 @@ class Category extends MY_Controller {
     
     public function del($id)
     {
-        if (!is_numeric($id)){
+        if (!is_numeric($id)) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
         

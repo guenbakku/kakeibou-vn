@@ -157,12 +157,12 @@ class Auth {
      */
     public function try_to_remember()
     {
-        if ($this->is_authenticated() === true){
+        if ($this->is_authenticated() === true) {
             return null;
         }
         
         $token = $this->CI->input->cookie($this->settings['cookie_name']);
-        if ($this->is_valid_token($token) === false){
+        if ($this->is_valid_token($token) === false) {
             return null;
         }
         

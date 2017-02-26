@@ -14,7 +14,7 @@ class MY_Controller extends CI_Controller {
         
         $this->load->library('auth');
         // Nếu chưa đăng nhập thì chuyển về trang login
-        if (!$this->auth->is_allowed() && !$this->auth->is_authenticated()){
+        if (!$this->auth->is_allowed() && !$this->auth->is_authenticated()) {
             redirect(base_url($this->auth->login_url()));
         }
     }
@@ -32,7 +32,7 @@ class MY_Controller extends CI_Controller {
         $base       = empty($base)? '' : trim($base, '/');
         $class_name = strtolower(get_class($this));
         
-        if(!is_array($uris)){
+        if (!is_array($uris)) {
             $uris = array($uris);
         }
         

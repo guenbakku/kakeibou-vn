@@ -12,11 +12,11 @@ function day_of_week($date): ?string
 {
     $days = array('Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy');
     
-    if (!is_numeric($date)){
+    if (!is_numeric($date)) {
         $date = strtotime($date);
     }
     
-    if ($date === false){
+    if ($date === false) {
         return null;
     }
         

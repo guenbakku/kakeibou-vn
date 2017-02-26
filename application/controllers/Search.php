@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Search extends MY_Controller {
     
-    public function __construct(){
+    public function __construct() {
         parent::__construct();
         $this->load->model('search_model');
     }
@@ -31,15 +31,15 @@ class Search extends MY_Controller {
                 );
                 $can_excute_search = false;
                 
-                foreach ($condition_keys as $key => $is_required){
+                foreach ($condition_keys as $key => $is_required) {
                     $val = trim($this->input->get($key));
-                    if (!empty($val)){
-                        if ($is_required){
+                    if (!empty($val)) {
+                        if ($is_required) {
                             $can_excute_search = true;
                         }
                         
-                        if ($key === 'memo_or_amount'){
-                            if (is_numeric($val)){
+                        if ($key === 'memo_or_amount') {
+                            if (is_numeric($val)) {
                                 $this->search_model->amount = $val;
                             }
                             else {
@@ -55,7 +55,7 @@ class Search extends MY_Controller {
                     }
                 }
                 
-                if (!$can_excute_search){
+                if (!$can_excute_search) {
                     throw new Exception('Chưa nhập điều kiện tìm kiếm');
                 }
                 

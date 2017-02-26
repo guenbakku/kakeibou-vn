@@ -1,6 +1,6 @@
 <?php 
 // Xóa lựa chọn "Tiền mặt" nếu thao tác là Rút hoặc nạp tiền vào tài khoản
-if (in_array($type, array('drawer', 'deposit'))){
+if (in_array($type, array('drawer', 'deposit'))) {
     unset($select['accounts'][Inout_model::ACCOUNT_CASH_ID]);
 }
 

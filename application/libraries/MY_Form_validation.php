@@ -14,9 +14,10 @@ class MY_Form_validation extends CI_Form_validation {
      * @return  object: class object.
      *--------------------------------------------------------------------
      */
-    public function reset_field_data($keys = null) {
+    public function reset_field_data($keys = null) 
+    {
         if ($keys === null) {
-            foreach($this->_field_data as &$key){
+            foreach($this->_field_data as &$key) {
                 $key['postdata'] = null;
             }
         } else {

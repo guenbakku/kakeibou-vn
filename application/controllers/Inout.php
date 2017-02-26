@@ -11,15 +11,15 @@ class Inout extends MY_Controller {
     
 	public function add($type=null)
     {   
-        if (!$cashFlowName = $this->inout_model->getCashFlowName($type)){
+        if (!$cashFlowName = $this->inout_model->getCashFlowName($type)) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
 
-        if (!empty($this->input->post())){
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
                 
-                if ($this->form_validation->run() === false){
+                if ($this->form_validation->run() === false) {
                     throw new Exception(validation_errors());
                 }
                 
@@ -28,7 +28,7 @@ class Inout extends MY_Controller {
                 $this->flash->success(sprintf(Consts::SUCC_ADD_INOUT_RECORD, $this->inout_model->getCashFlowName($type)));
                 
                 // Xét xem có nhập tiếp hay không
-                if ((bool)$this->input->get('continue') === false){
+                if ((bool)$this->input->get('continue') === false) {
                     return redirect(base_url());
                 } else {
                     $this->form_validation->reset_field_data(['amount', 'memo']);
@@ -59,17 +59,17 @@ class Inout extends MY_Controller {
     
     public function edit($id=null)
     {
-        if (!is_numeric($id)){
+        if (!is_numeric($id)) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
         
         $ioRecord = $this->inout_model->get($id);
         
-        if (empty($ioRecord)){
+        if (empty($ioRecord)) {
             show_error(Consts::ERR_NOT_FOUND);
         }
         
-        if (!empty($this->input->post())){
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             // Chuyển sang xử lý xóa record nếu lựa chọn xóa
             if ((bool)$this->input->get('delete') === true) {
                 return $this->del($id);
@@ -78,7 +78,7 @@ class Inout extends MY_Controller {
             try {
                 $this->load->library('form_validation');
                 
-                if ($this->form_validation->run() === false){
+                if ($this->form_validation->run() === false) {
                     throw new Exception(validation_errors());
                 }
                 
@@ -86,7 +86,7 @@ class Inout extends MY_Controller {
                 $this->flash->success(Consts::SUCC_EDIT_INOUT_RECORD);
                 return redirect($this->referer->getSession());
             }
-            catch (Exception $e){
+            catch (Exception $e) {
                 $this->flash->error($e->getMessage());
             }
         }
@@ -95,7 +95,7 @@ class Inout extends MY_Controller {
             $this->referer->saveSession();
         }
         
-        if ($ioRecord['cash_flow'] == 'handover'){
+        if ($ioRecord['cash_flow'] == 'handover') {
             $ioRecord['player'] = $this->inout_model->setPlayersForHandoverEdit($ioRecord);
         }
         
@@ -122,7 +122,7 @@ class Inout extends MY_Controller {
     
     public function del($id=null)
     {
-        if (!is_numeric($id)){
+        if (!is_numeric($id)) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
         

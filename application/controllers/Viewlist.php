@@ -77,7 +77,7 @@ class Viewlist extends MY_Controller {
         if (empty($date)) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
-        if (empty($range = boundary_date($date))){
+        if (empty($range = boundary_date($date))) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
         

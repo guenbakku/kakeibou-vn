@@ -1,5 +1,5 @@
 <script type="text/javascript">
-    function toggle_collapse_form(){
+    function toggle_collapse_form() {
         $('.advance-search').collapse('toggle');
     }
 </script>

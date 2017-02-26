@@ -7,11 +7,9 @@
  * @param   void
  * @return  string
  */
-function template_url(){
-    
+function template_url() {
     $CI =& get_instance();
     return $CI->template->template_url();
-   
 }
 
 /* End of file template_helper.php */

@@ -39,7 +39,7 @@ class User extends MY_Controller {
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
-                if ($this->form_validation->run() === false){
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
                 
@@ -77,7 +77,7 @@ class User extends MY_Controller {
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
-                if ($this->form_validation->run() === false){
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
                 $new_password = $this->input->post('new_password');
@@ -104,7 +104,7 @@ class User extends MY_Controller {
     public function login()
     {
         // Already Login
-        if ($this->auth->is_authenticated()){
+        if ($this->auth->is_authenticated()) {
             return redirect(base_url());
         }
         
@@ -112,7 +112,7 @@ class User extends MY_Controller {
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
-                if ($this->form_validation->run() === false){
+                if ($this->form_validation->run() === false) {
                     throw new Exception(validation_errors());
                 }
                 
@@ -121,7 +121,7 @@ class User extends MY_Controller {
                     'password' => $this->input->post('password'),
                     'remember' => $this->input->post('remember')==='1'? true : false,
                 ];
-                if ($this->auth->auth_info($auth_info)->authenticate() === false){
+                if ($this->auth->auth_info($auth_info)->authenticate() === false) {
                     throw new AppException($this->auth->error);
                 }
                 

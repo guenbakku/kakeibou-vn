@@ -51,7 +51,7 @@ class Referer {
     public function getSession($default=null, $reset=true)
     {
         $this->http_referer = $this->CI->session->userdata(self::SESSION_NAME);
-        if ($reset === true){
+        if ($reset === true) {
             $this->emptySession();
         }
         return $this->send_back($default);
@@ -98,10 +98,10 @@ class Referer {
      */
     protected function send_back($default)
     {
-        if (!empty($this->http_referer)){
+        if (!empty($this->http_referer)) {
             return $this->http_referer;
         }
-        else if (is_string($default) && !empty($default)){
+        else if (is_string($default) && !empty($default)) {
             return $default;
         }
         else {
