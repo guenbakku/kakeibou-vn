@@ -20,7 +20,7 @@ class Inout extends MY_Controller {
                 $this->load->library('form_validation');
                 
                 if ($this->form_validation->run() === false) {
-                    throw new Exception(validation_errors());
+                    throw new AppException(validation_errors());
                 }
                 
                 $this->inout_model->add($type, $this->input->post());
@@ -34,7 +34,7 @@ class Inout extends MY_Controller {
                     $this->form_validation->reset_field_data(['amount', 'memo']);
                 }
             }
-            catch (Exception $e) {
+            catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
             
@@ -79,14 +79,14 @@ class Inout extends MY_Controller {
                 $this->load->library('form_validation');
                 
                 if ($this->form_validation->run() === false) {
-                    throw new Exception(validation_errors());
+                    throw new AppException(validation_errors());
                 }
                 
                 $this->inout_model->edit($id, $this->input->post());
                 $this->flash->success(Consts::SUCC_EDIT_INOUT_RECORD);
                 return redirect($this->referer->getSession());
             }
-            catch (Exception $e) {
+            catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
         }

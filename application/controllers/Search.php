@@ -56,12 +56,12 @@ class Search extends MY_Controller {
                 }
                 
                 if (!$can_excute_search) {
-                    throw new Exception('Chưa nhập điều kiện tìm kiếm');
+                    throw new AppException('Chưa nhập điều kiện tìm kiếm');
                 }
                 
                 $result = $this->search_model->search();
             }
-            catch (Exception $e) {
+            catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
         }

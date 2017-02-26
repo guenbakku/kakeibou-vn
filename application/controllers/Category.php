@@ -49,14 +49,14 @@ class Category extends MY_Controller {
                 $this->load->library('form_validation');
                 
                 if ($this->form_validation->run() === false) {
-                    throw new Exception(validation_errors());
+                    throw new AppException(validation_errors());
                 }
                 
                 $this->category_model->add($this->input->post());
                 $this->flash->success(Consts::SUCC_ADD_CATEGORY);
                 return redirect($this->referer->getSession());
             }
-            catch (Exception $e) {
+            catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
         }
@@ -96,14 +96,14 @@ class Category extends MY_Controller {
                 $this->load->library('form_validation');
             
                 if ($this->form_validation->run() === false) {
-                    throw new Exception(validation_errors());
+                    throw new AppException(validation_errors());
                 }
                 
                 $this->category_model->edit($id, $this->input->post());
                 $this->flash->success(Consts::SUCC_EDIT_CATEGORY);
                 return redirect($this->referer->getSession());
             }
-            catch (Exception $e)
+            catch (AppException $e)
             {
                 $this->flash->error($e->getMessage());
             }

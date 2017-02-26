@@ -113,7 +113,7 @@ class User extends MY_Controller {
             try {
                 $this->load->library('form_validation');
                 if ($this->form_validation->run() === false) {
-                    throw new Exception(validation_errors());
+                    throw new AppException(validation_errors());
                 }
                 
                 $auth_info = [
