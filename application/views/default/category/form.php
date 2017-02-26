@@ -66,12 +66,6 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
     </form>
 </div>
 
-
-
-<?php if ($this->router->fetch_method() == 'edit'): ?>
-    <?php echo form_open($url['del'], array('id' => 'delCategory', 'class' => 'form-vertical sr-only'))?></form>
-<?php endif ?> 
-
 <script type="text/javascript">
     
     display_month_fixed_money_checkbox();
