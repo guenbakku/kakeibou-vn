@@ -14,6 +14,7 @@
     
     <!-- Resources -->
     <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/amcharts.js"></script>
+    <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/themes/black.js"></script>
     <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/serial.js"></script>
     
     <!-- Chart code -->
@@ -25,7 +26,7 @@
             var chart = AmCharts.makeChart("chartdiv", {
                 "fontFamily": "Arial",
                 "type": "serial",
-                "theme": "none",
+                "theme": "black",
                 "legend": {
                     "useGraphSettings": true,
                     "valueWidth": 60,
@@ -45,7 +46,7 @@
                 }],
                 "graphs": [{
                     "valueAxis": "v1",
-                    "lineColor": "black",
+                    "lineColor": "white",
                     "dashLength": 0,
                     "lineThickness": 2,
                     "bullet": false,
@@ -56,7 +57,7 @@
                     "fillAlphas": 0
                 }, {
                     "valueAxis": "v1",
-                    "lineColor": "blue",
+                    "lineColor": "#00FFFF",
                     "dashLength": 2,
                     "lineThickness": 1,
                     "bullet": false,
@@ -67,7 +68,7 @@
                     "fillAlphas": 0
                 }, {
                     "valueAxis": "v1",
-                    "lineColor": "red",
+                    "lineColor": "yellow",
                     "dashLength": 2,
                     "lineThickness": 1,
                     "bullet": false,

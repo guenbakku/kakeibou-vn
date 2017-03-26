@@ -32,6 +32,7 @@
         
         <!-- Resources -->
         <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/amcharts.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/themes/black.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/pie.js"></script>
         
         <!-- Chart code -->
@@ -41,6 +42,7 @@
                 var chart = AmCharts.makeChart( "chartdiv", {
                     "fontFamily": "Arial",
                     "type": "pie",
+                    "theme": "black",
                     "startDuration": 0,
                     "labelsEnabled": false,
                     "marginLeft": 10,

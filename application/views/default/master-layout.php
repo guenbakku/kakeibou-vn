@@ -19,6 +19,7 @@
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.min.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.structure.min.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.theme.min.css">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/theme.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/main.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/sticky-footer.css">
         <?=$_styles?>

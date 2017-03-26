@@ -18,6 +18,11 @@ a.clean{
     color: inherit !important;
 }
 
+.footer {
+    background-color: #3e444c !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.6);
+}
+
 .w10, .w20, .w30, .w40, .w50, .w60, .w70, .w80, .w90 {
     display: inline-block;
 }
@@ -30,7 +35,6 @@ a.clean{
 .w70 {width: 70%}
 .w80 {width: 80%}
 .w90 {width: 90%}
-
 
 .navbar .navbtn-group{
     float: left;
@@ -56,10 +60,12 @@ a.clean{
     border-right:1px solid #dfdfdf;
 }
 .navbar .navbtn-group > .active{
-    background: #e7e7e7;
+    background: #272b2e;
+    color: #fff;
 }
 .navbar .navbtn-group > .open{
-    background: #fff 
+    background: #272b2e;
+    color: #fff;
 }
 
 .navbar .dropdown{
@@ -82,7 +88,7 @@ a.clean{
     color: red;
 }
 .text-income {
-    color: #0000ff;
+    color: #2EFEF7;
 }
 
 select, 
@@ -143,7 +149,7 @@ input[type="color"] {
 
 .page-nav {
     line-height: 30px;
-    background-color: #f5f5f5;
+    background-color: #565656;
     padding: 0;
     border-radius: 5px;
     margin-bottom: 20px;
