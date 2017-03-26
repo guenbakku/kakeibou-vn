@@ -183,6 +183,26 @@ class Viewlist_model extends Inout_Model {
         
         $remaining_days = days_in_month(date('m')) - date('d') + 1;
         
+        // Thông tin sẽ gửi trả về
+        $result = array(
+            'today' => array(
+                'elapsed'   => - $outgo['liqid_outgo_today'],
+                'estimated' => floor(($month_estimated_outgo + $outgo['liqid_outgo_to_now'] - $outgo['liqid_outgo_today'])/$remaining_days),
+                'remain'    => null,
+                'elapsed_percent'   => null,
+                'remain_percent'    => null,
+                'estimated_percent' => 100,
+            ),
+            'month' => array(
+                'elapsed'   => - $outgo['liqid_outgo_to_now'],
+                'estimated' => $month_estimated_outgo,
+                'remain'    => null,
+                'elapsed_percent'   => null,
+                'remain_percent'    => null,
+                'estimated_percent' => 100,
+            )
+        );
+        
         // Gắn dữ liệu vào vị trí tương ứng và thêm tỷ lệ phần trăm
         return array_map(
             function ($item){
@@ -191,17 +211,7 @@ class Viewlist_model extends Inout_Model {
                 $item['elapsed_percent'] = $item['estimated'] != 0? floor($item['elapsed']/$item['estimated']*100) : 0;
                 $item['remain_percent'] = $item['estimated'] != 0? floor($item['remain']/$item['estimated']*100) : 0;
                 return $item;
-            }
-            , array(
-                'today' => array(
-                    'elapsed'   => - $outgo['liqid_outgo_today'],
-                    'estimated' => floor(($month_estimated_outgo + $outgo['liqid_outgo_to_now'] - $outgo['liqid_outgo_today'])/$remaining_days),
-                ),
-                'month' => array(
-                    'elapsed'   => - $outgo['liqid_outgo_to_now'],
-                    'estimated' => $month_estimated_outgo,
-                )
-            )
+            }, $result
         );
     }
     

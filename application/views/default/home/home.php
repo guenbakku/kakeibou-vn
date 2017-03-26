@@ -16,6 +16,20 @@
                 return outgo_status.html();
             },
         })
+        
+        /*
+         * hide any open popovers when the anywhere else in the body is clicked
+         */
+        $('body').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                if (!$(this).is(e.target) 
+                    && $(this).is('[aria-describedby]') 
+                    && $(this).has(e.target).length === 0 
+                    && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
     })
     
 </script>
@@ -35,20 +49,7 @@
                 </th>
                 <td class="text-center">
                     <div class="sr-only outgo-status">
-                        <table style="min-width:120px">
-                            <tr>
-                                <td>Dự định:</td> 
-                                <td class="text-right"><?=currency($liquidOutgoStatus['today']['estimated'], false)?></td> 
-                            </tr>
-                            <tr>
-                                <td>Đã chi:</td> 
-                                <td class="text-right"><?=currency($liquidOutgoStatus['today']['elapsed'], false)?></td> 
-                            </tr>
-                            <tr>
-                                <td>Còn lại:</td> 
-                                <td class="text-right"><?=currency($liquidOutgoStatus['today']['remain'], false)?></td> 
-                            </tr>
-                        </table>
+                        <?=$this->template->get_view('home/estimated_outgo_detail', $liquidOutgoStatus['today'])?>
                     </div>
                     <div class="progress" style="margin-bottom:0" data-toggle="popover">
                         <div class="progress-bar progress-bar-info" role="progressbar"
@@ -66,20 +67,7 @@
                 </th>
                 <td class="text-center">
                     <div class="sr-only outgo-status">
-                        <table style="min-width:120px">
-                            <tr>
-                                <td>Dự định:</td> 
-                                <td class="text-right"><?=currency($liquidOutgoStatus['month']['estimated'], false)?></td> 
-                            </tr>
-                            <tr>
-                                <td>Đã chi:</td> 
-                                <td class="text-right"><?=currency($liquidOutgoStatus['month']['elapsed'], false)?></td> 
-                            </tr>
-                            <tr>
-                                <td>Còn lại:</td> 
-                                <td class="text-right"><?=currency($liquidOutgoStatus['month']['remain'], false)?></td> 
-                            </tr>
-                        </table>
+                        <?=$this->template->get_view('home/estimated_outgo_detail', $liquidOutgoStatus['month'])?>
                     </div>
                     <div class="progress" style="margin-bottom:0" data-toggle="popover" >
                         <div class="progress-bar progress-bar-info" role="progressbar"
