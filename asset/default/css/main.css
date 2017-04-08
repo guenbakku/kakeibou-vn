@@ -135,8 +135,7 @@ input[type="color"] {
     position: absolute;
     display: block;
     width: 100%;
-    color: #333;
- }
+}
 
 .ui-autocomplete-loading { 
     background:url('../images/indicator.gif') no-repeat;
