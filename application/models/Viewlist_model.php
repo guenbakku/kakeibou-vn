@@ -2,8 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Viewlist_model extends Inout_Model {
-    
-    
+
     /*
      *--------------------------------------------------------------------
      * Dựa vào year, month được truyền vào để tự động lựa method 
@@ -92,6 +91,28 @@ class Viewlist_model extends Inout_Model {
         $this->search_model->hide_pair_inout = $account_id == 0? true : false;
         
         return $this->search_model->search(); 
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Tính lũy kế của thu, chi, tổng trong một dãi thời gian
+     *
+     * @param   array: dữ liệu thu, chi, tổng theo một dãi thời gian
+     * @return  array
+     *--------------------------------------------------------------------
+     */
+    public function calcCumulative($data) {
+        foreach ($data as $i => &$item) {
+            if ($i == 0) {
+                continue;
+            } else {
+                $preItem = $data[$i-1];
+            }
+            foreach (array('tong', 'thu', 'chi') as $key) {
+                $item[$key] += $preItem[$key];
+            }
+        }
+        return $data;
     }
     
     /*

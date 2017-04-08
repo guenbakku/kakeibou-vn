@@ -33,6 +33,7 @@ class Chart extends MY_Controller {
         $monthsList = months_list();
         
         $view_data['list'] = $this->viewlist_model->summaryInoutTypesAutoDetect($extractedDate['y'], $extractedDate['m']);
+        $view_data['list'] = $this->viewlist_model->calcCumulative($view_data['list']);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['select'] = [
