@@ -59,7 +59,7 @@
                         <div class="pull-right">
                             <span class="glyphicon glyphicon-menu-right"></span>
                         </div>
-                        <a href="<?=sprintf($url['edit'], $item['id'])?>" style="display:block; padding-right:15px; color:inherit">
+                        <a href="<?=sprintf($url['edit'], $item['id'])?>" style="display:block; padding-right:15px; color:inherit; text-decoration:none">
                             <?=$item['name']?>
                         </a>
                         <input type="hidden" name="categories[<?=$item['id']?>][id]" value="<?=$item['id']?>">
