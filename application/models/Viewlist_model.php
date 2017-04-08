@@ -108,7 +108,7 @@ class Viewlist_model extends Inout_Model {
             } else {
                 $preItem = $data[$i-1];
             }
-            foreach (array('tong', 'thu', 'chi') as $key) {
+            foreach (['tong', 'thu', 'chi'] as $key) {
                 $item[$key] += $preItem[$key];
             }
         }
