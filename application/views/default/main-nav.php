@@ -1,6 +1,7 @@
 <script type="text/javascript">
     $(function(){
         $('.navigation').navigation({'defaultIndex':0});
+        $('#inout-dropdown-menu').navigation();
     });
 </script>
 
@@ -13,10 +14,12 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
                     <span class="glyphicon glyphicon-edit" style="padding:0 5px">
                 </a>
-                <ul class="dropdown-menu">
+                <ul id="inout-dropdown-menu" class="dropdown-menu">
                     <?php $i=0 ?>
                     <?php foreach (Inout_model::$CASH_FLOW_NAMES as $key => $item): ?>
-                        <li><a href="<?=base_url('inout/add/'.$key)?>"><?=(++$i)?>. <?=$item[0]?></a></li>
+                        <li href="<?=base_url('inout/add/'.$key)?>">
+                            <a href="<?=base_url('inout/add/'.$key)?>"><?=(++$i)?>. <?=$item[0]?></a>
+                        </li>
                     <?php endforeach ?>
                 </ul>
             </span>
