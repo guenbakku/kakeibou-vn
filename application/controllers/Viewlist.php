@@ -37,6 +37,7 @@ class Viewlist extends MY_Controller {
         $yearsList  = $this->viewlist_model->getYearsList();
         $monthsList = months_list();
         
+        $view_data['title'] = 'Danh sách tóm tắt';
         $view_data['list'] = $this->viewlist_model->summaryInoutTypesAutoDetect($extractedDate['y'], $extractedDate['m']);
         $view_data['year'] = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
@@ -93,6 +94,7 @@ class Viewlist extends MY_Controller {
         $monthsList = months_list();
         $daysList   = days_list();
         
+        $view_data['title'] = 'Danh sách chi tiết';
         $view_data['list']  = $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account_id, $player_id);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';

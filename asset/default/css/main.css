@@ -79,7 +79,8 @@ a.clean{
     height: 50px;
     padding: 14px 10px;
 }
-.navbar .dropdown-menu a{
+
+.dropdown-menu a{
     padding-top:5px !important;
     padding-bottom:5px !important;
 }

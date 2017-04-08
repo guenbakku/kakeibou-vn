@@ -32,6 +32,7 @@ class Chart extends MY_Controller {
         $yearsList  = $this->viewlist_model->getYearsList();
         $monthsList = months_list();
         
+        $view_data['title'] = 'Biểu đồ đường';
         $view_data['list'] = $this->viewlist_model->summaryInoutTypesAutoDetect($extractedDate['y'], $extractedDate['m']);
         $view_data['list'] = $this->viewlist_model->calcCumulative($view_data['list']);
         $view_data['year']  = $extractedDate['y']?? '';
@@ -88,6 +89,7 @@ class Chart extends MY_Controller {
         $monthsList = months_list();
         $daysList   = days_list();
         
+        $view_data['title'] = 'Biểu đồ quạt';
         $view_data['list'] = $this->viewlist_model->summaryCategories($range[0], $range[1], $inout_type_id);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
