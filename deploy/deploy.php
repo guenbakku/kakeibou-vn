@@ -1,6 +1,7 @@
 <?php
 namespace Deployer;
 require_once 'recipe/common.php';
+require_once '../vendor/deployer/recipes/phinx.php';
 require_once 'servers.php';
 
 // Repository
@@ -23,10 +24,11 @@ set('writable_dirs', [
 // Delete unnecessary dirs
 set('clear_paths', [
     '.git',
-    '_design']);
+    '_design',
+    'deploy']);
 
 // Number of releases to keep
-set('keep_releases', 2);
+set('keep_releases', 3);
     
 // Additional tasks
 desc('Set permission of deploy_path to deploy user');
@@ -56,6 +58,7 @@ task('deploy', [
 before('deploy', 'chown:before');
 after('deploy', 'chown:after');
 after('deploy', 'success');
+after('cleanup', 'phinx:migrate');
 
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
