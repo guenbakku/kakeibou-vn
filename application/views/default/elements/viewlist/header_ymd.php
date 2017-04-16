@@ -2,9 +2,9 @@
     <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['prev']?>">
         <span class="glyphicon glyphicon-triangle-left"></span>
     </a>
-    <span class="btn btn-default btn-sm">
+    <a class="btn btn-default btn-sm disabled">
         <?=$date?>
-    </span>
+    </a>
     <a class="btn btn-primary btn-sm" href="<?=$url['dateChange']['next']?>">
         <span class="glyphicon glyphicon-triangle-right"></span>
     </a>
