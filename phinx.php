@@ -1,4 +1,6 @@
 <?php
+php_sapi_name() === 'cli' or die('No direct script access allowed');
+
 $_ENV['PHINX_DDL_DIR_PATH'] = __DIR__ . '/db/ddl';
 $_ENV['PHINX_DB_CONFIG_PATH'] = [
     'production' => __DIR__ . '/application/config/production/database.php',
