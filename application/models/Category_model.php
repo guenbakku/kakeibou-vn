@@ -128,18 +128,18 @@ class Category_model extends App_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Overide method 'getSelectTagData' trong App_Model
+     * Overide method 'get_select_tag_data' trong App_Model
      *
      * @param   id: loại danh mục muốn lấy (thu: 1/chi: 2)
      * @return  array
      *--------------------------------------------------------------------
      */
-    public function getSelectTagData($inout_type_id=null)
+    public function get_select_tag_data($inout_type_id=null)
     {
         $this->db->where('inout_type_id', $inout_type_id)
                  ->where('restrict_delete', '0')
                  ->order_by('order_no', 'asc');
         
-        return parent::getSelectTagData();
+        return parent::get_select_tag_data();
     }
 }

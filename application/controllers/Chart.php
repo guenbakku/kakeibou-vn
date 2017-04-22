@@ -29,11 +29,11 @@ class Chart extends MY_Controller {
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
         $dateChange = prev_next_time($date);
-        $yearsList  = $this->viewlist_model->getYearsList();
+        $yearsList  = $this->viewlist_model->get_years_list();
         $monthsList = months_list();
         
         $view_data['title'] = 'Biểu đồ đường';
-        $view_data['list'] = $this->viewlist_model->summaryInoutTypesAutoDetect($extractedDate['y'], $extractedDate['m']);
+        $view_data['list'] = $this->viewlist_model->summary_inout_types_auto($extractedDate['y'], $extractedDate['m']);
         $view_data['list'] = $this->viewlist_model->calcCumulative($view_data['list']);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
@@ -85,20 +85,20 @@ class Chart extends MY_Controller {
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
         $dateChange = prev_next_time($date);
-        $yearsList  = $this->viewlist_model->getYearsList();
+        $yearsList  = $this->viewlist_model->get_years_list();
         $monthsList = months_list();
         $daysList   = days_list();
         
         $view_data['title'] = 'Biểu đồ quạt';
-        $view_data['list'] = $this->viewlist_model->summaryCategories($range[0], $range[1], $inout_type_id);
+        $view_data['list'] = $this->viewlist_model->summary_categories($range[0], $range[1], $inout_type_id);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['day']   = $extractedDate['d']?? '';
         $view_data['total_items'] = count($view_data['list']);
         $view_data['select'] = array(
-            'accounts'    => $this->account_model->getSelectTagData(),
-            'players'     => $this->user_model->getSelectTagData(),
-            'inout_types' => $this->inout_type_model->getSelectTagData(),
+            'accounts'    => $this->account_model->get_select_tag_data(),
+            'players'     => $this->user_model->get_select_tag_data(),
+            'inout_types' => $this->inout_type_model->get_select_tag_data(),
             'year'        => array_combine($yearsList, $yearsList),
             'month'       => array_combine($monthsList, $monthsList),
             'day'         => array_combine($daysList, $daysList),

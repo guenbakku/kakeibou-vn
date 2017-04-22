@@ -9,16 +9,16 @@ class Viewlist_model extends Inout_Model {
      * lấy danh sách tổng chi tiêu thích hợp
      *--------------------------------------------------------------------
      */
-    public function summaryInoutTypesAutoDetect(?int $year, ?int $month): array
+    public function summary_inout_types_auto(?int $year, ?int $month): array
     {
         if ($year !== null && $month !== null) {
-            return $this->summaryInoutTypesByDayInMonth($year, $month);
+            return $this->summary_inout_types_by_day_in_month($year, $month);
         }
         else if ($year !== null) {
-            return $this->summaryInoutTypesByMonthInYear($year);
+            return $this->summary_inout_types_by_month_in_year($year);
         }
         else {
-            return $this->summaryInoutTypesByYear();
+            return $this->summary_inout_types_by_year();
         }
     }
     
@@ -27,13 +27,13 @@ class Viewlist_model extends Inout_Model {
      * Lấy danh sách tổng chi tiêu theo ngày (trong một tháng)
      *--------------------------------------------------------------------
      */
-    public function summaryInoutTypesByDayInMonth(int $year, int $month): array
+    public function summary_inout_types_by_day_in_month(int $year, int $month): array
     {       
         $range = boundary_date($year, $month);
-        $db_list = $this->summaryInoutTypes($range[0], $range[1], '%Y-%m-%d');
+        $db_list = $this->summary_inout_types($range[0], $range[1], '%Y-%m-%d');
         $full_list_keys = date_range($range[0], $range[1]);
         
-        return $this->combineList($full_list_keys, $db_list);
+        return $this->combine_list($full_list_keys, $db_list);
     }
     
     /*
@@ -41,15 +41,15 @@ class Viewlist_model extends Inout_Model {
      * Lấy danh sách tổng chi tiêu theo tháng (trong một năm)
      *--------------------------------------------------------------------
      */
-    public function summaryInoutTypesByMonthInYear(int $year): array
+    public function summary_inout_types_by_month_in_year(int $year): array
     {
         $range = boundary_date($year);
-        $db_list = $this->summaryInoutTypes($range[0], $range[1], '%Y-%m');
+        $db_list = $this->summary_inout_types($range[0], $range[1], '%Y-%m');
         $full_list_keys = array_map(function($month) use($year){
             return sprintf('%04d-%02d', $year, $month);
         }, range(1, 12));
         
-        return $this->combineList($full_list_keys, $db_list);
+        return $this->combine_list($full_list_keys, $db_list);
     }
     
     /*
@@ -57,16 +57,46 @@ class Viewlist_model extends Inout_Model {
      * Lấy danh sách tổng chi tiêu theo năm
      *--------------------------------------------------------------------
      */
-    public function summaryInoutTypesByYear(): array
+    public function summary_inout_types_by_year(): array
     {
-        $full_list_keys = $this->getYearsList();
+        $full_list_keys = $this->get_years_list();
         $range = array(
             reset($full_list_keys).'-01-01',
             end($full_list_keys).'-12-31'
         );
-        $db_list = $this->summaryInoutTypes($range[0], $range[1], '%Y');
+        $db_list = $this->summary_inout_types($range[0], $range[1], '%Y');
         
-        return $this->combineList($full_list_keys, $db_list);
+        return $this->combine_list($full_list_keys, $db_list);
+    }
+    
+    /*
+     *--------------------------------------------------------------------
+     * Tính tổng thu, chi, chênh lệch trong một khoảng thời gian.
+     * Không tính các inout lưu động nội bộ.
+     *
+     * @param   string  : format date dùng trong SQL WHERE & GROUP
+     * @param   string  : min date
+     * @param   string  : max date
+     * @return  array 
+     *--------------------------------------------------------------------
+     */    
+    public function summary_inout_types(string $from, string $to, string $date_format_string): array
+    {
+        $subQuery = $this->db->select("DATE_FORMAT(`date`, '{$date_format_string}') as `date`, 
+                                       SUM(CASE WHEN `categories`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
+                                       SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`")
+                             ->from('inout_records')
+                             ->join('categories', 'categories.id = inout_records.category_id')
+                             ->where('inout_records.date >=', $from)
+                             ->where('inout_records.date <=', $to)
+                             ->where('inout_records.pair_id', '')
+                             ->group_by("DATE_FORMAT(`inout_records`.`date`, '{$date_format_string}')")
+                             ->get_compiled_select();
+                             
+        return $this->db->select('date, thu, chi, (`thu` + `chi`) AS `tong`')
+                        ->from("($subQuery) t")
+                        ->order_by('date ASC')
+                        ->get()->result_array();
     }
     
     /*
@@ -238,36 +268,6 @@ class Viewlist_model extends Inout_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Tính tổng thu, chi, chênh lệch trong một khoảng thời gian.
-     * Không tính các inout lưu động nội bộ.
-     *
-     * @param   string  : format date dùng trong SQL WHERE & GROUP
-     * @param   string  : min date
-     * @param   string  : max date
-     * @return  array 
-     *--------------------------------------------------------------------
-     */    
-    public function summaryInoutTypes(string $from, string $to, string $date_format_string): array
-    {
-        $subQuery = $this->db->select("DATE_FORMAT(`date`, '{$date_format_string}') as `date`, 
-                                       SUM(CASE WHEN `categories`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`, 
-                                       SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`")
-                             ->from('inout_records')
-                             ->join('categories', 'categories.id = inout_records.category_id')
-                             ->where('inout_records.date >=', $from)
-                             ->where('inout_records.date <=', $to)
-                             ->where('inout_records.pair_id', '')
-                             ->group_by("DATE_FORMAT(`inout_records`.`date`, '{$date_format_string}')")
-                             ->get_compiled_select();
-                             
-        return $this->db->select('date, thu, chi, (`thu` + `chi`) AS `tong`')
-                        ->from("($subQuery) t")
-                        ->order_by('date ASC')
-                        ->get()->result_array();
-    }
-    
-    /*
-     *--------------------------------------------------------------------
      * Tính tổng thu chi theo từng category
      * Không tính các category được set restrict_delete
      *
@@ -277,7 +277,7 @@ class Viewlist_model extends Inout_Model {
      * @return  array
      *--------------------------------------------------------------------
      */
-    public function summaryCategories(string $from, string $to, int $inout_type_id): array
+    public function summary_categories(string $from, string $to, int $inout_type_id): array
     {
         $subQuery = $this->db->select('categories.id AS category_id,
                                          ABS(SUM(`inout_records`.`amount`)) AS total')
@@ -310,7 +310,7 @@ class Viewlist_model extends Inout_Model {
      * @return  array
      *--------------------------------------------------------------------
      */
-    public function getYearsList(): array
+    public function get_years_list(): array
     {
         $table = 'inout_records';
         $range = $this->db->select("DATE_FORMAT(MIN(`date`), '%Y') as `min`, 
@@ -339,10 +339,10 @@ class Viewlist_model extends Inout_Model {
      * @return  array   : full list sau khi gắn dữ liệu
      *--------------------------------------------------------------------
      */
-    private function combineList($full_list_keys=array(), $db_list=array())
+    private function combine_list($full_list_keys = [], $db_list = [])
     {
-        $empty_item = array('tong' => 0, 'thu' => 0, 'chi' => 0, 'date' => null);
-        $full_list = array();
+        $empty_item = ['tong' => 0, 'thu' => 0, 'chi' => 0, 'date' => null];
+        $full_list = [];
         
         foreach ($full_list_keys as $k) {
             $db_item = current($db_list);
@@ -355,7 +355,7 @@ class Viewlist_model extends Inout_Model {
                 $item = $empty_item;
             }
             
-            $full_list[] = array_merge($item, array('date' => $k));
+            $full_list[] = array_merge($item, ['date' => $k]);
         }
         
         return $full_list;

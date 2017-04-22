@@ -108,7 +108,7 @@ class Category extends MY_Controller {
         
         $view_data['title'] = 'Thêm danh mục';
         $view_data['select'] = [
-            'inout_types' => $this->inout_type_model->getSelectTagData(),
+            'inout_types' => $this->inout_type_model->get_select_tag_data(),
         ];
         $view_data['url'] = [
             'form' => $this->base_url(__FUNCTION__),
@@ -162,7 +162,7 @@ class Category extends MY_Controller {
 
         $view_data['title'] = 'Sửa danh mục';
         $view_data['select'] = [
-            'inout_types' => $this->inout_type_model->getSelectTagData(),
+            'inout_types' => $this->inout_type_model->get_select_tag_data(),
         ];
         $view_data['url'] = [
             'form'      => $this->base_url([__FUNCTION__, $id]),

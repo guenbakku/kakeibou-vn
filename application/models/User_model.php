@@ -5,7 +5,7 @@ class User_model extends App_Model {
     
     const TABLE = 'users';
     
-    protected $columnNamesforSelectTagMethod = array('id', 'fullname');
+    protected $select_tag_columns = array('id', 'fullname');
     
     /*
      *--------------------------------------------------------------------

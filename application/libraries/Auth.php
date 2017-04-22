@@ -135,7 +135,7 @@ class Auth {
         $password = $this->auth_info['password'];
         
         if (!$this->CI->auth_model->verify($username, $password)) {
-            $this->error = $this->CI->auth_model->getError();
+            $this->error = $this->CI->auth_model->get_error();
             return false;
         }
         

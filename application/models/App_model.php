@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class App_model extends CI_Model {
     
     // Tên column cần lấy dữ liệu để tạo tag HTML Select
-    protected $columnNamesforSelectTagMethod = array('id', 'name');
+    protected $select_tag_columns = array('id', 'name');
     
     // Chứa lỗi xảy ra trong quá trình thực thi các model con
     protected $error = [];
@@ -39,7 +39,7 @@ class App_model extends CI_Model {
      * @return  object: $this
      *--------------------------------------------------------------------
      */
-    protected function setError(string $msg)
+    protected function set_error(string $msg)
     {
         $this->error[] = $msg;
         return $this;
@@ -55,7 +55,7 @@ class App_model extends CI_Model {
      * @return  string/array
      *--------------------------------------------------------------------
      */
-    public function getError(string $glue='<br>')
+    public function get_error(string $glue='<br>')
     {
         return $glue===false? $this->error : implode($glue, $this->error);
     }
@@ -68,9 +68,9 @@ class App_model extends CI_Model {
      * @return  array : dữ liệu để xuất option
      *--------------------------------------------------------------------
      */    
-    public function getSelectTagData()
+    public function get_select_tag_data()
     {
-        $select = $this->columnNamesforSelectTagMethod;
+        $select = $this->select_tag_columns;
         $table  = $this::TABLE;
         
         return array_column(

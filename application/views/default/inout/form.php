@@ -12,7 +12,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
     $(function(){        
         $(".autocomplete").autocomplete({ 
             source: function(req, resp) {
-                $.getJSON("/inout/searchMemo/" + encodeURIComponent(req.term), resp);
+                $.getJSON("/inout/search_memo/" + encodeURIComponent(req.term), resp);
             },
             minLength: 2,
         });

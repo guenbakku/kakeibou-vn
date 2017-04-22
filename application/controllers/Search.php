@@ -11,8 +11,7 @@ class Search extends MY_Controller {
 	public function index()
     {   
         $result = null;
-        if (!empty($this->input->get()))
-        {
+        if (!empty($this->input->get())) {
             try {
                 $_POST = $this->input->get();
                 
@@ -70,8 +69,8 @@ class Search extends MY_Controller {
         $view_data['total_items'] = count($view_data['list']);
         $view_data['title']       = 'Tìm kiếm chi tiêu';
         $view_data['select']      = array(
-            'players'     => array(0 => 'Tất cả') + $this->user_model->getSelectTagData(),
-            'inout_types' => array(0 => 'Tất cả') + $this->inout_type_model->getSelectTagData(),
+            'players'     => array(0 => 'Tất cả') + $this->user_model->get_select_tag_data(),
+            'inout_types' => array(0 => 'Tất cả') + $this->inout_type_model->get_select_tag_data(),
         );
         $view_data['url'] = array(
             'form'  => $this->base_url(),

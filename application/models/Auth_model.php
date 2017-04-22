@@ -18,6 +18,14 @@ class Auth_model extends App_Model {
         $this->load->database('default');
     }
     
+    /*
+     *--------------------------------------------------------------------
+     * Kiểm tra đăng nhập của user
+     *
+     * @param   string
+     * @param   string
+     *--------------------------------------------------------------------
+     */
     public function verify(string $username, string $password): bool
     {
         try {
@@ -47,15 +55,15 @@ class Auth_model extends App_Model {
             
             // Password không match
             if (!password_verify($password, $this->user['password'])) {
-                $this->lockAccount();
+                $this->lock_account();
                 throw new AppException(Consts::ERR_LOGIN_INFO_INVALID);
             }
             
-            $this->resetLockAccount();
+            $this->reset_locked_account();
             return true;
         } 
         catch (AppException $e) {
-            $this->setError($e->getMessage());
+            $this->set_error($e->getMessage());
             return false;
         }
     }
@@ -68,18 +76,18 @@ class Auth_model extends App_Model {
      * @return  void
      *--------------------------------------------------------------------
      */
-    private function lockAccount()
+    private function lock_account()
     {
-        $data = [];
-        $data['login_attemps'] = $this->user['login_attemps'] + 1;
-        if ($data['login_attemps'] % $this->settings['login_attemps_max'] === 0) {
-            $data['locked_on'] = date('Y-m-d H:i:s');
-            $data['lock_duration'] = $this->user['lock_duration'] > 0
+        $user = [];
+        $user['login_attemps'] = $this->user['login_attemps'] + 1;
+        if ($user['login_attemps'] % $this->settings['login_attemps_max'] === 0) {
+            $user['locked_on'] = date('Y-m-d H:i:s');
+            $user['lock_duration'] = $this->user['lock_duration'] > 0
                                      ? $this->user['lock_duration'] * 2
                                      : $this->settings['lock_duration_min'];
         }
         $this->db->where('id', $this->user['id'])
-                 ->update(self::TABLE, $data);
+                 ->update(self::TABLE, $user);
     }
     
     /*
@@ -90,15 +98,15 @@ class Auth_model extends App_Model {
      * @return  void
      *--------------------------------------------------------------------
      */
-    private function resetLockAccount()
+    private function reset_lock_account()
     {
-        $data = array(
+        $user = array(
             'login_attemps' => 0,
             'locked_on'     => null,
             'lock_duration' => 0,
         );
         
         $this->db->where('id', $this->user['id'])
-                 ->update(self::TABLE, $data);
+                 ->update(self::TABLE, $user);
     }
 }    

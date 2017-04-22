@@ -54,22 +54,22 @@ class Inout_model extends App_Model {
                         ->row_array();
     }
     
-    public function add($type, $data)
+    public function add($type, array $data)
     {   
         $data['cash_flow']  = $type;
         $data['created_on'] = $data['modified_on'] = date('Y-m-d H:i:s');
         $data['created_by'] = $data['modified_by'] = $this->auth->user('id');
         
         $this->db->trans_start();
-        foreach ($this->setPairAddData($type, $data) as $item){
+        foreach ($this->set_pair_add_data($type, $data) as $item){
             $this->db->insert(self::TABLE, $item);
         }
         $this->db->trans_complete();
     }
     
-    public function edit($id, $data)
+    public function edit($id, array $data)
     {
-        $pair_data = $this->getPairId($id);
+        $pair_data = $this->get_pair_id($id);
         
         if ($pair_data === false){
             throw new AppException(Consts::ERR_BAD_REQUEST);
@@ -88,7 +88,7 @@ class Inout_model extends App_Model {
     
     public function del($id)
     {
-        $pair_data = $this->getPairId($id);
+        $pair_data = $this->get_pair_id($id);
         
         if ($pair_data === false){
             throw new AppException(Consts::ERR_BAD_REQUEST);
@@ -101,7 +101,7 @@ class Inout_model extends App_Model {
         $this->db->trans_complete();
     }
     
-    public function searchMemo($q)
+    public function search_memo(string $q)
     {
         $q = $this->db->escape_like_str($q);
         $sql = "SELECT `memo` 
@@ -121,10 +121,10 @@ class Inout_model extends App_Model {
      * 
      *--------------------------------------------------------------------
      */
-    private function setPairAddData($type, $data)
+    private function set_pair_add_data($type, array $data)
     {
         $pair[0] = $data;
-        $pair[0]['amount']  = $this->getInoutTypeCode($type)==1? $pair[0]['amount'] : 0-$pair[0]['amount'];
+        $pair[0]['amount']  = $this->get_inout_type_code($type)==1? $pair[0]['amount'] : 0-$pair[0]['amount'];
         
         // Không phải loại thao tác tạo ra dữ liệu lưu động nội bộ
         if (in_array($type, array('outgo', 'income'))){
@@ -135,7 +135,7 @@ class Inout_model extends App_Model {
         $pair[1] = $pair[0];
         $pair[0]['pair_id'] = $pair[1]['pair_id'] = random_string('unique');
         $pair[1]['amount']  = 0 - $pair[0]['amount'];
-        $pair[0]['category_id'] = $this->getFixCategoryCode($type);
+        $pair[0]['category_id'] = $this->get_fixed_category_code($type);
         $pair[1]['category_id'] = $pair[0]['category_id']+1;
         
         if ($type == 'drawer' || $type == 'deposit') {
@@ -160,7 +160,7 @@ class Inout_model extends App_Model {
      * 
      *--------------------------------------------------------------------
      */
-    private function getPairId($id)
+    private function get_pair_id($id)
     {
         $res = $this->db->select('inout_records.id')
                         ->select('inout_records.pair_id')
@@ -201,7 +201,7 @@ class Inout_model extends App_Model {
      *              -> Người chuyển là người còn lại
      *--------------------------------------------------------------------
      */
-    public function setPlayersForHandoverEdit($data)
+    public function set_handover_edit_players($data)
     {
         if ($data['cash_flow'] != 'handover'){
             return false;
@@ -217,7 +217,7 @@ class Inout_model extends App_Model {
         }
     }
     
-    public function getCashFlowName($type)
+    public function get_cash_flow_name($type)
     {
         if (!isset(self::$CASH_FLOW_NAMES[$type])){
             return null;
@@ -226,7 +226,7 @@ class Inout_model extends App_Model {
         return self::$CASH_FLOW_NAMES[$type][0];
     }
     
-    public function getInoutTypeCode($type)
+    public function get_inout_type_code($type)
     {      
         if (!isset(self::$CASH_FLOW_NAMES[$type])){
             return null;
@@ -235,10 +235,10 @@ class Inout_model extends App_Model {
         return self::$CASH_FLOW_NAMES[$type][1];
     }
     
-    public function getInoutTypeSign($type)
+    public function get_inout_type_sign($type)
     {   
         if (!is_numeric($type) && is_string($type)){
-            $type = $this->getInoutTypeCode($type);
+            $type = $this->get_inout_type_code($type);
         }
 
         if (!is_numeric($type) || !isset(self::$INOUT_TYPE[$type])){
@@ -256,7 +256,7 @@ class Inout_model extends App_Model {
      * @param   string: 
      *--------------------------------------------------------------------
      */
-    public function getFixCategoryCode($type)
+    public function get_fixed_category_code($type)
     {
         if (!isset(self::$CASH_FLOW_NAMES[$type])){
             return null;

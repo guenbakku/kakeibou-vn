@@ -11,7 +11,7 @@ class Inout extends MY_Controller {
     
 	public function add($type=null)
     {   
-        if (!$cashFlowName = $this->inout_model->getCashFlowName($type)) {
+        if (!$cashFlowName = $this->inout_model->get_cash_flow_name($type)) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
 
@@ -25,7 +25,7 @@ class Inout extends MY_Controller {
                 
                 $this->inout_model->add($type, $this->input->post());
                 
-                $this->flash->success(sprintf(Consts::SUCC_ADD_INOUT_RECORD, $this->inout_model->getCashFlowName($type)));
+                $this->flash->success(sprintf(Consts::SUCC_ADD_INOUT_RECORD, $this->inout_model->get_cash_flow_name($type)));
                 
                 // Xét xem có nhập tiếp hay không
                 if ((bool)$this->input->get('continue') === false) {
@@ -42,11 +42,11 @@ class Inout extends MY_Controller {
         
         $view_data['type']            = $type;
         $view_data['title']           = $cashFlowName;
-        $view_data['inout_type_sign'] = $this->inout_model->getInoutTypeSign($type);
+        $view_data['inout_type_sign'] = $this->inout_model->get_inout_type_sign($type);
         $view_data['select']   = array(
-            'accounts'   => $this->account_model->getSelectTagData(),
-            'players'    => $this->user_model->getSelectTagData(),
-            'categories' => $this->category_model->getSelectTagData($this->inout_model->getInoutTypeCode($type)),
+            'accounts'   => $this->account_model->get_select_tag_data(),
+            'players'    => $this->user_model->get_select_tag_data(),
+            'categories' => $this->category_model->get_select_tag_data($this->inout_model->get_inout_type_code($type)),
         );
         $view_data['url']   = array(
             'form'      => $this->base_url(array(__FUNCTION__, $type)),
@@ -96,7 +96,7 @@ class Inout extends MY_Controller {
         }
         
         if ($ioRecord['cash_flow'] == 'handover') {
-            $ioRecord['player'] = $this->inout_model->setPlayersForHandoverEdit($ioRecord);
+            $ioRecord['player'] = $this->inout_model->set_handover_edit_players($ioRecord);
         }
         
         $ioRecord['amount'] = abs($ioRecord['amount']);
@@ -105,11 +105,11 @@ class Inout extends MY_Controller {
         $view_data                    = $ioRecord;
         $view_data['type']            = $type;
         $view_data['title']           = 'Chỉnh sửa';
-        $view_data['inout_type_sign'] = $this->inout_model->getInoutTypeSign($ioRecord['inout_type_id']);
+        $view_data['inout_type_sign'] = $this->inout_model->get_inout_type_sign($ioRecord['inout_type_id']);
         $view_data['select']   = array(
-            'accounts'   => $this->account_model->getSelectTagData(),
-            'players'    => $this->user_model->getSelectTagData(),
-            'categories' => $this->category_model->getSelectTagData($this->inout_model->getInoutTypeCode($type)),
+            'accounts'   => $this->account_model->get_select_tag_data(),
+            'players'    => $this->user_model->get_select_tag_data(),
+            'categories' => $this->category_model->get_select_tag_data($this->inout_model->get_inout_type_code($type)),
         );
         $view_data['url']   = array(
             'form'      => $this->base_url(array(__FUNCTION__, $id)),
@@ -131,8 +131,8 @@ class Inout extends MY_Controller {
         redirect($this->referer->getSession());
     }
     
-    public function searchMemo($q)
+    public function search_memo($q)
     {
-        echo json_encode($this->inout_model->searchMemo(urldecode($q)));
+        echo json_encode($this->inout_model->search_memo(urldecode($q)));
     }
 }
