@@ -98,7 +98,7 @@ class Auth_model extends App_Model {
      * @return  void
      *--------------------------------------------------------------------
      */
-    private function reset_lock_account()
+    private function reset_locked_account()
     {
         $user = array(
             'login_attemps' => 0,
