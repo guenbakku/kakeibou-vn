@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed'); ?>
 
-<!-- Mobile version -->
+<!-- Mobile first -->
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="vi">
 	<head>
@@ -8,8 +8,8 @@
         <meta http-equiv="Content-Type" content="Text/html; charset=utf-8" />
         <meta name="robots" content="noindex" />
         <meta name="description" content="<?=$_page_description?>" />
-        <meta name="keywords" content="" />
-        <meta name="copyright" content="© Greentrees" />
+        <meta name="keywords" content="cashbook, kakeibou" />
+        <meta name="copyright" content="© NVB" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     
         <link rel="shortcut icon" href="<?=template_url()?>images/favicon.gif" type="image/gif">
