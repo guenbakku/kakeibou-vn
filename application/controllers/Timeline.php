@@ -134,7 +134,7 @@ class Timeline extends MY_Controller {
      * @param   string  : thời điểm hiện tại để scroll đến
      *--------------------------------------------------------------------
      */
-    protected function _page_scroll_target(string $date): ?string
+    protected function _page_scroll_target(?string $date): ?string
     {
         $format_type = date_format_type_of_string($date);
         
