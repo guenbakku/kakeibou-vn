@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Viewlist_model extends Inout_Model {
+class Timeline_model extends Inout_Model {
 
     /*
      *--------------------------------------------------------------------

@@ -23,7 +23,7 @@
                     <h4 class="modal-title">Lựa chọn thời gian</h4>
                 </div>
                 <div class="modal-body">
-                    <?=$this->template->get_view('elements/viewlist/header_ymd_modal')?>
+                    <?=$this->template->get_view('elements/timeline/header_ymd_modal')?>
                 </div>
                 <div class="modal-footer" style="text-align:center">
                     <button type="submit" class="btn btn-primary">Chọn</button>

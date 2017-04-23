@@ -1,5 +1,5 @@
 <?=$this->template->get_view('elements/page-nav.php')?>
-<?=$this->template->get_view('elements/viewlist/header', ['date_element' => 'header_ymd'])?>
+<?=$this->template->get_view('elements/timeline/header', ['date_element' => 'header_ymd'])?>
 
 <div class="container">
     <div class="well well-sm">

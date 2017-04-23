@@ -24,7 +24,7 @@
     <?=form_open($url['dateSelectionForm'], array('method'=>'get', 'id'=>'dateSelectionForm', 'class'=>'form-vertical'))?>
         <div class="panel panel-default no-top-border">
             <div class="panel-body">
-                <?=$this->template->get_view('elements/viewlist/date_selection_' . $date_selection_form)?>
+                <?=$this->template->get_view('elements/timeline/date_selection_' . $date_selection_form)?>
                 <button type="submit" class="btn btn-primary">Chọn</button>
             </div>
         </div>

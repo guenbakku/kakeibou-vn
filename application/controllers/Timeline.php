@@ -1,17 +1,17 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Viewlist extends MY_Controller {
+class Timeline extends MY_Controller {
     
     public function __construct()
     {   
         parent::__construct();
-        $this->load->model('viewlist_model');
+        $this->load->model('timeline_model');
     }
     
     public function index()
     {                  
-        // $this->template->write_view('MAIN', 'viewlist/menu', $view_data);
+        // $this->template->write_view('MAIN', 'timeline/menu', $view_data);
         // $this->template->render();
         return redirect($this->base_url(['summary', date('Y-m')]));
     }
@@ -34,11 +34,11 @@ class Viewlist extends MY_Controller {
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
         $dateChange = prev_next_time($date);
-        $yearsList  = $this->viewlist_model->get_years_list();
+        $yearsList  = $this->timeline_model->get_years_list();
         $monthsList = months_list();
         
         $view_data['title'] = 'Danh sách tóm tắt';
-        $view_data['list'] = $this->viewlist_model->summary_inout_types_auto($extractedDate['y'], $extractedDate['m']);
+        $view_data['list'] = $this->timeline_model->summary_inout_types_auto($extractedDate['y'], $extractedDate['m']);
         $view_data['year'] = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['select'] = [
@@ -58,7 +58,7 @@ class Viewlist extends MY_Controller {
         $view_data['pageScrollTarget'] = $this->_page_scroll_target($date);
         $view_data = array_merge($view_data, compact('date', 'dateFormatType'));
         
-        $this->template->write_view('MAIN', 'viewlist/summary', $view_data);
+        $this->template->write_view('MAIN', 'timeline/summary', $view_data);
         $this->template->render();
     }
     
@@ -90,12 +90,12 @@ class Viewlist extends MY_Controller {
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
         $dateChange = prev_next_time($date);
-        $yearsList  = $this->viewlist_model->get_years_list();
+        $yearsList  = $this->timeline_model->get_years_list();
         $monthsList = months_list();
         $daysList   = days_list();
         
         $view_data['title'] = 'Danh sách chi tiết';
-        $view_data['list']  = $this->viewlist_model->getInoutsOfDay($range[0], $range[1], $account_id, $player_id);
+        $view_data['list']  = $this->timeline_model->getInoutsOfDay($range[0], $range[1], $account_id, $player_id);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['day']   = $extractedDate['d']?? '';
@@ -122,7 +122,7 @@ class Viewlist extends MY_Controller {
         $view_data = array_merge($view_data, compact('date', 'dateFormatType', 'account_id', 'player_id', 'inout_type_id'));
         
         
-        $this->template->write_view('MAIN', 'viewlist/detail', $view_data);
+        $this->template->write_view('MAIN', 'timeline/detail', $view_data);
         $this->template->render();
     }
     
