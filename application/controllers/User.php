@@ -101,6 +101,14 @@ class User extends MY_Controller {
         $this->template->render();
     }
     
+    /*
+    *--------------------------------------------------------------------
+    * Thực hiện xác thực user
+    *
+    * @param    void
+    * @return   void
+    *--------------------------------------------------------------------
+    */
     public function login()
     {
         // Already Login

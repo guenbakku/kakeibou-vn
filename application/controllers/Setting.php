@@ -13,7 +13,7 @@ class Setting extends MY_Controller {
         $this->template->render();
 	}
     
-    public function edit($item)
+    public function edit(string $item)
     {
         if (empty($data = $this->setting_model->get($item))) {
             show_error(Consts::ERR_BAD_REQUEST);

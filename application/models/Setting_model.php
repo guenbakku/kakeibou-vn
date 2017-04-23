@@ -14,7 +14,7 @@ class Setting_model extends App_Model {
      * @return array        : (key => val)
      *--------------------------------------------------------------------
      */
-    public function get($items = null, $col = null){
+    public function get($items = null, string $col = null){
         
         if (is_string($items)){
             $items = [$items];
@@ -43,7 +43,7 @@ class Setting_model extends App_Model {
      *--------------------------------------------------------------------
      * Lưu setting
      *
-     * @param   array:
+     * @param   array
      * @return  void
      *--------------------------------------------------------------------
      */

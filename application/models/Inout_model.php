@@ -45,7 +45,7 @@ class Inout_model extends App_Model {
         $this->load->database('default');
     }
     
-    public function get($id)
+    public function get(int $id)
     {
         return $this->db->where('inout_records.id', $id)
                         ->join('categories', 'categories.id = inout_records.category_id')
@@ -54,7 +54,7 @@ class Inout_model extends App_Model {
                         ->row_array();
     }
     
-    public function add($type, array $data)
+    public function add(string $type, array $data)
     {   
         $data['cash_flow']  = $type;
         $data['created_on'] = $data['modified_on'] = date('Y-m-d H:i:s');
@@ -86,7 +86,7 @@ class Inout_model extends App_Model {
         $this->db->trans_complete();
     }
     
-    public function del($id)
+    public function del(int $id)
     {
         $pair_data = $this->get_pair_id($id);
         
@@ -121,7 +121,7 @@ class Inout_model extends App_Model {
      * 
      *--------------------------------------------------------------------
      */
-    private function set_pair_add_data($type, array $data)
+    private function set_pair_add_data(string $type, array $data)
     {
         $pair[0] = $data;
         $pair[0]['amount']  = $this->get_inout_type_code($type)==1? $pair[0]['amount'] : 0-$pair[0]['amount'];
@@ -160,7 +160,7 @@ class Inout_model extends App_Model {
      * 
      *--------------------------------------------------------------------
      */
-    private function get_pair_id($id)
+    private function get_pair_id(int $id)
     {
         $res = $this->db->select('inout_records.id')
                         ->select('inout_records.pair_id')
@@ -201,7 +201,7 @@ class Inout_model extends App_Model {
      *              -> Người chuyển là người còn lại
      *--------------------------------------------------------------------
      */
-    public function set_handover_edit_players($data)
+    public function set_handover_edit_players(array $data)
     {
         if ($data['cash_flow'] != 'handover'){
             return false;
@@ -217,25 +217,17 @@ class Inout_model extends App_Model {
         }
     }
     
-    public function get_cash_flow_name($type)
-    {
-        if (!isset(self::$CASH_FLOW_NAMES[$type])){
-            return null;
-        }
-        
-        return self::$CASH_FLOW_NAMES[$type][0];
-    }
-    
-    public function get_inout_type_code($type)
+    public function get_cash_flow_name(string $type)
     {      
-        if (!isset(self::$CASH_FLOW_NAMES[$type])){
-            return null;
-        }
-        
-        return self::$CASH_FLOW_NAMES[$type][1];
+        return isset(self::$CASH_FLOW_NAMES[$type])? self::$CASH_FLOW_NAMES[$type][0] : null;
     }
     
-    public function get_inout_type_sign($type)
+    public function get_inout_type_code(string $type)
+    {      
+        return isset(self::$CASH_FLOW_NAMES[$type])? self::$CASH_FLOW_NAMES[$type][1] : null;
+    }
+    
+    public function get_inout_type_sign(string $type)
     {   
         if (!is_numeric($type) && is_string($type)){
             $type = $this->get_inout_type_code($type);
@@ -253,15 +245,11 @@ class Inout_model extends App_Model {
      *--------------------------------------------------------------------
      * Lấy code của category cố định dành cho các loại thu chi phát sinh pair
      *
-     * @param   string: 
+     * @param   string
      *--------------------------------------------------------------------
      */
-    public function get_fixed_category_code($type)
+    public function get_fixed_category_code(string $type)
     {
-        if (!isset(self::$CASH_FLOW_NAMES[$type])){
-            return null;
-        }
-
-        return element(2, self::$CASH_FLOW_NAMES[$type]);
+        return isset(self::$CASH_FLOW_NAMES[$type])? element(2, self::$CASH_FLOW_NAMES[$type]) : null;
     }
 }

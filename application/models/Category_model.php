@@ -14,7 +14,7 @@ class Category_model extends App_Model {
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function get(?int $id=null, array $where=array())
+    public function get(?int $id=null, array $where=[])
     {
         if (is_numeric($id)){
             $this->db->where('id', $id);
@@ -39,16 +39,16 @@ class Category_model extends App_Model {
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function add(array $data)
+    public function add(array $category)
     {
         $order_no = current($this->db->select_max('order_no')
-                                     ->where('inout_type_id', $data['inout_type_id'])
+                                     ->where('inout_type_id', $category['inout_type_id'])
                                      ->where('restrict_delete', 0)
                                      ->get(self::TABLE)->row_array()) + 1;
         
         $add_data = array(
-            'name'              => $data['name'],
-            'inout_type_id'     => $data['inout_type_id'],
+            'name'              => $category['name'],
+            'inout_type_id'     => $category['inout_type_id'],
             'order_no'          => $order_no,
         );
         
@@ -64,11 +64,11 @@ class Category_model extends App_Model {
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function edit(int $id, array $data)
+    public function edit(int $id, array $category)
     {
         $update_data = array(
-            'name'              => $data['name'],
-            'month_fixed_money' => $data['month_fixed_money'], 
+            'name'              => $category['name'],
+            'month_fixed_money' => $category['month_fixed_money'], 
         );
         
         $this->db->where('id', $id)->update(self::TABLE, $update_data);
@@ -89,7 +89,11 @@ class Category_model extends App_Model {
                           ->count_all_results(self::TABLE);
 
         if ($count > 0){
-            throw new AppException(Consts::ERR_CATEGORY_NOT_EMPTY);
+            $category_name = $this->db->select('name')
+                                      ->where('id', $id)
+                                      ->get(self::TABLE)->row_array()['name'];
+            
+            throw new AppException(sprintf(Consts::ERR_CATEGORY_NOT_EMPTY, $category_name));
         }
         
         $this->db->where('id', $id)->delete(self::TABLE);
@@ -104,9 +108,9 @@ class Category_model extends App_Model {
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function edit_batch(array $arr, string $primary = 'id')
+    public function edit_batch(array $categories, string $primary = 'id')
     {
-        $this->db->update_batch(self::TABLE, $arr, $primary);
+        $this->db->update_batch(self::TABLE, $categories, $primary);
     }
     
     /*
@@ -134,7 +138,7 @@ class Category_model extends App_Model {
      * @return  array
      *--------------------------------------------------------------------
      */
-    public function get_select_tag_data($inout_type_id=null)
+    public function get_select_tag_data(int $inout_type_id=null)
     {
         $this->db->where('inout_type_id', $inout_type_id)
                  ->where('restrict_delete', '0')

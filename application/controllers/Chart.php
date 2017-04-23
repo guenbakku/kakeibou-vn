@@ -24,7 +24,7 @@ class Chart extends MY_Controller {
      * @return   void
      *--------------------------------------------------------------------
      */
-    public function line(?string $date = null): void
+    public function line(string $date=null)
     {   
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
@@ -34,7 +34,7 @@ class Chart extends MY_Controller {
         
         $view_data['title'] = 'Biểu đồ đường';
         $view_data['list'] = $this->timeline_model->summary_inout_types_auto($extractedDate['y'], $extractedDate['m']);
-        $view_data['list'] = $this->timeline_model->calcCumulative($view_data['list']);
+        $view_data['list'] = $this->timeline_model->calc_cumulative($view_data['list']);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['select'] = [
@@ -67,7 +67,7 @@ class Chart extends MY_Controller {
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function pie(?string $date = null)
+    public function pie(string $date=null)
     {
         if (empty($date)) {
             show_error(Consts::ERR_BAD_REQUEST);

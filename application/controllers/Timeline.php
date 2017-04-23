@@ -29,7 +29,7 @@ class Timeline extends MY_Controller {
      * @return   void
      *--------------------------------------------------------------------
      */
-    public function summary(?string $date = null): void
+    public function summary(string $date=null)
     {        
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
@@ -73,7 +73,7 @@ class Timeline extends MY_Controller {
      * @return  void
      *--------------------------------------------------------------------
      */
-    public function detail(?string $date = null): void
+    public function detail(string $date=null)
     {
         if (empty($date)) {
             show_error(Consts::ERR_BAD_REQUEST);
@@ -95,7 +95,7 @@ class Timeline extends MY_Controller {
         $daysList   = days_list();
         
         $view_data['title'] = 'Danh sách chi tiết';
-        $view_data['list']  = $this->timeline_model->getInoutsOfDay($range[0], $range[1], $account_id, $player_id);
+        $view_data['list']  = $this->timeline_model->get_day_inouts($range[0], $range[1], $account_id, $player_id);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['day']   = $extractedDate['d']?? '';
@@ -134,7 +134,7 @@ class Timeline extends MY_Controller {
      * @param   string  : thời điểm hiện tại để scroll đến
      *--------------------------------------------------------------------
      */
-    protected function _page_scroll_target(?string $date): ?string
+    protected function _page_scroll_target(string $date): ?string
     {
         $format_type = date_format_type_of_string($date);
         

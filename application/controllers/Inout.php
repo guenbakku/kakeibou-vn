@@ -9,7 +9,7 @@ class Inout extends MY_Controller {
         $this->template->render();
     }
     
-	public function add($type=null)
+	public function add(string $type)
     {   
         if (!$cashFlowName = $this->inout_model->get_cash_flow_name($type)) {
             show_error(Consts::ERR_BAD_REQUEST);
@@ -57,7 +57,7 @@ class Inout extends MY_Controller {
         $this->template->render();
 	}
     
-    public function edit($id=null)
+    public function edit(int $id)
     {
         if (!is_numeric($id)) {
             show_error(Consts::ERR_BAD_REQUEST);
@@ -120,7 +120,7 @@ class Inout extends MY_Controller {
         $this->template->render();
     }
     
-    public function del($id=null)
+    public function del(int $id)
     {
         if (!is_numeric($id)) {
             show_error(Consts::ERR_BAD_REQUEST);
@@ -131,7 +131,7 @@ class Inout extends MY_Controller {
         redirect($this->referer->getSession());
     }
     
-    public function search_memo($q)
+    public function search_memo(string $q)
     {
         echo json_encode($this->inout_model->search_memo(urldecode($q)));
     }

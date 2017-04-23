@@ -119,7 +119,7 @@ class Category extends MY_Controller {
         $this->template->render();
     }
     
-    public function edit($id=null)
+    public function edit(int $id)
     {
         if (!is_numeric($id)) {
             show_error(Consts::ERR_BAD_REQUEST);
@@ -174,14 +174,19 @@ class Category extends MY_Controller {
         $this->template->render();
     }
     
-    public function del($id)
+    public function del(int $id)
     {
         if (!is_numeric($id)) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
         
-        $this->category_model->del($id);
-        $this->flash->success(Consts::SUCC_DEL_CATEGORY);
+        try {
+            $this->category_model->del($id);
+            $this->flash->success(Consts::SUCC_DEL_CATEGORY);
+        }
+        catch (AppException $ex) {
+            $this->flash->error($ex->getMessage());
+        }
         return redirect($this->referer->getSession());
     }
 }

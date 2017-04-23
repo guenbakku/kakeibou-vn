@@ -110,7 +110,7 @@ class Timeline_model extends Inout_Model {
      * @return  array
      *--------------------------------------------------------------------
      */
-    public function getInoutsOfDay(string $from, string $to, int $account_id, int $player_id): array
+    public function get_day_inouts(string $from, string $to, int $account_id, int $player_id): array
     {
         $this->load->model('search_model');
         
@@ -131,18 +131,19 @@ class Timeline_model extends Inout_Model {
      * @return  array
      *--------------------------------------------------------------------
      */
-    public function calcCumulative($data) {
-        foreach ($data as $i => &$item) {
+    public function calc_cumulative(array $timeline): array
+    {
+        foreach ($timeline as $i => &$item) {
             if ($i == 0) {
                 continue;
             } else {
-                $preItem = $data[$i-1];
+                $preItem = $timeline[$i-1];
             }
             foreach (['tong', 'thu', 'chi'] as $key) {
                 $item[$key] += $preItem[$key];
             }
         }
-        return $data;
+        return $timeline;
     }
     
     /*
@@ -151,7 +152,7 @@ class Timeline_model extends Inout_Model {
      *
      *--------------------------------------------------------------------
      */
-    public function getRemaining(): array
+    public function get_remaining(): array
     {
         $now = date('Y-m-d');
         
@@ -210,7 +211,7 @@ class Timeline_model extends Inout_Model {
      *                       )
      *--------------------------------------------------------------------
      */
-    public function getLiquidOutgoStatus(): array
+    public function get_liquid_outgo_status(): array
     {
         $month_estimated_outgo = $this->category_model->get_month_estimated_outgo()['liquid'];
         

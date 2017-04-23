@@ -29,7 +29,7 @@ class Search_model extends App_Model {
         'hide_pair_inout'
     );
     
-    public function __set($name, $val)
+    public function __set(string $name, $val)
     {
         if ($val === null){
             return false;
