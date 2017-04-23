@@ -6,7 +6,7 @@ require_once 'servers.php';
 
 // Repository
 set('repository', 'ssh://gituser@nvb-online.com/opt/git/bhcashbook.git');
-set('branch', 'RC3');
+set('branch', 'master');
 
 // CodeIgniter shared dirs
 set('shared_dirs', [
@@ -20,6 +20,9 @@ set('writable_dirs', [
     'application/cache',
     'application/logs',
     'application/session']);
+    
+set('writable_mode', 'chown');
+set('writable_use_sudo', true);
 
 // Delete unnecessary dirs
 set('clear_paths', [
@@ -29,16 +32,7 @@ set('clear_paths', [
 
 // Number of releases to keep
 set('keep_releases', 3);
-    
-// Additional tasks
-desc('Set permission of deploy_path to deploy user');
-task('chown:before', function(){
-    run('sudo chown {{deploy_user}}: -R {{deploy_path}}');
-});
-desc('Set permission of deploy_path to http user');
-task('chown:after', function(){
-    run('sudo chown {{http_user}}: -R {{deploy_path}}');
-});
+
 
 // Main task
 desc('Deploy app');
@@ -51,12 +45,11 @@ task('deploy', [
     'deploy:shared',
     'deploy:symlink',
     'deploy:clear_paths',
+    'deploy:writable',
     'deploy:unlock',
     'cleanup',
 ]);
 
-before('deploy', 'chown:before');
-after('deploy', 'chown:after');
 after('deploy', 'success');
 after('cleanup', 'phinx:migrate');
 
