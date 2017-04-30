@@ -31,37 +31,37 @@
         </form>
     </div>
         
-    <div class="panel panel-default">
-        <?php if ($total_items > 0): ?>
-            <?php for ($i=0; $i<$total_items; $i++): ?>
-                <?php if ($i==0 || $list[$i]['date'] != $list[$i-1]['date']): ?>
-                    <div class="panel-heading"><strong><?=$list[$i]['date']?> (<?=day_of_week($list[$i]['date'])?>)</strong></div>
-                    <div class="list-group">
-                <?php endif ?>
-                        <!-- Item -->
-                        <a class="list-group-item" href="<?=sprintf($url['editTemplate'], $list[$i]['id'])?>">
-                            <div style="padding-right:15px; position:absolute; right:0px">
-                                <span class="glyphicon glyphicon-menu-right"></span>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-7" style="padding-right:0">
-                                    <div><?=$list[$i]['category']?></div>
-                                    <div class="small text-muted"><span class="fa <?=Account_model::$ICONS[$list[$i]['account_id']]?>"></span> <em><?=$list[$i]['memo']?></em></div>
-                                </div>
-                                <div class="col-xs-4 text-right">
-                                    <div class="<?=$list[$i]['inout_type']=='Thu'? 'text-income' : 'text-outgo'?>"><?=currency($list[$i]['amount'])?></div>
-                                    <div class="label <?=$list[$i]['player_label']?>"><?=$list[$i]['player']?></div>
-                                </div>
-                            </div>
-                        </a>
-                <?php if ($i==$total_items-1 || $list[$i]['date'] != $list[$i+1]['date']): ?>
+    <?php if ($total_items > 0): ?>
+        <?php for ($i=0; $i<$total_items; $i++): ?>
+            <?php if ($i==0 || $result[$i]['date'] != $result[$i-1]['date']): ?>
+                <div class="list-group">
+                    <div class="list-group-item active">
+                        <strong><?=$result[$i]['date']?> (<?=day_of_week($result[$i]['date'])?>)</strong>
                     </div>
-                <?php endif ?>
-            <?php endfor ?>
-        <?php else: ?>
-            <div class="panel-body">
-                <?=Consts::ERR_NOT_FOUND?>
-            </div>
-        <?php endif ?>
-    </div>
+            <?php endif ?>
+                    <!-- Item -->
+                    <a class="list-group-item" href="<?=sprintf($url['editTemplate'], $result[$i]['id'])?>">
+                        <div style="padding-right:15px; position:absolute; right:0px">
+                            <span class="glyphicon glyphicon-menu-right"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-7" style="padding-right:0">
+                                <div><?=$result[$i]['category']?></div>
+                                <div class="small text-muted"><span class="fa <?=Account_model::$ICONS[$result[$i]['account_id']]?>"></span> <em><?=$result[$i]['memo']?></em></div>
+                            </div>
+                            <div class="col-xs-4 text-right">
+                                <div class="<?=$result[$i]['inout_type']=='Thu'? 'text-income' : 'text-outgo'?>"><?=currency($result[$i]['amount'])?></div>
+                                <div class="label <?=$result[$i]['player_label']?>"><?=$result[$i]['player']?></div>
+                            </div>
+                        </div>
+                    </a>
+            <?php if ($i==$total_items-1 || $result[$i]['date'] != $result[$i+1]['date']): ?>
+                </div>
+            <?php endif ?>
+        <?php endfor ?>
+    <?php else: ?>
+        <div class="list-group">
+            <span class="list-group-item"><?=Consts::ERR_NOT_FOUND?></span>
+        </div>
+    <?php endif ?>
 </div>

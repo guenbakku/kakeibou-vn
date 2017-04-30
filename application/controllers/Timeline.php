@@ -95,11 +95,11 @@ class Timeline extends MY_Controller {
         $daysList   = days_list();
         
         $view_data['title'] = 'Danh sách chi tiết';
-        $view_data['list']  = $this->timeline_model->get_day_inouts($range[0], $range[1], $account_id, $player_id);
+        $view_data['result']  = $this->timeline_model->get_day_inouts($range[0], $range[1], $account_id, $player_id);
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['day']   = $extractedDate['d']?? '';
-        $view_data['total_items'] = count($view_data['list']);
+        $view_data['total_items'] = count($view_data['result']);
         $view_data['select'] = [
             'accounts'    => $this->account_model->get_select_tag_data(),
             'players'     => $this->user_model->get_select_tag_data(),

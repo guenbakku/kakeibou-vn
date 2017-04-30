@@ -77,13 +77,13 @@ class Search extends MY_Controller {
             'inout_types' => array(0 => 'Tất cả') + $this->inout_type_model->get_select_tag_data(),
         );
         $view_data['url'] = array(
-            'form'  => $this->base_url(),
-            'edit'  => base_url(array('inout', 'edit', '%s')),
-            'back'  => base_url(),
+            'form'      => $this->base_url(),
+            'edit'      => base_url(array('inout', 'edit', '%s')),
+            'back'      => base_url(),
+            'next_page' => $this->search_model->next_page_url(),
         );
         
 		$this->template->write_view('MAIN', 'search/home', $view_data);
         $this->template->render();
 	}
-    
 }

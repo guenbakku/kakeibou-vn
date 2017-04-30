@@ -106,6 +106,26 @@ class Search_model extends App_Model {
         return $this->result;
     }
     
+    /*
+     *--------------------------------------------------------------------
+     * Tạo url cho next page
+     *
+     * @param   void
+     * @return  string
+     *--------------------------------------------------------------------
+     */
+    public function next_page_url(): ?string
+    {
+        if (!$this->next) {
+            return null;
+        }
+        else {
+            $query = $this->input->get();
+            $query['offset'] = $this->next;
+            return current_url().'?'.http_build_query($query);
+        }
+    }
+    
     protected function gen_search_query()
     {        
         // Set dữ liệu cần lấy

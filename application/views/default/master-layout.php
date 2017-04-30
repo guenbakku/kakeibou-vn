@@ -21,7 +21,6 @@
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.theme.min.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/theme.css">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/main.css">
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/sticky-footer.css">
         <?=$_styles?>
         
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery-1.12.3.min.js"></script>
@@ -32,6 +31,8 @@
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.navigation.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.page-scroll.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.switcher.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/waypoints/jquery.waypoints.min.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/waypoints/infinite.min.js"></script>
         <?=$_scripts?>
 	</head>
 
