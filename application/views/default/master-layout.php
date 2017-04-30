@@ -1,5 +1,9 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed'); ?>
 
+<?php 
+    $release = '?'.Consts::RELEASE_DATE;
+?>
+
 <!-- Mobile first -->
 <!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="vi">
@@ -14,25 +18,25 @@
     
         <link rel="shortcut icon" href="<?=template_url()?>images/favicon.gif" type="image/gif">
         <link rel="apple-touch-icon" href="<?=template_url()?>images/favicon.gif" />
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/font-awesome-4.6.3/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.min.css">
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.structure.min.css">
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.theme.min.css">
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/theme.css">
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/main.css">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/css/bootstrap.min.css<?=$release?>">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/font-awesome-4.6.3/css/font-awesome.min.css<?=$release?>">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.min.css<?=$release?>">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.structure.min.css<?=$release?>">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.theme.min.css<?=$release?>">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/theme.css<?=$release?>">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/main.css<?=$release?>">
         <?=$_styles?>
         
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery-1.12.3.min.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.utilities.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.navigation.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.page-scroll.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.switcher.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/waypoints/jquery.waypoints.min.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/waypoints/infinite.min.js"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/jquery-1.12.3.min.js<?=$release?>"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/bootstrap-3.3.6-dist/js/bootstrap.min.js<?=$release?>"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery-ui.min.js<?=$release?>"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.js<?=$release?>"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.utilities.js<?=$release?>"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.navigation.js<?=$release?>"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.page-scroll.js<?=$release?>"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.switcher.js<?=$release?>"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/waypoints/jquery.waypoints.min.js<?=$release?>"></script>
+        <script type="text/javascript" src="<?=base_url()?>asset/upload/waypoints/infinite.min.js<?=$release?>"></script>
         <?=$_scripts?>
 	</head>
 
