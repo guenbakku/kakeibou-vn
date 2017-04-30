@@ -58,6 +58,9 @@ class Auth {
     // Token của session đăng nhập hiện tại
     protected $token = null;
     
+    // Cache lại giá trị expire_on của token
+    protected $cache = [];
+    
     // Thông tin user vừa đăng nhập
     protected $user = [];
     
@@ -450,23 +453,25 @@ class Auth {
             return false;
         }
         
-        $data = $this->CI->db
+        if (isset($this->cache[$token])) {
+            $expire_on = $this->cache[$token];
+        } else {
+            $data = $this->CI->db
                          ->select('expire_on')
                          ->where('token', $token)
                          ->limit(1)
                          ->get($this->settings['token_table'])
                          ->row_array();
                          
-        if (empty($data)) {
-            return false;
+            if (empty($data)) {
+                return false;
+            }
+            
+            $expire_on = $data['expire_on'];
+            $this->cache[$token] = $expire_on;
         }
         
-        $expire_on = strtotime($data['expire_on']);
-        if ($expire_on < time()) {
-            return false;
-        }
-        
-        return true;
+        return strtotime($expire_on) >= time();
     }
     
     /*
