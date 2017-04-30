@@ -10,7 +10,6 @@ class Search extends MY_Controller {
     
 	public function index()
     {   
-        $result = null;
         if (!empty($this->input->get())) {
             try {
                 $_POST = $this->input->get();
@@ -27,6 +26,7 @@ class Search extends MY_Controller {
                     'modified_from'     => true,
                     'modified_to'       => true,
                     'hide_pair_inout'   => false,
+                    'offset'            => false,
                 );
                 $can_excute_search = false;
                 
@@ -45,6 +45,9 @@ class Search extends MY_Controller {
                                 $this->search_model->memo = $val;
                             }
                         }
+                        elseif ($key == 'offset') {
+                            $this->search_model->$key = (int)$val;
+                        }
                         else {
                             $this->search_model->$key = $val;
                         }
@@ -58,17 +61,18 @@ class Search extends MY_Controller {
                     throw new AppException('Chưa nhập điều kiện tìm kiếm');
                 }
                 
-                $result = $this->search_model->search();
+                $this->search_model->search();
             }
             catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
         }
         
-        $view_data['list']        = $result;
-        $view_data['total_items'] = count($view_data['list']);
-        $view_data['title']       = 'Tìm kiếm chi tiêu';
-        $view_data['select']      = array(
+        $view_data['result']    = $this->search_model->result;
+        $view_data['page_num']  = count($this->search_model->result);
+        $view_data['total_num'] = $this->search_model->total;
+        $view_data['title']     = 'Tìm kiếm chi tiêu';
+        $view_data['select']    = array(
             'players'     => array(0 => 'Tất cả') + $this->user_model->get_select_tag_data(),
             'inout_types' => array(0 => 'Tất cả') + $this->inout_type_model->get_select_tag_data(),
         );

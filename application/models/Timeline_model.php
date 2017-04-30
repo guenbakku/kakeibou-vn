@@ -119,6 +119,7 @@ class Timeline_model extends Inout_Model {
         $this->search_model->account         = $account_id;
         $this->search_model->player          = $player_id;
         $this->search_model->hide_pair_inout = $account_id == 0? true : false;
+        $this->search_model->limit           = false;
         
         return $this->search_model->search(); 
     }
