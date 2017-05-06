@@ -17,7 +17,7 @@ class Search_model extends App_Model {
         'player'            => null,
         'hide_pair_inout'   => false,
         'offset'            => 0,
-        'limit'             => 200,
+        'limit'             => 100,
     ];
     
     public $result;
