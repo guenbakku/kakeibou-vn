@@ -127,6 +127,13 @@ input[type="color"] {
     font-size: 16px;
 }
 
+input[type="date"] {
+    display:block;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    min-height: 1.2em;
+}
+
 /* Chỉnh span trong progress bar vô giữa div */
 .progress {
     position: relative;
