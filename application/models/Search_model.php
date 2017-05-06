@@ -90,16 +90,16 @@ class Search_model extends App_Model {
     {
         $db = $this->gen_search_query();
         $total_num = $this->total_num($db);
-        $next_page_num = $this->next_page_num($db);
+        $has_next_page = $this->has_next_page($db);
         
         $result = $db->limit($this->settings['limit'])
                      ->offset($this->settings['offset'])
                      ->get()->result_array();
-        $fragment_num = $this->fragment_num($result, $next_page_num);
+        $fragment_num = $this->fragment_num($result, $has_next_page);
         
         $this->total = $total_num;
         $this->result = array_slice($result, 0, count($result)-$fragment_num);
-        $this->next = $next_page_num
+        $this->next = $has_next_page
                       ? $this->settings['offset'] + $this->settings['limit'] - $fragment_num
                       : 0;
 
@@ -126,6 +126,15 @@ class Search_model extends App_Model {
         }
     }
     
+    /*
+     *--------------------------------------------------------------------
+     * Tạo query cho xử lý tìm kiếm. 
+     * Dữ liệu sử dụng để tạo query lấy từ property settings
+     *
+     * @param   void
+     * @return  object: db object
+     *--------------------------------------------------------------------
+     */
     protected function gen_search_query()
     {        
         // Set dữ liệu cần lấy
@@ -193,23 +202,23 @@ class Search_model extends App_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Đếm số dữ liệu ở trang tiếp theo
+     * Kiểm tra xem có trang tiếp theo hay không
      *
      * @param   object: db object
-     * @param   int
+     * @return  bool
      *--------------------------------------------------------------------
      */
-    protected function next_page_num($db_obj): int
+    protected function has_next_page($db_obj): bool
     {
         if ($this->settings['limit'] === false) {
-            return 0;
+            return false;
         } 
         else {
             $db = clone $db_obj;
-            $next_page_num = $db->offset($this->settings['offset'] + $this->settings['limit'])
-                                ->limit($this->settings['limit'])
+            $has_next_page = $db->offset($this->settings['offset'] + $this->settings['limit'])
+                                ->limit(1)
                                 ->get()->num_rows();
-            return $next_page_num;
+            return $has_next_page > 0;
         }
     }
     
@@ -229,20 +238,22 @@ class Search_model extends App_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Tùy vào điều kiện tìm kiếm mà kết quả tìm kiếm của 1 trang bị cắt
-     * giữa chừng ngày.
-     * Ở đây sẽ đếm số item lẻ ở phần đuôi của list kết quả tìm kiếm
-     * để đảm bảo list kết quả tìm kiếm không bị cắt giữa chừng
+     * Tùy vào điều kiện tìm kiếm mà kết quả tìm kiếm của 1 trang có thể 
+     * bị cắt ở giữa chừng ngày cuối cùng trong danh sách.
+     * Ở đây sẽ đếm số item của ngày cuối cùng trong danh sách kết quả 
+     * tìm kiếm. 
+     * Số item này sẽ được cắt bỏ để đảm bảo list kết quả tìm kiếm 
+     * chỉ chứa những ngày có đủ số kết quả.
      * 
      * @param   array: result
-     * @param   int: số kết quả ở trang tiếp theo
-     * @return  
+     * @param   bool: có trang tiếp theo hay không
+     * @return  int
      *--------------------------------------------------------------------
      */
-    protected function fragment_num(array $result, int $next_page_num): int
+    protected function fragment_num(array $result, bool $has_next_page): int
     {
         // Nếu trang sau không có kết quả thì không cần phải cắt phần lẻ
-        if ($next_page_num == 0) {
+        if ($has_next_page == 0) {
             return 0;
         }
 
@@ -255,7 +266,8 @@ class Search_model extends App_Model {
             }
         }
         
-        // Nếu số lẻ loi bằng tổng số kết quả thì không cần phải cắt phần lẻ
+        // Nếu số lẻ loi bằng tổng số kết quả (tức danh sách kết quả chỉ chứa 1 ngày) 
+        // thì không cần phải cắt phần lẻ
         if ($fragment_num == count($result)) {
             return 0;
         }
