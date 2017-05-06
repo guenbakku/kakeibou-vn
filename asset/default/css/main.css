@@ -128,10 +128,9 @@ input[type="color"] {
 }
 
 input[type="date"] {
-    display:block;
+    display:inline-block;
     -webkit-appearance: textfield;
-    -moz-appearance: textfield;
-    min-height: 1.2em;
+    padding-top: 0px;
 }
 
 /* Chỉnh span trong progress bar vô giữa div */
