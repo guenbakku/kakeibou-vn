@@ -2,6 +2,12 @@
     function toggle_collapse_form() {
         $('.advance-search').collapse('toggle');
     }
+    
+    $(function() {
+        $('.clear-date').click(function(evt) {
+            $(this).parents('.row').find('input[type=date]').val('');
+        });
+    })
 </script>
 
 <div class="container">
@@ -68,61 +74,89 @@
                     
                     <div class="form-group">
                         <label>Thời gian thu chi:</label>
-                        <div class="input-group" style="width:100%">
-                            <span class="input-group-addon" style="min-width:60px">Từ</span>
-                            <?=form_input(
-                                array(
-                                    'name' => $field_name = 'inout_from',
-                                    'type' => 'date',
-                                ),
-                                set_value($field_name, null),
-                                array(
-                                    'class' => 'form-control',
-                                )
-                            )?>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="min-width:60px">Từ</span>
+                                    <?=form_input(
+                                        array(
+                                            'name' => $field_name = 'inout_from',
+                                            'type' => 'date',
+                                        ),
+                                        set_value($field_name, null),
+                                        array(
+                                            'class' => 'form-control',
+                                        )
+                                    )?>
+                                    <span class="input-group-addon" style="min-width:50px">
+                                        <span class="glyphicon glyphicon-remove clear-date"></span>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-group" style="width:100%">
-                            <span class="input-group-addon" style="min-width:60px">Đến</span>
-                            <?=form_input(
-                                array(
-                                    'name' => $field_name = 'inout_to',
-                                    'type' => 'date',
-                                ),
-                                set_value($field_name, null),
-                                array(
-                                    'class' => 'form-control',
-                                )
-                            )?>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="min-width:60px">Đến</span>
+                                    <?=form_input(
+                                        array(
+                                            'name' => $field_name = 'inout_to',
+                                            'type' => 'date',
+                                        ),
+                                        set_value($field_name, null),
+                                        array(
+                                            'class' => 'form-control',
+                                        )
+                                    )?>
+                                    <span class="input-group-addon" style="min-width:50px">
+                                        <span class="glyphicon glyphicon-remove clear-date"></span>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label>Thời gian nhập/chỉnh sửa:</label>
-                        <div class="input-group" style="width:100%">
-                            <span class="input-group-addon" style="min-width:60px">Từ</span>
-                            <?=form_input(
-                                array(
-                                    'name' => $field_name = 'modified_from',
-                                    'type' => 'date',
-                                ),
-                                set_value($field_name, null),
-                                array(
-                                    'class' => 'form-control',
-                                )
-                            )?>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="min-width:60px">Từ</span>
+                                    <?=form_input(
+                                        array(
+                                            'name' => $field_name = 'modified_from',
+                                            'type' => 'date',
+                                        ),
+                                        set_value($field_name, null),
+                                        array(
+                                            'class' => 'form-control',
+                                        )
+                                    )?>
+                                    <span class="input-group-addon" style="min-width:50px">
+                                        <span class="glyphicon glyphicon-remove clear-date"></span>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-group" style="width:100%">
-                            <span class="input-group-addon" style="min-width:60px">Đến</span>
-                            <?=form_input(
-                                array(
-                                    'name' => $field_name = 'modified_to',
-                                    'type' => 'date',
-                                ),
-                                set_value($field_name, null),
-                                array(
-                                    'class' => 'form-control',
-                                )
-                            )?>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon" style="min-width:60px">Đến</span>
+                                    <?=form_input(
+                                        array(
+                                            'name' => $field_name = 'modified_to',
+                                            'type' => 'date',
+                                        ),
+                                        set_value($field_name, null),
+                                        array(
+                                            'class' => 'form-control',
+                                        )
+                                    )?>
+                                    <span class="input-group-addon" style="min-width:50px">
+                                        <span class="glyphicon glyphicon-remove clear-date"></span>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
