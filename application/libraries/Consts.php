@@ -5,7 +5,7 @@ class Consts {
     
     const VERSION = '3.0';
     
-    const RELEASE_DATE = '20170430';
+    const RELEASE_DATE = '20170506';
     
     const ERR_BAD_REQUEST = 'Yêu cầu không hợp lệ';
     
