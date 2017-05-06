@@ -5,16 +5,16 @@ require_once '../vendor/deployer/recipes/phinx.php';
 require_once 'servers.php';
 
 // Repository
-set('repository', 'ssh://gituser@nvb-online.com/opt/git/bhcashbook.git');
+set('repository', '/opt/git/bhcashbook.git');
 set('branch', 'master');
 
-// CodeIgniter shared dirs
+// Codeigniter shared dirs
 set('shared_dirs', [
     'application/cache',
     'application/logs',
     'application/session']);
 
-// CodeIgniter writable dirs
+// Codeigniter writable dirs
 set('writable_dirs', [
     'application/cache',
     'application/logs',
