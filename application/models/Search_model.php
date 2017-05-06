@@ -66,7 +66,8 @@ class Search_model extends App_Model {
             }
         }
         else if (in_array($name, ['offset', 'limit'])) {
-            if ((!is_int($val) || $val < 0) && !is_bool($val)) {
+            $val = is_bool($val)? $val : (int)$val;
+            if ($val < 0) {
                 throw new AppException('Dữ liệu '.$name.' không hợp lệ');
             }
         }

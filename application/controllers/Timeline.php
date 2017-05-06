@@ -74,7 +74,7 @@ class Timeline extends MY_Controller {
      *--------------------------------------------------------------------
      */
     public function detail(string $date=null)
-    {
+    {   
         if (empty($date)) {
             show_error(Consts::ERR_BAD_REQUEST);
         }
@@ -83,6 +83,7 @@ class Timeline extends MY_Controller {
         }
         
         // Lấy thông tin từ request parameter
+        $offset         = $this->input->get('offset')?? 0;
         $account_id     = $this->input->get('account')?? 0;
         $player_id      = $this->input->get('player')?? 0;
         $inout_type_id  = $this->input->get('inout_type')?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
@@ -95,11 +96,20 @@ class Timeline extends MY_Controller {
         $daysList   = days_list();
         
         $view_data['title'] = 'Danh sách chi tiết';
-        $view_data['result']  = $this->timeline_model->get_day_inouts($range[0], $range[1], $account_id, $player_id);
+
+        $this->load->model('search_model');
+        $this->search_model->inout_from      = $range[0];
+        $this->search_model->inout_to        = $range[1];
+        $this->search_model->account         = $account_id;
+        $this->search_model->player          = $player_id;
+        $this->search_model->hide_pair_inout = $account_id == 0? true : false;
+        $this->search_model->offset          = $offset;
+        $view_data['result'] = $this->search_model->search();
+
         $view_data['year']  = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['day']   = $extractedDate['d']?? '';
-        $view_data['total_items'] = count($view_data['result']);
+        $view_data['current_num'] = count($view_data['result']);
         $view_data['select'] = [
             'accounts'    => $this->account_model->get_select_tag_data(),
             'players'     => $this->user_model->get_select_tag_data(),
@@ -118,9 +128,9 @@ class Timeline extends MY_Controller {
                 'next'          => $this->base_url([$this->router->fetch_method(), $dateChange[1]]).query_string(),
             ],
             'viewchart'         => base_url(['chart', $this->router->fetch_method(), $date]),
+            'next_page'         => $this->search_model->next_page_url(),
         ];
         $view_data = array_merge($view_data, compact('date', 'dateFormatType', 'account_id', 'player_id', 'inout_type_id'));
-        
         
         $this->template->write_view('MAIN', 'timeline/detail', $view_data);
         $this->template->render();
