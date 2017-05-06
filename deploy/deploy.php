@@ -12,8 +12,7 @@ set('branch', 'master');
 set('shared_dirs', [
     'application/cache',
     'application/logs',
-    'application/session',
-    'asset']);
+    'application/session']);
 
 // CodeIgniter writable dirs
 set('writable_dirs', [
