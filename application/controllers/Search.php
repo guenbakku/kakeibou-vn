@@ -17,7 +17,7 @@ class Search extends MY_Controller {
                 // Điều kiện tìm kiếm => bắt buộc hay không
                 // Khi tìm kiếm, ít nhất một trong những điều kiện 
                 // bắt buộc được nhập mới thực hiện tìm kiếm 
-                $condition_keys = array(
+                $condition_keys = [
                     'memo_or_amount'    => true,
                     'player'            => true,
                     'inout_type'        => true,
@@ -27,7 +27,7 @@ class Search extends MY_Controller {
                     'modified_to'       => true,
                     'hide_pair_inout'   => false,
                     'offset'            => false,
-                );
+                ];
                 $can_excute_search = false;
                 
                 foreach ($condition_keys as $key => $is_required) {
@@ -69,19 +69,19 @@ class Search extends MY_Controller {
         }
         
         $view_data['result']    = $this->search_model->result;
-        $view_data['page_num']  = count($this->search_model->result);
+        $view_data['current_num'] = count($this->search_model->result);
         $view_data['total_num'] = $this->search_model->total;
-        $view_data['title']     = 'Tìm kiếm chi tiêu';
-        $view_data['select']    = array(
-            'players'     => array(0 => 'Tất cả') + $this->user_model->get_select_tag_data(),
-            'inout_types' => array(0 => 'Tất cả') + $this->inout_type_model->get_select_tag_data(),
-        );
-        $view_data['url'] = array(
+        $view_data['title'] = 'Tìm kiếm chi tiêu';
+        $view_data['select'] = [
+            'players'     => [0 => 'Tất cả'] + $this->user_model->get_select_tag_data(),
+            'inout_types' => [0 => 'Tất cả'] + $this->inout_type_model->get_select_tag_data(),
+        ];
+        $view_data['url'] = [
             'form'      => $this->base_url(),
-            'edit'      => base_url(array('inout', 'edit', '%s')),
+            'edit'      => base_url(['inout', 'edit', '%s']),
             'back'      => base_url(),
             'next_page' => $this->search_model->next_page_url(),
-        );
+        ];
         
 		$this->template->write_view('MAIN', 'search/home', $view_data);
         $this->template->render();

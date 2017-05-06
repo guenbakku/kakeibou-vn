@@ -101,31 +101,6 @@ class Timeline_model extends Inout_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Lấy dữ liệu thu, chi theo từng ngày trong khoảng thời gian từ from -> to
-     *
-     * @param   string  : 'yyyy-mm-dd'
-     * @param   string  : 'yyyy-mm-dd'
-     * @param   int     : id loại tài khoản, nếu là 0 -> tất cả account
-     * @param   int     : id người phụ trách, nếu là 0 -> tất cả member
-     * @return  array
-     *--------------------------------------------------------------------
-     */
-    public function get_day_inouts(string $from, string $to, int $account_id, int $player_id): array
-    {
-        $this->load->model('search_model');
-        
-        $this->search_model->inout_from      = $from;
-        $this->search_model->inout_to        = $to;
-        $this->search_model->account         = $account_id;
-        $this->search_model->player          = $player_id;
-        $this->search_model->hide_pair_inout = $account_id == 0? true : false;
-        $this->search_model->limit           = false;
-        
-        return $this->search_model->search(); 
-    }
-    
-    /*
-     *--------------------------------------------------------------------
      * Tính lũy kế của thu, chi, tổng trong một dãi thời gian
      *
      * @param   array: dữ liệu thu, chi, tổng theo một dãi thời gian
