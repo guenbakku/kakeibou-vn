@@ -119,7 +119,7 @@ class Timeline extends MY_Controller {
             'day'         => array_combine($daysList, $daysList),
         ];
         $view_data['url'] = [
-            'dateSelectionForm' => $this->base_url([$this->router->fetch_method()]),
+            'dateSelectionForm' => $this->base_url([$this->router->fetch_method(), '%s']).query_string(),
             'subForm'           => $this->base_url([$this->router->fetch_method(), $date]),
             'back'              => base_url(),
             'editTemplate'      => base_url(['inout', 'edit', '%s']),

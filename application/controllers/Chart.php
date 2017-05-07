@@ -104,7 +104,7 @@ class Chart extends MY_Controller {
             'day'         => array_combine($daysList, $daysList),
         );
         $view_data['url'] = array(
-            'dateSelectionForm' => $this->base_url([$this->router->fetch_method()]),
+            'dateSelectionForm' => $this->base_url([$this->router->fetch_method(), '%s']).query_string(),
             'subForm'           => $this->base_url([$this->router->fetch_method(), $date]),
             'back'              => base_url(),
             'dateChange'        => [

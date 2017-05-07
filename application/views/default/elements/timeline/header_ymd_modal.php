@@ -63,7 +63,7 @@
             });
             
             var url = form.attr('action');
-            url = url + '/' + dateArr.join('-');
+            url = url.replace('%s', dateArr.join('-'));
             window.location.href = url;
         });
     });
