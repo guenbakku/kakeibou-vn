@@ -1,7 +1,7 @@
 <?php
 php_sapi_name() === 'cli' or die('No direct script access allowed');
 
-$_ENV['PHINX_DDL_DIR_PATH'] = __DIR__ . '/db/ddl';
+$_ENV['PHINX_DDL_DIR_PATH'] = __DIR__ . '/phinx/ddl';
 $_ENV['PHINX_DB_CONFIG_PATH'] = [
     'production' => __DIR__ . '/application/config/production/database.php',
     'development' => __DIR__ . '/application/config/database.php',
@@ -27,8 +27,8 @@ $db['development'] = get_db_config('development');
 
 return [
     'paths' => [
-        'migrations' => '%%PHINX_CONFIG_DIR%%/db/migrations',
-        'seeds' => '%%PHINX_CONFIG_DIR%%/db/seeds',
+        'migrations' => '%%PHINX_CONFIG_DIR%%/phinx/migrations',
+        'seeds' => '%%PHINX_CONFIG_DIR%%/phinx/seeds',
     ],
     
     'environments' => [

@@ -27,7 +27,9 @@ set('writable_use_sudo', true);
 set('clear_paths', [
     '.git',
     '_design',
-    'deploy']);
+    'deploy',
+    'phinx',
+    'phinx.php']);
 
 // Number of releases to keep
 set('keep_releases', 3);
@@ -43,7 +45,6 @@ task('deploy', [
     'deploy:vendors',
     'deploy:shared',
     'deploy:symlink',
-    'deploy:clear_paths',
     'deploy:writable',
     'deploy:unlock',
     'cleanup',
@@ -51,6 +52,5 @@ task('deploy', [
 
 after('deploy', 'success');
 after('cleanup', 'phinx:migrate');
-
-// [Optional] if deploy fails automatically unlock.
+after('phinx:migrate', 'deploy:clear_paths');
 after('deploy:failed', 'deploy:unlock');
