@@ -1,11 +1,12 @@
 <?php
 php_sapi_name() === 'cli' or die('No direct script access allowed');
 
-$_ENV['PHINX_DDL_DIR_PATH'] = __DIR__ . '/phinx/ddl';
+$PHINX_DIRNAME = 'db';
+
+$_ENV['PHINX_DDL_DIR_PATH'] = __DIR__ . "/$PHINX_DIRNAME/ddl";
 $_ENV['PHINX_DB_CONFIG_PATH'] = [
     'production' => __DIR__ . '/application/config/production/database.php',
-    'development' => __DIR__ . '/application/config/database.php',
-];
+    'development' => __DIR__ . '/application/config/database.php'];
 
 /*
  * Required when include Codeigniter file invidually.
@@ -27,8 +28,8 @@ $db['development'] = get_db_config('development');
 
 return [
     'paths' => [
-        'migrations' => '%%PHINX_CONFIG_DIR%%/phinx/migrations',
-        'seeds' => '%%PHINX_CONFIG_DIR%%/phinx/seeds',
+        'migrations' => "%%PHINX_CONFIG_DIR%%/$PHINX_DIRNAME/migrations",
+        'seeds' => "%%PHINX_CONFIG_DIR%%/$PHINX_DIRNAME/seeds",
     ],
     
     'environments' => [
