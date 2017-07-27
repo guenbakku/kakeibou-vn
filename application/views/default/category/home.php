@@ -1,30 +1,34 @@
 <script type="text/javascript" src="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery.ui.touch-punch.min.js"></script>
 <script type="text/javascript">
     $(function(){
-        $('#sortable').sortable({
+        $('.sortable').sortable({
             handle: '.handle',
             items: '.sort',
             axis: 'y',
             start: function(event, ui) {
+                // Save start_pos of target item to use in below reorder
                 var start_pos = ui.item.index();
                 ui.item.data('start_pos', start_pos);
             },
             update: function(event, ui) {
-                var index = ui.item.index();
+                var stop_pos = ui.item.index();
                 var start_pos = ui.item.data('start_pos');
+                var table = $(ui.item).parents('table');
                 
-                //update the html of the moved item to the current index
-                $('#sortable tr:nth-child(' + (index + 1) + ')').find('input[data-role=order_no]').val(index);
+                // we do not anything if position of target item does not change
+                if (start_pos == stop_pos) {
+                    return;
+                }
                 
-                if (start_pos < index) {
-                    //update the items before the re-ordered item
-                    for(var i=index; i > 0; i--){
-                        $('#sortable tr:nth-child(' + i + ')').find('input[data-role=order_no]').val(i - 1);
+                // we only update order of items between start_pos and stop_pos
+                if (start_pos < stop_pos) {
+                    for(var i=stop_pos; i >= start_pos; i--){
+                        table.find('tr').eq(i).find('input[data-role=order_no]').val(i);
                     }
-                }else {
-                    //update the items after the re-ordered item
-                    for(var i=index+2;i <= $("#sortable tr").length; i++){
-                        $('#sortable tr:nth-child(' + i + ')').find('input[data-role=order_no]').val(i - 1);
+                }
+                else {
+                    for(var i=stop_pos; i <= start_pos; i++){
+                        table.find('tr').eq(i).find('input[data-role=order_no]').val(i);
                     }
                 }
             },
@@ -49,7 +53,7 @@
             </table>
             
             <?php if (count($categories) > 0): ?>
-            <table id="sortable" class="table table-bordered table-ex">
+            <table class="table table-bordered table-ex sortable">
                 <?php foreach ($categories as $i => $item): ?>
                 <tr class="sort">
                     <td style="width:30px" class="handle">
@@ -78,7 +82,6 @@
             <?php else: ?>
             <p class="text-center" style="margin-top:10px">Chưa có dữ liệu</p>
             <?php endif ?>
-            
         </div>
     </form>
 </div>
