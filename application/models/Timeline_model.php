@@ -134,17 +134,17 @@ class Timeline_model extends Inout_Model {
         
         $sql = sprintf("SELECT SUM(`amount`) as `future_amount`,
                                SUM(CASE WHEN `date` <= '{$now}' THEN `amount` ELSE 0 END) AS `current_amount`,
-                               `inout_records`.`account_id`,
+                               `accounts`.`id` as `account_id`,
                                `accounts`.`name` as `account`, 
                                `users`.`fullname` as `player`
                         FROM `%s` 
-                        JOIN `accounts` ON `accounts`.`id` = `inout_records`.`account_id`
                         JOIN `users` ON `users`.`id` = `inout_records`.`player`
-                        GROUP BY `account_id`, `player`
+                        RIGHT JOIN `accounts` ON `accounts`.`id` = `inout_records`.`account_id`
+                        GROUP BY `account`, `player`
                         ORDER BY `account_id` ASC, `player` ASC", self::TABLE);
                         
         $data = $this->db->query($sql)->result_array(); 
-        
+                
         $combine_data = array();
         $total = array(0, 0);
         foreach ($data as $i => $item){
@@ -161,7 +161,7 @@ class Timeline_model extends Inout_Model {
         }
         
         $combine_data['Tổng cộng'] = $total;
-        
+                
         return $combine_data;
     }
     

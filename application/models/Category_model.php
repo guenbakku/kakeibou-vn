@@ -83,17 +83,26 @@ class Category_model extends App_Model {
      *--------------------------------------------------------------------
      */
     public function del(int $id)
-    {
+    {   
+        $category_name = $this->db->select('name')
+                                  ->where('id', $id)
+                                  ->get(self::TABLE)->row_array()['name'];
+                                      
+        // Kiểm tra xem danh mục này có chứa dữ liệu thu chi nào không
         $count = $this->db->where('category_id', $id)
                           ->from('inout_records')
                           ->count_all_results();
-
         if ($count > 0){
-            $category_name = $this->db->select('name')
-                                      ->where('id', $id)
-                                      ->get(self::TABLE)->row_array()['name'];
-            
             throw new AppException(sprintf(Consts::ERR_CATEGORY_NOT_EMPTY, $category_name));
+        }
+        
+        // Kiểm tra xem danh mục này có phải danh mục cấm xóa không
+        $count = $this->db->where('category_id', $id)
+                          ->where('restrict_delete', 1)
+                          ->from('categories')
+                          ->count_all_results();
+        if ($count > 0){
+            throw new AppException(sprintf(Consts::ERR_CATEGORY_RESTRICT_DELETE, $category_name));
         }
         
         $this->db->where('id', $id)->delete(self::TABLE);
@@ -141,7 +150,7 @@ class Category_model extends App_Model {
     public function get_select_tag_data(int $inout_type_id=null)
     {
         $this->db->where('inout_type_id', $inout_type_id)
-                 ->where('restrict_delete', '0')
+                 ->where('restrict_delete', 0)
                  ->order_by('order_no', 'asc');
         
         return parent::get_select_tag_data();

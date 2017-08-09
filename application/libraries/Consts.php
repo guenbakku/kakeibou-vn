@@ -17,6 +17,8 @@ class Consts {
     
     const ERR_CATEGORY_NOT_EMPTY = 'Không xóa được danh mục <strong>%s</strong>.<br>Cần xóa hết dữ liệu thu chi của danh mục này trước khi xóa danh mục.';
     
+    const ERR_CATEGORY_RESTRICT_DELETE = 'Danh mục <strong>%s</strong> không được phép xóa.';
+    
     const SUCC_ADD_INOUT_RECORD = 'Thêm ghi chép <strong>%s</strong> thành công';
     
     const SUCC_EDIT_INOUT_RECORD = 'Sửa ghi chép thành công';
