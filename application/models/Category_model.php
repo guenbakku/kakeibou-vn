@@ -86,7 +86,7 @@ class Category_model extends App_Model {
     {
         $count = $this->db->where('category_id', $id)
                           ->from('inout_records')
-                          ->count_all_results(self::TABLE);
+                          ->count_all_results();
 
         if ($count > 0){
             $category_name = $this->db->select('name')
