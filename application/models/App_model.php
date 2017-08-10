@@ -73,6 +73,10 @@ class App_model extends CI_Model {
         $select = $this->select_tag_columns;
         $table  = $this::TABLE;
         
+        if ($this->db->field_exists('order_no', $table)) {
+            $this->db->order_by('order_no', 'asc');
+        }
+        
         return array_column(
             $this->db->select($select)
                      ->order_by($select[0], 'asc')

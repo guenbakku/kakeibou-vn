@@ -141,7 +141,7 @@ class Timeline_model extends Inout_Model {
                         JOIN `users` ON `users`.`id` = `inout_records`.`player`
                         RIGHT JOIN `accounts` ON `accounts`.`id` = `inout_records`.`account_id`
                         GROUP BY `account`, `player`
-                        ORDER BY `account_id` ASC, `player` ASC", self::TABLE);
+                        ORDER BY `order_no` ASC, `account_id` ASC, `player` ASC", self::TABLE);
                         
         $data = $this->db->query($sql)->result_array(); 
                 
