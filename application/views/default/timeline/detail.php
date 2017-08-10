@@ -59,7 +59,7 @@
                             <div class="row">
                                 <div class="col-xs-7" style="padding-right:0">
                                     <div><?=$result[$i]['category']?></div>
-                                    <div class="small text-muted"><span class="fa <?=Account_model::$ICONS[$result[$i]['account_id']]?>"></span> <em><?=$result[$i]['memo']?></em></div>
+                                    <div class="small text-muted"><span class="fa <?=$result[$i]['account_icon']?>"></span> <em><?=$result[$i]['memo']?></em></div>
                                 </div>
                                 <div class="col-xs-4 text-right">
                                     <div class="<?=$result[$i]['inout_type']=='Thu'? 'text-income' : 'text-outgo'?>"><?=currency($result[$i]['amount'])?></div>

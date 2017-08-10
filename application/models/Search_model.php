@@ -146,6 +146,7 @@ class Search_model extends App_Model {
                            inout_types.name AS inout_type,
                            accounts.name AS account,
                            accounts.id AS account_id,
+                           accounts.icon AS account_icon,
                            categories.name AS category,
                            users.fullname AS player,
                            users.label AS player_label')

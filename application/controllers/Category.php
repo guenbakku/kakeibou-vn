@@ -15,7 +15,7 @@ class Category extends MY_Controller {
     {   
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
             $data = $this->input->post('categories');
-            $this->category_model->edit_batch($data, 'id');
+            $this->category_model->edit_batch($data);
             $this->flash->success(Consts::SUCC_EDIT_CATEGORY_ORDER);
             return redirect($this->referer->get());
         }

@@ -85,5 +85,22 @@ $config = [
             'rules' => 'required|trim|xss_clean',
         ],
     ],
+    
+    // For account
+    'account/add' => [
+        [
+            'field' => 'name',
+            'label' => 'Tên tài khoản',
+            'rules' => 'required|trim|xss_clean',
+        ],
+    ],
+    
+    'account/edit' => [
+        [
+            'field' => 'name',
+            'label' => 'Tên tài khoản',
+            'rules' => 'required|trim|xss_clean',
+        ],
+    ],
 ];
 

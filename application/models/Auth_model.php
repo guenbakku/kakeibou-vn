@@ -49,7 +49,7 @@ class Auth_model extends App_Model {
                 $locked_to = strtotime($this->user['locked_on']) + $this->user['lock_duration'];
                 $now = time();
                 if ($locked_to > $now) {
-                    throw new AppException(sprintf(Consts::ERR_ACCOUNT_LOCKED, (int)(($locked_to - $now) / 60)));
+                    throw new AppException(sprintf(Consts::ERR_USER_LOCKED, (int)(($locked_to - $now) / 60)));
                 }
             }
             

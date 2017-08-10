@@ -11,7 +11,8 @@ class Category_model extends App_Model {
      *
      * @param   mixed : null  => lấy hết table theo list
      *                  int   => lấy category đơn lẻ theo id
-     * @return  void
+     * @param   array: điều kiện search
+     * @return  array
      *--------------------------------------------------------------------
      */
     public function get(?int $id=null, array $where=[])
@@ -25,7 +26,7 @@ class Category_model extends App_Model {
         }
         
         $res = $this->db->where($where)
-                    ->order_by('order_no ASC')
+                    ->order_by('order_no', 'asc')
                     ->get(self::TABLE);
         
         return is_numeric($id)? $res->row_array() : $res->result_array();
@@ -78,7 +79,7 @@ class Category_model extends App_Model {
      *--------------------------------------------------------------------
      * Xóa danh mục khỏi db
      *
-     * @param   id: id của danh mục muốn sửa
+     * @param   id: id của danh mục muốn xóa
      * @return  void
      *--------------------------------------------------------------------
      */
@@ -97,9 +98,9 @@ class Category_model extends App_Model {
         }
         
         // Kiểm tra xem danh mục này có phải danh mục cấm xóa không
-        $count = $this->db->where('category_id', $id)
+        $count = $this->db->where('id', $id)
                           ->where('restrict_delete', 1)
-                          ->from('categories')
+                          ->from(self::TABLE)
                           ->count_all_results();
         if ($count > 0){
             throw new AppException(sprintf(Consts::ERR_CATEGORY_RESTRICT_DELETE, $category_name));

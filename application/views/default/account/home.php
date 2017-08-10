@@ -43,18 +43,14 @@
             <table class="table table-bordered" style="border-bottom:1px solid; border-color:inherit">
                 <tr>
                     <td>
-                        <div id="subNav" class="btn-group navigation">
-                            <a class="btn btn-default" href="<?=$url['subNav'][0]?>">Thu</a>
-                            <a class="btn btn-default" href="<?=$url['subNav'][1]?>">Chi</a>
-                        </div>
                         <a class="btn btn-default pull-right" href="<?=$url['add']?>"><span class="glyphicon glyphicon-plus"></span></a>
                     </td>
                 </tr>
             </table>
             
-            <?php if (count($categories) > 0): ?>
+            <?php if (count($accounts) > 0): ?>
             <table class="table table-bordered table-ex sortable">
-                <?php foreach ($categories as $i => $item): ?>
+                <?php foreach ($accounts as $i => $item): ?>
                 <tr class="sort">
                     <td style="width:30px" class="handle">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
