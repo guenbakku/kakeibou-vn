@@ -20,7 +20,7 @@ class ChangeTypeOfIdColumn extends AbstractMigration
                   ->update();
             
             $foreignTable = $this->table($foreignTables[$i]);
-            $foreignTable->changeColumn('id', 'integer', ['limit' => 11])
+            $foreignTable->changeColumn('id', 'integer', ['limit' => 11, 'identity' => true])
                          ->update();
             
             // Recreate foreign key relation
