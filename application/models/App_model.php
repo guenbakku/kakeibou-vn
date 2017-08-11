@@ -17,13 +17,11 @@ class App_model extends CI_Model {
         parent::__construct();
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Merge settings của model với thông tin được truyền vào 
      *
      * @param   array: setting
      * @return  object: $this
-     *--------------------------------------------------------------------
      */
     public function config(array $settings)
     {   
@@ -31,13 +29,11 @@ class App_model extends CI_Model {
         return $this;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lưu lại lỗi xảy ra 
      *
      * @param   string: thông tin muốn lưu
      * @return  object: $this
-     *--------------------------------------------------------------------
      */
     protected function set_error(string $msg)
     {
@@ -45,28 +41,24 @@ class App_model extends CI_Model {
         return $this;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy các lỗi xảy ra
      * 
      * @param   string : ký tự để nối các lỗi thành 1 chuỗi. 
      *                   Nếu truyền false sẽ trả về nguyên array
      *
      * @return  string/array
-     *--------------------------------------------------------------------
      */
     public function get_error(string $glue='<br>')
     {
         return $glue===false? $this->error : implode($glue, $this->error);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy dữ liệu từ CSDL để tạo select tag
      *
      * @param   void
      * @return  array : dữ liệu để xuất option
-     *--------------------------------------------------------------------
      */    
     public function get_select_tag_data()
     {
@@ -84,5 +76,22 @@ class App_model extends CI_Model {
             $select[1],
             $select[0] 
         );
+    }
+    
+    /**
+     * Xóa những field không có trong db trước khi lưu data vào db
+     *
+     * @param   array: dữ liệu muốn lưu vào db
+     * @return  array: dữ liệu sau khi đã bỏ những field ko cần thiết
+     */
+    public function remove_garbage_fields($data) {
+        $whitelist = $this->db->list_fields(static::TABLE);
+        $whitelist = array_flip($whitelist);
+        foreach ($data as $field => $val) {
+            if (!isset($whitelist[$field])) {
+                unset($data[$field]);
+            }
+        }
+        return $data;
     }
 }

@@ -1,13 +1,3 @@
-<?php 
-// Xóa lựa chọn "Tiền mặt" nếu thao tác là Rút hoặc nạp tiền vào tài khoản
-if (in_array($type, array('drawer', 'deposit'))) {
-    unset($select['accounts'][Inout_model::ACCOUNT_CASH_ID]);
-}
-
-// Thêm thuộc tính disabled cho input/select nếu dữ liệu sửa là dữ liệu pair
-$disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
-?>
-
 <script type="text/javascript">
     $(function(){        
         $(".autocomplete").autocomplete({ 
@@ -70,7 +60,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                 </div>
                 <?php endif ?>
                 
-                <?php if (in_array($type, array('outgo', 'income', 'drawer', 'deposit'))): ?>
+                <?php if (in_array($type, array('outgo', 'income'))): ?>
                 <div class="row">
                     <div class="col-xs-6">
                         <div class="form-group">
@@ -81,7 +71,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                                 set_value($field_name, null), 
                                 array(
                                     'class' => 'form-control',
-                                ) + $disabled_attr
+                                )
                             )?>
                         </div>
                     </div>
@@ -101,7 +91,7 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                 </div>
                 <?php endif ?>
                 
-                <?php if (in_array($type, array('handover'))): ?>
+                <?php if (in_array($type, array('internal'))): ?>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-6"><label>Chuyển từ:</label></div>
@@ -110,22 +100,22 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                     <div class="row">
                         <div class="col-xs-6">
                             <?=form_dropdown(
-                                $field_name = 'player[0]', 
-                                $select['players'], 
-                                set_value($field_name, $this->auth->user('id')), 
+                                $field_name = 'transfer_from', 
+                                $select['transfer'], 
+                                set_value($field_name, element(0, array_keys($select['transfer']))), 
                                 array(
                                     'class' => 'form-control',
-                                ) + $disabled_attr
+                                )
                             )?>
                         </div>
                         <div class="col-xs-6">
                             <?=form_dropdown(
-                                $field_name = 'player[1]', 
-                                $select['players'], 
-                                set_value($field_name, 3 - $this->auth->user('id')), 
+                                $field_name = 'transfer_to', 
+                                $select['transfer'], 
+                                set_value($field_name, element(1, array_keys($select['transfer']))), 
                                 array(
                                     'class' => 'form-control',
-                                ) + $disabled_attr
+                                )
                             )?>
                         </div>
                     </div>

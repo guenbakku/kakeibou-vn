@@ -23,6 +23,8 @@ class Consts {
     
     const ERR_ACCOUNT_RESTRICT_DELETE = 'Tài khoản <strong>%s</strong> không được phép xóa.';
     
+    const ERR_TRANSFER_FROM_TO_SAME = 'Giá trị <strong>Chuyển từ</strong> và <strong>đến</strong> không được giống nhau.';
+    
     const SUCC_ADD_INOUT_RECORD = 'Thêm ghi chép <strong>%s</strong> thành công';
     
     const SUCC_EDIT_INOUT_RECORD = 'Sửa ghi chép thành công';

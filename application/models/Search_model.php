@@ -54,7 +54,7 @@ class Search_model extends App_Model {
             }
         }
         else if ($name === 'account'){
-            if (!is_numeric($val) || $val < 0){
+            if (!is_numeric($val)){
                 throw new AppException('Dữ liệu loại tài khoản không hợp lệ');
             }
         }
@@ -177,7 +177,7 @@ class Search_model extends App_Model {
                 $this->db->where('inout_records.amount <', 0);
             }
         }
-        if (!empty($this->settings['account'])){
+        if ($this->settings['account']>0){
             $this->db->where('inout_records.account_id', $this->settings['account']);
         }
         if (!empty($this->settings['player'])){

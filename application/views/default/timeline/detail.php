@@ -18,7 +18,7 @@
                     <label>Tài khoản</label>
                     <?=form_dropdown(
                         'account', 
-                        $select['accounts'] + array('0' => 'Thực thu chi'), 
+                        $select['accounts'] + array('0' => 'Thực thu chi', '-1' => 'Tất cả'), 
                         $account_id, 
                         array(
                             'class' => 'form-control submit-on-change',

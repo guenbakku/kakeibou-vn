@@ -46,7 +46,8 @@ class Inout extends MY_Controller {
         $view_data['select']   = array(
             'accounts'   => $this->account_model->get_select_tag_data(),
             'players'    => $this->user_model->get_select_tag_data(),
-            'categories' => $this->category_model->get_select_tag_data($this->inout_model->get_inout_type_code($type)),
+            'categories' => $this->category_model->get_select_tag_data($this->inout_model->get_inout_type_id($type)),
+            'transfer'   => $this->inout_model->get_select_tag_data_for_transfer(),
         );
         $view_data['url']   = array(
             'form'      => $this->base_url(array(__FUNCTION__, $type)),
@@ -95,8 +96,10 @@ class Inout extends MY_Controller {
             $this->referer->saveSession();
         }
         
-        if ($ioRecord['cash_flow'] == 'handover') {
-            $ioRecord['player'] = $this->inout_model->set_handover_edit_players($ioRecord);
+        if ($ioRecord['cash_flow'] == 'internal') {
+            $transfer = $this->inout_model->get_transfer_code($ioRecord);
+            $ioRecord['transfer_from'] = $transfer['from'];
+            $ioRecord['transfer_to'] = $transfer['to'];
         }
         
         $ioRecord['amount'] = abs($ioRecord['amount']);
@@ -109,7 +112,8 @@ class Inout extends MY_Controller {
         $view_data['select']   = array(
             'accounts'   => $this->account_model->get_select_tag_data(),
             'players'    => $this->user_model->get_select_tag_data(),
-            'categories' => $this->category_model->get_select_tag_data($this->inout_model->get_inout_type_code($type)),
+            'categories' => $this->category_model->get_select_tag_data($this->inout_model->get_inout_type_id($type)),
+            'transfer'   => $this->inout_model->get_select_tag_data_for_transfer(),
         );
         $view_data['url']   = array(
             'form'      => $this->base_url(array(__FUNCTION__, $id)),
