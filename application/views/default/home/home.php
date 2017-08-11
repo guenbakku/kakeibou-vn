@@ -48,17 +48,7 @@
                     <a href="<?=$url['detailToday']?>">Hôm nay</a>
                 </th>
                 <td class="text-center">
-                    <div class="sr-only outgo-status">
-                        <?=$this->template->get_view('home/estimated_outgo_detail', $liquidOutgoStatus['today'])?>
-                    </div>
-                    <div class="progress" style="margin-bottom:0" data-toggle="popover">
-                        <div class="progress-bar progress-bar-info" role="progressbar"
-                            aria-valuenow="<?=$liquidOutgoStatus['today']['remain_percent']?>" 
-                            aria-valuemin="0" aria-valuemax="100" 
-                            style="width: <?=$liquidOutgoStatus['today']['remain_percent']?>%">
-                            <span><?=currency($liquidOutgoStatus['today']['remain'], false)?></span>
-                        </div>
-                    </div>
+                    <?=$this->template->get_view('home/estimated_outgo_detail', $liquidOutgoStatus['today'])?>
                 </td>
             </tr>
             <tr>
@@ -66,17 +56,7 @@
                     <a href="<?=$url['summaryThisMonth']?>">Tháng này</a>
                 </th>
                 <td class="text-center">
-                    <div class="sr-only outgo-status">
-                        <?=$this->template->get_view('home/estimated_outgo_detail', $liquidOutgoStatus['month'])?>
-                    </div>
-                    <div class="progress" style="margin-bottom:0" data-toggle="popover" >
-                        <div class="progress-bar progress-bar-info" role="progressbar"
-                        aria-valuenow="<?=$liquidOutgoStatus['month']['remain_percent']?>" 
-                        aria-valuemin="0" aria-valuemax="100" 
-                        style="width: <?=$liquidOutgoStatus['month']['remain_percent']?>%">
-                            <span><?=currency($liquidOutgoStatus['month']['remain'], false)?></span>
-                        </div>
-                    </div>
+                    <?=$this->template->get_view('home/estimated_outgo_detail', $liquidOutgoStatus['month'])?>
                 </td>
             </tr>
         </table>
