@@ -66,7 +66,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>Thu chi tháng này</strong>
-            <a class="pull-right" href="<?=base_url(['timeline', 'summary', date('Y')])?>">
+            <a class="pull-right" href="<?=$url['summaryThisYear']?>">
                 <span class="glyphicon glyphicon-option-horizontal"></span>
             </a>
         </div>

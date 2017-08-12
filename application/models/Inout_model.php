@@ -124,6 +124,9 @@ class Inout_model extends App_Model {
      */
     private function set_pair_add_data(string $type, array $data)
     {
+        // Thêm dấu + - vào số tiền tùy vào loại dòng tiền
+        $data['amount'] = intval($this->get_inout_type_sign($type).$data['amount']);
+
         // Nếu không phải loại thao tác tạo ra dữ liệu lưu động nội bộ
         if (in_array($type, ['outgo', 'income'])){
             return [$data];
@@ -137,8 +140,8 @@ class Inout_model extends App_Model {
         }
         
         $pair = [$data, $data];
-        $pair[0]['pair_id'] = $pair[1]['pair_id'] = random_string('unique');
-        $pair[0]['amount'] = 0-$pair[0]['amount'];
+        $pair[0]['pair_id'] = $pair[1]['pair_id'] = $this->gen_pair_id();
+        $pair[1]['amount'] = 0-$pair[0]['amount'];
         
         list($pair[0]['account_id'], $pair[0]['player']) = $this->extract_transfer_code($data['transfer_from']);
         list($pair[1]['account_id'], $pair[1]['player']) = $this->extract_transfer_code($data['transfer_to']);
@@ -285,6 +288,25 @@ class Inout_model extends App_Model {
             $pair[0]['player'] = $pair[1]['player'];
         }
         return $pair;
+    }
+    
+    /**
+     * Tạo pair_id
+     *
+     * @param   void
+     * @return  string
+     */
+    public function gen_pair_id() {
+        do {
+            $pair_id = random_string('md5');
+            $existed = $this->db->select('pair_id')
+                                ->from(self::TABLE)
+                                ->where('pair_id', $pair_id)
+                                ->limit(1)
+                                ->get()->num_rows() > 0;
+        } while ($existed);
+        
+        return $pair_id;
     }
 
     /**
