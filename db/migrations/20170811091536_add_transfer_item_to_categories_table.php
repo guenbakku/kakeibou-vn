@@ -12,12 +12,14 @@ class AddTransferItemToCategoriesTable extends AbstractMigration
                 'name' => 'Chuyển khoản*',
                 'inout_type_id' => 2,
                 'order_no' => 4,
+                'restrict_delete' => 1,
             ],
             [
                 'id' => 8,
                 'name' => 'Chuyển khoản*',
                 'inout_type_id' => 1,
                 'order_no' => 4,
+                'restrict_delete' => 1,
             ],
         ];
         
