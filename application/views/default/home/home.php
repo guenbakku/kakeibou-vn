@@ -18,7 +18,7 @@
         })
         
         /*
-         * hide any open popovers when the anywhere else in the body is clicked
+         * Ẩn tất cả popovers đang mở khi click vào chỗ khác trên màn hình
          */
         $('body').on('click', function (e) {
             $('[data-toggle="popover"]').each(function () {
@@ -39,13 +39,16 @@
     <?php if ($liquidOutgoStatus['month']['estimated'] > 0): ?>
     <div class="panel panel-default">
         <div class="panel-heading">
+            <a class="pull-right" href="<?=$url['summaryThisMonth']?>">
+                <span class="glyphicon glyphicon-option-horizontal"></span>
+            </a>
             <strong>Số tiền có thể chi</strong><br>
             <span class="small text-muted"><em>(Không tính các khoản chi cố định)</em></span>
         </div>
         <table class="table table-bordered">
             <tr>
                 <th style="width:33.3%">
-                    <a href="<?=$url['detailToday']?>">Hôm nay</a>
+                    Hôm nay
                 </th>
                 <td class="text-center">
                     <?=$this->template->get_view('home/estimated_outgo_detail', $liquidOutgoStatus['today'])?>
@@ -53,7 +56,7 @@
             </tr>
             <tr>
                 <th>
-                    <a href="<?=$url['summaryThisMonth']?>">Tháng này</a>
+                    Tháng này
                 </th>
                 <td class="text-center">
                     <?=$this->template->get_view('home/estimated_outgo_detail', $liquidOutgoStatus['month'])?>
@@ -65,10 +68,10 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <strong>Thu chi tháng này</strong>
             <a class="pull-right" href="<?=$url['summaryThisYear']?>">
                 <span class="glyphicon glyphicon-option-horizontal"></span>
             </a>
+            <strong>Thu chi tháng này</strong>
         </div>
         <table class="table table-bordered">
             <tr>
