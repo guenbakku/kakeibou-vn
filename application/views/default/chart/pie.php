@@ -23,11 +23,14 @@
     <?php if (count(array_filter($list, function($item){return $item['total'] > 0;}))): ?>
         <!-- Styles -->
         <style>
-            #chartdiv {
+            #chart-box {
                 width: 100%;
-                height: <?=$inout_type_id == 1? 380 : 600?>px;
+                height: 400px;
+            }
+            #legend-box {
+                width: 100%;
                 margin-bottom: 20px;
-            }													
+            }
         </style>
         
         <!-- Resources -->
@@ -37,9 +40,17 @@
         
         <!-- Chart code -->
         <script type="text/javascript">
+            function sum(data) {
+                var sum = 0;
+                $.each(data, function(i, item){
+                    sum += parseFloat(item.total) || 0;
+                });
+                return sum;
+            }
+            
             (function(){
                 var chartData = <?=json_encode($list)?>;
-                var chart = AmCharts.makeChart( "chartdiv", {
+                var chartConfig = {
                     "fontFamily": "Arial",
                     "type": "pie",
                     "theme": "black",
@@ -49,24 +60,39 @@
                     "marginRight": 10,
                     "autoMargins": false,
                     "pullOutRadius": 0,
-                    "legend":{
+                    "legend": {
+                        "divId": "legend-box",
                         "position":"bottom",
                         "autoMargins":false,
                     },
                     "dataProvider": chartData,
                     "valueField": "total",
                     "titleField": "category_name",
+                    "innerRadius": "35%",
                     "balloon":{
                         "fixedPosition": false,
                     },
                     "export": {
                         "enabled": false
-                    }
-                });
+                    },
+                    "allLabels": [{
+                        "text": "Tổng",
+                        "align": "center",
+                        "bold": true,
+                        "y": 180
+                    }, {
+                        "text": sum(chartData).toLocaleString(),
+                        "align": "center",
+                        "bold": false,
+                        "y": 200
+                    }],
+                };
+                var chart = AmCharts.makeChart( "chart-box", chartConfig);
             })();
         </script>
         
-        <div id="chartdiv"></div>
+        <div id="chart-box"></div>
+        <div id="legend-box"></div>
     <?php else: ?>
         <div class="panel panel-default">
             <div class="panel-body">
