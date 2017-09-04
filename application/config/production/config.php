@@ -20,7 +20,7 @@ date_default_timezone_set('Asia/Tokyo');
 | environments.
 |
 */
-$config['base_url'] = 'http://kakeibou.nvb-online.com';
+$config['base_url'] = 'https://kakeibou.nvb-online.com';
 
 /*
 |--------------------------------------------------------------------------
