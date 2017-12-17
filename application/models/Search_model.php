@@ -99,7 +99,7 @@ class Search_model extends App_Model {
         $fragment_num = $this->fragment_num($result, $has_next_page);
         
         $this->total = $total_num;
-        $this->result = array_slice($result, 0, count($result)-$fragment_num);
+        $this->result = array_slice($result, 0, count($result) - $fragment_num);
         $this->next = $has_next_page
                       ? $this->settings['offset'] + $this->settings['limit'] - $fragment_num
                       : 0;
@@ -155,7 +155,7 @@ class Search_model extends App_Model {
                  ->join('categories', 'categories.id = inout_records.category_id')
                  ->join('inout_types', 'inout_types.id = categories.inout_type_id')
                  ->join('users', 'users.id = inout_records.player')
-                 ->order_by('inout_records.date', 'ASC')
+                 ->order_by('inout_records.date', 'DESC')
                  ->order_by('categories.inout_type_id', 'ASC')
                  ->order_by('inout_records.created_on', 'ASC');
         
