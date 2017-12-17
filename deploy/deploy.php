@@ -5,7 +5,7 @@ require_once '../vendor/deployer/recipes/phinx.php';
 require_once 'servers.php';
 
 // Repository
-set('repository', '/opt/git/bhcashbook.git');
+set('repository', 'ssh://git@redmine.nvb-online.com/kakeibou/gl-bhcashbook.git');
 set('branch', 'master');
 
 // Codeigniter shared dirs
