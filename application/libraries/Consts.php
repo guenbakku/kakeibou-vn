@@ -3,9 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Consts {
     
-    const VERSION = '3.0';
+    const VERSION = '3.0.0';
     
-    const RELEASE_DATE = '20170506';
+    const RELEASE_DATE = '20171217';
     
     const ERR_BAD_REQUEST = 'Yêu cầu không hợp lệ';
     
