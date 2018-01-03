@@ -13,14 +13,15 @@ class Chart extends MY_Controller {
     
     /**
      *--------------------------------------------------------------------
-     * Trang tổng kết số tiền thu chi trong theo ngày trong tháng, 
-     * tháng trong năm và năm
+     * Trang tổng kết số tiền thu chi theo 
+     *  - ngày trong tháng, 
+     *  - tháng trong năm 
+     *  - năm
      *
-     * @param    string: hiển thị theo list hay chart
-     * @param    string: đối tượng tổng kết: 
-     *                       - ngày trong tháng, 
-     *                       - tháng trong năm, 
-     *                       - năm
+     * @param    string: thời gian muốn xem danh sách, có thể nhận format:
+     *                      - yyyy-mm
+     *                      - yyyy
+     *                      - null
      * @return   void
      *--------------------------------------------------------------------
      */

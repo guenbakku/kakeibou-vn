@@ -3,12 +3,7 @@
  */
 function pageScroll(target, offset, anchorName){
         
-    $(function(){
-        
-        if (target.length == 0){
-            return false;
-        }
-        
+    $(function(){      
         offset = typeof(offset) !== 'undefined'? offset : 0;
         anchorName = typeof(anchorName) !== 'undefined'? anchorName : 'page-scroll';
         
@@ -16,8 +11,8 @@ function pageScroll(target, offset, anchorName){
         
         if (targetDOM.length > 0){
             var y_coord = targetDOM.offset().top + offset;
-            $('body').animate({'scrollTop': y_coord }, {
-                'duration': 0,
+            $('html, body').animate({scrollTop: y_coord}, {
+                'duration': 50,
                 'complete': blink(targetDOM),
             });
         }

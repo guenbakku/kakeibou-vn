@@ -9,17 +9,23 @@ class Timeline_model extends Inout_Model {
      * lấy danh sách tổng chi tiêu thích hợp
      *--------------------------------------------------------------------
      */
-    public function summary_inout_types_auto(?int $year, ?int $month): array
+    public function summary_inout_types_auto(?int $year, ?int $month, int $sort_order = SORT_ASC): array
     {
         if ($year !== null && $month !== null) {
-            return $this->summary_inout_types_by_day_in_month($year, $month);
+            $list = $this->summary_inout_types_by_day_in_month($year, $month);
         }
         else if ($year !== null) {
-            return $this->summary_inout_types_by_month_in_year($year);
+            $list = $this->summary_inout_types_by_month_in_year($year);
         }
         else {
-            return $this->summary_inout_types_by_year();
+            $list = $this->summary_inout_types_by_year();
         }
+
+        // Sort danh sách theo date
+        $date = array_column($list, 'date');
+        array_multisort($date, $sort_order, $list);
+
+        return $list;
     }
     
     /*
@@ -309,7 +315,7 @@ class Timeline_model extends Inout_Model {
     
     /*
      *--------------------------------------------------------------------
-     * Gắn từng item từ List (lấy từ CSDL) vào danh sách thời gian đầy đủ
+     * Gắn từng item từ list (lấy từ CSDL) vào danh sách thời gian đầy đủ
      *
      * @param   array   : danh sách thời gian đầy đủ
      * @param   array   : list lấy từ CSDL
@@ -334,7 +340,7 @@ class Timeline_model extends Inout_Model {
             
             $full_list[] = array_merge($item, ['date' => $k]);
         }
-        
+
         return $full_list;
     }
     
