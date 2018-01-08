@@ -52,7 +52,7 @@ class Category extends MY_Controller {
                 // Validate form
                 foreach($data as $i => $category) {
                     $this->form_validation->set_rules(
-                        sprintf('categories[%d][month_estimated_inout]', $i),
+                        sprintf('categories[%d][month_estimated_amount]', $i),
                         sprintf('Dự định chi tháng này của %s', $category['name']),
                         'required|trim|greater_than_equal_to[0]'
                     );
@@ -120,11 +120,7 @@ class Category extends MY_Controller {
     }
     
     public function edit(int $id)
-    {
-        if (!is_numeric($id)) {
-            show_error(Consts::ERR_BAD_REQUEST);
-        }
-        
+    {       
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
             // Chuyển sang xử lý xóa category nếu lựa chọn xóa
             if ((bool)$this->input->get('delete') === true) {
@@ -175,11 +171,7 @@ class Category extends MY_Controller {
     }
     
     public function del(int $id)
-    {
-        if (!is_numeric($id)) {
-            show_error(Consts::ERR_BAD_REQUEST);
-        }
-        
+    {        
         try {
             $this->category_model->del($id);
             $this->flash->success(Consts::SUCC_DEL_CATEGORY);
@@ -188,5 +180,23 @@ class Category extends MY_Controller {
             $this->flash->error($ex->getMessage());
         }
         return redirect($this->referer->getSession());
+    }
+
+    /**
+     * API kiểm tra category có phải là loại thu chi cố định hàng tháng hay không.
+     *
+     * @param   int: id của category
+     */ 
+    public function is_month_fixed_money()
+    {   
+        $category_id = $this->input->get('id');
+        if (!ctype_digit($category_id)) {
+            show_error(Consts::ERR_BAD_REQUEST);
+        }
+
+        $result = $this->category_model->is_month_fixed_money($category_id);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($result));
     }
 }

@@ -29,7 +29,7 @@
                             <div class="input-group">
                                 <?=form_input(
                                     [
-                                        'name' => $field_name = sprintf('categories[%d][month_estimated_inout]', $i),
+                                        'name' => $field_name = sprintf('categories[%d][month_estimated_amount]', $i),
                                         'type' => 'number',
                                         'pattern' => '\d*',
                                     ],
@@ -42,12 +42,12 @@
                             </div>
                         </div>
                         <div class="col-xs-2">
-                            <input type="hidden" value="0" name="<?=$field_name = sprintf('categories[%d][month_fixed_money]', $i)?>">
+                            <input type="hidden" value="0" name="<?=$field_name = sprintf('categories[%d][is_month_fixed_money]', $i)?>">
                             <?=form_checkbox(
                                 array(
                                     'name'      => $field_name,
                                     'value'     => '1',
-                                    'checked'   => (bool)set_value($field_name, FALSE),
+                                    'checked'   => (bool)set_value($field_name, false),
                                 )
                             )?>
                         </div>

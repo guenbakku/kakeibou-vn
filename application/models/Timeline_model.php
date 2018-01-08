@@ -208,10 +208,10 @@ class Timeline_model extends Inout_Model {
                        SUM(CASE WHEN `date` = '{$today}' THEN `amount` ELSE 0 END) AS `liqid_outgo_today`
                 FROM `inout_records`
                 JOIN `categories` ON `categories`.`id` = `inout_records`.`category_id`
-                WHERE DATE_FORMAT(`date`, '%Y-%m') = '{$month}'
-                    AND `inout_type_id` = 2
-                    AND `month_fixed_money` = 0
-                    AND `pair_id` = ''";
+                WHERE DATE_FORMAT(`inout_records`.`date`, '%Y-%m') = '{$month}'
+                    AND `categories`.`inout_type_id` = 2
+                    AND `categories`.`is_month_fixed_money` = 0
+                    AND `inout_records`.`pair_id` = ''";
                             
         $outgo = $this->db->query($sql)->row_array();
         

@@ -68,8 +68,8 @@ class Category_model extends App_Model {
     public function edit(int $id, array $category)
     {
         $update_data = array(
-            'name'              => $category['name'],
-            'month_fixed_money' => $category['month_fixed_money'], 
+            'name' => $category['name'],
+            'is_month_fixed_money' => $category['is_month_fixed_money'], 
         );
         
         $this->db->where('id', $id)->update(self::TABLE, $update_data);
@@ -133,18 +133,38 @@ class Category_model extends App_Model {
      */
     public function get_month_estimated_outgo(): array
     {
-        return $this->db->select("SUM(`month_estimated_inout`) as `total`", false)
-                        ->select("SUM(CASE WHEN `month_fixed_money` = 0 THEN `month_estimated_inout` ELSE 0 END) AS `liquid`", false)
-                        ->select("SUM(CASE WHEN `month_fixed_money` = 1 THEN `month_estimated_inout` ELSE 0 END) AS `fixed`", false)
+        return $this->db->select("SUM(`month_estimated_amount`) as `total`", false)
+                        ->select("SUM(CASE WHEN `is_month_fixed_money` = 0 THEN `month_estimated_amount` ELSE 0 END) AS `liquid`", false)
+                        ->select("SUM(CASE WHEN `is_month_fixed_money` = 1 THEN `month_estimated_amount` ELSE 0 END) AS `fixed`", false)
                         ->where('inout_type_id', array_flip($this->inout_model::$INOUT_TYPE)['Chi'])
                         ->get(self::TABLE)->row_array();
+    }
+
+    /**
+     * Kiểm tra category có phải là loại thu chi cố định hàng tháng hay không.
+     *
+     * @param   int: id của category
+     * @return  bool|null: true nếu là loại thu chi cố định hàng tháng và ngược lại.
+     *                     null nếu id không tồn tại trong CSDL.
+     */
+    public function is_month_fixed_money(int $id)
+    {
+        $result = $this->db->select('is_month_fixed_money')
+                           ->where('id', $id)
+                           ->get(self::TABLE)->row_array();
+
+        if ($result === null) {
+            return null;
+        }
+
+        return (bool) $result['is_month_fixed_money'];
     }
     
     /*
      *--------------------------------------------------------------------
      * Overide method 'get_select_tag_data' trong App_Model
      *
-     * @param   id: loại danh mục muốn lấy (thu: 1/chi: 2)
+     * @param   int: loại danh mục muốn lấy (thu: 1/chi: 2)
      * @return  array
      *--------------------------------------------------------------------
      */
