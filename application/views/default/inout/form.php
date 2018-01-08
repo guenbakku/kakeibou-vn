@@ -1,10 +1,24 @@
 <script type="text/javascript">
     $(function(){        
-        $(".autocomplete").autocomplete({ 
+        // Search memo
+        $("[name=memo]").autocomplete({ 
             source: function(req, resp) {
                 $.getJSON("/inout/search_memo/" + encodeURIComponent(req.term), resp);
             },
             minLength: 2,
+        });
+
+        // Tự động check skip_month_estimated
+        $("[name=category_id]").change(function (evt) {
+            if ($("[name=skip_month_estimated]").length === 0) {
+                return false;
+            }
+            var category_id = $(this).val();
+            $.getJSON("/category/is_month_fixed_money", {
+                'id': category_id
+            }).done(function (data) {
+                $("[name=skip_month_estimated]").prop('checked', data);
+            });
         });
     });
 </script>
@@ -132,6 +146,23 @@
                         )
                     )?>
                 </div>
+                
+                <?php if (in_array($type, array('outgo'))): ?>
+                    <div class="form-group">
+                        <label>
+                            <input type="hidden" value="0" name="<?=$field_name = 'skip_month_estimated'?>">
+                            <?=form_checkbox(
+                                array(
+                                    'name'      => $field_name,
+                                    'value'     => '1',
+                                    'checked'   => (bool)set_value($field_name, false),
+                                )
+                            )?>
+                            Không tính vào Dự định chi tháng này
+                        </label>
+                    </div>
+                <?php endif ?>
+
                 <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
                 <?php if ($this->uri->segment(2) == 'add'): ?>
                     <button type="button" onClick="Cashbook.submitbutton(this, 'continue')" class="btn btn-primary"><?=Consts::LABEL['submit_continue']?></button>

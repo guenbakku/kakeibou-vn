@@ -38,7 +38,7 @@
                             array(
                                 'name'      => $field_name,
                                 'value'     => '1',
-                                'checked'   => (bool)set_value($field_name, TRUE),
+                                'checked'   => (bool)set_value($field_name, true),
                             )
                         )?>
                         Ẩn dữ liệu lưu động nội bộ
