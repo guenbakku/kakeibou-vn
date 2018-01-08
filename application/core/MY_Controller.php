@@ -19,12 +19,10 @@ class MY_Controller extends CI_Controller {
         }
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tạo base_url có tự động thêm tên controller class
      * Ngoài ra nếu $ctr_base_url được chỉ định, sẽ thêm phần này vào trước 
      * tên controller class.
-     *--------------------------------------------------------------------
      */
     public function base_url($uris=null, $protocol=null)
     {

@@ -17,7 +17,6 @@ class Timeline extends MY_Controller {
     }
     
     /**
-     *--------------------------------------------------------------------
      * Trang tổng kết số tiền thu chi theo 
      *  - ngày trong tháng, 
      *  - tháng trong năm 
@@ -28,7 +27,6 @@ class Timeline extends MY_Controller {
      *                      - yyyy
      *                      - null
      * @return   void
-     *--------------------------------------------------------------------
      */
     public function summary(string $date=null)
     {        
@@ -66,7 +64,6 @@ class Timeline extends MY_Controller {
     }
     
     /**
-     *--------------------------------------------------------------------
      * Trang danh sách chi tiết thu chi theo ngày
      *
      * @param   string: thời gian muốn xem danh sách, có thể nhận format:
@@ -74,7 +71,6 @@ class Timeline extends MY_Controller {
      *                      - yyyy-mm
      *                      - yyyy
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function detail(string $date=null)
     {   
@@ -139,13 +135,11 @@ class Timeline extends MY_Controller {
         $this->template->render();
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tạo page-scroll target đến ngày/tháng/năm hiện tại tùy vào kiểu danh sách
      *
      * @param   string  : kiểu danh sách
      * @param   string  : thời điểm hiện tại để scroll đến
-     *--------------------------------------------------------------------
      */
     protected function _page_scroll_target(?string $date): ?string
     {

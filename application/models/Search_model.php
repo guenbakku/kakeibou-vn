@@ -79,13 +79,11 @@ class Search_model extends App_Model {
         $this->settings[$name] = $val;
     }
 
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Thực hiện tìm kiếm
      *
      * @param   void
      * @return  array
-     *--------------------------------------------------------------------
      */
     public function search(): array 
     {
@@ -107,13 +105,11 @@ class Search_model extends App_Model {
         return $this->result;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tạo url cho next page
      *
      * @param   void
      * @return  string
-     *--------------------------------------------------------------------
      */
     public function next_page_url(): ?string
     {
@@ -127,14 +123,12 @@ class Search_model extends App_Model {
         }
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tạo query cho xử lý tìm kiếm. 
      * Dữ liệu sử dụng để tạo query lấy từ property settings
      *
      * @param   void
      * @return  object: db object
-     *--------------------------------------------------------------------
      */
     protected function gen_search_query()
     {        
@@ -202,13 +196,11 @@ class Search_model extends App_Model {
         return $this->db;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Kiểm tra xem có trang tiếp theo hay không
      *
      * @param   object: db object
      * @return  bool
-     *--------------------------------------------------------------------
      */
     protected function has_next_page($db_obj): bool
     {
@@ -224,13 +216,11 @@ class Search_model extends App_Model {
         }
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Đếm tổng số kết quả tìm được
      *
      * @param   object: db object
      * @return  int
-     *--------------------------------------------------------------------
      */
     protected function total_num($db_obj): int
     {
@@ -238,8 +228,7 @@ class Search_model extends App_Model {
         return $db->count_all_results();
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tùy vào điều kiện tìm kiếm mà kết quả tìm kiếm của 1 trang có thể 
      * bị cắt ở giữa chừng ngày cuối cùng trong danh sách.
      * Ở đây sẽ đếm số item của ngày cuối cùng trong danh sách kết quả 
@@ -250,7 +239,6 @@ class Search_model extends App_Model {
      * @param   array: result
      * @param   bool: có trang tiếp theo hay không
      * @return  int
-     *--------------------------------------------------------------------
      */
     protected function fragment_num(array $result, bool $has_next_page): int
     {

@@ -12,7 +12,6 @@ class Chart extends MY_Controller {
     }
     
     /**
-     *--------------------------------------------------------------------
      * Trang tổng kết số tiền thu chi theo 
      *  - ngày trong tháng, 
      *  - tháng trong năm 
@@ -23,7 +22,6 @@ class Chart extends MY_Controller {
      *                      - yyyy
      *                      - null
      * @return   void
-     *--------------------------------------------------------------------
      */
     public function line(string $date=null)
     {   
@@ -58,7 +56,6 @@ class Chart extends MY_Controller {
     }
     
     /**
-     *--------------------------------------------------------------------
      * Trang danh sách chi tiết thu chi theo ngày
      *
      * @param   string: thời gian muốn xem danh sách, có thể nhận format:
@@ -66,7 +63,6 @@ class Chart extends MY_Controller {
      *                      - yyyy-mm
      *                      - yyyy
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function pie(string $date=null)
     {

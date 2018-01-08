@@ -135,8 +135,15 @@ class Inout extends MY_Controller {
         redirect($this->referer->getSession());
     }
     
-    public function search_memo(string $q)
-    {
-        echo json_encode($this->inout_model->search_memo(urldecode($q)));
+    /**
+     * API trả về kết quả search memo
+     */
+    public function search_memo()
+    {   
+        $keyword = $this->input->get('keyword');
+        $result = $this->inout_model->search_memo($keyword);
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($result));
     }
 }

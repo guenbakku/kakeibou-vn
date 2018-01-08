@@ -5,14 +5,12 @@ class Setting_model extends App_Model {
     
     const TABLE = 'settings';
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy setting
      *
      * @param  string/array : item setting muốn lấy
      * @param  string       : column muốn lấy
      * @return array        : (key => val)
-     *--------------------------------------------------------------------
      */
     public function get($items = null, string $col = null){
         
@@ -40,12 +38,10 @@ class Setting_model extends App_Model {
     }
     
     /*
-     *--------------------------------------------------------------------
      * Lưu setting
      *
      * @param   array
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function edit(array $data)
     {

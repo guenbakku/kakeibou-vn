@@ -1,7 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-/*
- *----------------------------------------------------------------------------------------------
+/**
  * Trả về array mới có index là giá trị của một column cụ thể có trong array
  *
  * @param   array  : array có ít nhất 2 chiều
@@ -13,7 +12,6 @@
  *                   Nếu biến này là null, array sẽ được tạo với dạng array(key => item)
  *                      với item là item nguyên bản của array truyền vào
  * @return  array  : array mới đã được đánh index
- *----------------------------------------------------------------------------------------------
  */
 function array_gen_key($arr=null, $key=null, $val=null){
     
@@ -45,8 +43,7 @@ function array_gen_key($arr=null, $key=null, $val=null){
     
 }
 
-/*
- *----------------------------------------------------------------------------------------------
+/**
  * Update key của array_1 bằng key của array_2.
  * Chỉ update những key có mặt ở cả array_1 và array_2.
  * Những key có ở array_1 nhưng không có ở array_2 sẽ được giữ nguyên giá trị.
@@ -55,7 +52,6 @@ function array_gen_key($arr=null, $key=null, $val=null){
  * @paran   array: array chứa nội dung muốn thay đổi cho array_1
  *
  * @return  array: array_1 đã được update 
- *----------------------------------------------------------------------------------------------
  */
 function array_update($array1, $array2) {
     foreach ($array1 as $key => $val) {
