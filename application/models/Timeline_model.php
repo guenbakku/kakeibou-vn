@@ -210,7 +210,7 @@ class Timeline_model extends Inout_Model {
                 JOIN `categories` ON `categories`.`id` = `inout_records`.`category_id`
                 WHERE DATE_FORMAT(`inout_records`.`date`, '%Y-%m') = '{$month}'
                     AND `categories`.`inout_type_id` = 2
-                    AND `categories`.`is_month_fixed_money` = 0
+                    AND `inout_records`.`skip_month_estimated` = 0
                     AND `inout_records`.`pair_id` = ''";
                             
         $outgo = $this->db->query($sql)->row_array();
