@@ -3,7 +3,9 @@
         // Search memo
         $("[name=memo]").autocomplete({ 
             source: function(req, resp) {
-                $.getJSON("/inout/search_memo/" + encodeURIComponent(req.term), resp);
+                $.getJSON("/inout/search_memo", {
+                    'keyword': req.term,
+                }, resp);
             },
             minLength: 2,
         });

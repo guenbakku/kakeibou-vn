@@ -137,12 +137,11 @@ class Inout extends MY_Controller {
     
     /**
      * API trả về kết quả search memo
-     *
-     * @param   string: chuỗi tìm kiếm
      */
-    public function search_memo(string $q)
-    {
-        $result = $this->inout_model->search_memo(urldecode($q));
+    public function search_memo()
+    {   
+        $keyword = $this->input->get('keyword');
+        $result = $this->inout_model->search_memo($keyword);
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($result));

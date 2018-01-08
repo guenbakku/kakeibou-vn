@@ -184,8 +184,6 @@ class Category extends MY_Controller {
 
     /**
      * API kiểm tra category có phải là loại thu chi cố định hàng tháng hay không.
-     *
-     * @param   int: id của category
      */ 
     public function is_month_fixed_money()
     {   
