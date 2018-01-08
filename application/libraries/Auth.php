@@ -76,41 +76,35 @@ class Auth {
         $this->try_to_remember();
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Config cho auth
      *
      * @param   array
      * @return  object: class
-     *--------------------------------------------------------------------
      */
     public function config(array $settings) {
         $this->settings = array_update($this->settings, $settings);
         return $this;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Set thông tin xác thực.
      * Thông tin này sẽ được check ở method authenticate.
      *
      * @param   array
      * @return  object: class
-     *--------------------------------------------------------------------
      */
     public function auth_info(array $auth_info) {
         $this->auth_info = array_update($this->auth_info, $auth_info);
         return $this;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Destroy tất cả thông tin đăng nhập của session hiện tại.
      * Chủ yếu sử dụng khi muốn logout.
      *
      * @param   void
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function destroy()
     {
@@ -120,13 +114,11 @@ class Auth {
         $this->CI->session->sess_destroy();
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Thực hiện xác thực tài khoản
      *
      * @param   void
      * @return  boolean: xác thực thành công hay không
-     *--------------------------------------------------------------------
      */
     public function authenticate(): bool
     {
@@ -150,13 +142,11 @@ class Auth {
         return true;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Cố gắng khôi phục lại thông tin đăng nhập từ token
      *
      * @param   void
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function try_to_remember()
     {
@@ -175,13 +165,11 @@ class Auth {
         $this->set_cookie();        
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy thông tin của user đang đăng nhập từ session
      *
      * @param   mixed: key
      * @return  mixed
-     *--------------------------------------------------------------------
      */
     public function user(string $key = null)
     {   
@@ -197,13 +185,11 @@ class Auth {
         return null;
     }
 
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Kiểm tra user đã được chứng thực hay chưa (đã đăng nhập hay chưa)
      *
      * @param   void
      * @return  boolean
-     *--------------------------------------------------------------------
      */
     public function is_authenticated()
     {
@@ -220,14 +206,12 @@ class Auth {
         return true;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Kiểm tra controller & action hiện tại có bắt buộc phải đăng nhập
      * mới access được hay không.
      *
      * @param   void
      * @return  bool
-     *--------------------------------------------------------------------
      */
     public function is_allowed(): bool
     {
@@ -239,13 +223,11 @@ class Auth {
         return in_array($identifier, $this->allowed);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Thêm identifier vào danh sách allowed url
      *
      * @param   string/array: 
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function allow($identifiers)
     {
@@ -263,27 +245,23 @@ class Auth {
         }
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Trả về login url trong settings
      *
      * @param   void
      * @return  string
-     *--------------------------------------------------------------------
      */
     public function login_url(): string
     {
         return $this->settings['login_url'];
     }
     
-    /*
-     *----------------------------------------------------------------------
+    /**
      * Update lại thông tin user lưu trong session hiện tại.
      * Sử dụng user_id trong session để lấy thông tin user mới từ db
      *
      * @param   void
      * @return  void
-     *---------------------------------------------------------------------
      */
     public function update_session() 
     {
@@ -294,14 +272,12 @@ class Auth {
         }
     }
     
-    /*
-    *----------------------------------------------------------------------
+    /**
      * Xóa tất cả token của user hiện có trong db trừ token của session hiện tại.
      * Chủ yếu sử dụng khi thay đổi mật khẩu đăng nhập.
      *
      * @param   int: user id    
      * @param   void
-     *---------------------------------------------------------------------
      */
     public function delete_all_other_tokens_of_user(int $user_id = null)
     {
@@ -316,13 +292,11 @@ class Auth {
         }
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy thông tin user đăng nhập từ token
      *
      * @param   string: token
      * @return  array
-     *--------------------------------------------------------------------
      */
     protected function get_user_from_db(array $where): ?array
     {   
@@ -338,13 +312,11 @@ class Auth {
                          ->get()->row_array();
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Trả về thời gian hiệu lục của token
      *
      * @param   void
      * @return  int
-     *--------------------------------------------------------------------
      */
     protected function token_duration(): int
     {
@@ -355,13 +327,11 @@ class Auth {
         }
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Xóa những token hết hạn trong db
      *
      * @param   void
      * @return  void
-     *--------------------------------------------------------------------
      */
     protected function del_expired_token_in_db()
     {
@@ -370,13 +340,11 @@ class Auth {
                  ->delete($this->settings['token_table']);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Thêm token mới vào đb cho account vừa đăng nhập
      * 
      * @param   int: id của user
      * @return  string: token vừa mới thêm vào db
-     *--------------------------------------------------------------------
      */
     protected function add_token_to_db(int $user_id): string
     {
@@ -394,13 +362,11 @@ class Auth {
         return $new_token;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Renew token trong db
      * 
      * @param   string: token cũ
      * @return  string: token mới
-     *--------------------------------------------------------------------
      */
     protected function renew_token_in_db(string $old_token): string
     {
@@ -414,13 +380,11 @@ class Auth {
         return $new_token;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tạo token và đảm bảo token chưa tồn tại trong db
      *
      * @param   void
      * @return  string
-     *--------------------------------------------------------------------
      */
     protected function gen_token(): string
     {
@@ -439,13 +403,11 @@ class Auth {
         return $token;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Validate token có còn hiệu lực hay không
      *
      * @param   string: token
      * @return  bool
-     *--------------------------------------------------------------------
      */
     protected function is_valid_token(?string $token): bool
     {
@@ -474,13 +436,11 @@ class Auth {
         return strtotime($expire_on) >= time();
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lưu dữ liệu của user đã login vào session
      *
      * @param   array: dữ liệu muốn lưu
      * @return  bool
-     *--------------------------------------------------------------------
      */
     protected function set_session()
     {   
@@ -495,13 +455,11 @@ class Auth {
         $this->CI->session->set_userdata($session_name, $data);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Set cookie chứa token để gửi trả về cho client
      *
      * @param   void
      * @return  void
-     *--------------------------------------------------------------------
      */
     protected function set_cookie()
     {

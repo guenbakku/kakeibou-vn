@@ -7,14 +7,12 @@ class User_model extends App_Model {
     
     protected $select_tag_columns = array('id', 'fullname');
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy thông tin của user
      *
      * @param   int: user id
      * @param   array: field muốn lấy
      * @return  array: thông tin của user
-     *--------------------------------------------------------------------
      */
     public function get(int $user_id, array $fields=[]): array
     {
@@ -28,14 +26,12 @@ class User_model extends App_Model {
                     ->get(self::TABLE)->row_array();
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Update thông tin của user
      *
      * @param   int: user id
      * @param   array: data để updata
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function edit(int $user_id, array $data)
     {
@@ -52,14 +48,12 @@ class User_model extends App_Model {
              ->update(self::TABLE);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Kiểm tra xem password của user_id có match với dữ liệu trong db hay không.
      *
      * @param   string: password muốn kiểm tra
      * @param   int: user id
      * @return  boolean
-     *--------------------------------------------------------------------
      */
     public function password_matched(string $password, int $user_id): bool
     {

@@ -8,13 +8,11 @@ class User extends MY_Controller {
         redirect(base_url($this->auth->login_url()));
 	}
     
-    /*
-     *--------------------------------------------------------------------
-     * Dispatcher của những method edit bên dưới
+    /**
+     * Proxy của những method edit bên dưới
      *
      * @param   string: mode
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function edit(string $method)
     {   
@@ -25,13 +23,11 @@ class User extends MY_Controller {
         call_user_func([$this, $method]);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Thay đổi thông tin cá nhân của user
      *
      * @param   void
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function edit_info()
     {
@@ -63,13 +59,11 @@ class User extends MY_Controller {
         $this->template->render();
     }
 
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Thay đổi mật khẩu của user
      *
      * @param   void
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function edit_password()
     {
@@ -101,14 +95,12 @@ class User extends MY_Controller {
         $this->template->render();
     }
     
-    /*
-    *--------------------------------------------------------------------
-    * Thực hiện xác thực user
-    *
-    * @param    void
-    * @return   void
-    *--------------------------------------------------------------------
-    */
+    /**
+     * Thực hiện xác thực user
+     *
+     * @param    void
+     * @return   void
+     */
     public function login()
     {
         // Already Login
@@ -150,14 +142,12 @@ class User extends MY_Controller {
         redirect(base_url($this->auth->login_url()));
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Validation rule cho việc kiểm tra password hiện tại có đúng không.
      * Chủ yếu dùng khi muốn thay đổi password.
      *
      * @param   string: password hiện tại
      * @return  boolean
-     *--------------------------------------------------------------------
      */
     public function _password_matched(string $old_password): bool
     {   

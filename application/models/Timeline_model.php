@@ -3,11 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Timeline_model extends Inout_Model {
 
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Dựa vào year, month được truyền vào để tự động lựa method 
      * lấy danh sách tổng chi tiêu thích hợp
-     *--------------------------------------------------------------------
      */
     public function summary_inout_types_auto(?int $year, ?int $month, int $sort_order = SORT_ASC): array
     {
@@ -28,10 +26,8 @@ class Timeline_model extends Inout_Model {
         return $list;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy danh sách tổng chi tiêu theo ngày (trong một tháng)
-     *--------------------------------------------------------------------
      */
     public function summary_inout_types_by_day_in_month(int $year, int $month): array
     {       
@@ -42,10 +38,8 @@ class Timeline_model extends Inout_Model {
         return $this->combine_list($full_list_keys, $db_list);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy danh sách tổng chi tiêu theo tháng (trong một năm)
-     *--------------------------------------------------------------------
      */
     public function summary_inout_types_by_month_in_year(int $year): array
     {
@@ -58,10 +52,8 @@ class Timeline_model extends Inout_Model {
         return $this->combine_list($full_list_keys, $db_list);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy danh sách tổng chi tiêu theo năm
-     *--------------------------------------------------------------------
      */
     public function summary_inout_types_by_year(): array
     {
@@ -75,8 +67,7 @@ class Timeline_model extends Inout_Model {
         return $this->combine_list($full_list_keys, $db_list);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tính tổng thu, chi, chênh lệch trong một khoảng thời gian.
      * Không tính các inout lưu động nội bộ.
      *
@@ -84,7 +75,6 @@ class Timeline_model extends Inout_Model {
      * @param   string  : min date
      * @param   string  : max date
      * @return  array 
-     *--------------------------------------------------------------------
      */    
     public function summary_inout_types(string $from, string $to, string $date_format_string): array
     {
@@ -105,13 +95,11 @@ class Timeline_model extends Inout_Model {
                         ->get()->result_array();
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tính lũy kế của thu, chi, tổng trong một dãi thời gian
      *
      * @param   array: dữ liệu thu, chi, tổng theo một dãi thời gian
      * @return  array
-     *--------------------------------------------------------------------
      */
     public function calc_cumulative(array $timeline): array
     {
@@ -128,11 +116,8 @@ class Timeline_model extends Inout_Model {
         return $timeline;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tính số tổng tiền còn lại tính đến hiện tại theo Tiền mặt, Tài khoản, Tổng cộng
-     *
-     *--------------------------------------------------------------------
      */
     public function get_remaining(): array
     {
@@ -171,8 +156,7 @@ class Timeline_model extends Inout_Model {
         return $combine_data;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tính: số chi lưu động của ngày hôm nay tính tới thời điểm hiện tại
      *       số chi lưu động của tháng này tính tới thời điểm hiện tại
      *       số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng
@@ -191,7 +175,6 @@ class Timeline_model extends Inout_Model {
      *                                          2 => tỷ lệ phần trăm                        
      *                                         ),
      *                       )
-     *--------------------------------------------------------------------
      */
     public function get_liquid_outgo_status(): array
     {
@@ -249,8 +232,7 @@ class Timeline_model extends Inout_Model {
         );
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Tính tổng thu chi theo từng category
      * Không tính các category được set restrict_delete
      *
@@ -258,7 +240,6 @@ class Timeline_model extends Inout_Model {
      * @param   string  : 'yyyy-mm-dd'
      * @param   int     : của inout_type
      * @return  array
-     *--------------------------------------------------------------------
      */
     public function summary_categories(string $from, string $to, int $inout_type_id): array
     {
@@ -285,13 +266,11 @@ class Timeline_model extends Inout_Model {
                  
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy danh sách tất cả năm có trong table inout_record
      * 
      * @param   void
      * @return  array
-     *--------------------------------------------------------------------
      */
     public function get_years_list(): array
     {
@@ -313,14 +292,12 @@ class Timeline_model extends Inout_Model {
         return $full_list;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Gắn từng item từ list (lấy từ CSDL) vào danh sách thời gian đầy đủ
      *
      * @param   array   : danh sách thời gian đầy đủ
      * @param   array   : list lấy từ CSDL
      * @return  array   : full list sau khi gắn dữ liệu
-     *--------------------------------------------------------------------
      */
     private function combine_list($full_list_keys = [], $db_list = [])
     {
@@ -343,5 +320,4 @@ class Timeline_model extends Inout_Model {
 
         return $full_list;
     }
-    
 }

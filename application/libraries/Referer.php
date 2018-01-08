@@ -30,25 +30,19 @@ class Referer {
         $this->CI->load->library('session');
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy http_referer
-     *
-     *--------------------------------------------------------------------
      */
-    public function get($default=null)
+    public function get($default = null)
     {
         $this->http_referer = $this->set_http_referer();
         return $this->send_back($default);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy http_referer từ Session
-     *
-     *--------------------------------------------------------------------
      */
-    public function getSession($default=null, $reset=true)
+    public function getSession($default = null, $reset = true)
     {
         $this->http_referer = $this->CI->session->userdata(self::SESSION_NAME);
         if ($reset === true) {
@@ -57,13 +51,10 @@ class Referer {
         return $this->send_back($default);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lưu http_referer vô Session
-     *
-     *--------------------------------------------------------------------
      */
-    public function saveSession($rewrite=true)
+    public function saveSession($rewrite = true)
     {
         // Không ghi đè session nếu dữ liệu session đã tồn tại
         if ($rewrite == false && !empty($this->CI->session->userdata(self::SESSION_NAME))){
@@ -76,25 +67,19 @@ class Referer {
         );
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Reset lại session
-     *
-     *--------------------------------------------------------------------
      */
     public function emptySession()
     {
         unset($_SESSION[self::SESSION_NAME]);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Xử lý nên trả về dữ liệu nào
      * Nếu link referer trống hoặc không thuộc domain của app
      *  thì trả về default. 
      * Nếu default không quy định thì trả về base_url()
-     *
-     *--------------------------------------------------------------------
      */
     protected function send_back($default)
     {
@@ -109,14 +94,11 @@ class Referer {
         }
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Set dữ liệu http_referer
      * Nếu không quy định thủ công $http_referer thì sẽ lấy dữ liệu từ biến global
-     *
-     *--------------------------------------------------------------------
      */
-    protected function set_http_referer($http_referer=null)
+    protected function set_http_referer($http_referer = null)
     {
         if (empty($http_referer)){
             @$http_referer = $_SERVER['HTTP_REFERER'];

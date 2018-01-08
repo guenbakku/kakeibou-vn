@@ -18,13 +18,11 @@ class Auth_model extends App_Model {
         $this->load->database('default');
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Kiểm tra đăng nhập của user
      *
      * @param   string
      * @param   string
-     *--------------------------------------------------------------------
      */
     public function verify(string $username, string $password): bool
     {
@@ -68,13 +66,11 @@ class Auth_model extends App_Model {
         }
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Xử lý khóa tài khoản nếu password bị sai
      *
      * @param   void
      * @return  void
-     *--------------------------------------------------------------------
      */
     private function lock_account()
     {
@@ -90,13 +86,11 @@ class Auth_model extends App_Model {
                  ->update(self::TABLE, $user);
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Reset lại thông tin khóa tài khoản nếu đăng nhập thành công
      *
      * @param   array: dữ liệu user lấy từ db
      * @return  void
-     *--------------------------------------------------------------------
      */
     private function reset_locked_account()
     {

@@ -1,12 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-/*
- *--------------------------------------------------------------------
+/**
  * Tính thứ của một ngày cụ thể
  *
  * @param int/string : timestamp hoặc string theo format datetime
  * @return string    : thứ trong tuần
- *--------------------------------------------------------------------
  */
 function day_of_week($date): ?string
 {
@@ -23,14 +21,12 @@ function day_of_week($date): ?string
     return $days[date('w', $date)];
 }
 
-/*
- *--------------------------------------------------------------------
+/**
  * Tách chuỗi date thành array('y' => yyyy, 'm' => mm, 'd' => đd)
  *
  * @param   string: bắt buộc phải có ký tự ngăn cách giữa yyyy-mm-dd
  * @param   bool: có lấy cả những item null không
- * @param   array
- *--------------------------------------------------------------------
+ * @return  array
  */
 function extract_date_string(?string $date, bool $includeNullItem = true): array
 {
@@ -60,15 +56,13 @@ function extract_date_string(?string $date, bool $includeNullItem = true): array
            : array_filter($extracted, function($item){return $item !== null;});
 }
 
-/*
- *--------------------------------------------------------------------
+/**
  * Tạo chuỗi date từ array 
  * Có thể xem đây là hàm ngược của hàm extract_date_string()
  *
  * @param   array: array chứa year, month, day
  * @param   string: chuỗi để nối
- * return   string: chuỗi date đã nối
- *--------------------------------------------------------------------
+ * @return  string: chuỗi date đã nối
  */
 function combine_date_string(array $date, string $glue = '-'): ?string
 {
@@ -76,7 +70,7 @@ function combine_date_string(array $date, string $glue = '-'): ?string
     return implode($glue, array_filter($date, function($item){return $item !== null;}));
 }
 
-/*
+/**
  * Trả về loại format của một chuỗi ký tự kiểu date.
  * Hàm này sẽ cố gắng dùng regex để chuyển chuỗi về đúng format chuẩn
  * trước khi xét.
@@ -86,7 +80,7 @@ function combine_date_string(array $date, string $glue = '-'): ?string
  *        other      -> null
  *
  * @param   string
- * @return  string/null
+ * @return  string|null
  */
 function date_format_type_of_string(?string $date): ?string
 {
@@ -103,8 +97,7 @@ function date_format_type_of_string(?string $date): ?string
     }
 }
 
-/*
- *--------------------------------------------------------------------
+/**
  * Tính ngày giới hạn (bắt đầu và kết thúc) của một khoảng thời gian
  * Ví dụ 
  *      1. 2016         -> array('2016-01-01', '2016-12-31')
@@ -115,7 +108,6 @@ function date_format_type_of_string(?string $date): ?string
  * @param   int : month
  * @param   int : day
  * @return  array : ngày đầu và cuối của khoảng thời gian đó
- *--------------------------------------------------------------------
  */
 function boundary_date(?string $year, int $month = null, int $day = null): array
 {
@@ -153,13 +145,11 @@ function boundary_date(?string $year, int $month = null, int $day = null): array
     return $range;
 }
 
-/*
- *--------------------------------------------------------------------
+/**
  * Tính ngày, tháng hoặc năm trước và sau của dữ liệu nhập vào
  * Nếu dữ liệu nhập vào là dạng ngày  -> ngày trước và sau
  *                              tháng -> tháng trước và sau
  *                              năm   -> năm trước và sau  
- *--------------------------------------------------------------------
  */
 function prev_next_time(?string $date): array
 {
@@ -186,13 +176,11 @@ function prev_next_time(?string $date): array
     }
 }
 
-/*
- *--------------------------------------------------------------------
+/**
  * Tạo danh sách 12 tháng
  * 
  * @param   void
  * @return  array
- *--------------------------------------------------------------------
  */
 function months_list(): array
 {
@@ -202,13 +190,11 @@ function months_list(): array
     );
 }
 
-/*
- *--------------------------------------------------------------------
+/**
  * Tạo danh sách 31 ngày
  * 
  * @param   void
  * @return  array
- *--------------------------------------------------------------------
  */
 function days_list(): array
 {

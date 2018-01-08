@@ -3,13 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MY_Output extends CI_Output {
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Xóa những header không cần thiết
      * 
      * @param   string/array: tên những header muốn xóa
      * @return  void
-     *--------------------------------------------------------------------
      */
     public function remove_headers($headers = array())
     {
