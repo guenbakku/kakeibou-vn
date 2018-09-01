@@ -148,6 +148,8 @@ class Inout_model extends App_Model {
         
         $pair[0]['category_id'] = $this->get_internal_category_id($pair);
         $pair[1]['category_id'] = $pair[0]['category_id']+1;
+
+        $pair = $this->modify_pair_player($pair);
         
         return $pair;
     }
