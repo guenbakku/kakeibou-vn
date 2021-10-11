@@ -1,7 +1,7 @@
 <script type="text/javascript">
-    $(function(){        
+    $(function(){
         // Search memo
-        $("[name=memo]").autocomplete({ 
+        $("[name=memo]").autocomplete({
             source: function(req, resp) {
                 $.getJSON("/inout/search_memo", {
                     'keyword': req.term,
@@ -45,7 +45,7 @@
                                 'class' => 'form-control',
                             )
                         )?>
-                        <span class="input-group-addon">¥</span>
+                        <span class="input-group-addon"><?=APP_CURRENCY?></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -61,21 +61,21 @@
                         )
                     )?>
                 </div>
-                
+
                 <?php if (in_array($type, array('outgo', 'income'))): ?>
                 <div class="form-group">
                     <label>Danh mục:</label>
                     <?=form_dropdown(
-                        $field_name = 'category_id', 
-                        $select['categories'], 
-                        set_value($field_name, null), 
+                        $field_name = 'category_id',
+                        $select['categories'],
+                        set_value($field_name, null),
                         array(
                             'class' => 'form-control',
                         )
                     )?>
                 </div>
                 <?php endif ?>
-                
+
                 <?php if (in_array($type, array('outgo', 'income'))): ?>
                 <div class="row">
                     <div class="col-xs-6">
@@ -83,8 +83,8 @@
                             <label>Tài khoản:</label>
                             <?=form_dropdown(
                                 $field_name = 'account_id',
-                                $select['accounts'], 
-                                set_value($field_name, null), 
+                                $select['accounts'],
+                                set_value($field_name, null),
                                 array(
                                     'class' => 'form-control',
                                 )
@@ -95,9 +95,9 @@
                         <div class="form-group">
                             <label>Phụ trách:</label>
                             <?=form_dropdown(
-                                $field_name = 'player', 
-                                $select['players'], 
-                                set_value($field_name, $this->auth->user('id')), 
+                                $field_name = 'player',
+                                $select['players'],
+                                set_value($field_name, $this->auth->user('id')),
                                 array(
                                     'class' => 'form-control',
                                 )
@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <?php endif ?>
-                
+
                 <?php if (in_array($type, array('internal'))): ?>
                 <div class="form-group">
                     <div class="row">
@@ -116,9 +116,9 @@
                     <div class="row">
                         <div class="col-xs-6">
                             <?=form_dropdown(
-                                $field_name = 'transfer_from', 
-                                $select['transfer'], 
-                                set_value($field_name, element(0, array_keys($select['transfer']))), 
+                                $field_name = 'transfer_from',
+                                $select['transfer'],
+                                set_value($field_name, element(0, array_keys($select['transfer']))),
                                 array(
                                     'class' => 'form-control',
                                 )
@@ -126,9 +126,9 @@
                         </div>
                         <div class="col-xs-6">
                             <?=form_dropdown(
-                                $field_name = 'transfer_to', 
-                                $select['transfer'], 
-                                set_value($field_name, element(1, array_keys($select['transfer']))), 
+                                $field_name = 'transfer_to',
+                                $select['transfer'],
+                                set_value($field_name, element(1, array_keys($select['transfer']))),
                                 array(
                                     'class' => 'form-control',
                                 )
@@ -137,18 +137,18 @@
                     </div>
                 </div>
                 <?php endif ?>
-                
+
                 <div class="form-group">
                     <label>Ghi chú:</label>
                     <?=form_input(
-                        $field_name = 'memo', 
+                        $field_name = 'memo',
                         set_value($field_name, null, false),
                         array(
                             'class' => 'form-control autocomplete',
                         )
                     )?>
                 </div>
-                
+
                 <?php if (in_array($type, array('outgo'))): ?>
                     <div class="form-group">
                         <label>

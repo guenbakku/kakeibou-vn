@@ -38,7 +38,7 @@
                                                 'class' => 'form-control',
                                             ]
                                         )?>
-                                        <span class="input-group-addon">¥</span>
+                                        <span class="input-group-addon"><?=APP_CURRENCY?></span>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <?php endforeach ?>
-                
+
                 <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
             </div>
         </div>
