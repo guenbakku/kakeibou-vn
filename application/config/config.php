@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-//Set timezone là Tokyo
-date_default_timezone_set('Asia/Tokyo');
+//Set default timezone
+date_default_timezone_set(isset($_SERVER['CI_TIMEZONE']) ? $_SERVER['CI_TIMEZONE'] : 'Asia/Ho_Chi_Minh');
 
 /*
 |--------------------------------------------------------------------------
