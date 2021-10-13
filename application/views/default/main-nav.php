@@ -6,7 +6,7 @@
 </script>
 
 <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container fluid" style="padding-left:0">
+    <div class="container" style="padding-left:0">
         <div class="navbtn-group navigation">
             <a href="<?=base_url()?>"><span class="glyphicon glyphicon-home" style="padding:0 5px"></span></a>
             <?php if($this->auth->is_authenticated()):?>
@@ -27,6 +27,9 @@
             <a href="<?=base_url('setting/')?>"><span class="glyphicon glyphicon-cog" style="padding:0 5px"></span></a>
             <a href="<?=base_url('search/')?>"><span class="glyphicon glyphicon-search" style="padding:0 5px"></span></a>
             <?php endif ?>
+        </div>
+        <div class="currency">
+            <span><?=APP_CURRENCY?></span>
         </div>
     </div>
 </nav>
