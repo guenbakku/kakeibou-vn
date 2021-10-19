@@ -4,10 +4,10 @@
 | Active template
 |--------------------------------------------------------------------------
 |
-| The $template['active_template'] setting lets you choose which template 
-| group to make active.  By default there is only one group (the 
+| The $template['active_template'] setting lets you choose which template
+| group to make active.  By default there is only one group (the
 | "default" group).
-| The $template['mobile_template'] setting lets you choose which template 
+| The $template['mobile_template'] setting lets you choose which template
 | group to make active when website is viewed by mobile device. Let it empty
 | when you want to use active_template for both web and mobile view mode.
 |
@@ -24,9 +24,9 @@ $template['mobile_template'] = '';
 |   Typically this file will contain a full XHTML skeleton that outputs your
 |   full template or region per region. Include the file extension if other
 |   than ".php"
-| ['regions'] Places within the template where your content may land. 
-|   You may also include default markup, wrappers and attributes here 
-|   (though not recommended). Region keys must be translatable into variables 
+| ['regions'] Places within the template where your content may land.
+|   You may also include default markup, wrappers and attributes here
+|   (though not recommended). Region keys must be translatable into variables
 |   (no spaces or dashes, etc)
 | ['parser'] The parser class/library to use for the parse_view() method
 |   NOTE: See http://codeigniter.com/forums/viewthread/60050/P0/ for a good
@@ -39,9 +39,9 @@ $template['mobile_template'] = '';
 | Region information can be extended by setting the following variables:
 | ['content'] Must be an array! Use to set default region content
 | ['name'] A string to identify the region beyond what it is defined by its key.
-| ['wrapper'] An HTML element to wrap the region contents in. (We 
+| ['wrapper'] An HTML element to wrap the region contents in. (We
 |   recommend doing this in your template file.)
-| ['attributes'] Multidimensional array defining HTML attributes of the 
+| ['attributes'] Multidimensional array defining HTML attributes of the
 |   wrapper. (We recommend doing this in your template file.)
 |
 | Example:
@@ -65,14 +65,14 @@ $template['mobile_template'] = '';
 $template['default'] = array(
     'template'      => 'master-layout',
     'regions'       => array(
-        'MAIN',        
+        'MAIN',
     ),
     'parser'            => 'parser',
     'parser_method'     => 'parse',
     'parse_template'    => FALSE,
     'default_args'      => array(
-        '_page_title'       => 'BH Cash Book',        
-        '_page_description' => 'BH Cash Book',
+        '_page_title'       => 'BH Cash Book (VND)',
+        '_page_description' => 'BH Cash Book (VND)',
     ),
 );
 
