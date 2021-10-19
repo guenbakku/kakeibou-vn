@@ -1,5 +1,4 @@
-# Kakeibou - Phiên bản VNĐ
-Clone từ app kakeibou, phiên bản VNĐ
+# Kakeibou - VND currency version
 
 ## For development
 ### Initialize docker container
@@ -7,13 +6,18 @@ Clone từ app kakeibou, phiên bản VNĐ
 docker-compose build
 docker-compose up
 
-# in cli of php container
+# access into cli of php container
+docker-compose exec php /bin/bash
+
 # install required php libraries
 composer install
 
-# in cli of php container
 # initialize database
 vendor/bin/phinx migrate -e development
 ```
 
-## For deployment
+### Access urls
+1. app:  
+    http://localhost:8080
+2. phpMyAdmin:  
+    http://localhost:4040
