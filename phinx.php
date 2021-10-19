@@ -11,7 +11,7 @@ $_ENV['PHINX_DB_CONFIG_PATH'] = [
 /*
  * Required when include Codeigniter file invidually.
  */
-define('BASEPATH', true); 
+define('BASEPATH', true);
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
@@ -31,7 +31,7 @@ return [
         'migrations' => "%%PHINX_CONFIG_DIR%%/$PHINX_DIRNAME/migrations",
         'seeds' => "%%PHINX_CONFIG_DIR%%/$PHINX_DIRNAME/seeds",
     ],
-    
+
     'environments' => [
         'default_migration_table' => 'phinxlog',
         'default_database' => 'development',
@@ -39,12 +39,12 @@ return [
             'adapter' => 'mysql',
             'host' => $db['production']['hostname'],
             'name' => $db['production']['database'],
-            'user' => 'root',
-            'pass' => 'king=miu',
+            'user' => $db['production']['username'],
+            'pass' => $db['production']['password'],
             'port' => 3306,
             'charset' => $db['production']['char_set'],
         ],
-    
+
         'development' => [
             'adapter' => 'mysql',
             'host' => $db['development']['hostname'],
@@ -55,6 +55,6 @@ return [
             'charset' => $db['development']['char_set'],
         ],
     ],
-    
+
     'version_order' => 'creation',
 ];
