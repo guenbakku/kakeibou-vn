@@ -1,1 +1,5 @@
-application/session
+/application/session
+/application/logs
+/application/cache
+/vendor
+/.docker/data

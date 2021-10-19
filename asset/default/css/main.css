@@ -5,8 +5,22 @@
 
 @charset "utf-8";
 
-body{
+body {
     padding-top:70px;
+    font-family: Arial !important;
+}
+
+a {
+    -webkit-tap-highlight-color: rgba(226, 226, 226, 0.4);
+}
+
+a.clean {
+    color: inherit !important;
+}
+
+.footer {
+    background-color: #3e444c !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.6);
 }
 
 .w10, .w20, .w30, .w40, .w50, .w60, .w70, .w80, .w90 {
@@ -22,56 +36,86 @@ body{
 .w80 {width: 80%}
 .w90 {width: 90%}
 
-
-.navbar .navbtn-group{
+.navbar .navbtn-group {
     float: left;
     display: block;
     width: auto;
     height: 50px;
 }
-.navbar .navbtn-group:after{
+.navbar .navbtn-group:after {
     content: "";
     clear: both;
     display: block;
 }
-.navbar .navbtn-group a{
+.navbar .navbtn-group a {
+    color: inherit;
+    text-decoration: none;
+}
+.navbar .navbtn-group > a {
     display: block;
     float:left;
     box-sizing: border-box;
     height: 50px;
     padding: 14px 10px;
     border-right:1px solid #dfdfdf;
-    text-decoration: none;
-    color:#333;
 }
-.navbar .navbtn-group a.active{
-    background: #e7e7e7;
+.navbar .navbtn-group > .active {
+    background: #272b2e;
+    color: #fff;
+}
+.navbar .navbtn-group > .open {
+    background: #272b2e;
+    color: #fff;
 }
 
-.text-red {
+.navbar .dropdown {
+    display: block;
+    float:left;
+    border-right:1px solid #dfdfdf;
+}
+.navbar .dropdown-toggle {
+    display: block;
+    box-sizing: border-box;
+    height: 50px;
+    padding: 14px 10px;
+}
+
+.navbar .currency {
+    float: right;
+    padding: 14px 0;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.dropdown-menu a {
+    padding-top:5px !important;
+    padding-bottom:5px !important;
+}
+
+.text-outgo {
     color: red;
 }
-.text-blue {
-    color: #0000ff;
+.text-income {
+    color: #2EFEF7;
 }
 
-select, 
+select,
 textarea,
-input[type="text"], 
-input[type="password"], 
-input[type="datetime"], 
-input[type="datetime-local"], 
-input[type="date"], 
-input[type="month"], 
-input[type="time"], 
-input[type="week"], 
-input[type="number"], 
-input[type="email"], 
-input[type="url"], 
-input[type="search"], 
-input[type="tel"], 
-input[type="color"] { 
-    font-size: 16px; 
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"] {
+    font-size: 16px;
 }
 
 .form-group > select,
@@ -86,8 +130,14 @@ input[type="color"] {
 .row > .col-xs-9 > select,
 .row > .col-xs-10 > select,
 .row > .col-xs-11 > select,
-.row > .col-xs-12 > select{
+.row > .col-xs-12 > select {
     font-size: 16px;
+}
+
+input[type="date"] {
+    display:inline-block;
+    -webkit-appearance: textfield;
+    padding-top: 0px;
 }
 
 /* Chỉnh span trong progress bar vô giữa div */
@@ -99,10 +149,87 @@ input[type="color"] {
     position: absolute;
     display: block;
     width: 100%;
-    color: #333;
- }
+}
 
-.ui-autocomplete-loading { 
+.ui-autocomplete-loading {
     background:url('../images/indicator.gif') no-repeat;
     background-position: right 10px center;
+}
+
+.table-ex td {
+    vertical-align: middle !important;
+}
+
+.page-nav {
+    line-height: 30px;
+    background-color: #565656;
+    padding: 0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.page-nav .col-xs-1,
+.page-nav .col-xs-2,
+.page-nav .col-xs-3,
+.page-nav .col-xs-4,
+.page-nav .col-xs-5,
+.page-nav .col-xs-6,
+.page-nav .col-xs-7,
+.page-nav .col-xs-8,
+.page-nav .col-xs-9,
+.page-nav .col-xs-10,
+.page-nav .col-xs-11,
+.page-nav .col-xs-12 {
+    line-height: 30px;
+}
+
+.no-top-border {
+    border-top: none !important;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Sticky footer style
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 80px;
+}
+.footer {
+    position: absolute;
+    display: table;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 80px;
+    background-color: #f5f5f5;
+}
+
+.footer .container {
+    display: table-cell;
+    height: 80px;
+    width: 100%;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Infinite loading style
+-------------------------------------------------- */
+@keyframes blink {
+  75% { opacity: 0.0; }
+}
+@-webkit-keyframes blink {
+  75% { opacity: 0.0; }
+}
+.infinite-loading:after {
+    content: 'Loading...';
+    display: block;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: blink 1s step-end infinite;
+    -webkit-animation: blink 0.5s step-end infinite;
 }

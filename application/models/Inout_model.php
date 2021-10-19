@@ -6,29 +6,45 @@ class Inout_model extends App_Model {
     const TABLE = 'inout_records';
     
     // ID của Account Tiền mặt trong Table Categories (chú ý kiểu String)
-    const ACCOUNT_CASH_ID = '1'; 
+    const ACCOUNT_CASH_ID = '1';
     
-    // Mốc đánh dấu ID bắt đầu của category fix
+    // Mốc đánh dấu ID kết thúc của category fix
     const FIX_CATEGORY_ID_MAX = '20';
     
-    public static $INOUT_TYPE = array(
+    // Ký tự nối account & player trong select cho nút transfer
+    const TRANSFER_SELECT_GLUE = '-';
+    
+    // Tên của loại thu chi
+    public static $INOUT_TYPE = [
         1 => 'Thu',
         2 => 'Chi',
-    );
+    ];
     
-    // Tên và phân loại thu chi cho từng loại dòng tiền
-    // Thứ tự từng Item trong array:
-    //      Tên đầy đủ
-    //      Phân loại khoản thu chi (nếu là 1 pair thu chi thì là của item đầu tiên)
-    //      ID của Category đại diện (nếu là 1 pair thu chi thì là của item đầu tiên, nếu 0: không có Category đại diện)
-    // Nếu trong pair có 1 item là tài khoản ngân hàng thì mặc định đó là item đầu tiên
-    public static $CASH_FLOW_NAMES = array(
-        'outgo'     => array('Thêm khoản chi', 2, 0),
-        'income'    => array('Thêm khoản thu', 1, 0),
-        'drawer'    => array('Rút tiền từ tài khoản*', 2, 1),
-        'deposit'   => array('Nạp tiền vô tài khoản*', 1, 3),
-        'handover'  => array('Chuyển tiền qua tay*', 2, 5),
-    );
+    // Dấu của loại thu chi
+    public static $INOUT_TYPE_SIGN = [
+        1 => 1,
+        2 => -1,
+    ];
+    
+    /**
+     * Tên và phân loại thu chi cho từng loại dòng tiền
+     * Thứ tự từng Item trong array:
+     *      Tên đầy đủ
+     *      Phân loại khoản thu chi (nếu là lưu động nội bộ thì là của item đầu tiên)
+     * Nếu trong pair có 1 item là tài khoản ngân hàng thì mặc định đó là item đầu tiên
+     */    
+    public static $CASH_FLOW_NAMES = [
+        'outgo'     => ['Thêm khoản chi', 2],
+        'income'    => ['Thêm khoản thu', 1],
+        'internal'  => ['Chuyển nội bộ*', 2],
+    ];
+    
+    public static $INTERNAL_CATEGORY_IDS = [
+        'drawer' => 1,
+        'deposit' => 3,
+        'handover' => 5,
+        'transfer' => 7,
+    ];
     
     public function __construct()
     {
@@ -36,52 +52,56 @@ class Inout_model extends App_Model {
         $this->load->database('default');
     }
     
-    public function get($id)
+    public function get(int $id)
     {
-        return $this->db->where('iorid', $id)
-                        ->join('categories', 'categories.cid = inout_records.category_id')
+        return $this->db->where('inout_records.id', $id)
+                        ->join('categories', 'categories.id = inout_records.category_id')
                         ->limit(1)
                         ->get(self::TABLE)
                         ->row_array();
     }
     
-    public function add($type, $data)
-    {
+    public function add(string $type, array $data)
+    {   
+        $data['cash_flow']  = $type;
+        $data['created_on'] = $data['modified_on'] = date('Y-m-d H:i:s');
+        $data['created_by'] = $data['modified_by'] = $this->auth->user('id');
+        
         $this->db->trans_start();
-        foreach ($this->setPairAddData($type, $data) as $item){
+        foreach ($this->set_pair_add_data($type, $data) as $item){
+            $item = $this->remove_garbage_fields($item);
             $this->db->insert(self::TABLE, $item);
         }
         $this->db->trans_complete();
     }
     
-    public function edit($id, $data)
+    public function edit($id, array $data)
     {
-        // Dựa vào giá trị amount cũ trong dữ liệu để xét dấu 
-        // âm dương cho dữ liệu chuẩn bị thay đổi
-        $old_value = current($this->db->select('amount')
-                                      ->where('iorid', $id)
-                                      ->get(self::TABLE)->row_array());
-        $k = $old_value/abs($old_value);
-        $k_arr = array($k, 0 - $k);
+        $data['modified_on'] = date('Y-m-d H:i:s');
+        $data['modified_by'] = $this->auth->user('id');
         
         $this->db->trans_start();
-        foreach ($this->getPairId($id) as $i => $item){
-            $data['amount'] = $k_arr[$i] * $data['amount'];
-            $this->db->where('iorid', $item)->update(self::TABLE, $data);
+        foreach ($this->set_pair_edit_data($id, $data) as $item){
+            $item = $this->remove_garbage_fields($item);
+            $this->db->where('id', $item['id'])
+                     ->update(self::TABLE, $item);
         }
         $this->db->trans_complete();
     }
     
-    public function del($id)
+    public function del(int $id)
     {
+        $pair = $this->get_pair_data($id);
+        
         $this->db->trans_start();
-        foreach ($this->getPairId($id) as $item){
-            $this->db->where('iorid', $item)->delete(self::TABLE);
+        foreach ($pair as $i => $item){
+            $this->db->where('id', $item['id'])
+                     ->delete(self::TABLE);
         }
         $this->db->trans_complete();
     }
     
-    public function searchMemo($q)
+    public function search_memo(string $q)
     {
         $q = $this->db->escape_like_str($q);
         $sql = "SELECT `memo` 
@@ -95,145 +115,312 @@ class Inout_model extends App_Model {
         return array_column($this->db->query($sql)->result_array(), 'memo');
     }
     
-    private function setPairAddData($type, $data)
+    /**
+     * Tạo pair dữ liệu cho thao tác add
+     * 
+     * @param   string: type inout
+     * @param   array: dữ liệu form
+     * @return  array
+     */
+    private function set_pair_add_data(string $type, array $data)
     {
-        $data['cash_flow']  = $type;
-        $data['created_on'] = date('Y-m-d H:i:s');
-        $data['created_by'] = $this->login_model->getInfo('uid');
-        
-        $pair[0] = $data;
-        $pair[0]['amount']  = $this->getInoutTypeCode($type)==1? $pair[0]['amount'] : 0-$pair[0]['amount'];
-        
-        // Không phải loại theo tác tạo ra pair dữ liệu
-        if (in_array($type, array('outgo', 'income'))){
-            return $pair;
+        // Thêm dấu + - vào số tiền tùy vào loại dòng tiền
+        $data['amount'] = intval($this->get_inout_type_sign($type).$data['amount']);
+
+        // Nếu không phải loại thao tác tạo ra dữ liệu lưu động nội bộ
+        if (in_array($type, ['outgo', 'income'])){
+            return [$data];
         }
         
-        // Tạo pair dữ liệu
-        $pair[1] = $pair[0];
-        $pair[0]['pair_id'] = $pair[1]['pair_id'] = random_string('unique');
-        $pair[1]['amount']  = 0 - $pair[0]['amount'];
-        $pair[0]['category_id'] = $this->getFixCategoryCode($type);
+        if (!isset($data['transfer_from']) || !isset($data['transfer_to'])) {
+            throw new AppException(Consts::ERR_BAD_REQUEST);
+        }
+        if ($data['transfer_from'] == $data['transfer_to']) {
+            throw new AppException(Consts::ERR_TRANSFER_FROM_TO_SAME);
+        }
+        
+        $pair = [$data, $data];
+        $pair[0]['pair_id'] = $pair[1]['pair_id'] = $this->gen_pair_id();
+        $pair[1]['amount'] = 0-$pair[0]['amount'];
+        
+        list($pair[0]['account_id'], $pair[0]['player']) = $this->extract_transfer_code($data['transfer_from']);
+        list($pair[1]['account_id'], $pair[1]['player']) = $this->extract_transfer_code($data['transfer_to']);
+        
+        $pair[0]['category_id'] = $this->get_internal_category_id($pair);
         $pair[1]['category_id'] = $pair[0]['category_id']+1;
-        
-        if ($type == 'drawer' || $type == 'deposit'){
-            $pair[1]['account_id']  = self::ACCOUNT_CASH_ID;
-        }
-        elseif ($type == 'handover'){
-            $pair[0]['account_id'] = $pair[1]['account_id'] = self::ACCOUNT_CASH_ID;
-            $pair[0]['player'] = $data['player'][0];
-            $pair[1]['player'] = $data['player'][1];
-        }
+
+        $pair = $this->modify_pair_player($pair);
         
         return $pair;
     }
     
-    private function getPairId($id)
-    {
-        $pair_id = $this->db->select('pair_id')
-                            ->where('iorid', $id)
-                            ->get(self::TABLE)
-                            ->row_array();
-        
-        // Id không có trong CSDL
-        if (empty($pair_id)){
-            return false;
-        }
-        
-        // Lấy value 'pair_id' và kiểm tra pair_id trống hay không
-        $pair_id = current($pair_id);
-
-        if (empty($pair_id)){
-            return array($id);
-        }
-        
-        // Lấy id còn lại trong cặp pair_id
-        $other_id = current($this->db->select('iorid')
-                                     ->where('pair_id', $pair_id)
-                                     ->where('iorid !=', $id)
-                                     ->get(self::TABLE)
-                                     ->row_array() );
-                             
-        return array($id, $other_id);
-    }
-    
-    /*
-     *--------------------------------------------------------------------
-     * Tính toán ID của người chuyển và người nhận khi cash_flow=handover
-     * Cách tính:
-     *      Nếu inout_type_id của data đang sửa = 2 (Chi) 
-     *              -> Người chuyển là player của data đang xét
-     *      Nếu inout_type_id của data đang sửa = 1 (Thu)
-     *              -> Người chuyển là người còn lại
-     *--------------------------------------------------------------------
+    /**
+     * Tạo pair dữ liệu cho thao tác edit
+     * 
+     * @param   int: id của record muốn sửa
+     * @param   array: dữ liệu form
+     * @return  array
      */
-    public function setPlayersForHandoverEdit($data)
+    private function set_pair_edit_data(int $id, array $data)
     {
-        if ($data['cash_flow'] != 'handover'){
-            return false;
+        $pair = $this->get_pair_data($id);
+        
+        // Remove fields which can not be editable from $data
+        unset(
+            $data['pair_id'],
+            $data['id'],
+            $data['created_on'],
+            $data['created_by']
+        );
+        
+        // Nếu không phải loại thao tác tạo ra dữ liệu lưu động nội bộ
+        if (count($pair) == 1) {
+            $pair[0] = array_merge($pair[0], $data);
+            $amount_sign = $this::$INOUT_TYPE_SIGN[$pair[0]['inout_type_id']];
+            $pair[0]['amount'] = $amount_sign * ABS($data['amount']);
+            return $pair;
         }
         
-        $players = array($data['player'], 3-$data['player']);
+        if ($data['transfer_from'] == $data['transfer_to']) {
+            throw new AppException(Consts::ERR_TRANSFER_FROM_TO_SAME);
+        }
         
-        if ($data['inout_type_id'] == array_flip(self::$INOUT_TYPE)['Chi']){
-            return $players;
+        foreach ($pair as $i => $val) {
+            $pair[$i] = array_merge($pair[$i], $data);
+            $amount_sign = $this::$INOUT_TYPE_SIGN[$pair[$i]['inout_type_id']];
+            $pair[$i]['amount'] = $amount_sign * ABS($data['amount']);
+            $transfer = $i==0? $data['transfer_from'] : $data['transfer_to'];
+            list($pair[$i]['account_id'], $pair[$i]['player']) = $this->extract_transfer_code($transfer);
         }
-        else {
-            return array_reverse($players);
-        }
+        
+        $pair[0]['category_id'] = $this->get_internal_category_id($pair);
+        $pair[1]['category_id'] = $pair[0]['category_id']+1;
+        
+        $pair = $this->modify_pair_player($pair);
+        
+        return $pair;
     }
     
-    public function getCashFlowName($type)
-    {
-        if (!isset(self::$CASH_FLOW_NAMES[$type])){
-            return false;
+    /**
+     * Lấy pair dữ liệu của record có id được truyền
+     *
+     * @param   int: id
+     * @return  array
+     */
+    private function get_pair_data(int $inout_id) {
+        $select = [
+            'inout_records.id',
+            'inout_records.pair_id',
+            'inout_records.account_id',
+            'inout_records.player',
+            'categories.inout_type_id',
+        ];
+        
+        $res = $this->db->select($select)
+                        ->from(self::TABLE)
+                        ->join('categories', 'categories.id = inout_records.category_id')
+                        ->where('inout_records.id', $inout_id)
+                        ->limit(1)
+                        ->get()->result_array();
+        
+        if (empty($res)){
+            throw new AppException(Consts::ERR_BAD_REQUEST);
         }
         
-        return self::$CASH_FLOW_NAMES[$type][0];
+        $pair_id = $res[0]['pair_id'];
+        if (empty($pair_id)) {
+            return $res;
+        }
+        
+        $res = $this->db->select($select)
+                        ->from(self::TABLE)
+                        ->join('categories', 'categories.id = inout_records.category_id')
+                        ->order_by('inout_records.id')
+                        ->where('inout_records.pair_id', $pair_id)
+                        ->limit(2)
+                        ->get()->result_array();
+                        
+        return $res;
     }
     
-    public function getInoutTypeCode($type)
+    /**
+     * Tách transfer_from hoặc transfer_to thành account và player
+     *
+     * @param   string: transfer code
+     * @return  array: ['account_id' => ..., 'player' => ...]
+     */
+    private function extract_transfer_code($transfer)
+    {
+        $item = [
+            0 => null,
+            1 => $this->auth->user('id'),
+        ];
+        
+        $transfer = explode(self::TRANSFER_SELECT_GLUE, $transfer);
+        $transfer = array_slice($transfer, 0, 2);
+        
+        foreach ($transfer as $i => $val) {
+            $item[$i] = $val;
+        }
+        return $item;
+    }
+    
+    /**
+     * Sửa player của pair data về player của item cash
+     * nếu 1 item trong pair là cash và 1 item còn lại là tài khoản ngân hàng
+     *
+     * @param   array: pair data
+     * @return  array: pair data đã sửa
+     */
+    private function modify_pair_player($pair) {
+        if (!in_array(self::ACCOUNT_CASH_ID, [
+            $pair[0]['account_id'], 
+            $pair[1]['account_id'],
+        ])) {
+            return $pair;
+        }
+        
+        if ($pair[0]['account_id'] == $pair[1]['account_id']) {
+            return $pair;
+        }
+        
+        if ($pair[0]['account_id'] == self::ACCOUNT_CASH_ID) {
+            $pair[1]['player'] = $pair[0]['player'];
+        } else {
+            $pair[0]['player'] = $pair[1]['player'];
+        }
+        return $pair;
+    }
+    
+    /**
+     * Tạo pair_id
+     *
+     * @param   void
+     * @return  string
+     */
+    public function gen_pair_id() {
+        do {
+            $pair_id = random_string('md5');
+            $existed = $this->db->select('pair_id')
+                                ->from(self::TABLE)
+                                ->where('pair_id', $pair_id)
+                                ->limit(1)
+                                ->get()->num_rows() > 0;
+        } while ($existed);
+        
+        return $pair_id;
+    }
+
+    /**
+     * Trả về dữ liệu để tạo nút select cho ô transfer_from và transfer_to
+     *
+     * @param void
+     * @return array
+     */
+    public function get_select_tag_data_for_transfer() {
+        $this->load->model('user_model');
+        $this->load->model('account_model');
+        $current_player_id = $this->auth->user('id');
+        $player_select_tags = $this->user_model->get_select_tag_data();
+        $account_select_tags = $this->account_model->get_select_tag_data();
+        $glue = self::TRANSFER_SELECT_GLUE;
+        $select_tags = [];
+        foreach ($player_select_tags as $player_id => $name) {
+            $key = implode($glue, [self::ACCOUNT_CASH_ID, $player_id]);
+            $select_tags[$key] = $name;
+        }
+        unset($account_select_tags[self::ACCOUNT_CASH_ID]);
+        $select_tags += $account_select_tags;
+        return $select_tags;
+    }
+    
+    /**
+     * Tính toán giá trị transfer_from và transfer_to cho dữ liệu trong database
+     * 
+     * @param   array: dữ liệu inout trong db
+     * @return  array: giá trị của transfer_from, transfer_to
+     */
+    public function get_transfer_code(array $data) {
+        $transfer = [
+            'from' => null,
+            'to' => null,
+        ];
+        
+        if (empty($data['pair_id'])) {
+            return $transfer;
+        }
+        
+        $pair = $this->db->select('account_id')
+                         ->select('player')
+                         ->where('pair_id', $data['pair_id'])
+                         ->order_by('id', 'asc')
+                         ->from(self::TABLE)
+                         ->get()->result_array();
+        
+        if (empty($pair)) {
+            throw new AppException(ERR_NOT_FOUND);
+        }
+        
+        // Bỏ item player nếu ko phải là item cash
+        $modifier = function ($item) {
+            if ($item['account_id'] != self::ACCOUNT_CASH_ID) {
+                unset($item['player']);
+            }
+            return $item;
+        };
+        
+        $glue = self::TRANSFER_SELECT_GLUE;
+        $transfer['from'] = implode($glue, $modifier($pair[0]));
+        $transfer['to'] = implode($glue, $modifier($pair[1]));
+        return $transfer;
+    }
+    
+    public function get_cash_flow_name(string $type)
     {      
-        if (!isset(self::$CASH_FLOW_NAMES[$type])){
-            return false;
-        }
-        
-        return self::$CASH_FLOW_NAMES[$type][1];
+        return isset(self::$CASH_FLOW_NAMES[$type])? self::$CASH_FLOW_NAMES[$type][0] : null;
     }
     
-    public function getInoutTypeSign($type){
-        
+    public function get_inout_type_id(string $type)
+    {      
+        return isset(self::$CASH_FLOW_NAMES[$type])? self::$CASH_FLOW_NAMES[$type][1] : null;
+    }
+    
+    public function get_inout_type_sign(string $type)
+    {   
         if (!is_numeric($type) && is_string($type)){
-            
-            if (!isset(self::$CASH_FLOW_NAMES[$type])){
-                return false;
-            }
-            
-            return $this->getInoutTypeCode($type) == array_flip(self::$INOUT_TYPE)['Thu']
-                    ? '+' : '-';
-        }
-        elseif (is_numeric($type)){
-
-            if (!isset(self::$INOUT_TYPE[$type])){
-                return false;
-            }
-            
-            return $type == array_flip(self::$INOUT_TYPE)['Thu']
-                    ? '+' : '-';
+            $type = $this->get_inout_type_id($type);
         }
 
-        return false;
+        if (!is_numeric($type) || !isset(self::$INOUT_TYPE[$type])){
+            return null;
+        }
+
+        return intval($type) === array_flip(self::$INOUT_TYPE)['Thu']
+               ? '+' : '-';
     }
     
-    public function getFixCategoryCode($type)
+    /**
+     * Lấy code của category nội bộ dành cho các loại thu chi phát sinh pair
+     *
+     * @param   string
+     * @param   int
+     */
+    public function get_internal_category_id($pair)
     {
-        if (!isset(self::$CASH_FLOW_NAMES[$type])){
-            return false;
+        if ($pair[0]['account_id'] == self::ACCOUNT_CASH_ID) {
+            if ($pair[1]['account_id'] == self::ACCOUNT_CASH_ID) {
+                return self::$INTERNAL_CATEGORY_IDS['handover'];
+            }
+            else {
+                return self::$INTERNAL_CATEGORY_IDS['deposit'];
+            }
+        } else {
+            if ($pair[1]['account_id'] == self::ACCOUNT_CASH_ID) {
+                return self::$INTERNAL_CATEGORY_IDS['drawer'];
+            }
+            else {
+                return self::$INTERNAL_CATEGORY_IDS['transfer'];
+            }
         }
-        if (self::$CASH_FLOW_NAMES[$type][2]==0){
-            return false;
-        }
-        
-        return self::$CASH_FLOW_NAMES[$type][2];    
     }
 }

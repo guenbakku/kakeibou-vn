@@ -1,23 +1,19 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Home extends CI_Controller {
-    
-    public function __construct()
-    {   
-        parent::__construct();
-        if ($this->login_model->isLogin() === false){
-            redirect(base_url().Login_model::LOGIN_URL);
-        }
-    }
-    
-	public function index()
-    {   
-        $view_data['month_sum'] = current($this->summary_model->getSumListFromDB('%Y-%m', date('Y-m'), date('Y-m')));
-        $view_data['liquidOutgoStatus'] = $this->summary_model->getLiquidOutgoStatus();
-        $view_data['remaining'] = $this->summary_model->getRemaining();
-		$this->template->write_view('MAIN', 'home', $view_data);
+class Home extends MY_Controller {
+
+    public function index()
+    {
+        $view_data['month_sum'] = current($this->timeline_model->summary_inout_types(date('Y-m-01'), date('Y-m-t'), '%Y-%m'));
+        $view_data['liquidOutgoStatus'] = $this->timeline_model->get_liquid_outgo_status();
+        $view_data['remaining'] = $this->timeline_model->get_remaining();
+        $view_data['url'] = [
+            'detailToday' => base_url(['timeline', 'detail', date('Y-m-d')]),
+            'summaryThisMonth' => base_url(['timeline', 'summary', date('Y-m')]),
+            'summaryThisYear' => base_url(['timeline', 'summary', date('Y')])
+        ];
+        $this->template->write_view('MAIN', 'home/home', $view_data);
         $this->template->render();
-	}
-    
+    }
 }

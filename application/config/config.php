@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-//Set timezone là Tokyo
-date_default_timezone_set('Asia/Tokyo');
+//Set default timezone
+date_default_timezone_set(isset($_SERVER['CI_TIMEZONE']) ? $_SERVER['CI_TIMEZONE'] : 'Asia/Ho_Chi_Minh');
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +20,7 @@ date_default_timezone_set('Asia/Tokyo');
 | environments.
 |
 */
-$config['base_url'] = BASEURL;
+$config['base_url'] = 'http://localhost:8080';
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ $config['base_url'] = BASEURL;
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -366,7 +366,7 @@ $config['encryption_key'] = hex2bin('20621a2acfaa2b50f927398a454b5382');
 */
 $config['sess_driver'] = 'files';
 $config['sess_cookie_name'] = 'bhcb_session';
-$config['sess_expiration'] = 7200;
+$config['sess_expiration'] = 0;
 $config['sess_save_path'] = FCPATH.'application/session';
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;

@@ -3,24 +3,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Setting_model extends App_Model {
     
-    const TABLE        = 'settings';
+    const TABLE = 'settings';
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Lấy setting
      *
-     * @param  string/array : item muốn lấy
+     * @param  string/array : item setting muốn lấy
+     * @param  string       : column muốn lấy
      * @return array        : (key => val)
-     *--------------------------------------------------------------------
      */
-    public function get($arr = null, $col = null){
+    public function get($items = null, string $col = null){
         
-        if (is_string($arr)){
-            $arr =array($arr);
+        if (is_string($items)){
+            $items = [$items];
         }
         
-        if (is_array($arr)){
-            foreach ($arr as $key){
+        if (is_array($items)){
+            foreach ($items as $key){
                 $this->db->where('item', $key);
             }
         }
@@ -39,14 +38,12 @@ class Setting_model extends App_Model {
     }
     
     /*
-     *--------------------------------------------------------------------
      * Lưu setting
      *
-     * @param   array:
+     * @param   array
      * @return  void
-     *--------------------------------------------------------------------
      */
-    public function edit($data)
+    public function edit(array $data)
     {
         foreach ($data as $k => $v){
             $this->db->where('item', $k)

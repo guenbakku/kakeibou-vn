@@ -18,37 +18,35 @@ class Flash {
         $this->CI->load->library('session');
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Set Success Message
      *
-     *--------------------------------------------------------------------
+     * @param   string
      */
     public function success($msg)
     {
-        $this->set_session('success', $msg);
+        $this->set_session($msg, 'success');
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Set Error Message
      *
-     *--------------------------------------------------------------------
+     * @param   string
      */
     public function error($msg)
     {
-        $this->set_session('danger', $msg);
+        $this->set_session($msg, 'danger');
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Printout Bootstrap Flash
-     *
-     *--------------------------------------------------------------------
      */
     public function output()
-    {
-        if (null === $data = $this->CI->session->userdata(self::SESSION_NAME)){
+    {   
+        $data = $this->CI->session->userdata(self::SESSION_NAME);
+        unset($_SESSION[self::SESSION_NAME]);
+
+        if ($data === null) {
             return null;
         }
         
@@ -57,18 +55,13 @@ class Flash {
         $html .= $data['msg'];
         $html .= '</div>';
         
-        unset($_SESSION[self::SESSION_NAME]);
-        
         return $html;
     }
     
-    /*
-     *--------------------------------------------------------------------
+    /**
      * Save flash data to Session
-     *
-     *--------------------------------------------------------------------
      */
-    private function set_session($status, $msg)
+    protected function set_session($msg, $status)
     {
         $this->CI->session->set_userdata(
             self::SESSION_NAME, 

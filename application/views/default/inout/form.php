@@ -1,31 +1,34 @@
-<?php 
-
-// Xóa lựa chọn "Tiền mặt" nếu thao tác là Rút hoặc nạp tiền vào tài khoản
-if (in_array($type, array('drawer', 'deposit'))){
-    unset($select['accounts'][Inout_model::ACCOUNT_CASH_ID]);
-}
-
-// Thêm thuộc tính disabled cho input/select nếu dữ liệu sửa là dữ liệu pair
-$disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
-?>
-
 <script type="text/javascript">
     $(function(){
-        $(".autofocus").focus();
-        
-        $(".autocomplete").autocomplete({ 
+        // Search memo
+        $("[name=memo]").autocomplete({
             source: function(req, resp) {
-                $.getJSON("/inout/searchMemo/" + encodeURIComponent(req.term), resp);
+                $.getJSON("/inout/search_memo", {
+                    'keyword': req.term,
+                }, resp);
             },
             minLength: 2,
+        });
+
+        // Tự động check skip_month_estimated
+        $("[name=category_id]").change(function (evt) {
+            if ($("[name=skip_month_estimated]").length === 0) {
+                return false;
+            }
+            var category_id = $(this).val();
+            $.getJSON("/category/is_month_fixed_money", {
+                'id': category_id
+            }).done(function (data) {
+                $("[name=skip_month_estimated]").prop('checked', data);
+            });
         });
     });
 </script>
 
+<?=$this->template->get_view('elements/page-nav')?>
 <div class="container">
-    <?php echo form_open($form_url, array('id' => 'addCashFlow', 'class' => 'form-vertical'))?>
+    <?php echo form_open($url['form'], array('id' => 'addCashFlow', 'class' => 'form-vertical'))?>
         <div class="panel panel-default">
-            <div class="panel-heading"><strong><?=$title?></strong></div>
             <div class="panel-body">
                 <div class="form-group">
                     <label>Số tiền:</label>
@@ -39,10 +42,10 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                             ),
                             set_value($field_name, null),
                             array(
-                                'class' => 'form-control autofocus',
+                                'class' => 'form-control',
                             )
                         )?>
-                        <span class="input-group-addon">¥</span>
+                        <span class="input-group-addon"><?=APP_CURRENCY?></span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -58,33 +61,33 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                         )
                     )?>
                 </div>
-                
+
                 <?php if (in_array($type, array('outgo', 'income'))): ?>
                 <div class="form-group">
                     <label>Danh mục:</label>
                     <?=form_dropdown(
-                        $field_name = 'category_id', 
-                        $select['categories'], 
-                        set_value($field_name, null), 
+                        $field_name = 'category_id',
+                        $select['categories'],
+                        set_value($field_name, null),
                         array(
                             'class' => 'form-control',
                         )
                     )?>
                 </div>
                 <?php endif ?>
-                
-                <?php if (in_array($type, array('outgo', 'income', 'drawer', 'deposit'))): ?>
+
+                <?php if (in_array($type, array('outgo', 'income'))): ?>
                 <div class="row">
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label>Tài khoản:</label>
                             <?=form_dropdown(
                                 $field_name = 'account_id',
-                                $select['accounts'], 
-                                set_value($field_name, null), 
+                                $select['accounts'],
+                                set_value($field_name, null),
                                 array(
                                     'class' => 'form-control',
-                                ) + $disabled_attr
+                                )
                             )?>
                         </div>
                     </div>
@@ -92,9 +95,9 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                         <div class="form-group">
                             <label>Phụ trách:</label>
                             <?=form_dropdown(
-                                $field_name = 'player', 
-                                $select['players'], 
-                                set_value($field_name, $this->login_model->getInfo('uid')), 
+                                $field_name = 'player',
+                                $select['players'],
+                                set_value($field_name, $this->auth->user('id')),
                                 array(
                                     'class' => 'form-control',
                                 )
@@ -103,8 +106,8 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                     </div>
                 </div>
                 <?php endif ?>
-                
-                <?php if (in_array($type, array('handover'))): ?>
+
+                <?php if (in_array($type, array('internal'))): ?>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-6"><label>Chuyển từ:</label></div>
@@ -113,59 +116,63 @@ $disabled_attr = (!empty($pair_id))? array('disabled' => 'true') : array();
                     <div class="row">
                         <div class="col-xs-6">
                             <?=form_dropdown(
-                                $field_name = 'player[0]', 
-                                $select['players'], 
-                                set_value($field_name, $this->login_model->getInfo('uid')), 
+                                $field_name = 'transfer_from',
+                                $select['transfer'],
+                                set_value($field_name, element(0, array_keys($select['transfer']))),
                                 array(
                                     'class' => 'form-control',
-                                ) + $disabled_attr
+                                )
                             )?>
                         </div>
                         <div class="col-xs-6">
                             <?=form_dropdown(
-                                $field_name = 'player[1]', 
-                                $select['players'], 
-                                set_value($field_name, 3-$this->login_model->getInfo('uid')), 
+                                $field_name = 'transfer_to',
+                                $select['transfer'],
+                                set_value($field_name, element(1, array_keys($select['transfer']))),
                                 array(
                                     'class' => 'form-control',
-                                ) + $disabled_attr
+                                )
                             )?>
                         </div>
                     </div>
                 </div>
                 <?php endif ?>
-                
+
                 <div class="form-group">
                     <label>Ghi chú:</label>
                     <?=form_input(
-                        $field_name = 'memo', 
+                        $field_name = 'memo',
                         set_value($field_name, null, false),
                         array(
                             'class' => 'form-control autocomplete',
                         )
                     )?>
                 </div>
-                <button type="submit" class="btn btn-primary">Nhập</button>
-                <?php if ($this->uri->segment(2) == 'edit'): ?>
-                    <button type="button" class="btn btn-danger pull-right del-record-btn">Xóa</button>
+
+                <?php if (in_array($type, array('outgo'))): ?>
+                    <div class="form-group">
+                        <label>
+                            <input type="hidden" value="0" name="<?=$field_name = 'skip_month_estimated'?>">
+                            <?=form_checkbox(
+                                array(
+                                    'name'      => $field_name,
+                                    'value'     => '1',
+                                    'checked'   => (bool)set_value($field_name, false),
+                                )
+                            )?>
+                            Không tính vào Dự định chi tháng này
+                        </label>
+                    </div>
+                <?php endif ?>
+
+                <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
+                <?php if ($this->router->fetch_method() == 'add'): ?>
+                    <button type="button" onClick="Cashbook.submitbutton(this, 'continue')" class="btn btn-primary"><?=Consts::LABEL['submit_continue']?></button>
+                <?php endif ?>
+                <?php if ($this->router->fetch_method() == 'edit'): ?>
+                    <button type="button" onClick="Cashbook.submitbutton(this, 'delete')" class="btn btn-danger pull-right"><?=Consts::LABEL['delete']?></button>
                 <?php endif ?>
             </div>
         </div>
     </form>
 </div>
-
-<?php if ($this->uri->segment(2) == 'edit'): ?>
-    <script type="text/javascript">
-        $(function(){
-            $('.del-record-btn').click(function(evt){
-                evt.preventDefault();
-                if (confirm('Muốn xóa ghi chép này?')){
-                    $('#delCashFlow').submit();
-                }
-            });
-        })
-    </script>
-    
-    <?php echo form_open($del_url, array('id' => 'delCashFlow', 'class' => 'form-vertical sr-only'))?>
-    </form>
-<?php endif ?> 
