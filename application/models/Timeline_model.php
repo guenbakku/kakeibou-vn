@@ -155,6 +155,11 @@ class Timeline_model extends Inout_Model {
 
         $combine_data['Tổng cộng'] = $total;
 
+        // Loại account có tiền còn lại bằng 0 ra khỏi danh sách dữ liệu
+        $combine_data = array_filter($combine_data, function($item, $key) {
+            return $key === 'Tổng cộng' || $item[0] != 0 || $item[1] != 0;
+        }, ARRAY_FILTER_USE_BOTH);
+
         return $combine_data;
     }
 
