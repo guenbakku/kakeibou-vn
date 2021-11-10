@@ -135,7 +135,6 @@ class Timeline_model extends Inout_Model {
                         ORDER BY `order_no` ASC, `account_id` ASC, `player` ASC", self::TABLE);
 
         $data = $this->db->query($sql)->result_array();
-
         $combine_data = array();
         $total = array(0, 0);
         foreach ($data as $i => $item){
@@ -154,6 +153,11 @@ class Timeline_model extends Inout_Model {
         }
 
         $combine_data['Tổng cộng'] = $total;
+
+        // Loại account có tiền còn lại bằng 0 ra khỏi danh sách dữ liệu
+        $combine_data = array_filter($combine_data, function($item, $key) {
+            return $key === 'Tổng cộng' || $item[0] != 0 || $item[1] != 0;
+        }, ARRAY_FILTER_USE_BOTH);
 
         return $combine_data;
     }
