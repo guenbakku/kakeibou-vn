@@ -1,30 +1,3 @@
-<script type="text/javascript">
-    $(function(){
-        // Search memo
-        $("[name=memo]").autocomplete({
-            source: function(req, resp) {
-                $.getJSON("/inout/search_memo", {
-                    'keyword': req.term,
-                }, resp);
-            },
-            minLength: 2,
-        });
-
-        // Tự động check skip_month_estimated
-        $("[name=category_id]").change(function (evt) {
-            if ($("[name=skip_month_estimated]").length === 0) {
-                return false;
-            }
-            var category_id = $(this).val();
-            $.getJSON("/category/is_month_fixed_money", {
-                'id': category_id
-            }).done(function (data) {
-                $("[name=skip_month_estimated]").prop('checked', data);
-            });
-        });
-    });
-</script>
-
 <?=$this->template->get_view('elements/page-nav')?>
 <div class="container">
     <?php echo form_open($url['form'], array('id' => 'addCashFlow', 'class' => 'form-vertical'))?>
@@ -37,12 +10,11 @@
                         <?=form_input(
                             array(
                                 'name' => $field_name = 'amount',
-                                'type' => 'number',
-                                'pattern' => '\d*',
+                                'type' => 'text',
                             ),
                             set_value($field_name, null),
                             array(
-                                'class' => 'form-control',
+                                'class' => 'form-control amount',
                             )
                         )?>
                         <span class="input-group-addon"><?=APP_CURRENCY?></span>
@@ -165,9 +137,9 @@
                     </div>
                 <?php endif ?>
 
-                <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
+                <button type="button" onClick="submitForm(this)" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
                 <?php if ($this->router->fetch_method() == 'add'): ?>
-                    <button type="button" onClick="Cashbook.submitbutton(this, 'continue')" class="btn btn-primary"><?=Consts::LABEL['submit_continue']?></button>
+                    <button type="button" onClick="submitFormAndContinue(this)" class="btn btn-primary"><?=Consts::LABEL['submit_continue']?></button>
                 <?php endif ?>
                 <?php if ($this->router->fetch_method() == 'edit'): ?>
                     <button type="button" onClick="Cashbook.submitbutton(this, 'delete')" class="btn btn-danger pull-right"><?=Consts::LABEL['delete']?></button>
@@ -176,3 +148,48 @@
         </div>
     </form>
 </div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+<script type="text/javascript">
+    // Format number typed in amount input
+    anElements = new AutoNumeric.multiple('.amount', {
+        allowDecimalPadding: false,
+        formatOnPageLoad: true,
+        decimalPlaces: 0,
+    });
+    function submitForm(btn) {
+        anElements.forEach(elm => elm.formUnformat());
+        Cashbook.submitbutton(btn, 'submit');
+    }
+    function submitFormAndContinue(btn) {
+        anElements.forEach(elm => elm.formUnformat());
+        Cashbook.submitbutton(btn, 'continue');
+    }
+</script>
+
+<script type="text/javascript">
+    $(function(){
+        // Search memo
+        $("[name=memo]").autocomplete({
+            source: function(req, resp) {
+                $.getJSON("/inout/search_memo", {
+                    'keyword': req.term,
+                }, resp);
+            },
+            minLength: 2,
+        });
+
+        // Tự động check skip_month_estimated
+        $("[name=category_id]").change(function (evt) {
+            if ($("[name=skip_month_estimated]").length === 0) {
+                return false;
+            }
+            var category_id = $(this).val();
+            $.getJSON("/category/is_month_fixed_money", {
+                'id': category_id
+            }).done(function (data) {
+                $("[name=skip_month_estimated]").prop('checked', data);
+            });
+        });
+    });
+</script>
