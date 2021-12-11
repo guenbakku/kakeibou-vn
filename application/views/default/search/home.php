@@ -1,17 +1,8 @@
-<?php 
+<?php
     echo $this->template->get_view('elements/page-nav');
     echo $this->template->get_view('search/form');
     if ($result === null) return; // Không hiện panel kết quả ở initial display
 ?>
-
-<script type="text/javascript">
-    $(function(){
-        var infinite = new Waypoint.Infinite({
-            element: $('.infinite-container'),
-            items: '.infinite-item',
-        })
-    });
-</script>
 
 <div class="container">
     <?php if ($total_num > 0): ?>
@@ -32,11 +23,11 @@
                                 <span class="glyphicon glyphicon-menu-right"></span>
                             </div>
                             <div class="row">
-                                <div class="col-xs-7" style="padding-right:0">
+                                <div class="col-xs-6" style="padding-right:0">
                                     <div><?=$result[$i]['category']?></div>
                                     <div class="small text-muted"><span class="fa <?=$result[$i]['account_icon']?>"></span> <em><?=$result[$i]['memo']?></em></div>
                                 </div>
-                                <div class="col-xs-4 text-right">
+                                <div class="col-xs-5 text-right">
                                     <div class="<?=$result[$i]['inout_type']=='Thu'? 'text-income' : 'text-outgo'?>"><?=currency($result[$i]['amount'])?></div>
                                     <div class="label <?=$result[$i]['player_label']?>"><?=$result[$i]['player']?></div>
                                 </div>
@@ -56,3 +47,12 @@
     <a class="infinite-more-link sr-only" href="<?=$url['next_page']?>">Trang tiếp</a>
     <?php endif ?>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        var infinite = new Waypoint.Infinite({
+            element: $('.infinite-container'),
+            items: '.infinite-item',
+        })
+    });
+</script>
