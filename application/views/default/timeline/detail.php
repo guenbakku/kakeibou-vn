@@ -17,9 +17,9 @@
                 <div class="col-xs-6">
                     <label>Tài khoản</label>
                     <?=form_dropdown(
-                        'account', 
-                        $select['accounts'] + array('0' => 'Thực thu chi', '-1' => 'Tất cả'), 
-                        $account_id, 
+                        'account',
+                        $select['accounts'] + array('0' => 'Thực thu chi', '-1' => 'Tất cả'),
+                        $account_id,
                         array(
                             'class' => 'form-control submit-on-change',
                         )
@@ -28,9 +28,9 @@
                 <div class="col-xs-6">
                     <label>Phụ trách</label>
                     <?=form_dropdown(
-                        'player', 
-                        $select['players'] + array('0' => 'Tất cả'), 
-                        $player_id, 
+                        'player',
+                        $select['players'] + array('0' => 'Tất cả'),
+                        $player_id,
                         array(
                             'class' => 'form-control submit-on-change',
                         )
@@ -57,11 +57,11 @@
                                 <span class="glyphicon glyphicon-menu-right"></span>
                             </div>
                             <div class="row">
-                                <div class="col-xs-7" style="padding-right:0">
+                                <div class="col-xs-6" style="padding-right:0">
                                     <div><?=$result[$i]['category']?></div>
                                     <div class="small text-muted"><span class="fa <?=$result[$i]['account_icon']?>"></span> <em><?=$result[$i]['memo']?></em></div>
                                 </div>
-                                <div class="col-xs-4 text-right">
+                                <div class="col-xs-5 text-right">
                                     <div class="<?=$result[$i]['inout_type']=='Thu'? 'text-income' : 'text-outgo'?>"><?=currency($result[$i]['amount'])?></div>
                                     <div class="label <?=$result[$i]['player_label']?>"><?=$result[$i]['player']?></div>
                                 </div>

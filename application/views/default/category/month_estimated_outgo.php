@@ -30,12 +30,11 @@
                                         <?=form_input(
                                             [
                                                 'name' => $field_name = sprintf('categories[%d][month_estimated_amount]', $i),
-                                                'type' => 'number',
-                                                'pattern' => '\d*',
+                                                'type' => 'text',
                                             ],
                                             set_value($field_name, null),
                                             [
-                                                'class' => 'form-control',
+                                                'class' => 'form-control amount',
                                             ]
                                         )?>
                                         <span class="input-group-addon"><?=APP_CURRENCY?></span>
@@ -64,8 +63,22 @@
                 </div>
                 <?php endforeach ?>
 
-                <button type="button" onClick="Cashbook.submitbutton(this, 'submit')" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
+                <button type="button" onClick="submitForm(this)" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
             </div>
         </div>
     </form>
 </div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+<script type="text/javascript">
+    // Format number typed in amount input
+    anElements = new AutoNumeric.multiple('.amount', {
+        allowDecimalPadding: false,
+        formatOnPageLoad: true,
+        decimalPlaces: 0,
+    });
+    function submitForm(btn) {
+        anElements.forEach(elm => elm.formUnformat());
+        Cashbook.submitbutton(btn, 'submit');
+    }
+</script>
