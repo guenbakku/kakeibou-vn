@@ -35,7 +35,7 @@
                                             set_value($field_name, null),
                                             [
                                                 'class' => 'form-control amount',
-                                                'inputmode' => 'numeric' // Show numeric keyboard in iOS
+                                                'inputmode' => 'tel' // A cheet to show numeric keyboard in iOS
                                             ]
                                         )?>
                                         <span class="input-group-addon"><?=APP_CURRENCY?></span>
