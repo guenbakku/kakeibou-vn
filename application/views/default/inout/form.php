@@ -154,16 +154,15 @@
 <script type="text/javascript">
     // Format number typed in amount input
     anElements = new AutoNumeric.multiple('.amount', {
-        allowDecimalPadding: false,
         formatOnPageLoad: true,
         decimalPlaces: 0,
     });
     function submitForm(btn) {
-        anElements.forEach(elm => elm.formUnformat());
+        anElements.forEach(elm => elm.unformat());
         Cashbook.submitbutton(btn, 'submit');
     }
     function submitFormAndContinue(btn) {
-        anElements.forEach(elm => elm.formUnformat());
+        anElements.forEach(elm => elm.unformat());
         Cashbook.submitbutton(btn, 'continue');
     }
 </script>
