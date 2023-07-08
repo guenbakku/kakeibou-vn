@@ -15,7 +15,7 @@
                         <div class="col-xs-6 text-right text-income"><?=currency($v['thu'])?></div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-6"><?=currency($v['tong'])?></div>
+                        <div class="col-xs-6 text-right"><?=currency($v['tong'])?></div>
                         <div class="col-xs-6 text-right text-outgo"><?=currency($v['chi'])?></div>
                     </div>
                 </div>
