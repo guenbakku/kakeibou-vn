@@ -8,7 +8,7 @@ class Search extends MY_Controller {
         $this->load->model('search_model');
     }
 
-	public function index()
+    public function index()
     {
         if (!empty($this->input->get())) {
             try {
@@ -70,7 +70,8 @@ class Search extends MY_Controller {
 
         $view_data['result']    = $this->search_model->result;
         $view_data['current_num'] = is_array($this->search_model->result) ? count($this->search_model->result) : 0;
-        $view_data['total_num'] = $this->search_model->total;
+        $view_data['num_of_results'] = $this->search_model->num_of_results;
+        $view_data['results_sum'] = $this->search_model->results_sum;
         $view_data['title'] = 'Tìm kiếm chi tiêu';
         $view_data['select'] = [
             'players'     => [0 => 'Tất cả'] + $this->user_model->get_select_tag_data(),
@@ -83,7 +84,7 @@ class Search extends MY_Controller {
             'next_page' => $this->search_model->next_page_url(),
         ];
 
-		$this->template->write_view('MAIN', 'search/home', $view_data);
+        $this->template->write_view('MAIN', 'search/home', $view_data);
         $this->template->render();
-	}
+    }
 }
