@@ -5,8 +5,23 @@
 ?>
 
 <div class="container">
-    <?php if ($total_num > 0): ?>
-    <p>Tìm được <strong><?=$total_num?></strong> kết quả</p>
+    <?php if ($num_of_results > 0): ?>
+        <p>Tìm được <strong><?=$num_of_results?></strong> kết quả</p>
+
+        <div class="panel panel-default">
+            <table class="table table-bordered">
+                <tr>
+                    <th style="width:33.3%" class="text-center">Tổng thu</th>
+                    <th style="width:33.3%" class="text-center">Tổng chi</th>
+                    <th style="width:33.3%" class="text-center">Chênh lệch</th>
+                </tr>
+                <tr>
+                    <td class="text-right"><?=currency($results_sum['thu'])?></td>
+                    <td class="text-right"><?=currency($results_sum['chi'])?></td>
+                    <td class="text-right"><?=currency($results_sum['tong'])?></td>
+                </tr>
+            </table>
+        </div>
     <?php endif ?>
     <div class="infinite-container">
         <?php if ($current_num > 0): ?>
