@@ -101,18 +101,20 @@ class Inout_model extends App_Model {
         $this->db->trans_complete();
     }
 
-    public function search_memo(string $q)
+    public function search_memo(string $keyword, string $cash_flow)
     {
-        $q = $this->db->escape_like_str($q);
-        $sql = "SELECT `memo`
+        // TODO: sửa lại sql để có thể lấy được những colum khác của record có modified_on là mới nhất
+        $keyword = $this->db->escape_like_str($keyword);
+        $sql = "SELECT `memo` as `value`
                 FROM (SELECT `memo`, COUNT(`memo`) as `count`, MAX(`modified_on`) as `modified_on`
                       FROM `inout_records`
-                      WHERE `memo` LIKE '%{$q}%'
+                      WHERE `memo` LIKE '%{$keyword}%'
+                        AND `cash_flow` = '{$cash_flow}'
                       GROUP BY `memo`) AS t
                 ORDER BY `modified_on` DESC, `count` DESC
                 LIMIT 0, 10";
 
-        return array_column($this->db->query($sql)->result_array(), 'memo');
+        return $this->db->query($sql)->result_array();
     }
 
     /**

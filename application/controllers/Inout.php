@@ -135,7 +135,8 @@ class Inout extends MY_Controller {
     public function search_memo()
     {
         $keyword = $this->input->get('keyword');
-        $result = $this->inout_model->search_memo($keyword);
+        $cash_flow = $this->input->get('cash_flow');
+        $result = $this->inout_model->search_memo($keyword, $cash_flow);
         $this->output
             ->set_content_type('application/json')
             ->set_output(json_encode($result));
