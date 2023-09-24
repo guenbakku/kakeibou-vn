@@ -180,8 +180,12 @@
             },
             select: function(even, ui) {
                 const {category_id, account_id} = ui.item;
-                $("[name=category_id]").val(category_id).trigger('change');
-                $("[name=account_id]").val(account_id).trigger('change');
+                if (category_id) {
+                    $("[name=category_id]").val(category_id).trigger('change');
+                }
+                if (account_id) {
+                    $("[name=account_id]").val(account_id).trigger('change');
+                }
             },
             minLength: 2,
         });
