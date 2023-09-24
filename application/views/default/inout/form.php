@@ -61,7 +61,7 @@
 
                 <?php if (in_array($type, array('outgo', 'income'))): ?>
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-xs-6" style="padding-right: 7.5px">
                         <div class="form-group">
                             <label>Tài khoản:</label>
                             <?=form_dropdown(
@@ -74,7 +74,7 @@
                             )?>
                         </div>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-6" style="padding-left: 7.5px">
                         <div class="form-group">
                             <label>Phụ trách:</label>
                             <?=form_dropdown(
@@ -91,31 +91,41 @@
                 <?php endif ?>
 
                 <?php if (in_array($type, array('internal'))): ?>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-xs-6"><label>Chuyển từ:</label></div>
-                        <div class="col-xs-6"><label>đến:</label></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <?=form_dropdown(
-                                $field_name = 'transfer_from',
-                                $select['transfer'],
-                                set_value($field_name, element(0, array_keys($select['transfer']))),
-                                array(
-                                    'class' => 'form-control',
-                                )
-                            )?>
+                <div class="row">
+                    <div class="col-xs-9">
+                        <div class="row">
+                            <div class="col-xs-6" style="padding-right: 0">
+                                <div class="form-group">
+                                    <label>Chuyển từ:</label>
+                                    <?=form_dropdown(
+                                        $field_name = 'transfer_from',
+                                        $select['transfer'],
+                                        set_value($field_name, element(0, array_keys($select['transfer']))),
+                                        array(
+                                            'class' => 'form-control',
+                                        )
+                                    )?>
+                                </div>
+                            </div>
+                            <div class="col-xs-6" style="padding-right: 0">
+                                <div class="form-group">
+                                    <label>đến:</label>
+                                    <?=form_dropdown(
+                                        $field_name = 'transfer_to',
+                                        $select['transfer'],
+                                        set_value($field_name, element(1, array_keys($select['transfer']))),
+                                        array(
+                                            'class' => 'form-control',
+                                        )
+                                    )?>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-xs-6">
-                            <?=form_dropdown(
-                                $field_name = 'transfer_to',
-                                $select['transfer'],
-                                set_value($field_name, element(1, array_keys($select['transfer']))),
-                                array(
-                                    'class' => 'form-control',
-                                )
-                            )?>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <label>　</label>
+                            <button id="switch-account" type="button" class="btn btn-default form-control"><i class="glyphicon glyphicon-retweet"></i></button>
                         </div>
                     </div>
                 </div>
@@ -201,6 +211,14 @@
             }).done(function (data) {
                 $("[name=skip_month_estimated]").prop('checked', data);
             });
+        });
+
+        // Switch giá trị transfer-from và transfer-to
+        $("#switch-account").on("click", () => {
+            const transfer_from = $("[name=transfer_from]").val();
+            const transfer_to = $("[name=transfer_to]").val();
+            $("[name=transfer_from]").val(transfer_to);
+            $("[name=transfer_to]").val(transfer_from);
         });
     });
 </script>
