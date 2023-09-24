@@ -101,18 +101,31 @@ class Inout_model extends App_Model {
         $this->db->trans_complete();
     }
 
-    public function search_memo(string $q)
+    public function search_memo(string $keyword, string $cash_flow)
     {
-        $q = $this->db->escape_like_str($q);
-        $sql = "SELECT `memo`
-                FROM (SELECT `memo`, COUNT(`memo`) as `count`, MAX(`modified_on`) as `modified_on`
+        $keyword = $this->db->escape_like_str($keyword);
+        $keyword = trim($keyword);
+        $sql = "SELECT
+                    `inout_records`.`id`,
+                    `inout_records`.`category_id`,
+                    `inout_records`.`account_id`,
+                    `inout_records`.`cash_flow`,
+                    `inout_records`.`memo` as `value`
+                FROM (SELECT `memo`, COUNT(`memo`) as `count`, MAX(`modified_on`) as `modified_on`, `cash_flow`
                       FROM `inout_records`
-                      WHERE `memo` LIKE '%{$q}%'
+                      WHERE `memo` LIKE '%{$keyword}%'
+                        AND `cash_flow` = '{$cash_flow}'
                       GROUP BY `memo`) AS t
-                ORDER BY `modified_on` DESC, `count` DESC
+                LEFT JOIN `inout_records`
+                    ON `inout_records`.`memo` = `t`.`memo`
+                    AND `inout_records`.`modified_on` = `t`.`modified_on`
+                    AND `inout_records`.`cash_flow` = `t`.`cash_flow`
+                WHERE `inout_records`.`cash_flow` != 'internal'
+                    OR `inout_records`.`amount` >= 0
+                ORDER BY `inout_records`.`modified_on` DESC, `t`.`count` DESC
                 LIMIT 0, 10";
 
-        return array_column($this->db->query($sql)->result_array(), 'memo');
+        return $this->db->query($sql)->result_array();
     }
 
     /**
@@ -358,7 +371,7 @@ class Inout_model extends App_Model {
                          ->get()->result_array();
 
         if (empty($pair)) {
-            throw new AppException(ERR_NOT_FOUND);
+            throw new AppException(Consts::ERR_NOT_FOUND);
         }
 
         // Bỏ item player nếu ko phải là item cash

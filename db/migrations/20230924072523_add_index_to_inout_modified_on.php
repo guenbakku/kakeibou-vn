@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class AddIndexToInoutMemo extends AbstractMigration
+class AddIndexToInoutModifiedOn extends AbstractMigration
 {
     /**
      * Change Method.
@@ -28,6 +28,6 @@ class AddIndexToInoutMemo extends AbstractMigration
     public function change()
     {
         $table = $this->table('inout_records');
-        $table->addIndex(['memo'])->save();
+        $table->addIndex(['modified_on'])->save();
     }
 }

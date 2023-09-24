@@ -34,6 +34,17 @@
                     )?>
                 </div>
 
+                <div class="form-group">
+                    <label>Ghi chú:</label>
+                    <?=form_input(
+                        $field_name = 'memo',
+                        set_value($field_name, null, false),
+                        array(
+                            'class' => 'form-control autocomplete',
+                        )
+                    )?>
+                </div>
+
                 <?php if (in_array($type, array('outgo', 'income'))): ?>
                 <div class="form-group">
                     <label>Danh mục:</label>
@@ -110,17 +121,6 @@
                 </div>
                 <?php endif ?>
 
-                <div class="form-group">
-                    <label>Ghi chú:</label>
-                    <?=form_input(
-                        $field_name = 'memo',
-                        set_value($field_name, null, false),
-                        array(
-                            'class' => 'form-control autocomplete',
-                        )
-                    )?>
-                </div>
-
                 <?php if (in_array($type, array('outgo'))): ?>
                     <div class="form-group">
                         <label>
@@ -168,12 +168,24 @@
 
 <script type="text/javascript">
     $(function(){
+        const cash_flow = "<?=$type?>";
+
         // Search memo
         $("[name=memo]").autocomplete({
             source: function(req, resp) {
                 $.getJSON("/inout/search_memo", {
-                    'keyword': req.term,
+                    keyword: req.term,
+                    cash_flow,
                 }, resp);
+            },
+            select: function(even, ui) {
+                const {category_id, account_id} = ui.item;
+                if (category_id) {
+                    $("[name=category_id]").val(category_id).trigger('change');
+                }
+                if (account_id) {
+                    $("[name=account_id]").val(account_id).trigger('change');
+                }
             },
             minLength: 2,
         });
@@ -183,7 +195,7 @@
             if ($("[name=skip_month_estimated]").length === 0) {
                 return false;
             }
-            var category_id = $(this).val();
+            const category_id = $(this).val();
             $.getJSON("/category/is_month_fixed_money", {
                 'id': category_id
             }).done(function (data) {
