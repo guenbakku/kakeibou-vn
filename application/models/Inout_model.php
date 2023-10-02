@@ -61,18 +61,25 @@ class Inout_model extends App_Model {
                         ->row_array();
     }
 
-    public function add(string $type, array $data)
+    /**
+     * Add new inout record to database
+     * @return int[] the list ids of inserted records
+     */
+    public function add(string $type, array $data): array
     {
         $data['cash_flow']  = $type;
         $data['created_on'] = $data['modified_on'] = date('Y-m-d H:i:s');
         $data['created_by'] = $data['modified_by'] = $this->auth->user('id');
+        $insert_id = [];
 
         $this->db->trans_start();
         foreach ($this->set_pair_add_data($type, $data) as $item){
             $item = $this->remove_garbage_fields($item);
             $this->db->insert(self::TABLE, $item);
+            $insert_id[] = $this->db->insert_id();
         }
         $this->db->trans_complete();
+        return $insert_id;
     }
 
     public function edit($id, array $data)

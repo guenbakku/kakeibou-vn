@@ -17,9 +17,15 @@ class Inout extends MY_Controller {
                     throw new AppException(validation_errors());
                 }
 
-                $this->inout_model->add($type, $this->input->post());
+                $insert_ids = $this->inout_model->add($type, $this->input->post());
+                $first_insert_id = reset($insert_ids);
 
-                $this->flash->success(sprintf(Consts::SUCC_ADD_INOUT_RECORD, $this->inout_model->get_cash_flow_name($type)));
+                $this->flash->success(sprintf(
+                    Consts::SUCC_ADD_INOUT_RECORD,
+                    $this->inout_model->get_cash_flow_name($type),
+                    $this->base_url(['edit', $first_insert_id]),
+                    $first_insert_id
+                ));
 
                 // Xét xem có nhập tiếp hay không
                 if ((bool)$this->input->get('continue') === false) {
@@ -78,7 +84,11 @@ class Inout extends MY_Controller {
                 }
 
                 $this->inout_model->edit($id, $this->input->post());
-                $this->flash->success(Consts::SUCC_EDIT_INOUT_RECORD);
+                $this->flash->success(sprintf(
+                    Consts::SUCC_EDIT_INOUT_RECORD,
+                    $this->base_url(['edit', $id]),
+                    $id
+                ));
                 return redirect($this->referer->getSession());
             }
             catch (AppException $e) {
@@ -126,7 +136,7 @@ class Inout extends MY_Controller {
 
         $this->inout_model->del($id);
         $this->flash->success(Consts::SUCC_DELETE_INOUT_RECORD);
-        redirect($this->referer->getSession());
+        return redirect($this->referer->getSession());
     }
 
     /**
