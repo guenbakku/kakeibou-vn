@@ -179,6 +179,7 @@
 <script type="text/javascript">
     $(function(){
         const cash_flow = "<?=$type?>";
+        const is_edit = <?=json_encode($this->router->fetch_method() == 'edit')?>;
 
         // Search memo
         $("[name=memo]").autocomplete({
@@ -189,12 +190,14 @@
                 }, resp);
             },
             select: function(even, ui) {
-                const {category_id, account_id} = ui.item;
-                if (category_id) {
-                    $("[name=category_id]").val(category_id).trigger('change');
-                }
-                if (account_id) {
-                    $("[name=account_id]").val(account_id).trigger('change');
+                if (!is_edit) {
+                    const {category_id, account_id} = ui.item;
+                    if (category_id) {
+                        $("[name=category_id]").val(category_id).trigger('change');
+                    }
+                    if (account_id) {
+                        $("[name=account_id]").val(account_id).trigger('change');
+                    }
                 }
             },
             minLength: 2,
@@ -217,8 +220,8 @@
         $("#switch-account").on("click", () => {
             const transfer_from = $("[name=transfer_from]").val();
             const transfer_to = $("[name=transfer_to]").val();
-            $("[name=transfer_from]").val(transfer_to);
-            $("[name=transfer_to]").val(transfer_from);
+            $("[name=transfer_from]").val(transfer_to).trigger('change');
+            $("[name=transfer_to]").val(transfer_from).trigger('change');
         });
     });
 </script>
