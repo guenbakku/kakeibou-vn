@@ -23,8 +23,7 @@ class Inout extends MY_Controller {
                 $this->flash->success(sprintf(
                     Consts::SUCC_ADD_INOUT_RECORD,
                     $this->inout_model->get_cash_flow_name($type),
-                    $this->base_url(['edit', $first_insert_id]),
-                    $first_insert_id
+                    $this->base_url(['edit', $first_insert_id])
                 ));
 
                 // Xét xem có nhập tiếp hay không
@@ -86,8 +85,7 @@ class Inout extends MY_Controller {
                 $this->inout_model->edit($id, $this->input->post());
                 $this->flash->success(sprintf(
                     Consts::SUCC_EDIT_INOUT_RECORD,
-                    $this->base_url(['edit', $id]),
-                    $id
+                    $this->base_url(['edit', $id])
                 ));
                 return redirect($this->referer->getSession());
             }
