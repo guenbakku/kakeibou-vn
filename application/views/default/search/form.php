@@ -33,7 +33,7 @@
                 </div>
                 <div class="form-group">
                     <label>
-                        <input type="hidden" value="0" name="<?=$field_name = 'only_temp'?>">
+                        <input type="hidden" value="0" name="<?=$field_name = 'only_show_temp_inout'?>">
                         <?=form_checkbox(
                             array(
                                 'name'      => $field_name,
@@ -46,7 +46,7 @@
                 </div>
                 <div class="form-group">
                     <label>
-                        <input type="hidden" value="0" name="<?=$field_name = 'show_pair_inout'?>">
+                        <input type="hidden" value="0" name="<?=$field_name = 'also_show_pair_inout'?>">
                         <?=form_checkbox(
                             array(
                                 'name'      => $field_name,

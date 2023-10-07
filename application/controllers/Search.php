@@ -18,16 +18,16 @@ class Search extends MY_Controller {
                 // Khi tìm kiếm, ít nhất một trong những điều kiện
                 // bắt buộc được nhập mới thực hiện tìm kiếm
                 $condition_keys = [
-                    'memo_or_amount'    => true,
-                    'player'            => true,
-                    'inout_type'        => true,
-                    'inout_from'        => true,
-                    'inout_to'          => true,
-                    'modified_from'     => true,
-                    'modified_to'       => true,
-                    'show_pair_inout'   => false,
-                    'only_temp'         => false,
-                    'offset'            => false,
+                    'memo_or_amount' => true,
+                    'player' => true,
+                    'inout_type' => true,
+                    'inout_from' => true,
+                    'inout_to' => true,
+                    'modified_from' => true,
+                    'modified_to' => true,
+                    'also_show_pair_inout' => false,
+                    'only_show_temp_inout' => false,
+                    'offset' => false,
                 ];
                 $can_excute_search = false;
 

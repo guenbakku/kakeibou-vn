@@ -100,7 +100,7 @@ class Timeline extends MY_Controller {
         $this->search_model->inout_to        = $range[1];
         $this->search_model->account         = $account_id;
         $this->search_model->player          = $player_id;
-        $this->search_model->show_pair_inout = $account_id != 0;
+        $this->search_model->also_show_pair_inout = $account_id != 0;
         $this->search_model->offset          = $offset;
         $view_data['result'] = $this->search_model->search();
 
