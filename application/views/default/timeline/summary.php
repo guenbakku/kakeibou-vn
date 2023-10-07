@@ -11,12 +11,24 @@
                 </div>
                 <div class="col-xs-11">
                     <div class="row">
-                        <div class="col-xs-6"><span class="label label-default"><?=$v['date']?></span></div>
+                        <div class="col-xs-12"><span class="label label-default"><?=$v['date']?></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 text-right">Danh nghĩa</div>
+                        <div class="col-xs-6 text-right">Tổng hợp</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 text-right text-income"><?=currency($v['thu_temp'])?></div>
                         <div class="col-xs-6 text-right text-income"><?=currency($v['thu'])?></div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-6 text-right"><?=currency($v['tong'])?></div>
+                        <div class="col-xs-6 text-right text-outgo"><?=currency($v['chi_temp'])?></div>
                         <div class="col-xs-6 text-right text-outgo"><?=currency($v['chi'])?></div>
+                    </div>
+                    <hr style="margin:5px 0">
+                    <div class="row">
+                        <div class="col-xs-6 text-right"><strong><?=currency($v['thu_temp'] + $v['chi_temp'])?></strong></div>
+                        <div class="col-xs-6 text-right"><strong><?=currency($v['tong'])?></strong></div>
                     </div>
                 </div>
             </div>

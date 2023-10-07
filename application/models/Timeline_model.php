@@ -48,7 +48,6 @@ class Timeline_model extends Inout_Model {
         $full_list_keys = array_map(function($month) use($year){
             return sprintf('%04d-%02d', $year, $month);
         }, range(1, 12));
-
         return $this->combine_list($full_list_keys, $db_list);
     }
 
@@ -80,7 +79,9 @@ class Timeline_model extends Inout_Model {
     {
         $subQuery = $this->db->select("DATE_FORMAT(`date`, '{$date_format_string}') as `date`,
                                        SUM(CASE WHEN `categories`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`,
-                                       SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`")
+                                       SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`,
+                                       SUM(CASE WHEN `categories`.`inout_type_id` = 1 AND `inout_records`.`is_temp` = 1 THEN `amount` ELSE 0 END) AS `thu_temp`,
+                                       SUM(CASE WHEN `categories`.`inout_type_id` = 2 AND `inout_records`.`is_temp` = 1 THEN `amount` ELSE 0 END) AS `chi_temp`")
                              ->from('inout_records')
                              ->join('categories', 'categories.id = inout_records.category_id')
                              ->where('inout_records.date >=', $from)
@@ -89,7 +90,7 @@ class Timeline_model extends Inout_Model {
                              ->group_by("DATE_FORMAT(`inout_records`.`date`, '{$date_format_string}')")
                              ->get_compiled_select();
 
-        return $this->db->select('date, thu, chi, (`thu` + `chi`) AS `tong`')
+        return $this->db->select('date, thu, chi, thu_temp, chi_temp, (`thu` + `chi`) AS `tong`')
                         ->from("($subQuery) t")
                         ->order_by('date ASC')
                         ->get()->result_array();
@@ -308,7 +309,15 @@ class Timeline_model extends Inout_Model {
      */
     private function combine_list($full_list_keys = [], $db_list = [])
     {
-        $empty_item = ['tong' => 0, 'thu' => 0, 'chi' => 0, 'date' => null];
+        $empty_item = [
+            'tong' => "0",
+            'thu' => "0",
+            'chi' => "0",
+            'thu_temp' => "0",
+            'chi_temp' => "0",
+            'date' => null
+        ];
+
         $full_list = [];
 
         foreach ($full_list_keys as $k) {

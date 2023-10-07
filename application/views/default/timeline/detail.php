@@ -59,11 +59,27 @@
                             <div class="row">
                                 <div class="col-xs-6" style="padding-right:0">
                                     <div><?=$result[$i]['category']?></div>
-                                    <div class="small text-muted"><span class="fa <?=$result[$i]['account_icon']?>"></span> <em><?=$result[$i]['memo']?></em></div>
+                                    <div class="small text-muted">
+                                        <span class="label label-default" style="margin-right:3px">
+                                            <span class="fa <?=$result[$i]['account_icon']?>"></span> <?=$result[$i]['account_icon'] == 'fa-bank' ? 'Tài khoản' : 'Tiền mặt'?>
+                                        </span>
+                                        <?php if ($result[$i]['is_temp']): ?>
+                                        <span class="label label-default">
+                                            Danh nghĩa
+                                        </span>
+                                        <?php endif ?>
+                                    </div>
                                 </div>
                                 <div class="col-xs-5 text-right">
                                     <div class="<?=$result[$i]['inout_type']=='Thu'? 'text-income' : 'text-outgo'?>"><?=currency($result[$i]['amount'])?></div>
                                     <div class="label <?=$result[$i]['player_label']?>"><?=$result[$i]['player']?></div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 5px ">
+                                <div class="col-xs-11">
+                                    <div class="small text-muted">
+                                        <em ><?=$result[$i]['memo']?></em>
+                                    </div>
                                 </div>
                             </div>
                         </a>

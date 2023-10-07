@@ -38,6 +38,7 @@ class Timeline extends MY_Controller {
         $view_data['list'] = $this->timeline_model->summary_inout_types_auto(
             $extractedDate['y'], $extractedDate['m'], SORT_DESC
         );
+        // dd($view_data['list']);
         $view_data['year'] = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['select'] = [
@@ -80,10 +81,10 @@ class Timeline extends MY_Controller {
         }
 
         // Lấy thông tin từ request parameter
-        $offset         = $this->input->get('offset')?? 0;
-        $account_id     = $this->input->get('account')?? 0;
-        $player_id      = $this->input->get('player')?? 0;
-        $inout_type_id  = $this->input->get('inout_type')?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
+        $offset = $this->input->get('offset')?? 0;
+        $account_id = $this->input->get('account')?? 0;
+        $player_id = $this->input->get('player')?? 0;
+        $inout_type_id = $this->input->get('inout_type')?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
 
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
@@ -95,37 +96,37 @@ class Timeline extends MY_Controller {
         $view_data['title'] = 'Danh sách chi tiết';
 
         $this->load->model('search_model');
-        $this->search_model->inout_from      = $range[0];
-        $this->search_model->inout_to        = $range[1];
-        $this->search_model->account         = $account_id;
-        $this->search_model->player          = $player_id;
-        $this->search_model->hide_pair_inout = $account_id == 0? true : false;
-        $this->search_model->offset          = $offset;
+        $this->search_model->inout_from = $range[0];
+        $this->search_model->inout_to = $range[1];
+        $this->search_model->account = $account_id;
+        $this->search_model->player = $player_id;
+        $this->search_model->also_show_pair_inout = $account_id != 0;
+        $this->search_model->offset = $offset;
         $view_data['result'] = $this->search_model->search();
 
-        $view_data['year']  = $extractedDate['y']?? '';
+        $view_data['year'] = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
-        $view_data['day']   = $extractedDate['d']?? '';
+        $view_data['day'] = $extractedDate['d']?? '';
         $view_data['current_num'] = count($view_data['result']);
         $view_data['select'] = [
-            'accounts'    => $this->account_model->get_select_tag_data(),
-            'players'     => $this->user_model->get_select_tag_data(),
+            'accounts' => $this->account_model->get_select_tag_data(),
+            'players' => $this->user_model->get_select_tag_data(),
             'inout_types' => $this->inout_type_model->get_select_tag_data(),
-            'year'        => array_combine($yearsList, $yearsList),
-            'month'       => array_combine($monthsList, $monthsList),
-            'day'         => array_combine($daysList, $daysList),
+            'year' => array_combine($yearsList, $yearsList),
+            'month' => array_combine($monthsList, $monthsList),
+            'day' => array_combine($daysList, $daysList),
         ];
         $view_data['url'] = [
             'dateSelectionForm' => $this->base_url([$this->router->fetch_method(), '%s']).query_string(),
-            'subForm'           => $this->base_url([$this->router->fetch_method(), $date]),
-            'back'              => base_url(),
-            'editTemplate'      => base_url(['inout', 'edit', '%s']),
-            'dateChange'        => [
-                'prev'          => $this->base_url([$this->router->fetch_method(), $dateChange[0]]).query_string(),
-                'next'          => $this->base_url([$this->router->fetch_method(), $dateChange[1]]).query_string(),
+            'subForm' => $this->base_url([$this->router->fetch_method(), $date]),
+            'back' => base_url(),
+            'editTemplate' => base_url(['inout', 'edit', '%s']),
+            'dateChange' => [
+                'prev' => $this->base_url([$this->router->fetch_method(), $dateChange[0]]).query_string(),
+                'next' => $this->base_url([$this->router->fetch_method(), $dateChange[1]]).query_string(),
             ],
-            'viewchart'         => base_url(['chart', $this->router->fetch_method(), $date]),
-            'next_page'         => $this->search_model->next_page_url(),
+            'viewchart' => base_url(['chart', $this->router->fetch_method(), $date]),
+            'next_page' => $this->search_model->next_page_url(),
         ];
         $view_data = array_merge($view_data, compact('date', 'dateFormatType', 'account_id', 'player_id', 'inout_type_id'));
 

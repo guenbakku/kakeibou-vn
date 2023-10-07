@@ -88,6 +88,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label>
+                        <input type="hidden" value="0" name="<?=$field_name = 'is_temp'?>">
+                        <?=form_checkbox(
+                            array(
+                                'name'      => $field_name,
+                                'value'     => '1',
+                                'checked'   => (bool)set_value($field_name, false),
+                            )
+                        )?>
+                        Thu chi danh nghĩa
+                    </label>
+                </div>
                 <?php endif ?>
 
                 <?php if (in_array($type, array('internal'))): ?>
@@ -132,19 +145,19 @@
                 <?php endif ?>
 
                 <?php if (in_array($type, array('outgo'))): ?>
-                    <div class="form-group">
-                        <label>
-                            <input type="hidden" value="0" name="<?=$field_name = 'skip_month_estimated'?>">
-                            <?=form_checkbox(
-                                array(
-                                    'name'      => $field_name,
-                                    'value'     => '1',
-                                    'checked'   => (bool)set_value($field_name, false),
-                                )
-                            )?>
-                            Không tính vào Dự định chi tháng này
-                        </label>
-                    </div>
+                <div class="form-group">
+                    <label>
+                        <input type="hidden" value="0" name="<?=$field_name = 'skip_month_estimated'?>">
+                        <?=form_checkbox(
+                            array(
+                                'name'      => $field_name,
+                                'value'     => '1',
+                                'checked'   => (bool)set_value($field_name, false),
+                            )
+                        )?>
+                        Không tính vào Dự định chi tháng này
+                    </label>
+                </div>
                 <?php endif ?>
 
                 <button type="button" onClick="submitForm(this)" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>

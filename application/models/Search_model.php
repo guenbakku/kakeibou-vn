@@ -6,18 +6,19 @@ class Search_model extends App_Model {
     const TABLE = 'inout_records';
 
     protected $settings = [
-        'amount'            => null,
-        'memo'              => null,
-        'inout_from'        => null,
-        'inout_to'          => null,
-        'inout_type'        => null,
-        'modified_from'     => null,
-        'modified_to'       => null,
-        'account'           => null,
-        'player'            => null,
-        'hide_pair_inout'   => false,
-        'offset'            => 0,
-        'limit'             => 100,
+        'amount' => null,
+        'memo' => null,
+        'inout_from' => null,
+        'inout_to' => null,
+        'inout_type' => null,
+        'modified_from' => null,
+        'modified_to' => null,
+        'account' => null,
+        'player' => null,
+        'only_show_temp_inout' => false,
+        'also_show_pair_inout' => false,
+        'offset' => 0,
+        'limit' => 100,
     ];
 
     public $result;
@@ -72,7 +73,11 @@ class Search_model extends App_Model {
                 throw new AppException('Dữ liệu '.$name.' không hợp lệ');
             }
         }
-        else if ($name === 'hide_pair_inout')
+        else if ($name === 'also_show_pair_inout')
+        {
+            $val = (bool) $val;
+        }
+        else if ($name === 'only_show_temp_inout')
         {
             $val = (bool) $val;
         }
@@ -144,6 +149,8 @@ class Search_model extends App_Model {
                            inout_records.amount,
                            inout_records.memo,
                            inout_records.date,
+                           inout_records.skip_month_estimated,
+                           inout_records.is_temp,
                            inout_types.name AS inout_type,
                            inout_types.id AS inout_type_id,
                            accounts.name AS account,
@@ -210,8 +217,11 @@ class Search_model extends App_Model {
         if (!empty($this->settings['modified_to'])){
             $db->where('inout_records.modified_on <', date('Y-m-d H:i:s', strtotime($this->settings['modified_to'] . ' +1 days')));
         }
-        if ($this->settings['hide_pair_inout'] === true){
+        if ($this->settings['also_show_pair_inout'] === false){
             $db->where('inout_records.pair_id', '');
+        }
+        if ($this->settings['only_show_temp_inout'] === true){
+            $db->where('inout_records.is_temp', 1);
         }
 
         return $db;
