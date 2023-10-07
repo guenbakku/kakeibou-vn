@@ -25,7 +25,8 @@ class Search extends MY_Controller {
                     'inout_to'          => true,
                     'modified_from'     => true,
                     'modified_to'       => true,
-                    'hide_pair_inout'   => false,
+                    'show_pair_inout'   => false,
+                    'only_temp'         => false,
                     'offset'            => false,
                 ];
                 $can_excute_search = false;

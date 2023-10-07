@@ -38,6 +38,7 @@ class Timeline extends MY_Controller {
         $view_data['list'] = $this->timeline_model->summary_inout_types_auto(
             $extractedDate['y'], $extractedDate['m'], SORT_DESC
         );
+        // dd($view_data['list']);
         $view_data['year'] = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['select'] = [
@@ -99,7 +100,7 @@ class Timeline extends MY_Controller {
         $this->search_model->inout_to        = $range[1];
         $this->search_model->account         = $account_id;
         $this->search_model->player          = $player_id;
-        $this->search_model->hide_pair_inout = $account_id == 0? true : false;
+        $this->search_model->show_pair_inout = $account_id != 0;
         $this->search_model->offset          = $offset;
         $view_data['result'] = $this->search_model->search();
 
