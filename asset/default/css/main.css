@@ -222,6 +222,11 @@ table.last-row-is-total tr:nth-last-child(2) th {
     border-bottom: 1px solid
 }
 
+.table-summarize {
+    font-size: 12px;
+    margin:10px 0;
+}
+
 /* Infinite loading style
 -------------------------------------------------- */
 @keyframes blink {

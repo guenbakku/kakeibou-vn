@@ -7,9 +7,9 @@
     </div>
     <table class="table table-bordered last-row-is-total">
         <tr>
-            <th style="width:33%" class="text-center">Danh nghĩa</th>
-            <th style="width:33%" class="text-center">Thực tế</th>
-            <th style="width:33%" class="text-center">Tổng hợp</th>
+            <th style="width:33.3%" class="text-center">Danh nghĩa</th>
+            <th style="width:33.3%" class="text-center">Thực tế</th>
+            <th style="width:33.3%" class="text-center">Tổng hợp</th>
         </tr>
         <tr>
             <td class="text-right"><?=currency($month_sum['thu_temp'])?></td>
@@ -22,8 +22,8 @@
             <td class="text-right"><?=currency($month_sum['chi'])?></td>
         </tr>
         <tr>
-            <td class="text-right"><?=currency($month_sum['thu_temp'] + $month_sum['chi_temp'])?></td>
-            <td class="text-right"><?=currency($month_sum['tong'] - $month_sum['thu_temp'] - $month_sum['chi_temp'])?></td>
+            <td class="text-right"><?=currency($month_sum['tong_temp'])?></td>
+            <td class="text-right"><?=currency($month_sum['tong'] - $month_sum['tong_temp'])?></td>
             <td class="text-right"><?=currency($month_sum['tong'])?></td>
         </tr>
     </table>
