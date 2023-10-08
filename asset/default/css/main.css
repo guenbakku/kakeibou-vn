@@ -219,7 +219,7 @@ body {
 
 table.last-row-is-total tr:nth-last-child(2) td,
 table.last-row-is-total tr:nth-last-child(2) th {
-    border-bottom: 2px solid
+    border-bottom: 1px solid
 }
 
 /* Infinite loading style
