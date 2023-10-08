@@ -90,7 +90,14 @@ class Timeline_model extends Inout_Model {
                              ->group_by("DATE_FORMAT(`inout_records`.`date`, '{$date_format_string}')")
                              ->get_compiled_select();
 
-        return $this->db->select('date, thu, chi, thu_temp, chi_temp, (`thu` + `chi`) AS `tong`')
+        return $this->db->select('
+                            date,
+                            thu,
+                            chi,
+                            thu_temp,
+                            chi_temp,
+                            (`thu` + `chi`) AS `tong`,
+                            (`thu_temp` + `chi_temp`) AS `tong_temp`')
                         ->from("($subQuery) t")
                         ->order_by('date ASC')
                         ->get()->result_array();
@@ -310,11 +317,12 @@ class Timeline_model extends Inout_Model {
     private function combine_list($full_list_keys = [], $db_list = [])
     {
         $empty_item = [
-            'tong' => "0",
-            'thu' => "0",
-            'chi' => "0",
-            'thu_temp' => "0",
-            'chi_temp' => "0",
+            'tong' => '0',
+            'thu' => '0',
+            'chi' => '0',
+            'tong_temp' => '0',
+            'thu_temp' => '0',
+            'chi_temp' => '0',
             'date' => null
         ];
 
