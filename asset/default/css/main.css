@@ -219,7 +219,7 @@ body {
 
 table.last-row-is-total tr:nth-last-child(2) td,
 table.last-row-is-total tr:nth-last-child(2) th {
-    border-bottom: 1px solid
+    border-bottom: 1px solid #c8c8c8
 }
 
 .table-summarize {
