@@ -9,16 +9,16 @@
                 <div class="pull-right" style="padding-right:15px; position:absolute; right:0px">
                     <span class="glyphicon glyphicon-menu-right"></span>
                 </div>
-                <div class="col-xs-1" style="width:45px" onclick="toggle_collapse_table_detail(this); return false">
+                <div class="col-xs-2" onclick="toggle_collapse_table_detail(this); return false">
                     <div class="label label-default">
                         <span class="glyphicon glyphicon-triangle-bottom"></span>
                     </div>
                 </div>
                 <a href="<?=sprintf($url['detailTemplate'], $v['date'])?>">
-                    <div class="col-xs-4" style="padding-left:0">
+                    <div class="col-xs-3" style="padding-left:0">
                         <span class="label label-default"><?=$v['date']?></span>
                     </div>
-                    <div class="col-xs-6 text-right <?=$v['tong']>=0 ? 'text-income' : 'text-outgo'?>">
+                    <div class="col-xs-6 text-right <?=$v['tong']>=0 ? 'text-income' : 'text-outgo'?>" style="padding-left:0">
                         <?=currency($v['tong'])?>
                     </div>
                 </a>
