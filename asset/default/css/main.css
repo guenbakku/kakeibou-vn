@@ -243,3 +243,9 @@ table.last-row-is-total tr:nth-last-child(2) th {
     animation: blink 1s step-end infinite;
     -webkit-animation: blink 0.5s step-end infinite;
 }
+
+/* Disable iOS device render using iOS button */
+input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
