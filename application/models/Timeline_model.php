@@ -331,7 +331,7 @@ class Timeline_model extends Inout_Model {
         foreach ($full_list_keys as $k) {
             $db_item = current($db_list);
 
-            if ($k == $db_item['date']){
+            if ($db_item && $k == $db_item['date']){
                 $item = $db_item;
                 next($db_list);
             }
