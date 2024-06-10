@@ -20,7 +20,7 @@ date_default_timezone_set(isset($_SERVER['CI_TIMEZONE']) ? $_SERVER['CI_TIMEZONE
 | environments.
 |
 */
-$config['base_url'] = getenv('BASE_URL');
+$config['base_url'] = $_ENV['BASE_URL'];
 
 /*
 |--------------------------------------------------------------------------

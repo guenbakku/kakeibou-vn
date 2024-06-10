@@ -295,7 +295,7 @@ switch (ENVIRONMENT)
  */
 require_once FCPATH.'vendor'.DIRECTORY_SEPARATOR.'autoload.php';
 $dotenv = \Dotenv\Dotenv::createImmutable(FCPATH);
-$dotenv->load();
+$dotenv->safeLoad();
 
 /*
  * --------------------------------------------------------------------
