@@ -11,8 +11,3 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |   http://codeigniter.com/user_guide/general/hooks.html
 |
 */
-
-$hook['pre_system'] = function() {
-    $dotenv = \Dotenv\Dotenv::createImmutable(FCPATH);
-    $dotenv->load();
-};

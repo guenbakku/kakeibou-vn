@@ -15,8 +15,8 @@ composer install
 # copy .env.example to .env
 cp .env.example .env
 
-# migrate database (-e: use 'development' environment)
-vendor/bin/phinx migrate -e development
+# migrate database
+vendor/bin/phinx migrate
 ```
 
 ### Access urls

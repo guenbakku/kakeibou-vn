@@ -20,7 +20,7 @@ date_default_timezone_set(isset($_SERVER['CI_TIMEZONE']) ? $_SERVER['CI_TIMEZONE
 | environments.
 |
 */
-$config['base_url'] = 'http://localhost:8080';
+$config['base_url'] = getenv('BASE_URL');
 
 /*
 |--------------------------------------------------------------------------
@@ -133,7 +133,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FCPATH . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+$config['composer_autoload'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------

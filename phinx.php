@@ -8,9 +8,6 @@ $dotenv->load();
 $PHINX_DIRNAME = 'db';
 
 $_ENV['PHINX_DDL_DIR_PATH'] = __DIR__ . "/$PHINX_DIRNAME/ddl";
-$_ENV['PHINX_DB_CONFIG_PATH'] = [
-    'production' => __DIR__ . '/application/config/production/database.php',
-    'development' => __DIR__ . '/application/config/database.php'];
 
 /*
  * Required when include Codeigniter file invidually.
@@ -21,14 +18,12 @@ define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'developm
 /*
  * Get config of data from application config file's
  */
-function get_db_config($env) {
-    $path = $_ENV['PHINX_DB_CONFIG_PATH'][$env];
-    require ($path);
+function get_db_config() {
+    require (__DIR__ . '/application/config/database.php');
     return $db['default'];
 }
 
-$db['production'] = get_db_config('production');
-$db['development'] = get_db_config('development');
+$db = get_db_config();
 
 return [
     'paths' => [
@@ -38,25 +33,15 @@ return [
 
     'environments' => [
         'default_migration_table' => 'phinxlog',
-        'default_database' => 'development',
+        'default_database' => 'production',
         'production' => [
             'adapter' => 'mysql',
-            'host' => $db['production']['hostname'],
-            'name' => $db['production']['database'],
-            'user' => $db['production']['username'],
-            'pass' => $db['production']['password'],
+            'host' => $db['hostname'],
+            'name' => $db['database'],
+            'user' => $db['username'],
+            'pass' => $db['password'],
             'port' => 3306,
-            'charset' => $db['production']['char_set'],
-        ],
-
-        'development' => [
-            'adapter' => 'mysql',
-            'host' => $db['development']['hostname'],
-            'name' => $db['development']['database'],
-            'user' => $db['development']['username'],
-            'pass' => $db['development']['password'],
-            'port' => 3306,
-            'charset' => $db['development']['char_set'],
+            'charset' => $db['char_set'],
         ],
     ],
 
