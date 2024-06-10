@@ -1,6 +1,10 @@
 <?php
 php_sapi_name() === 'cli' or die('No direct script access allowed');
 
+// Load dotenv file
+$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
 $PHINX_DIRNAME = 'db';
 
 $_ENV['PHINX_DDL_DIR_PATH'] = __DIR__ . "/$PHINX_DIRNAME/ddl";
