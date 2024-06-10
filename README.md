@@ -12,7 +12,10 @@ docker-compose exec php /bin/bash
 # install required php libraries
 composer install
 
-# initialize database
+# copy .env.example to .env
+cp .env.example .env
+
+# migrate database (-e: use 'development' environment)
 vendor/bin/phinx migrate -e development
 ```
 

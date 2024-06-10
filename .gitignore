@@ -1,5 +1,6 @@
-/application/session
-/application/logs
-/application/cache
-/vendor
 /.docker/data
+/.env
+/application/cache
+/application/logs
+/application/session
+/vendor
