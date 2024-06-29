@@ -78,6 +78,6 @@
     });
     function submitForm(btn) {
         anElements.forEach(elm => elm.unformat());
-        Cashbook.submitbutton(btn, 'submit');
+        Cashbook.submitButton(btn, 'submit');
     }
 </script>
