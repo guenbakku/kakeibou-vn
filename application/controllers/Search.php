@@ -12,8 +12,6 @@ class Search extends MY_Controller {
     {
         if (!empty($this->input->get())) {
             try {
-                $_POST = $this->input->get();
-
                 // Điều kiện tìm kiếm => bắt buộc hay không
                 // Khi tìm kiếm, ít nhất một trong những điều kiện
                 // bắt buộc được nhập mới thực hiện tìm kiếm
@@ -29,13 +27,13 @@ class Search extends MY_Controller {
                     'only_show_temp_inout' => false,
                     'offset' => false,
                 ];
-                $can_excute_search = false;
+                $can_execute_search = false;
 
                 foreach ($condition_keys as $key => $is_required) {
-                    $val = trim($this->input->get($key));
+                    $val = trim($this->input->get($key) ?? '');
                     if (!empty($val)) {
                         if ($is_required) {
-                            $can_excute_search = true;
+                            $can_execute_search = true;
                         }
 
                         if ($key === 'memo_or_amount') {
@@ -58,7 +56,7 @@ class Search extends MY_Controller {
                     }
                 }
 
-                if (!$can_excute_search) {
+                if (!$can_execute_search) {
                     throw new AppException('Chưa nhập điều kiện tìm kiếm');
                 }
 

@@ -1,24 +1,29 @@
 <?php
+/**
+ * System messages translation for CodeIgniter(tm)
+ *
+ * @author	CodeIgniter community
+ * @copyright	Copyright (c) 2014 - 2016, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license	http://opensource.org/licenses/MIT	MIT License
+ * @link	http://codeigniter.com
+ */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-$lang['imglib_source_image_required'] = "Bạn phải chỉ ra ảnh nguồn trong bảng thiết lập.";
-$lang['imglib_gd_required'] = "Tính năng này yêu cầu máy chủ phải có thư viện GD.";
-$lang['imglib_gd_required_for_props'] = "Máy chủ phải hỗ trợ thư viện GD để có thể xác định các thuộc tính của ảnh.";
-$lang['imglib_unsupported_imagecreate'] = "Máy chủ không hỗ trợ các thao tác của thư viện GD cho việc xử lý ảnh.";
-$lang['imglib_gif_not_supported'] = "Không hỗ trợ ảnh GIF do vấn đề bản quyền.  Bạn phải sử dụng JPG hoặc PNG.";
-$lang['imglib_jpg_not_supported'] = "Không hỗ trợ ảnh JPG.";
-$lang['imglib_png_not_supported'] = "Không hỗ trợ ảnh PNG.";
-$lang['imglib_jpg_or_png_required'] = "Phương thức thay đổi kích thước ảnh đã thiết lập chỉ hoạt động được với JPEG hoặc PNG.";
-$lang['imglib_copy_error'] = "Lỗi xảy ra khi thay thế file.  Hãy chắc chắn thư mục đã được thiết lập quyền ghi.";
-$lang['imglib_rotate_unsupported'] = "Thao tác quay ảnh không được máy chủ hỗ trợ.";
-$lang['imglib_libpath_invalid'] = "Đường dẫn đến thư viện ảnh không đúng.  Hãy thiết lập lại cho đúng.";
-$lang['imglib_image_process_failed'] = "Xử lý lỗi.  Hãy kiểm tra máy chủ hỗ trợ phương thức đã chọn và đường dẫn đến thư viện ảnh là đúng.";
-$lang['imglib_rotation_angle_required'] = "Phải nhập góc quay để thực hiện thao tác quay ảnh.";
-$lang['imglib_writing_failed_gif'] = "GIF image.";
-$lang['imglib_invalid_path'] = "Đường dẫn đến file ảnh không đúng.";
-$lang['imglib_copy_failed'] = "Thao tác copy ảnh không thực hiện được.";
-$lang['imglib_missing_font'] = "Không tìm thấy font để sử dụng.";
-$lang['imglib_save_failed'] = "Không thể lưu ảnh.  Hãy chắc chắn rằng file & thư mục đã được thiết lập quyền ghi.";
-
-
-/* End of file imglib_lang.php */
-/* Location: ./system/language/english/imglib_lang.php */
+$lang['imglib_source_image_required'] = 'Bạn phải chọn một ảnh nguồn trong tùy chọn.';
+$lang['imglib_gd_required'] = 'Không thể thiếu thư viện ảnh GD cho chức năng này .';
+$lang['imglib_gd_required_for_props'] = 'Máy chủ phải hỗ trợ thư viện ảnh GD để xác định các thuộc tính của hình ảnh.';
+$lang['imglib_unsupported_imagecreate'] = 'Máy chủ không hỗ trợ hàm GD cần thiết để xử lý loại ảnh này.';
+$lang['imglib_gif_not_supported'] = 'Hình ảnh GIF thường không được hỗ trợ do hạn chế bản quyền. Bạn có thể phải sử dụng hình ảnh JPG hoặc PNG để thay thế.';
+$lang['imglib_jpg_not_supported'] = 'Ảnh JPG không được hỗ trợ.';
+$lang['imglib_png_not_supported'] = 'Ảnh PNG không được hỗ trợ.';
+$lang['imglib_jpg_or_png_required'] = 'Giao thức thay đổi kích thước ảnh được chỉ định chỉ hoạt động với loại ảnh JPG và PNG.';
+$lang['imglib_copy_error'] = 'Lỗi khi thay thế các tập tin, bạn hãy chắc chắn rằng thư mục cho phép ghi.';
+$lang['imglib_rotate_unsupported'] = '"Image rotation" Server không hỗ trợ.';
+$lang['imglib_libpath_invalid'] = 'Đường dẫn "image library" không chính xác. Bạn hãy đặt chính xác đường dẫn.';
+$lang['imglib_image_process_failed'] = 'Xử lý hình ảnh thất bại. Bạn hãy kiểm tra lại máy chủ của bạn có hỗ trợ giao thức xử lý và đường dẫn "image library" là chính xác.';
+$lang['imglib_rotation_angle_required'] = 'Thiếu gốc xoay (angle of rotation) để xoay hình.';
+$lang['imglib_invalid_path'] = 'Đường dẫn hình ảnh không chính xác.';
+$lang['imglib_invalid_image'] = 'Các hình ảnh được cung cấp không hợp lệ.';
+$lang['imglib_copy_failed'] = 'Sao chép hình ảnh thất bại';
+$lang['imglib_missing_font'] = 'Không tìm thấy font.';
+$lang['imglib_save_failed'] = 'Không thể lưu hình ảnh. Bạn hãy chắc rằng đường dẫn đến thư mục chứ ảnh đúng và thư mục cho phép ghi.';
