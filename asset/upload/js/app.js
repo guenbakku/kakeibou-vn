@@ -13,11 +13,6 @@ var Cashbook = {};
         var action = form.attr('action');
 
         switch (type) {
-            case 'submit':
-            case 'add':
-            case 'edit':
-                action = Cashbook.insertParam(action, 'continue', '0');
-                break;
             case 'continue':
                 action = Cashbook.insertParam(action, 'continue', '1');
                 break;
@@ -27,8 +22,11 @@ var Cashbook = {};
                 }
                 action = Cashbook.insertParam(action, 'delete', '1');
                 break;
+            default:
+                break;
         }
 
+        $(btn).attr('disabled', true);
         form.attr('action', action);
         form.submit();
     }
