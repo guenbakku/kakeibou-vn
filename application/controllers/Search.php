@@ -30,7 +30,7 @@ class Search extends MY_Controller {
                 $can_execute_search = false;
 
                 foreach ($condition_keys as $key => $is_required) {
-                    $val = trim($this->input->get($key));
+                    $val = trim($this->input->get($key) ?? '');
                     if (!empty($val)) {
                         if ($is_required) {
                             $can_execute_search = true;
