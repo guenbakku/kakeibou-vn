@@ -20,13 +20,13 @@ class Timeline extends MY_Controller {
      *  - tháng trong năm
      *  - năm
      *
-     * @param    string: thời gian muốn xem danh sách, có thể nhận format:
-     *                      - yyyy-mm
-     *                      - yyyy
-     *                      - null
-     * @return   void
+     * @param string $date: thời gian muốn xem danh sách, có thể nhận format:
+     *  - yyyy-mm
+     *  - yyyy
+     *  - null
+     * @return void
      */
-    public function summary(string $date=null)
+    public function summary(string $date='')
     {
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
@@ -38,7 +38,6 @@ class Timeline extends MY_Controller {
         $view_data['list'] = $this->timeline_model->summary_inout_types_auto(
             $extractedDate['y'], $extractedDate['m'], SORT_DESC
         );
-        // dd($view_data['list']);
         $view_data['year'] = $extractedDate['y']?? '';
         $view_data['month'] = $extractedDate['m']?? '';
         $view_data['select'] = [
@@ -65,13 +64,13 @@ class Timeline extends MY_Controller {
     /**
      * Trang danh sách chi tiết thu chi theo ngày
      *
-     * @param   string: thời gian muốn xem danh sách, có thể nhận format:
-     *                      - yyyy-mm-dd
-     *                      - yyyy-mm
-     *                      - yyyy
+     * @param string $date thời gian muốn xem danh sách, có thể nhận format:
+     *  - yyyy-mm-dd
+     *  - yyyy-mm
+     *  - yyyy
      * @return  void
      */
-    public function detail(string $date=null)
+    public function detail(string $date='')
     {
         if (empty($date)) {
             show_error(Consts::ERR_BAD_REQUEST);
@@ -137,10 +136,9 @@ class Timeline extends MY_Controller {
     /**
      * Tạo page-scroll target đến ngày/tháng/năm hiện tại tùy vào kiểu danh sách
      *
-     * @param   string  : kiểu danh sách
-     * @param   string  : thời điểm hiện tại để scroll đến
+     * @param string $date thời điểm hiện tại để scroll đến
      */
-    protected function _page_scroll_target(?string $date): ?string
+    protected function _page_scroll_target(string $date): string
     {
         $format_type = date_format_type_of_string($date);
 

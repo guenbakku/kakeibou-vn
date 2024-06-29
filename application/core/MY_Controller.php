@@ -20,7 +20,7 @@ class MY_Controller extends CI_Controller {
     }
 
     /**
-     * Tạo base_url có tự động thêm tên controller class
+     * Tạo base_url có tự động thêm tên controller class.
      * Ngoài ra nếu $ctr_base_url được chỉ định, sẽ thêm phần này vào trước
      * tên controller class.
      */
@@ -36,7 +36,7 @@ class MY_Controller extends CI_Controller {
 
         // Xóa slash ở 2 đầu mỗi string (nếu có) trong $uris
         $uris = array_map(function($uri){
-            return trim($uri, '/');
+            return trim($uri ?? '', '/');
         }, $uris);
 
         // Nối base, current class name, $uris lại với nhau
