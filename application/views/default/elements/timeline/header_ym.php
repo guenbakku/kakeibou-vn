@@ -40,7 +40,7 @@
                     <?=$this->template->get_view('elements/timeline/header_ym_modal')?>
                 </div>
                 <div class="modal-footer" style="text-align:center">
-                    <button type="submit" class="btn btn-primary">Chọn</button>
+                    <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')">Chọn</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                 </div>
             </div>

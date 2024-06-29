@@ -18,7 +18,7 @@
                         )
                     )?>
                 </div>
-                <input type="submit" class="btn btn-primary" value="<?=Consts::LABEL['submit']?>">
+                <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')"><?=Consts::LABEL['submit']?></button>
             </form>
         </div>
     </div>
