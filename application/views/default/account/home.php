@@ -17,7 +17,7 @@
                     </td>
                 </tr>
             </table>
-            
+
             <?php if (count($accounts) > 0): ?>
             <table class="table table-bordered table-ex sortable">
                 <?php foreach ($accounts as $i => $item): ?>
@@ -41,7 +41,7 @@
             <table class="table table-bordered" style="border-top:1px solid; border-color:inherit">
                 <tr>
                     <td>
-                        <button type="submit" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
+                        <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')"><?=Consts::LABEL['submit']?></button>
                     </td>
                 </tr>
             </table>
