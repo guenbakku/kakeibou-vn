@@ -1,25 +1,41 @@
 <?=$this->template->get_view('elements/page-nav.php')?>
 <?=$this->template->get_view('elements/timeline/header', ['date_element' => 'header_ymd'])?>
 
-<div class="container">    
+<div class="container">
     <div class="well well-sm">
         <?=form_open($url['subForm'], array('method'=>'get', 'id' => 'subForm', 'class' => 'form-horizon'))?>
             <div class="row">
                 <div class="col-xs-6">
                     <label>Loại</label>
                     <?=form_dropdown(
-                        'inout_type', 
-                        $select['inout_types'], 
-                        $inout_type_id, 
+                        'inout_type',
+                        $select['inout_types'],
+                        $inout_type_id,
                         array(
                             'class' => 'form-control submit-on-change',
                         )
                     )?>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="mt-3 mb-0">
+                        <input type="hidden" value="0" name="<?=$field_name = 'only_show_temp_inout'?>">
+                        <?=form_checkbox(
+                            array(
+                                'name' => $field_name,
+                                'value' => '1',
+                                'checked' => (bool) $only_show_temp_inout,
+                                'class' => 'submit-on-change',
+                            )
+                        )?>
+                        Chỉ hiện dữ liệu Danh nghĩa
+                    </label>
+                </div>
+            </div>
         </form>
     </div>
-    
+
     <?php if (count(array_filter($list, function($item){return $item['total'] > 0;}))): ?>
         <!-- Styles -->
         <style>
@@ -32,12 +48,12 @@
                 margin-bottom: 20px;
             }
         </style>
-        
+
         <!-- Resources -->
         <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/amcharts.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/themes/black.js"></script>
         <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/pie.js"></script>
-        
+
         <!-- Chart code -->
         <script type="text/javascript">
             function sum(data) {
@@ -47,7 +63,7 @@
                 });
                 return sum;
             }
-            
+
             (function(){
                 var chartData = <?=json_encode($list)?>;
                 var chartConfig = {
@@ -90,7 +106,7 @@
                 var chart = AmCharts.makeChart( "chart-box", chartConfig);
             })();
         </script>
-        
+
         <div id="chart-box"></div>
         <div id="legend-box"></div>
     <?php else: ?>
