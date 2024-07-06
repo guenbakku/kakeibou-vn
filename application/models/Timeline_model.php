@@ -172,24 +172,28 @@ class Timeline_model extends Inout_Model {
     }
 
     /**
-     * Tính: số chi lưu động của ngày hôm nay tính tới thời điểm hiện tại
-     *       số chi lưu động của tháng này tính tới thời điểm hiện tại
-     *       số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng
-     *       tổng số tiền dự tính chi trong tháng này (lấy từ CSDL)
+     * Tính:
+     *  - số chi lưu động của ngày hôm nay tính tới thời điểm hiện tại
+     *  - số chi lưu động của tháng này tính tới thời điểm hiện tại
+     *  - số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng
+     *  - tổng số tiền dự tính chi trong tháng này (lấy từ CSDL)
      *
-     * @param   void
-     * @return  array: array(
-     *                        'today' => array(
-     *                                          0 -> số chi lưu động của ngày hôm nay
-     *                                          1 -> số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng
-     *                                          2 -> tỷ lệ phần trăm
-     *                                         ),
-     *                        'month' => array(
-     *                                          0 -> số chi lưu động của tháng này (tới thời điểm hiện tại)
-     *                                          1 -> số tiền dự định chi trong tháng
-     *                                          2 => tỷ lệ phần trăm
-     *                                         ),
-     *                       )
+     * @param void
+     * @return array Content of array:
+     * ```php
+     *     array(
+     *          'today' => array(
+     *               0 -> số chi lưu động của ngày hôm nay
+     *               1 -> số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng
+     *               2 -> tỷ lệ phần trăm
+     *          ),
+     *          'month' => array(
+     *               0 -> số chi lưu động của tháng này (tới thời điểm hiện tại)
+     *               1 -> số tiền dự định chi trong tháng
+     *               2 => tỷ lệ phần trăm
+     *          ),
+     *     )
+     * ```
      */
     public function get_liquid_outgo_status(): array
     {
@@ -251,34 +255,44 @@ class Timeline_model extends Inout_Model {
      * Tính tổng thu chi theo từng category
      * Không tính các category được set restrict_delete
      *
-     * @param   string  : 'yyyy-mm-dd'
-     * @param   string  : 'yyyy-mm-dd'
-     * @param   int     : của inout_type
-     * @return  array
+     * @param string $from yyyy-mm-dd
+     * @param string $to yyyy-mm-dd
+     * @param int $inout_type_id id của inout_type
+     * @param bool $only_show_temp_inout specify whether only show temp inout or not
+     * @return array
      */
-    public function summary_categories(string $from, string $to, int $inout_type_id): array
+    public function summary_categories(
+        string $from,
+        string $to,
+        int $inout_type_id,
+        bool $only_show_temp_inout = false
+    ): array
     {
         $subQuery = $this->db->select('categories.id AS category_id,
                                          ABS(SUM(`inout_records`.`amount`)) AS total')
-                               ->from('inout_records')
-                               ->where('categories.inout_type_id', $inout_type_id)
-                               ->where('categories.restrict_delete != ', 1)
-                               ->where('inout_records.date >=', $from)
-                               ->where('inout_records.date <=', $to)
-                               ->join('categories', 'categories.id = inout_records.category_id')
-                               ->group_by('categories.id', 'categories.name')
-                               ->get_compiled_select();
+            ->from('inout_records')
+            ->where('categories.inout_type_id', $inout_type_id)
+            ->where('categories.restrict_delete !=', 1)
+            ->where('inout_records.date >=', $from)
+            ->where('inout_records.date <=', $to)
+            ->join('categories', 'categories.id = inout_records.category_id')
+            ->group_by('categories.id', 'categories.name');
+
+        if ($only_show_temp_inout) {
+            $subQuery->where('inout_records.is_temp =', 1);
+        }
+
+        $subQueryStr = $subQuery->get_compiled_select();
 
         return $this->db->select('categories.id AS category_id,
                                   categories.name AS category_name,
                                   IFNULL(t1.total, 0 ) AS total')
-                        ->from("($subQuery) t1")
-                        ->where('categories.inout_type_id', $inout_type_id)
-                        ->where('categories.restrict_delete != ', 1)
-                        ->join('categories', 'categories.id = t1.category_id', 'right outer')
-                        ->order_by('categories.order_no')
-                        ->get()->result_array();
-
+            ->from("($subQueryStr) t1")
+            ->where('categories.inout_type_id', $inout_type_id)
+            ->where('categories.restrict_delete != ', 1)
+            ->join('categories', 'categories.id = t1.category_id', 'right outer')
+            ->order_by('categories.order_no')
+            ->get()->result_array();
     }
 
     /**
