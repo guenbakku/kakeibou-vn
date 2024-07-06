@@ -37,6 +37,22 @@
                     )?>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <label class="mt-3 mb-0">
+                        <input type="hidden" value="0" name="<?=$field_name = 'only_show_temp_inout'?>">
+                        <?=form_checkbox(
+                            array(
+                                'name' => $field_name,
+                                'value' => '1',
+                                'checked' => (bool) $only_show_temp_inout,
+                                'class' => 'submit-on-change',
+                            )
+                        )?>
+                        Chỉ hiện dữ liệu Danh nghĩa
+                    </label>
+                </div>
+            </div>
         </form>
     </div>
 </div>
