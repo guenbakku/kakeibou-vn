@@ -10,3 +10,15 @@ function query_string()
 {
     return empty($_SERVER['QUERY_STRING'])? '' : '?'.$_SERVER['QUERY_STRING'];
 }
+
+/**
+ * Trả về url trỏ đến thư mục template đang được sử dụng.
+ * Yêu cầu phải load sẵn library template
+ *
+ * @param   void
+ * @return  string
+ */
+function template_url() {
+    $CI =& get_instance();
+    return $CI->template->template_url();
+}
