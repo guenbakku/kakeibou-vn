@@ -16,15 +16,15 @@
         <meta name="copyright" content="© NVB" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-        <link rel="shortcut icon" href="<?=template_url()?>images/favicon.gif" type="image/gif">
-        <link rel="apple-touch-icon" href="<?=template_url()?>images/favicon.gif" />
+        <link rel="shortcut icon" type="image/gif" href="<?=template_asset_url('images/favicon.gif')?>">
+        <link rel="apple-touch-icon" href="<?=template_asset_url('images/favicon.gif')?>">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=asset_url('upload/bootstrap-3.3.6-dist/css/bootstrap.min.css')?>">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=asset_url('upload/font-awesome-4.6.3/css/font-awesome.min.css')?>">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=asset_url('upload/jquery-ui-1.12.0.custom/jquery-ui.min.css')?>">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=asset_url('upload/jquery-ui-1.12.0.custom/jquery-ui.structure.min.css')?>">
         <link rel="stylesheet" type="text/css" media="screen,print" href="<?=asset_url('upload/jquery-ui-1.12.0.custom/jquery-ui.theme.min.css')?>">
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/theme.css<?=$asset_time?>">
-        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_url()?>css/main.css<?=$asset_time?>">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_asset_url('css/theme.css')?>">
+        <link rel="stylesheet" type="text/css" media="screen,print" href="<?=template_asset_url('css/main.css')?>">
         <?=$_styles?>
 
         <script type="text/javascript" src="<?=asset_url('upload/js/jquery-1.12.3.min.js')?>"></script>
