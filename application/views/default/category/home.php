@@ -1,5 +1,5 @@
-<script type="text/javascript" src="<?=base_url()?>asset/upload/jquery-ui-1.12.0.custom/jquery.ui.touch-punch.min.js"></script>
-<script type="text/javascript" src="<?=base_url()?>asset/upload/js/app.sortableWrapper.js"></script>
+<script type="text/javascript" src="<?=asset_url('upload/jquery-ui-1.12.0.custom/jquery.ui.touch-punch.min.js')?>"></script>
+<script type="text/javascript" src="<?=asset_url('upload/js/app.sortableWrapper.js')?>"></script>
 <script type="text/javascript">
     $(function(){
         $('.sortable').sortableWrapper();

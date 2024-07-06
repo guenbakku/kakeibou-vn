@@ -50,9 +50,9 @@
         </style>
 
         <!-- Resources -->
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/amcharts.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/themes/black.js"></script>
-        <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/pie.js"></script>
+        <script type="text/javascript" src="<?=asset_url('upload/amcharts/amcharts.js')?>"></script>
+        <script type="text/javascript" src="<?=asset_url('upload/amcharts/themes/black.js')?>"></script>
+        <script type="text/javascript" src="<?=asset_url('upload/amcharts/pie.js')?>"></script>
 
         <!-- Chart code -->
         <script type="text/javascript">

@@ -9,20 +9,20 @@
             width: 100%;
             height: 300px;
             margin-bottom: 20px;
-        }													
+        }
     </style>
-    
+
     <!-- Resources -->
-    <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/amcharts.js"></script>
-    <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/themes/black.js"></script>
-    <script type="text/javascript" src="<?=base_url()?>asset/upload/amcharts/serial.js"></script>
-    
+    <script type="text/javascript" src="<?=asset_url('upload/amcharts/amcharts.js')?>"></script>
+    <script type="text/javascript" src="<?=asset_url('upload/amcharts/themes/black.js')?>"></script>
+    <script type="text/javascript" src="<?=asset_url('upload/amcharts/serial.js')?>"></script>
+
     <!-- Chart code -->
     <script type="text/javascript">
         (function(){
             var chartData = <?=json_encode($list)?>;
             var dateFormat = genDateFormat(chartData);
-            
+
             var chart = AmCharts.makeChart("chartdiv", {
                 "fontFamily": "Arial",
                 "type": "serial",
@@ -98,49 +98,49 @@
                     "enabled": false,
                 }
             });
-            
+
             chart.addListener("dataUpdated", zoomChart);
             chart.addListener("init", zoomChart);
             zoomChart();
-            
-            
+
+
             // Generate setting for dataDateFormat and categoryAxis.minPeriod
             function genDateFormat(chartData) {
                 if (chartData.length == 0 || typeof(chartData[0]['date']) === 'undefined') {
                     return false;
                 }
-                
+
                 var testDate = chartData[0]['date'];
                 switch (true) {
                     case new RegExp(/^\d{4}$/).test(testDate):
                         return {
-                            dataDateFormat: 'YYYY', 
+                            dataDateFormat: 'YYYY',
                             categoryBalloonDateFormat: 'YYYY',
-                            minPeriod: 'YYYY', 
+                            minPeriod: 'YYYY',
                         };
                     case new RegExp(/^\d{4}\-\d{2}$/).test(testDate):
                         return {
-                            dataDateFormat: 'YYYY-MM', 
+                            dataDateFormat: 'YYYY-MM',
                             categoryBalloonDateFormat: 'YYYY-MM',
-                            minPeriod: 'MM', 
+                            minPeriod: 'MM',
                         };
                     case new RegExp(/^\d{4}\-\d{2}\-\d{2}$/).test(testDate):
                         return {
-                            dataDateFormat: 'YYYY-MM-DD', 
+                            dataDateFormat: 'YYYY-MM-DD',
                             categoryBalloonDateFormat: 'YYYY-MM-DD',
                             minPeriod: 'DD',
                         };
                 }
             }
-            
+
             function zoomChart(){
                 chart.zoomToIndexes(chart.dataProvider.length - chart.dataProvider.length, chart.dataProvider.length - 1);
             }
         })();
-    
+
     </script>
-    
+
     <!-- HTML -->
     <div id="chartdiv"></div>
-    
+
 </div>

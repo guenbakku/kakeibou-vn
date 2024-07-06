@@ -297,6 +297,8 @@ switch (ENVIRONMENT)
 
 	define('VIEWPATH', $view_folder);
 
+    define('ASSETPATH', dirname(BASEPATH).DIRECTORY_SEPARATOR.'asset'.DIRECTORY_SEPARATOR);
+
 /*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
