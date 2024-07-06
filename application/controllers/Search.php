@@ -12,6 +12,9 @@ class Search extends MY_Controller {
     {
         if (!empty($this->input->get())) {
             try {
+                // This is needed for displaying inputted values into input fields on result screen
+                $_POST = $this->input->get();
+
                 // Điều kiện tìm kiếm => bắt buộc hay không
                 // Khi tìm kiếm, ít nhất một trong những điều kiện
                 // bắt buộc được nhập mới thực hiện tìm kiếm
