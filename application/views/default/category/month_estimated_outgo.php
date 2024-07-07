@@ -63,7 +63,7 @@
                 </div>
                 <?php endforeach ?>
 
-                <button type="button" onClick="submitForm(this)" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
+                <button type="submit" onClick="submitForm(this)" class="btn btn-primary"><?=Consts::LABEL['submit']?></button>
             </div>
         </div>
     </form>
