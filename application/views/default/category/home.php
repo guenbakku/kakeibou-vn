@@ -29,15 +29,15 @@
                     <td style="width:30px" class="handle">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </td>
-                    <td>
-                        <div class="pull-right">
-                            <span class="glyphicon glyphicon-menu-right"></span>
-                        </div>
-                        <a href="<?=sprintf($url['edit'], $item['id'])?>" style="display:block; padding-right:15px; color:inherit; text-decoration:none">
+                    <td style="border-right:0">
+                        <a href="<?=sprintf($url['edit'], $item['id'])?>" style="display:block; color:inherit; text-decoration:none">
                             <?=$item['name']?>
                         </a>
                         <input type="hidden" name="categories[<?=$item['id']?>][id]" value="<?=$item['id']?>">
                         <input type="hidden" name="categories[<?=$item['id']?>][order_no]" data-role="order_no" value="<?=$i?>">
+                    </td>
+                    <td style="width:30px; border-left:0">
+                        <span class="glyphicon glyphicon-menu-right"></span>
                     </td>
                 </tr>
                 <?php endforeach ?>
