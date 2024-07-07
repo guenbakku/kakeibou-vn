@@ -25,7 +25,7 @@
                     <td style="width:30px" class="handle">
                         <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </td>
-                    <td style="border-right:0">
+                    <td style="border-right:0; width:100%">
                         <a href="<?=sprintf($url['edit'], $item['id'])?>" style="display:block; color:inherit; text-decoration:none">
                             <div><?=$item['name']?></div>
                             <div class="small text-muted"><em><?=$item['description']?></em></div>
@@ -33,7 +33,7 @@
                         <input type="hidden" name="categories[<?=$item['id']?>][id]" value="<?=$item['id']?>">
                         <input type="hidden" name="categories[<?=$item['id']?>][order_no]" data-role="order_no" value="<?=$i?>">
                     </td>
-                    <td style="width:30px; border-left:0">
+                    <td style="border-left:0; padding-right:15px">
                         <span class="glyphicon glyphicon-menu-right"></span>
                     </td>
                 </tr>
