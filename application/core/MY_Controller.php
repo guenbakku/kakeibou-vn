@@ -45,7 +45,9 @@ class MY_Controller extends CI_Controller
         // Nối base, current class name, $uris lại với nhau
         $combined_uris = array_filter(
             array_merge([$base], [$class_name], $uris),
-            function ($uri) {return (!empty($uri) && is_string($uri)) || '0' == $uri; }
+            function ($uri) {
+                return (!empty($uri) && is_string($uri)) || '0' == $uri;
+            }
         );
 
         $uris = implode('/', $combined_uris);

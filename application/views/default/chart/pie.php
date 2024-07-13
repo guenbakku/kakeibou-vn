@@ -36,7 +36,9 @@
         </form>
     </div>
 
-    <?php if (count(array_filter($list, function ($item) {return $item['total'] > 0; }))) { ?>
+    <?php if (count(array_filter($list, function ($item) {
+        return $item['total'] > 0;
+    }))) { ?>
         <!-- Styles -->
         <style>
             #chart-box {

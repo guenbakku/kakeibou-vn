@@ -63,7 +63,9 @@ function extract_date_string(string $date, bool $includeNullItem = true): array
     OUTPUT:
     return $includeNullItem
            ? $extracted
-           : array_filter($extracted, function ($item) {return null !== $item; });
+           : array_filter($extracted, function ($item) {
+               return null !== $item;
+           });
 }
 
 /**
@@ -79,7 +81,9 @@ function combine_date_string(array $date, string $glue = '-'): string
 {
     $date = array_slice($date, 0, 3);
 
-    return implode($glue, array_filter($date, function ($item) {return null !== $item; }));
+    return implode($glue, array_filter($date, function ($item) {
+        return null !== $item;
+    }));
 }
 
 /**
@@ -201,7 +205,9 @@ function prev_next_time(string $date): array
 function months_list(): array
 {
     return array_map(
-        function ($item) {return sprintf('%02d', $item); },
+        function ($item) {
+            return sprintf('%02d', $item);
+        },
         range(1, 12)
     );
 }
@@ -212,7 +218,9 @@ function months_list(): array
 function days_list(): array
 {
     return array_map(
-        function ($item) {return sprintf('%02d', $item); },
+        function ($item) {
+            return sprintf('%02d', $item);
+        },
         range(1, 31)
     );
 }

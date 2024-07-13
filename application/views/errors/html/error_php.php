@@ -13,20 +13,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <?php if (defined('SHOW_DEBUG_BACKTRACE') && SHOW_DEBUG_BACKTRACE === true) { ?>
 
-	<p>Backtrace:</p>
-	<?php foreach (debug_backtrace() as $error) { ?>
+    <p>Backtrace:</p>
+    <?php foreach (debug_backtrace() as $error) { ?>
 
-		<?php if (isset($error['file']) && 0 !== strpos($error['file'], realpath(BASEPATH))) { ?>
+        <?php if (isset($error['file']) && 0 !== strpos($error['file'], realpath(BASEPATH))) { ?>
 
-			<p style="margin-left:10px">
-			File: <?= $error['file']; ?><br />
-			Line: <?= $error['line']; ?><br />
-			Function: <?= $error['function']; ?>
-			</p>
+            <p style="margin-left:10px">
+            File: <?= $error['file']; ?><br />
+            Line: <?= $error['line']; ?><br />
+            Function: <?= $error['function']; ?>
+            </p>
 
-		<?php } ?>
+        <?php } ?>
 
-	<?php } ?>
+    <?php } ?>
 
 <?php } ?>
 

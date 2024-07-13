@@ -52,12 +52,12 @@ $autoload['packages'] = [];
 |
 | Prototype:
 |
-|	$autoload['libraries'] = array('database', 'email', 'session');
+|    $autoload['libraries'] = array('database', 'email', 'session');
 |
 | You can also supply an alternative library name to be assigned
 | in the controller:
 |
-|	$autoload['libraries'] = array('user_agent' => 'ua');
+|    $autoload['libraries'] = array('user_agent' => 'ua');
 */
 $autoload['libraries'] = ['consts', 'appexception', 'template', 'flash', 'referer'];
 
@@ -72,7 +72,7 @@ $autoload['libraries'] = ['consts', 'appexception', 'template', 'flash', 'refere
 |
 | Prototype:
 |
-|	$autoload['drivers'] = array('cache');
+|    $autoload['drivers'] = array('cache');
 */
 $autoload['drivers'] = [];
 
@@ -82,7 +82,7 @@ $autoload['drivers'] = [];
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['helper'] = array('url', 'file');
+|    $autoload['helper'] = array('url', 'file');
 */
 $autoload['helper'] = ['array', 'url', 'form', 'security', 'string', 'number', 'date', 'currency'];
 
@@ -92,7 +92,7 @@ $autoload['helper'] = ['array', 'url', 'form', 'security', 'string', 'number', '
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['config'] = array('config1', 'config2');
+|    $autoload['config'] = array('config1', 'config2');
 |
 | NOTE: This item is intended for use ONLY if you have created custom
 | config files.  Otherwise, leave it blank.
@@ -106,7 +106,7 @@ $autoload['config'] = [];
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['language'] = array('lang1', 'lang2');
+|    $autoload['language'] = array('lang1', 'lang2');
 |
 | NOTE: Do not include the "_lang" part of your file.  For example
 | "codeigniter_lang.php" would be referenced as array('codeigniter');
@@ -120,12 +120,12 @@ $autoload['language'] = [];
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['model'] = array('first_model', 'second_model');
+|    $autoload['model'] = array('first_model', 'second_model');
 |
 | You can also supply an alternative model name to be assigned
 | in the controller:
 |
-|	$autoload['model'] = array('first_model' => 'first');
+|    $autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = [
     'app_model',

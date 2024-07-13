@@ -10,11 +10,11 @@ if (!defined('BASEPATH')) {
  * This class contains process which handle authentication and authorization.
  * This class need model auth_model for communicating with database.
  *
- * @author		Nguyen Van Bach
+ * @author        Nguyen Van Bach
  *
- * @category	Libraries
+ * @category    Libraries
  *
- * @see		http://nvb-online.com
+ * @see        http://nvb-online.com
  *
  * @copyright   Copyright (c) 2017, Nguyen Van Bach.
  * @license     MIT
