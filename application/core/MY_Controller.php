@@ -1,8 +1,9 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class MY_Controller extends CI_Controller {
+defined('BASEPATH') or exit('No direct script access allowed');
 
+class MY_Controller extends CI_Controller
+{
     protected $ctrl_base_url = '';
 
     public function __construct()
@@ -10,7 +11,7 @@ class MY_Controller extends CI_Controller {
         parent::__construct();
 
         $this->output->set_header('Access-Control-Allow-Origin: '.base_url());
-        $this->output->remove_headers(array('X-Powered-By'));
+        $this->output->remove_headers(['X-Powered-By']);
 
         $this->load->library('auth');
         // Nếu chưa đăng nhập thì chuyển về trang login
@@ -23,26 +24,28 @@ class MY_Controller extends CI_Controller {
      * Tạo base_url có tự động thêm tên controller class.
      * Ngoài ra nếu $ctr_base_url được chỉ định, sẽ thêm phần này vào trước
      * tên controller class.
+     *
+     * @param mixed $uris
      */
-    public function base_url($uris = [], string $protocol=null)
+    public function base_url($uris = [], ?string $protocol = null)
     {
-        $base       = strtolower($this->ctrl_base_url);
-        $base       = empty($base)? '' : trim($base, '/');
+        $base = strtolower($this->ctrl_base_url);
+        $base = empty($base) ? '' : trim($base, '/');
         $class_name = strtolower(get_class($this));
 
         if (!is_array($uris)) {
-            $uris = array($uris);
+            $uris = [$uris];
         }
 
         // Xóa slash ở 2 đầu mỗi string (nếu có) trong $uris
-        $uris = array_map(function($uri){
+        $uris = array_map(function ($uri) {
             return trim($uri ?? '', '/');
         }, $uris);
 
         // Nối base, current class name, $uris lại với nhau
         $combined_uris = array_filter(
-            array_merge(array($base), array($class_name), $uris),
-            function($uri){return (!empty($uri) && is_string($uri)) || $uri == '0';}
+            array_merge([$base], [$class_name], $uris),
+            function ($uri) {return (!empty($uri) && is_string($uri)) || '0' == $uri; }
         );
 
         $uris = implode('/', $combined_uris);

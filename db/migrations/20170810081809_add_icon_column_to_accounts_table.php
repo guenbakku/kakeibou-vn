@@ -29,14 +29,15 @@ class AddIconColumnToAccountsTable extends AbstractMigration
     {
         // Add column
         $table = $this->table('accounts');
-        $table->addColumn('icon', 'string', array('limit' => 50, 'after' => 'order_no'))
-              ->update();
-        
+        $table->addColumn('icon', 'string', ['limit' => 50, 'after' => 'order_no'])
+            ->update()
+        ;
+
         // Fill data
-        $sql = "SELECT * FROM accounts";
+        $sql = 'SELECT * FROM accounts';
         $rows = $this->fetchAll($sql);
         foreach ($rows as $row) {
-            $icon = $row['restrict_delete'] == 1? 'fa-money' : 'fa-bank';
+            $icon = 1 == $row['restrict_delete'] ? 'fa-money' : 'fa-bank';
             $id = $row['id'];
             $sql = sprintf("UPDATE accounts SET `icon` = '%s' WHERE `id` = %s", $icon, $id);
             $this->execute($sql);

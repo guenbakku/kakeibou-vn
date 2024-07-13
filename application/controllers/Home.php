@@ -1,8 +1,9 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Home extends MY_Controller {
+defined('BASEPATH') or exit('No direct script access allowed');
 
+class Home extends MY_Controller
+{
     public function index()
     {
         $view_data['month_sum'] = current($this->timeline_model->summary_inout_types(date('Y-m-01'), date('Y-m-t'), '%Y-%m'));
@@ -12,7 +13,7 @@ class Home extends MY_Controller {
         $view_data['url'] = [
             'detailToday' => base_url(['timeline', 'detail', date('Y-m-d')]),
             'summaryThisMonth' => base_url(['timeline', 'summary', date('Y-m')]),
-            'summaryThisYear' => base_url(['timeline', 'summary', date('Y')])
+            'summaryThisYear' => base_url(['timeline', 'summary', date('Y')]),
         ];
         $this->template->write_view('MAIN', 'home/home', $view_data);
         $this->template->render();

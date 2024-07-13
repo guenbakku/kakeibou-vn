@@ -17,6 +17,9 @@ $finder = (new PhpCsFixer\Finder())
 return (new PhpCsFixer\Config())
     ->setRules([
         '@PhpCsFixer' => true,
+        'echo_tag_syntax' => ['format' => 'short'],
     ])
+    ->setIndent("    ")
+    ->setLineEnding("\n")
     ->setFinder($finder)
 ;

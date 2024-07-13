@@ -1,14 +1,19 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 
 /**
- * Tính thứ của một ngày cụ thể
+ * Tính thứ của một ngày cụ thể.
  *
- * @param string|int $date timestamp hoặc string theo format datetime
+ * @param int|string $date timestamp hoặc string theo format datetime
+ *
  * @return string thứ trong tuần
  */
-function day_of_week(string|int $date): ?string
+function day_of_week(int|string $date): ?string
 {
-    $days = array('Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy');
+    $days = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
 
     if (!is_numeric($date)) {
         $date = strtotime($date);
@@ -16,7 +21,7 @@ function day_of_week(string|int $date): ?string
         $date = (int) $date;
     }
 
-    if ($date === false) {
+    if (false === $date) {
         return null;
     }
 
@@ -24,11 +29,10 @@ function day_of_week(string|int $date): ?string
 }
 
 /**
- * Tách chuỗi date thành array('y' => yyyy, 'm' => mm, 'd' => đd)
+ * Tách chuỗi date thành array('y' => yyyy, 'm' => mm, 'd' => đd).
  *
- * @param string $date bắt buộc phải có ký tự ngăn cách giữa yyyy-mm-dd
- * @param bool $includeNullItem có lấy cả những item null không
- * @return array
+ * @param string $date            bắt buộc phải có ký tự ngăn cách giữa yyyy-mm-dd
+ * @param bool   $includeNullItem có lấy cả những item null không
  */
 function extract_date_string(string $date, bool $includeNullItem = true): array
 {
@@ -39,7 +43,7 @@ function extract_date_string(string $date, bool $includeNullItem = true): array
     $month = $month ?? '';
     $day = $day ?? '';
 
-    $extracted = array('y' => null, 'm' => null, 'd' => null);
+    $extracted = ['y' => null, 'm' => null, 'd' => null];
     if (!preg_match('/^\d{1,4}$/', $year)) {
         goto OUTPUT;
     }
@@ -59,21 +63,23 @@ function extract_date_string(string $date, bool $includeNullItem = true): array
     OUTPUT:
     return $includeNullItem
            ? $extracted
-           : array_filter($extracted, function($item){return $item !== null;});
+           : array_filter($extracted, function ($item) {return null !== $item; });
 }
 
 /**
  * Tạo chuỗi date từ array
- * Có thể xem đây là hàm ngược của hàm extract_date_string()
+ * Có thể xem đây là hàm ngược của hàm extract_date_string().
  *
- * @param array $date array chứa year, month, day
+ * @param array  $date array chứa year, month, day
  * @param string $glue chuỗi để nối
+ *
  * @return string chuỗi date đã nối
  */
 function combine_date_string(array $date, string $glue = '-'): string
 {
     $date = array_slice($date, 0, 3);
-    return implode($glue, array_filter($date, function($item){return $item !== null;}));
+
+    return implode($glue, array_filter($date, function ($item) {return null !== $item; }));
 }
 
 /**
@@ -83,21 +89,24 @@ function combine_date_string(array $date, string $glue = '-'): string
  *  - 2016-12-31 -> 'ymd'
  *  - 2016/02 -> 'ym'
  *  - 2016 -> 'y'
- *  - other -> null
+ *  - other -> null.
  *
  * @param string $date chuỗi muốn kiểm tra
- * @return string|null
  */
 function date_format_type_of_string(string $date): ?string
 {
     $extracted_arr = extract_date_string($date, false);
-    switch(count($extracted_arr)) {
+
+    switch (count($extracted_arr)) {
         case 3:
             return 'ymd';
+
         case 2:
             return 'ym';
+
         case 1:
             return 'y';
+
         default:
             return null;
     }
@@ -108,14 +117,15 @@ function date_format_type_of_string(string $date): ?string
  * Ví dụ
  *  1. 2016         -> array('2016-01-01', '2016-12-31')
  *  2. 2016-12      -> array('2016-12-01', '2016-12-31')
- *  3. 2016-12-31   -> array('2016-12-31', '2016-12-31')
+ *  3. 2016-12-31   -> array('2016-12-31', '2016-12-31').
  *
- * @param int $year year
+ * @param int $year  year
  * @param int $month month
- * @param int $day day
+ * @param int $day   day
+ *
  * @return array ngày đầu và cuối của khoảng thời gian đó
  */
-function boundary_date(string $year, int $month = null, int $day = null): array
+function boundary_date(string $year, ?int $month = null, ?int $day = null): array
 {
     // Tách parameter đầu tiên thành year, month, day
     // nếu parameter đầu tiên là chuỗi format kiểu date
@@ -125,30 +135,29 @@ function boundary_date(string $year, int $month = null, int $day = null): array
     }
 
     if (!is_numeric($year)) {
-        return array();
+        return [];
     }
 
-    $range = array(
+    $range = [
         date('Y-m-d', strtotime($year.'-01-01')),
         date('Y-m-d', strtotime($year.'-12-31')),
-    );
+    ];
     if (!is_numeric($month)) {
         return $range;
     }
 
-    $range = array(
+    $range = [
         date('Y-m-d', strtotime($year.'-'.$month.'-01')),
         date('Y-m-t', strtotime($year.'-'.$month.'-01')),
-    );
+    ];
     if (!is_numeric($day)) {
         return $range;
     }
 
-    $range = array(
+    return [
         date('Y-m-d', strtotime($year.'-'.$month.'-'.$day)),
         date('Y-m-d', strtotime($year.'-'.$month.'-'.$day)),
-    );
-    return $range;
+    ];
 }
 
 /**
@@ -156,7 +165,7 @@ function boundary_date(string $year, int $month = null, int $day = null): array
  * Nếu dữ liệu nhập vào là dạng:
  *  * ngày  -> ngày trước và sau
  *  * tháng -> tháng trước và sau
- *  * năm   -> năm trước và sau
+ *  * năm   -> năm trước và sau.
  */
 function prev_next_time(string $date): array
 {
@@ -164,49 +173,50 @@ function prev_next_time(string $date): array
 
     switch (count($extracted)) {
         case 1:
-            return array(
+            return [
                 $extracted['y'] - 1,
                 $extracted['y'] + 1,
-            );
+            ];
+
         case 2:
-            return array(
-                date('Y-m', strtotime(implode('-', $extracted).'-01' . ' -1 month')),
-                date('Y-m', strtotime(implode('-', $extracted).'-01' . ' +1 month')),
-            );
+            return [
+                date('Y-m', strtotime(implode('-', $extracted).'-01 -1 month')),
+                date('Y-m', strtotime(implode('-', $extracted).'-01 +1 month')),
+            ];
+
         case 3:
-            return array(
-                date('Y-m-d', strtotime(implode('-', $extracted). ' -1 day')),
-                date('Y-m-d', strtotime(implode('-', $extracted). ' +1 day')),
-            );
+            return [
+                date('Y-m-d', strtotime(implode('-', $extracted).' -1 day')),
+                date('Y-m-d', strtotime(implode('-', $extracted).' +1 day')),
+            ];
+
         default:
-            return array(null, null);
+            return [null, null];
     }
 }
 
 /**
- * Tạo danh sách 12 tháng
+ * Tạo danh sách 12 tháng.
  *
  * @param   void
- * @return  array
  */
 function months_list(): array
 {
     return array_map(
-        function($item){return sprintf('%02d', $item);},
+        function ($item) {return sprintf('%02d', $item); },
         range(1, 12)
     );
 }
 
 /**
- * Tạo danh sách 31 ngày
+ * Tạo danh sách 31 ngày.
  *
  * @param   void
- * @return  array
  */
 function days_list(): array
 {
     return array_map(
-        function($item){return sprintf('%02d', $item);},
+        function ($item) {return sprintf('%02d', $item); },
         range(1, 31)
     );
 }

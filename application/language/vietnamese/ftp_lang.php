@@ -1,13 +1,14 @@
 <?php
 /**
- * System messages translation for CodeIgniter(tm)
+ * System messages translation for CodeIgniter(tm).
  *
  * @author CodeIgniter community
  * @copyright Copyright (c) 2014 - 2016, British Columbia Institute of Technology (http://bcit.ca/)
  * @license http://opensource.org/licenses/MIT MIT License
- * @link http://codeigniter.com
+ *
+ * @see http://codeigniter.com
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 $lang['ftp_no_connection'] = 'Không xác định ID kết nối - không hợp lệ, bạn hãy chắc chắn rằng đã kết nối trước khi thực hiện quy trình kết nối.';
 $lang['ftp_unable_to_connect'] = 'Không thể kết nối tới máy chủ, theo thông tin máy chủ bạn cung cấp.';

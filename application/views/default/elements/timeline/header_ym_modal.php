@@ -2,27 +2,27 @@
     <div class="col-xs-6" id="date-selection-year">
         <div class="form-group">
             <label>Năm</label>
-            <?=form_dropdown(
-                $field_name = 'year', 
-                array('' => '--') + $select['year'], 
-                $year?? date('Y'), 
-                array(
+            <?= form_dropdown(
+                $field_name = 'year',
+                ['' => '--'] + $select['year'],
+                $year ?? date('Y'),
+                [
                     'class' => 'form-control',
-                )
-            )?>
+                ]
+            ); ?>
         </div>
     </div>
     <div class="col-xs-6" id="date-selection-month">
         <div class="form-group">
             <label>Tháng</label>
-            <?=form_dropdown(
-                $field_name = 'month', 
-                array('' => '--') + $select['month'], 
-                $month?? date('m'), 
-                array(
+            <?= form_dropdown(
+                $field_name = 'month',
+                ['' => '--'] + $select['month'],
+                $month ?? date('m'),
+                [
                     'class' => 'form-control',
-                )
-            )?>
+                ]
+            ); ?>
         </div>
     </div>
 </div>

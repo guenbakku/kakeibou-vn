@@ -22,7 +22,7 @@ class AddTransferItemToCategoriesTable extends AbstractMigration
                 'restrict_delete' => 1,
             ],
         ];
-        
+
         $this->insert('categories', $rows);
     }
 }

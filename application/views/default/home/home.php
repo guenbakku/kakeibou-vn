@@ -1,5 +1,5 @@
 <?php
-    $today = date('Y-m-d');
+$today = date('Y-m-d');
 ?>
 <script type="text/javascript">
     $(function () {
@@ -35,11 +35,11 @@
 </script>
 
 <div class="container">
-    <?php // Chỉ hiện bảng Chi thực tế/Dự định nếu có setting "Dự định chi tháng này" ?>
-    <?php if ($liquidOutgoStatus['month']['estimated'] > 0): ?>
+    <?php // Chỉ hiện bảng Chi thực tế/Dự định nếu có setting "Dự định chi tháng này"?>
+    <?php if ($liquidOutgoStatus['month']['estimated'] > 0) { ?>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a class="pull-right" href="<?=$url['summaryThisMonth']?>">
+            <a class="pull-right" href="<?= $url['summaryThisMonth']; ?>">
                 <span class="glyphicon glyphicon-option-horizontal"></span>
             </a>
             <strong>Số tiền có thể chi</strong><br>
@@ -51,7 +51,7 @@
                     Hôm nay
                 </th>
                 <td class="text-center">
-                    <?=$this->template->get_view('home/home_estimated_outgo_detail', $liquidOutgoStatus['today'])?>
+                    <?= $this->template->get_view('home/home_estimated_outgo_detail', $liquidOutgoStatus['today']); ?>
                 </td>
             </tr>
             <tr>
@@ -59,13 +59,13 @@
                     Tháng này
                 </th>
                 <td class="text-center">
-                    <?=$this->template->get_view('home/home_estimated_outgo_detail', $liquidOutgoStatus['month'])?>
+                    <?= $this->template->get_view('home/home_estimated_outgo_detail', $liquidOutgoStatus['month']); ?>
                 </td>
             </tr>
         </table>
     </div>
-    <?php endif ?>
+    <?php } ?>
 
-    <?=$this->template->get_view('home/home_month_sum', ['month_sum' => $month_sum]) ?>
-    <?=$this->template->get_view('home/home_remaining', ['remaining' => $remaining]) ?>
+    <?= $this->template->get_view('home/home_month_sum', ['month_sum' => $month_sum]); ?>
+    <?= $this->template->get_view('home/home_remaining', ['remaining' => $remaining]); ?>
 </div>

@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Search extends MY_Controller {
+defined('BASEPATH') or exit('No direct script access allowed');
 
-    public function __construct() {
+class Search extends MY_Controller
+{
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('search_model');
     }
@@ -39,23 +41,19 @@ class Search extends MY_Controller {
                             $can_execute_search = true;
                         }
 
-                        if ($key === 'memo_or_amount') {
+                        if ('memo_or_amount' === $key) {
                             if (is_numeric($val)) {
                                 $this->search_model->amount = $val;
-                            }
-                            else {
+                            } else {
                                 $this->search_model->memo = $val;
                             }
+                        } elseif ('offset' == $key) {
+                            $this->search_model->{$key} = (int) $val;
+                        } else {
+                            $this->search_model->{$key} = $val;
                         }
-                        elseif ($key == 'offset') {
-                            $this->search_model->$key = (int)$val;
-                        }
-                        else {
-                            $this->search_model->$key = $val;
-                        }
-                    }
-                    else {
-                        $this->search_model->$key = null;
+                    } else {
+                        $this->search_model->{$key} = null;
                     }
                 }
 
@@ -64,25 +62,24 @@ class Search extends MY_Controller {
                 }
 
                 $this->search_model->search();
-            }
-            catch (AppException $e) {
+            } catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
         }
 
-        $view_data['result']    = $this->search_model->result;
+        $view_data['result'] = $this->search_model->result;
         $view_data['current_num'] = is_array($this->search_model->result) ? count($this->search_model->result) : 0;
         $view_data['num_of_results'] = $this->search_model->num_of_results;
         $view_data['results_sum'] = $this->search_model->results_sum;
         $view_data['title'] = 'Tìm kiếm chi tiêu';
         $view_data['select'] = [
-            'players'     => [0 => 'Tất cả'] + $this->user_model->get_select_tag_data(),
+            'players' => [0 => 'Tất cả'] + $this->user_model->get_select_tag_data(),
             'inout_types' => [0 => 'Tất cả'] + $this->inout_type_model->get_select_tag_data(),
         ];
         $view_data['url'] = [
-            'form'      => $this->base_url(),
-            'edit'      => base_url(['inout', 'edit', '%s']),
-            'back'      => base_url(),
+            'form' => $this->base_url(),
+            'edit' => base_url(['inout', 'edit', '%s']),
+            'back' => base_url(),
             'next_page' => $this->search_model->next_page_url(),
         ];
 

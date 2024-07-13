@@ -27,7 +27,7 @@ class Initial extends AbstractMigration
      */
     public function change()
     {
-        $ddl = file_get_contents($_ENV['PHINX_DDL_DIR_PATH'] . '/20170416054615_initial.sql');
+        $ddl = file_get_contents($_ENV['PHINX_DDL_DIR_PATH'].'/20170416054615_initial.sql');
         $this->execute($ddl);
     }
 }

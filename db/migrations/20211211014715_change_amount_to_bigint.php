@@ -29,13 +29,15 @@ class ChangeAmountToBigint extends AbstractMigration
     {
         $table = $this->table('inout_records');
         $table->changeColumn('amount', 'biginteger')
-            ->save();
+            ->save()
+        ;
     }
 
     public function down()
     {
         $table = $this->table('inout_records');
         $table->changeColumn('amount', 'integer')
-            ->save();
+            ->save()
+        ;
     }
 }

@@ -1,8 +1,9 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Timeline extends MY_Controller {
+defined('BASEPATH') or exit('No direct script access allowed');
 
+class Timeline extends MY_Controller
+{
     public function __construct()
     {
         parent::__construct();
@@ -18,41 +19,42 @@ class Timeline extends MY_Controller {
      * Trang tổng kết số tiền thu chi theo
      *  - ngày trong tháng,
      *  - tháng trong năm
-     *  - năm
+     *  - năm.
      *
      * @param string $date: thời gian muốn xem danh sách, có thể nhận format:
-     *  - yyyy-mm
-     *  - yyyy
-     *  - null
-     * @return void
+     *                      - yyyy-mm
+     *                      - yyyy
+     *                      - null
      */
-    public function summary(string $date='')
+    public function summary(string $date = '')
     {
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
         $dateChange = prev_next_time($date);
-        $yearsList  = $this->timeline_model->get_years_list();
+        $yearsList = $this->timeline_model->get_years_list();
         $monthsList = months_list();
 
         $view_data['title'] = 'Danh sách tóm tắt';
         $view_data['list'] = $this->timeline_model->summary_inout_types_auto(
-            $extractedDate['y'], $extractedDate['m'], SORT_DESC
+            $extractedDate['y'],
+            $extractedDate['m'],
+            SORT_DESC
         );
-        $view_data['year'] = $extractedDate['y']?? '';
-        $view_data['month'] = $extractedDate['m']?? '';
+        $view_data['year'] = $extractedDate['y'] ?? '';
+        $view_data['month'] = $extractedDate['m'] ?? '';
         $view_data['select'] = [
-            'year'  => array_combine($yearsList, $yearsList),
+            'year' => array_combine($yearsList, $yearsList),
             'month' => array_combine($monthsList, $monthsList),
         ];
         $view_data['url'] = [
             'dateSelectionForm' => $this->base_url($this->router->fetch_method()),
-            'back'              => base_url(),
-            'dateChange'        => [
-                'prev'          => $this->base_url([$this->router->fetch_method(), $dateChange[0]]).query_string(),
-                'next'          => $this->base_url([$this->router->fetch_method(), $dateChange[1]]).query_string(),
+            'back' => base_url(),
+            'dateChange' => [
+                'prev' => $this->base_url([$this->router->fetch_method(), $dateChange[0]]).query_string(),
+                'next' => $this->base_url([$this->router->fetch_method(), $dateChange[1]]).query_string(),
             ],
-            'viewchart'         => base_url(['chart', $this->router->fetch_method(), $date]),
-            'detailTemplate'   => $this->base_url(['detail', '%s']),
+            'viewchart' => base_url(['chart', $this->router->fetch_method(), $date]),
+            'detailTemplate' => $this->base_url(['detail', '%s']),
         ];
         $view_data['pageScrollTarget'] = $this->_page_scroll_target($date);
         $view_data = array_merge($view_data, compact('date', 'dateFormatType'));
@@ -62,15 +64,14 @@ class Timeline extends MY_Controller {
     }
 
     /**
-     * Trang danh sách chi tiết thu chi theo ngày
+     * Trang danh sách chi tiết thu chi theo ngày.
      *
      * @param string $date thời gian muốn xem danh sách, có thể nhận format:
-     *  - yyyy-mm-dd
-     *  - yyyy-mm
-     *  - yyyy
-     * @return  void
+     *                     - yyyy-mm-dd
+     *                     - yyyy-mm
+     *                     - yyyy
      */
-    public function detail(string $date='')
+    public function detail(string $date = '')
     {
         if (empty($date)) {
             show_error(Consts::ERR_BAD_REQUEST);
@@ -89,9 +90,9 @@ class Timeline extends MY_Controller {
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
         $dateChange = prev_next_time($date);
-        $yearsList  = $this->timeline_model->get_years_list();
+        $yearsList = $this->timeline_model->get_years_list();
         $monthsList = months_list();
-        $daysList   = days_list();
+        $daysList = days_list();
 
         $view_data['title'] = 'Danh sách chi tiết';
 
@@ -101,13 +102,13 @@ class Timeline extends MY_Controller {
         $this->search_model->account = $account_id;
         $this->search_model->player = $player_id;
         $this->search_model->only_show_temp_inout = $only_show_temp_inout;
-        $this->search_model->also_show_pair_inout = $account_id != 0;
+        $this->search_model->also_show_pair_inout = 0 != $account_id;
         $this->search_model->offset = $offset;
         $view_data['result'] = $this->search_model->search();
 
-        $view_data['year'] = $extractedDate['y']?? '';
-        $view_data['month'] = $extractedDate['m']?? '';
-        $view_data['day'] = $extractedDate['d']?? '';
+        $view_data['year'] = $extractedDate['y'] ?? '';
+        $view_data['month'] = $extractedDate['m'] ?? '';
+        $view_data['day'] = $extractedDate['d'] ?? '';
         $view_data['current_num'] = count($view_data['result']);
         $view_data['select'] = [
             'accounts' => $this->account_model->get_select_tag_data(),
@@ -143,7 +144,7 @@ class Timeline extends MY_Controller {
     }
 
     /**
-     * Tạo page-scroll target đến ngày/tháng/năm hiện tại tùy vào kiểu danh sách
+     * Tạo page-scroll target đến ngày/tháng/năm hiện tại tùy vào kiểu danh sách.
      *
      * @param string $date thời điểm hiện tại để scroll đến
      */
@@ -154,8 +155,10 @@ class Timeline extends MY_Controller {
         switch ($format_type) {
             case null:
                 return date('Y');
+
             case 'y':
                 return date('Y-m');
+
             case 'ym':
             case 'ymd':
                 return date('Y-m-d');

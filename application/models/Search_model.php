@@ -1,9 +1,15 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Search_model extends App_Model {
+defined('BASEPATH') or exit('No direct script access allowed');
 
-    const TABLE = 'inout_records';
+class Search_model extends App_Model
+{
+    public const TABLE = 'inout_records';
+
+    public $result;
+    public $next;
+    public $num_of_results;
+    public $results_sum;
 
     protected $settings = [
         'amount' => null,
@@ -21,64 +27,51 @@ class Search_model extends App_Model {
         'limit' => 100,
     ];
 
-    public $result;
-    public $next;
-    public $num_of_results;
-    public $results_sum;
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->load->model('inout_type_model');
     }
 
     public function __set(string $name, $val)
     {
-        if ($val === null){
+        if (null === $val) {
             return false;
         }
 
-        if (!in_array($name, array_keys($this->settings), true)){
-            throw new AppException($name . ' không tồn tại');
+        if (!in_array($name, array_keys($this->settings), true)) {
+            throw new AppException($name.' không tồn tại');
         }
 
-        if ($name === 'amount'){
-            if (!is_numeric($val) || $val < 0){
+        if ('amount' === $name) {
+            if (!is_numeric($val) || $val < 0) {
                 throw new AppException('Dữ liệu số tiền không hợp lệ');
             }
-        }
-        else if ($name === 'player'){
-            if (!is_numeric($val)){
+        } elseif ('player' === $name) {
+            if (!is_numeric($val)) {
                 throw new AppException('Dữ liệu người phụ trách không hợp lệ');
             }
-        }
-        else if ($name === 'inout_type'){
-            if (!is_numeric($val) || !in_array($val, [0, 1, 2])){
+        } elseif ('inout_type' === $name) {
+            if (!is_numeric($val) || !in_array($val, [0, 1, 2])) {
                 throw new AppException('Dữ liệu loại thu chi không hợp lệ');
             }
-        }
-        else if ($name === 'account'){
-            if (!is_numeric($val)){
+        } elseif ('account' === $name) {
+            if (!is_numeric($val)) {
                 throw new AppException('Dữ liệu loại tài khoản không hợp lệ');
             }
-        }
-        else if (in_array($name, ['inout_from', 'inout_to', 'modified_from', 'modified_to'])){
+        } elseif (in_array($name, ['inout_from', 'inout_to', 'modified_from', 'modified_to'])) {
             // Quăng ngoại lệ nếu val không có dạng yyyy-mm-dd
             // hoặc không phải là ngày tháng năm có nghĩa
-            if (!preg_match('/^\d{4}(\-\d{2})?(\-\d{2})?$/', $val) || !strtotime($val) ) {
+            if (!preg_match('/^\d{4}(\-\d{2})?(\-\d{2})?$/', $val) || !strtotime($val)) {
                 throw new AppException('Dữ liệu ngày tháng ('.$name.') không hợp lệ');
             }
-        }
-        else if (in_array($name, ['offset', 'limit'])) {
-            $val = is_bool($val)? $val : (int)$val;
+        } elseif (in_array($name, ['offset', 'limit'])) {
+            $val = is_bool($val) ? $val : (int) $val;
             if ($val < 0) {
                 throw new AppException('Dữ liệu '.$name.' không hợp lệ');
             }
-        }
-        else if ($name === 'also_show_pair_inout')
-        {
+        } elseif ('also_show_pair_inout' === $name) {
             $val = (bool) $val;
-        }
-        else if ($name === 'only_show_temp_inout')
-        {
+        } elseif ('only_show_temp_inout' === $name) {
             $val = (bool) $val;
         }
 
@@ -86,10 +79,9 @@ class Search_model extends App_Model {
     }
 
     /**
-     * Thực hiện tìm kiếm
+     * Thực hiện tìm kiếm.
      *
      * @param   void
-     * @return  array
      */
     public function search(): array
     {
@@ -98,8 +90,9 @@ class Search_model extends App_Model {
         $has_next_page = $this->has_next_page($db);
 
         $result = $db->limit($this->settings['limit'])
-                     ->offset($this->settings['offset'])
-                     ->get()->result_array();
+            ->offset($this->settings['offset'])
+            ->get()->result_array()
+        ;
         $fragment_num = $this->fragment_num($result, $has_next_page);
 
         $this->num_of_results = $num_of_results;
@@ -113,27 +106,27 @@ class Search_model extends App_Model {
     }
 
     /**
-     * Tạo url cho next page
+     * Tạo url cho next page.
      *
      * @param   void
-     * @return  string
      */
     public function next_page_url(): ?string
     {
         if (!$this->next) {
             return null;
         }
-        else {
-            $query = $this->input->get();
-            $query['offset'] = $this->next;
-            return current_url().'?'.http_build_query($query);
-        }
+
+        $query = $this->input->get();
+        $query['offset'] = $this->next;
+
+        return current_url().'?'.http_build_query($query);
     }
 
     protected function get_fresh_query()
     {
         $db = clone $this->db;
         $db->reset_query();
+
         return $db;
     }
 
@@ -161,16 +154,19 @@ class Search_model extends App_Model {
                            users.label AS player_label')
             ->order_by('inout_records.date', 'DESC')
             ->order_by('categories.inout_type_id', 'ASC')
-            ->order_by('inout_records.created_on', 'ASC');
+            ->order_by('inout_records.created_on', 'ASC')
+        ;
 
         return $this->add_where_query($db);
     }
 
     /**
      * Add điều kiện where và join table để tìm kiếm.
-     * Dữ liệu sử dụng để tạo query lấy từ property settings
+     * Dữ liệu sử dụng để tạo query lấy từ property settings.
      *
      * @param   void
+     * @param mixed $db
+     *
      * @return  object: db object
      */
     protected function add_where_query($db)
@@ -179,48 +175,48 @@ class Search_model extends App_Model {
             ->join('accounts', 'accounts.id = inout_records.account_id')
             ->join('categories', 'categories.id = inout_records.category_id')
             ->join('inout_types', 'inout_types.id = categories.inout_type_id')
-            ->join('users', 'users.id = inout_records.player');
+            ->join('users', 'users.id = inout_records.player')
+        ;
 
         // Set điều kiện tìm kiếm
-        if ($this->settings['amount'] != null){ // Chú ý không phải là kiểm tra empty vì muốn xét luôn trường hợp nhập 0
+        if (null != $this->settings['amount']) { // Chú ý không phải là kiểm tra empty vì muốn xét luôn trường hợp nhập 0
             $db->where('ABS(`inout_records`.`amount`)', $this->settings['amount'], false);
         }
-        if (!empty($this->settings['memo'])){
+        if (!empty($this->settings['memo'])) {
             $parts = explode(' ', trim($this->settings['memo']));
-            foreach ($parts as $part){
+            foreach ($parts as $part) {
                 $db->like('inout_records.memo', $part);
             }
         }
-        if (!empty($this->settings['inout_type'])){
-            if ($this->settings['inout_type'] == array_flip($this->inout_type_model::$INOUT_TYPE)['Thu']){
+        if (!empty($this->settings['inout_type'])) {
+            if ($this->settings['inout_type'] == array_flip($this->inout_type_model::$INOUT_TYPE)['Thu']) {
                 $db->where('inout_records.amount >=', 0);
-            }
-            else{
+            } else {
                 $db->where('inout_records.amount <', 0);
             }
         }
-        if ($this->settings['account']>0){
+        if ($this->settings['account'] > 0) {
             $db->where('inout_records.account_id', $this->settings['account']);
         }
-        if (!empty($this->settings['player'])){
+        if (!empty($this->settings['player'])) {
             $db->where('inout_records.player', $this->settings['player']);
         }
-        if (!empty($this->settings['inout_from'])){
+        if (!empty($this->settings['inout_from'])) {
             $db->where('inout_records.date >=', $this->settings['inout_from']);
         }
-        if (!empty($this->settings['inout_to'])){
+        if (!empty($this->settings['inout_to'])) {
             $db->where('inout_records.date <=', $this->settings['inout_to']);
         }
-        if (!empty($this->settings['modified_from'])){
+        if (!empty($this->settings['modified_from'])) {
             $db->where('inout_records.modified_on >=', date('Y-m-d H:i:s', strtotime($this->settings['modified_from'])));
         }
-        if (!empty($this->settings['modified_to'])){
-            $db->where('inout_records.modified_on <', date('Y-m-d H:i:s', strtotime($this->settings['modified_to'] . ' +1 days')));
+        if (!empty($this->settings['modified_to'])) {
+            $db->where('inout_records.modified_on <', date('Y-m-d H:i:s', strtotime($this->settings['modified_to'].' +1 days')));
         }
-        if ($this->settings['also_show_pair_inout'] === false){
+        if (false === $this->settings['also_show_pair_inout']) {
             $db->where('inout_records.pair_id', '');
         }
-        if ($this->settings['only_show_temp_inout'] === true){
+        if (true === $this->settings['only_show_temp_inout']) {
             $db->where('inout_records.is_temp', 1);
         }
 
@@ -228,7 +224,7 @@ class Search_model extends App_Model {
     }
 
     /**
-     * Tính tổng thu chi của tất cả kết quả tìm kiếm
+     * Tính tổng thu chi của tất cả kết quả tìm kiếm.
      */
     protected function sum_amount_of_all_results()
     {
@@ -242,41 +238,44 @@ class Search_model extends App_Model {
                 SUM(`amount`) AS `tong`,
                 SUM(CASE WHEN `t`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`,
                 SUM(CASE WHEN `t`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`')
-            ->from("($subQuery) t")
-            ->get()->result_array();
+            ->from("({$subQuery}) t")
+            ->get()->result_array()
+        ;
 
         return array_shift($sum_amount);
     }
 
     /**
-     * Kiểm tra xem có trang tiếp theo hay không
+     * Kiểm tra xem có trang tiếp theo hay không.
      *
      * @param   object: db object
-     * @return  bool
+     * @param mixed $db_obj
      */
     protected function has_next_page($db_obj): bool
     {
-        if ($this->settings['limit'] === false) {
+        if (false === $this->settings['limit']) {
             return false;
         }
-        else {
-            $db = clone $db_obj;
-            $has_next_page = $db->offset($this->settings['offset'] + $this->settings['limit'])
-                                ->limit(1)
-                                ->get()->num_rows();
-            return $has_next_page > 0;
-        }
+
+        $db = clone $db_obj;
+        $has_next_page = $db->offset($this->settings['offset'] + $this->settings['limit'])
+            ->limit(1)
+            ->get()->num_rows()
+        ;
+
+        return $has_next_page > 0;
     }
 
     /**
-     * Đếm tổng số kết quả tìm được
+     * Đếm tổng số kết quả tìm được.
      *
      * @param   object: db object
-     * @return  int
+     * @param mixed $db_obj
      */
     protected function get_num_of_results($db_obj): int
     {
         $db = clone $db_obj;
+
         return $db->count_all_results();
     }
 
@@ -290,20 +289,19 @@ class Search_model extends App_Model {
      *
      * @param   array: result
      * @param   bool: có trang tiếp theo hay không
-     * @return  int
      */
     protected function fragment_num(array $result, bool $has_next_page): int
     {
         // Nếu trang sau không có kết quả thì không cần phải cắt phần lẻ
-        if ($has_next_page == 0) {
+        if (0 == $has_next_page) {
             return 0;
         }
 
         // Đếm số phần tử lẻ loi
         $fragment_num = 0;
-        for ($i=count($result)-1; $i > 0; $i--) {
-            $fragment_num++;
-            if ($result[$i]['date'] !== $result[$i-1]['date']) {
+        for ($i = count($result) - 1; $i > 0; --$i) {
+            ++$fragment_num;
+            if ($result[$i]['date'] !== $result[$i - 1]['date']) {
                 break;
             }
         }
