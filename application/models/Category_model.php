@@ -9,13 +9,12 @@ class Category_model extends App_Model
     /**
      * Lấy thông tin category (theo list hoặc đơn lẻ).
      *
-     * @param   mixed : null  => lấy hết table theo list
-     *                  int   => lấy category đơn lẻ theo id
-     * @param   array: điều kiện search
-     *
-     * @return array
+     * @param null|int $id
+     *                        - null  => lấy hết table theo list
+     *                        - int   => lấy category đơn lẻ theo id
+     * @param array    $where điều kiện search
      */
-    public function get(?int $id = null, array $where = [])
+    public function get(?int $id = null, array $where = []): array
     {
         if (is_numeric($id)) {
             $this->db->where('id', $id);
@@ -35,8 +34,6 @@ class Category_model extends App_Model
 
     /**
      * Thêm một danh mục vào db.
-     *
-     * @param   array: data của danh mục
      */
     public function add(array $category)
     {
@@ -56,9 +53,6 @@ class Category_model extends App_Model
 
     /**
      * Sửa danh mục.
-     *
-     * @param   id: id của danh mục muốn sửa
-     * @param   array: data mới của danh mục
      */
     public function edit(int $id, array $category)
     {
@@ -72,8 +66,6 @@ class Category_model extends App_Model
 
     /**
      * Xóa danh mục khỏi db.
-     *
-     * @param   id: id của danh mục muốn xóa
      */
     public function del(int $id)
     {
@@ -107,8 +99,8 @@ class Category_model extends App_Model
     /**
      * Edit batch.
      *
-     * @param   array: dữ liệu muốn update
-     * @param   string: column làm chuẩn
+     * @param array  $categories dữ liệu muốn update
+     * @param string $primary    column làm chuẩn
      */
     public function edit_batch(array $categories, string $primary = 'id')
     {
@@ -117,8 +109,6 @@ class Category_model extends App_Model
 
     /**
      * Lấy dữ liệu dự định chi trong tháng này.
-     *
-     * @param   void
      */
     public function get_month_estimated_outgo(): array
     {
@@ -133,12 +123,12 @@ class Category_model extends App_Model
     /**
      * Kiểm tra category có phải là loại thu chi cố định hàng tháng hay không.
      *
-     * @param   int: id của category
+     * @param int $id id của category
      *
-     * @return  bool|null: true nếu là loại thu chi cố định hàng tháng và ngược lại.
-     *         null nếu id không tồn tại trong CSDL.
+     * @return null|bool true nếu là loại thu chi cố định hàng tháng và ngược lại.
+     *                   null nếu id không tồn tại trong CSDL.
      */
-    public function is_month_fixed_money(int $id)
+    public function is_month_fixed_money(int $id): ?bool
     {
         $result = $this->db->select('is_month_fixed_money')
             ->where('id', $id)
@@ -153,13 +143,14 @@ class Category_model extends App_Model
     }
 
     /**
-     * Overide method 'get_select_tag_data' trong App_Model.
+     * Override method 'get_select_tag_data' trong App_Model.
      *
-     * @param   int: loại danh mục muốn lấy (thu: 1/chi: 2)
-     *
-     * @return array
+     * @param int $inout_type_id loại danh mục muốn lấy
+     *                           - 1: thu
+     *                           - 2: chi
+     *                           - null: lấy tất cả dữ liệu
      */
-    public function get_select_tag_data(?int $inout_type_id = null)
+    public function get_select_tag_data(?int $inout_type_id = null): array
     {
         $this->db->where('inout_type_id', $inout_type_id)
             ->where('restrict_delete', 0)

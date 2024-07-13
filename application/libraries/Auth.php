@@ -85,10 +85,6 @@ class Auth
 
     /**
      * Config cho auth.
-     *
-     * @param   array
-     *
-     * @return  object: class
      */
     public function config(array $settings)
     {
@@ -100,10 +96,6 @@ class Auth
     /**
      * Set thông tin xác thực.
      * Thông tin này sẽ được check ở method authenticate.
-     *
-     * @param   array
-     *
-     * @return  object: class
      */
     public function auth_info(array $auth_info)
     {
@@ -115,8 +107,6 @@ class Auth
     /**
      * Destroy tất cả thông tin đăng nhập của session hiện tại.
      * Chủ yếu sử dụng khi muốn logout.
-     *
-     * @param   void
      */
     public function destroy()
     {
@@ -129,9 +119,7 @@ class Auth
     /**
      * Thực hiện xác thực tài khoản.
      *
-     * @param   void
-     *
-     * @return  boolean: xác thực thành công hay không
+     * @return bool xác thực thành công hay không
      */
     public function authenticate(): bool
     {
@@ -158,8 +146,6 @@ class Auth
 
     /**
      * Cố gắng khôi phục lại thông tin đăng nhập từ token.
-     *
-     * @param   void
      */
     public function try_to_remember()
     {
@@ -181,7 +167,7 @@ class Auth
     /**
      * Lấy thông tin của user đang đăng nhập từ session.
      *
-     * @param   mixed: key
+     * @param null|string $key tên field muốn lấy. Nếu null sẽ trả về toàn bộ data trong session
      */
     public function user(?string $key = null)
     {
@@ -199,8 +185,6 @@ class Auth
 
     /**
      * Kiểm tra user đã được chứng thực hay chưa (đã đăng nhập hay chưa).
-     *
-     * @param   void
      *
      * @return bool
      */
@@ -222,8 +206,6 @@ class Auth
     /**
      * Kiểm tra controller & action hiện tại có bắt buộc phải đăng nhập
      * mới access được hay không.
-     *
-     * @param   void
      */
     public function is_allowed(): bool
     {
@@ -239,8 +221,7 @@ class Auth
     /**
      * Thêm identifier vào danh sách allowed url.
      *
-     * @param   string/array:
-     * @param mixed $identifiers
+     * @param string|string[] $identifiers
      */
     public function allow($identifiers)
     {
@@ -260,8 +241,6 @@ class Auth
 
     /**
      * Trả về login url trong settings.
-     *
-     * @param   void
      */
     public function login_url(): string
     {
@@ -271,8 +250,6 @@ class Auth
     /**
      * Update lại thông tin user lưu trong session hiện tại.
      * Sử dụng user_id trong session để lấy thông tin user mới từ db.
-     *
-     * @param   void
      */
     public function update_session()
     {
@@ -286,9 +263,6 @@ class Auth
     /**
      * Xóa tất cả token của user hiện có trong db trừ token của session hiện tại.
      * Chủ yếu sử dụng khi thay đổi mật khẩu đăng nhập.
-     *
-     * @param   int: user id
-     * @param   void
      */
     public function delete_all_other_tokens_of_user(?int $user_id = null)
     {
@@ -305,9 +279,9 @@ class Auth
     }
 
     /**
-     * Lấy thông tin user đăng nhập từ token.
+     * Lấy thông tin user đăng nhập từ database.
      *
-     * @param   string: token
+     * @param array $where array chứa điều kiện where
      */
     protected function get_user_from_db(array $where): ?array
     {
@@ -327,8 +301,6 @@ class Auth
 
     /**
      * Trả về thời gian hiệu lục của token.
-     *
-     * @param   void
      */
     protected function token_duration(): int
     {
@@ -341,8 +313,6 @@ class Auth
 
     /**
      * Xóa những token hết hạn trong db.
-     *
-     * @param   void
      */
     protected function del_expired_token_in_db()
     {
@@ -355,9 +325,9 @@ class Auth
     /**
      * Thêm token mới vào đb cho account vừa đăng nhập.
      *
-     * @param   int: id của user
+     * @param int $user_id id của user
      *
-     * @return  string: token vừa mới thêm vào db
+     * @return string token vừa mới thêm vào db
      */
     protected function add_token_to_db(int $user_id): string
     {
@@ -379,9 +349,9 @@ class Auth
     /**
      * Renew token trong db.
      *
-     * @param   string: token cũ
+     * @param string $old_token token cũ
      *
-     * @return  string: token mới
+     * @return string token mới
      */
     protected function renew_token_in_db(string $old_token): string
     {
@@ -399,8 +369,6 @@ class Auth
 
     /**
      * Tạo token và đảm bảo token chưa tồn tại trong db.
-     *
-     * @param   void
      */
     protected function gen_token(): string
     {
@@ -424,8 +392,6 @@ class Auth
 
     /**
      * Validate token có còn hiệu lực hay không.
-     *
-     * @param   string: token
      */
     protected function is_valid_token(?string $token): bool
     {
@@ -457,10 +423,6 @@ class Auth
 
     /**
      * Lưu dữ liệu của user đã login vào session.
-     *
-     * @param   array: dữ liệu muốn lưu
-     *
-     * @return bool
      */
     protected function set_session()
     {
@@ -477,8 +439,6 @@ class Auth
 
     /**
      * Set cookie chứa token để gửi trả về cho client.
-     *
-     * @param   void
      */
     protected function set_cookie()
     {

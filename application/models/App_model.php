@@ -20,10 +20,6 @@ class App_model extends CI_Model
 
     /**
      * Merge settings của model với thông tin được truyền vào.
-     *
-     * @param   array: setting
-     *
-     * @return  object: $this
      */
     public function config(array $settings)
     {
@@ -35,12 +31,10 @@ class App_model extends CI_Model
     /**
      * Lấy các lỗi xảy ra.
      *
-     * @param   string : ký tự để nối các lỗi thành 1 chuỗi.
-     *                   Nếu truyền false sẽ trả về nguyên array
-     *
-     * @return  string/array
+     * @param false|string $glue ký tự để nối các lỗi thành 1 chuỗi.
+     *                           Nếu truyền false sẽ trả về nguyên array
      */
-    public function get_error(string $glue = '<br>')
+    public function get_error(false|string $glue = '<br>'): array|string
     {
         return false === $glue ? $this->error : implode($glue, $this->error);
     }
@@ -48,11 +42,9 @@ class App_model extends CI_Model
     /**
      * Lấy dữ liệu từ CSDL để tạo select tag.
      *
-     * @param   void
-     *
-     * @return array : dữ liệu để xuất option
+     * @return array dữ liệu để xuất option
      */
-    public function get_select_tag_data()
+    public function get_select_tag_data(): array
     {
         $select = $this->select_tag_columns;
         $table = $this::TABLE;
@@ -73,12 +65,11 @@ class App_model extends CI_Model
     /**
      * Xóa những field không có trong db trước khi lưu data vào db.
      *
-     * @param   array: dữ liệu muốn lưu vào db
-     * @param mixed $data
+     * @param array $data dữ liệu muốn lưu vào db
      *
-     * @return  array: dữ liệu sau khi đã bỏ những field ko cần thiết
+     * @return array dữ liệu sau khi đã bỏ những field ko cần thiết
      */
-    public function remove_garbage_fields($data)
+    public function remove_garbage_fields(array $data): array
     {
         $whitelist = $this->db->list_fields(static::TABLE);
         $whitelist = array_flip($whitelist);
@@ -94,9 +85,7 @@ class App_model extends CI_Model
     /**
      * Lưu lại lỗi xảy ra.
      *
-     * @param   string: thông tin muốn lưu
-     *
-     * @return  object: $this
+     * @param string $msg thông tin muốn lưu
      */
     protected function set_error(string $msg)
     {

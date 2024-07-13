@@ -80,8 +80,6 @@ class Search_model extends App_Model
 
     /**
      * Thực hiện tìm kiếm.
-     *
-     * @param   void
      */
     public function search(): array
     {
@@ -93,7 +91,7 @@ class Search_model extends App_Model
             ->offset($this->settings['offset'])
             ->get()->result_array()
         ;
-        $fragment_num = $this->fragment_num($result, $has_next_page);
+        $fragment_num = $this->count_fragment_num($result, $has_next_page);
 
         $this->num_of_results = $num_of_results;
         $this->result = array_slice($result, 0, count($result) - $fragment_num);
@@ -107,8 +105,6 @@ class Search_model extends App_Model
 
     /**
      * Tạo url cho next page.
-     *
-     * @param   void
      */
     public function next_page_url(): ?string
     {
@@ -164,10 +160,9 @@ class Search_model extends App_Model
      * Add điều kiện where và join table để tìm kiếm.
      * Dữ liệu sử dụng để tạo query lấy từ property settings.
      *
-     * @param   void
-     * @param mixed $db
+     * @param object $db
      *
-     * @return  object: db object
+     * @return object db object
      */
     protected function add_where_query($db)
     {
@@ -248,8 +243,7 @@ class Search_model extends App_Model
     /**
      * Kiểm tra xem có trang tiếp theo hay không.
      *
-     * @param   object: db object
-     * @param mixed $db_obj
+     * @param object $db_obj db object
      */
     protected function has_next_page($db_obj): bool
     {
@@ -269,8 +263,7 @@ class Search_model extends App_Model
     /**
      * Đếm tổng số kết quả tìm được.
      *
-     * @param   object: db object
-     * @param mixed $db_obj
+     * @param object $db_obj db object
      */
     protected function get_num_of_results($db_obj): int
     {
@@ -280,20 +273,19 @@ class Search_model extends App_Model
     }
 
     /**
+     * Đếm số item của ngày cuối cùng trong danh sách kết quả tìm kiếm.
      * Tùy vào điều kiện tìm kiếm mà kết quả tìm kiếm của 1 trang có thể
      * bị cắt ở giữa chừng ngày cuối cùng trong danh sách.
-     * Ở đây sẽ đếm số item của ngày cuối cùng trong danh sách kết quả
-     * tìm kiếm.
      * Số item này sẽ được cắt bỏ để đảm bảo list kết quả tìm kiếm
      * chỉ chứa những ngày có đủ số kết quả.
      *
-     * @param   array: result
-     * @param   bool: có trang tiếp theo hay không
+     * @param array $result        result
+     * @param bool  $has_next_page có trang tiếp theo hay không
      */
-    protected function fragment_num(array $result, bool $has_next_page): int
+    protected function count_fragment_num(array $result, bool $has_next_page): int
     {
-        // Nếu trang sau không có kết quả thì không cần phải cắt phần lẻ
-        if (0 == $has_next_page) {
+        // Nếu không có trang tiếp theo không cần phải cắt phần lẻ
+        if (true === $has_next_page) {
             return 0;
         }
 

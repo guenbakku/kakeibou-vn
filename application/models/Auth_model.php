@@ -21,9 +21,6 @@ class Auth_model extends App_Model
 
     /**
      * Kiểm tra đăng nhập của user.
-     *
-     * @param   string
-     * @param   string
      */
     public function verify(string $username, string $password): bool
     {
@@ -72,8 +69,6 @@ class Auth_model extends App_Model
 
     /**
      * Xử lý khóa tài khoản nếu password bị sai.
-     *
-     * @param   void
      */
     private function lock_account()
     {
@@ -92,8 +87,6 @@ class Auth_model extends App_Model
 
     /**
      * Reset lại thông tin khóa tài khoản nếu đăng nhập thành công.
-     *
-     * @param   array: dữ liệu user lấy từ db
      */
     private function reset_locked_account()
     {

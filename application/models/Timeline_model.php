@@ -70,9 +70,9 @@ class Timeline_model extends Inout_Model
      * Tính tổng thu, chi, chênh lệch trong một khoảng thời gian.
      * Không tính các inout lưu động nội bộ.
      *
-     * @param   string  : format date dùng trong SQL WHERE & GROUP
-     * @param   string  : min date
-     * @param   string  : max date
+     * @param string $from               min date
+     * @param string $to                 max date
+     * @param string $date_format_string format date dùng trong SQL WHERE & GROUP
      */
     public function summary_inout_types(string $from, string $to, string $date_format_string): array
     {
@@ -107,7 +107,7 @@ class Timeline_model extends Inout_Model
     /**
      * Tính lũy kế của thu, chi, tổng trong một dãi thời gian.
      *
-     * @param   array: dữ liệu thu, chi, tổng theo một dãi thời gian
+     * @param array $timeline dữ liệu thu, chi, tổng theo một dải thời gian
      */
     public function calc_cumulative(array $timeline): array
     {
@@ -175,8 +175,6 @@ class Timeline_model extends Inout_Model
      *  - số chi lưu động của tháng này tính tới thời điểm hiện tại
      *  - số tiền trung bình có thể chi mỗi ngày từ đây đến cuối tháng
      *  - tổng số tiền dự tính chi trong tháng này (lấy từ CSDL)
-     *
-     * @param void
      *
      * @return array Content of array:
      *               ```php
@@ -298,8 +296,6 @@ class Timeline_model extends Inout_Model
 
     /**
      * Lấy danh sách tất cả năm có trong table inout_record.
-     *
-     * @param   void
      */
     public function get_years_list(): array
     {
@@ -323,14 +319,12 @@ class Timeline_model extends Inout_Model
     /**
      * Gắn từng item từ list (lấy từ CSDL) vào danh sách thời gian đầy đủ.
      *
-     * @param   array   : danh sách thời gian đầy đủ
-     * @param   array   : list lấy từ CSDL
-     * @param mixed $full_list_keys
-     * @param mixed $db_list
+     * @param array $full_list_keys danh sách thời gian đầy đủ
+     * @param array $db_list        list lấy từ CSDL
      *
-     * @return array : full list sau khi gắn dữ liệu
+     * @return array full list sau khi gắn dữ liệu
      */
-    private function combine_list($full_list_keys = [], $db_list = [])
+    private function combine_list(array $full_list_keys = [], array $db_list = [])
     {
         $empty_item = [
             'tong' => '0',

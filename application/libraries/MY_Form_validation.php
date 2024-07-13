@@ -9,11 +9,8 @@ class MY_Form_validation extends CI_Form_validation
      * Sử dụng khi muốn show lại form đã qua validate đồng thời reset lại
      * field trong form đó.
      *
-     * @param   mixed: danh sách key muốn reset.
-     *                 Nếu null sẽ reset lại toàn bộ field.
-     * @param null|mixed $keys
-     *
-     * @return  object: class object
+     * @param null|mixed $keys danh sách key muốn reset.
+     *                         Nếu null sẽ reset lại toàn bộ field.
      */
     public function reset_field_data($keys = null)
     {

@@ -197,8 +197,6 @@ function prev_next_time(string $date): array
 
 /**
  * Tạo danh sách 12 tháng.
- *
- * @param   void
  */
 function months_list(): array
 {
@@ -210,8 +208,6 @@ function months_list(): array
 
 /**
  * Tạo danh sách 31 ngày.
- *
- * @param   void
  */
 function days_list(): array
 {

@@ -11,8 +11,6 @@ class User extends MY_Controller
 
     /**
      * Proxy của những method edit bên dưới.
-     *
-     * @param   string: mode
      */
     public function edit(string $method)
     {
@@ -25,8 +23,6 @@ class User extends MY_Controller
 
     /**
      * Thay đổi thông tin cá nhân của user.
-     *
-     * @param   void
      */
     public function edit_info()
     {
@@ -59,8 +55,6 @@ class User extends MY_Controller
 
     /**
      * Thay đổi mật khẩu của user.
-     *
-     * @param   void
      */
     public function edit_password()
     {
@@ -93,8 +87,6 @@ class User extends MY_Controller
 
     /**
      * Thực hiện xác thực user.
-     *
-     * @param    void
      */
     public function login()
     {
@@ -139,8 +131,6 @@ class User extends MY_Controller
     /**
      * Validation rule cho việc kiểm tra password hiện tại có đúng không.
      * Chủ yếu dùng khi muốn thay đổi password.
-     *
-     * @param   string: password hiện tại
      */
     public function _password_matched(string $old_password): bool
     {

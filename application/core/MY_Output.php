@@ -5,9 +5,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class MY_Output extends CI_Output
 {
     /**
-     * Xóa những header không cần thiết.
+     * Xóa những header không cần thiết ra khỏi response của PHP.
      *
-     * @param array|string $headers tên những header muốn xóa
+     * @param string|string[] $headers tên những header muốn xóa
      */
     public function remove_headers(array|string $headers = [])
     {

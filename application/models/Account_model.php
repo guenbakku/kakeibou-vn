@@ -9,13 +9,12 @@ class Account_model extends App_Model
     /**
      * Lấy danh sách tài khoản.
      *
-     * @param   mixed : null  => lấy hết table theo list
-     *                  int   => lấy account có id cụ thể
-     * @param   array: điều kiện search
-     *
-     * @return array
+     * @param null|int $id
+     *                        - null  => lấy hết table theo list
+     *                        - int   => lấy account có id cụ thể
+     * @param array    $where điều kiện search
      */
-    public function get(?int $id = null, array $where = [])
+    public function get(?int $id = null, array $where = []): array
     {
         if (is_numeric($id)) {
             $this->db->where('id', $id);
@@ -35,8 +34,6 @@ class Account_model extends App_Model
 
     /**
      * Thêm mới tài khoản.
-     *
-     * @param   array: data của tài khoản
      */
     public function add(array $account)
     {
@@ -56,9 +53,6 @@ class Account_model extends App_Model
 
     /**
      * Sửa tài khoản.
-     *
-     * @param   id: id của tài khoản muốn sửa
-     * @param   array: data mới của tài khoản
      */
     public function edit(int $id, array $account)
     {
@@ -73,8 +67,8 @@ class Account_model extends App_Model
     /**
      * Edit batch.
      *
-     * @param   array: dữ liệu muốn update
-     * @param   string: column làm chuẩn
+     * @param array  $accounts dữ liệu muốn update
+     * @param string $primary  column làm chuẩn
      */
     public function edit_batch(array $accounts, string $primary = 'id')
     {
@@ -83,8 +77,6 @@ class Account_model extends App_Model
 
     /**
      * Xóa tài khoản khỏi db.
-     *
-     * @param   id: id của tài khoản muốn xóa
      */
     public function del(int $id)
     {

@@ -11,10 +11,10 @@ class User_model extends App_Model
     /**
      * Lấy thông tin của user.
      *
-     * @param   int: user id
-     * @param   array: field muốn lấy
+     * @param int   $user_id user id
+     * @param array $fields  field muốn lấy
      *
-     * @return  array: thông tin của user
+     * @return array thông tin của user
      */
     public function get(int $user_id, array $fields = []): array
     {
@@ -33,8 +33,8 @@ class User_model extends App_Model
     /**
      * Update thông tin của user.
      *
-     * @param   int: user id
-     * @param   array: data để updata
+     * @param int   $user_id user id
+     * @param array $data    data để update
      */
     public function edit(int $user_id, array $data)
     {
@@ -54,9 +54,6 @@ class User_model extends App_Model
 
     /**
      * Kiểm tra xem password của user_id có match với dữ liệu trong db hay không.
-     *
-     * @param   string: password muốn kiểm tra
-     * @param   int: user id
      */
     public function password_matched(string $password, int $user_id): bool
     {

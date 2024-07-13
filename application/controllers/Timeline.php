@@ -21,10 +21,10 @@ class Timeline extends MY_Controller
      *  - tháng trong năm
      *  - năm.
      *
-     * @param string $date: thời gian muốn xem danh sách, có thể nhận format:
-     *                      - yyyy-mm
-     *                      - yyyy
-     *                      - null
+     * @param string $date thời gian muốn xem danh sách, có thể nhận format:
+     *                     - yyyy-mm
+     *                     - yyyy
+     *                     - null
      */
     public function summary(string $date = '')
     {

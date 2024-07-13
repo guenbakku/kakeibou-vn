@@ -9,13 +9,12 @@ class Setting_model extends App_Model
     /**
      * Lấy setting.
      *
-     * @param  string/array : item setting muốn lấy
-     * @param  string       : column muốn lấy
-     * @param null|mixed $items
+     * @param string|string[] $items item setting muốn lấy
+     * @param string          $col   column muốn lấy
      *
-     * @return array : (key => val)
+     * @return array [key => val]
      */
-    public function get($items = null, ?string $col = null)
+    public function get(array|string $items, ?string $col = null): array
     {
         if (is_string($items)) {
             $items = [$items];
@@ -44,7 +43,7 @@ class Setting_model extends App_Model
      * Lưu setting
      *
      * @param   array
-     * @return  void
+
      */
     public function edit(array $data)
     {

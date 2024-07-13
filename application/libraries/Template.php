@@ -458,12 +458,9 @@ class Template
      *
      * NOTE: This function does NOT check for existence of .js file
      *
-     * @param   string   script to import or embed
-     * @param   string  'import' to load external file or 'embed' to add as-is
-     * @param   bool  TRUE to use 'defer' attribute, FALSE to exclude it
-     * @param mixed $script
-     * @param mixed $type
-     * @param mixed $defer
+     * @param string $script script to import or embed
+     * @param string $type   'import' to load external file or 'embed' to add as-is
+     * @param bool   $defer  TRUE to use 'defer' attribute, FALSE to exclude it
      *
      * @return true on success, FALSE otherwise
      */
@@ -522,14 +519,11 @@ class Template
      *
      * NOTE: This function does NOT check for existence of .css file
      *
-     * @param   string   CSS file to link, import or embed
-     * @param   string  'link', 'import' or 'embed'
-     * @param   string  media attribute to use with 'link' type only, FALSE for none
-     * @param mixed $style
-     * @param mixed $type
-     * @param mixed $media
+     * @param string $style CSS file to link, import or embed
+     * @param string $type  'link', 'import' or 'embed'
+     * @param string $media media attribute to use with 'link' type only, FALSE for none
      *
-     * @return true on success, FALSE otherwise
+     * @return bool true on success, false otherwise
      */
     public function add_css($style, $type = 'link', $media = false)
     {
@@ -628,9 +622,7 @@ class Template
     /**
      * Load the master template or a single region.
      *
-     * DEPRECATED!
-     *
-     * Use render() to compile and display your template and regions
+     * @deprecated Use render() to compile and display your template and regions
      *
      * @param null|mixed $region
      * @param mixed      $buffer
@@ -645,10 +637,8 @@ class Template
 
     /**
      * Get the url to the certain selecting template folder in asset folder.
-     *
-     * @return string
      */
-    public function template_url()
+    public function template_url(): string
     {
         $CI = &get_instance();
         $CI->load->helper('url');
@@ -658,14 +648,11 @@ class Template
 
     // --------------------------------------------------------------------
 
-    /*
-     * Set the view mode (web or mobile) manual by cookie
+    /**
+     * Set the view mode (web or mobile) manual by cookie.
      *
-     * @access  public
-     * @param   void
-     * @return  void
+     * @param null|string $viewmode
      */
-
     public function set_viewmode($viewmode = null)
     {
         if (null === $viewmode) {
@@ -692,7 +679,7 @@ class Template
 
     // --------------------------------------------------------------------
 
-    /*
+    /**
      * Check if viewmode is mobile or not.
      *
      * This function will first check manual viewmode set by cookie.
@@ -701,11 +688,8 @@ class Template
      * If you turn $change_viewmode on, this function only return true
      * if both viewmode is mobile and the mobile_template is already set in config file.
      *
-     * @access  public
-     * @param   boolean : automatically change to mobile viewmode if is mobile or not
-     * @return  void
+     * @param bool $change_viewmode automatically change to mobile viewmode if is mobile or not
      */
-
     public function is_mobile($change_viewmode = false)
     {
         $is_mobile = $this->CI->agent->is_mobile();
@@ -801,7 +785,3 @@ class Template
         return $output;
     }
 }
-// END Template Class
-
-// End of file Template.php
-// Location: ./system/application/libraries/Template.php
