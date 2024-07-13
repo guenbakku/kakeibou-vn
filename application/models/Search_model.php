@@ -288,7 +288,7 @@ class Search_model extends App_Model
     protected function count_fragment_num(array $result, bool $has_next_page): int
     {
         // Nếu không có trang tiếp theo không cần phải cắt phần lẻ
-        if ($has_next_page === true) {
+        if ($has_next_page === false) {
             return 0;
         }
 
