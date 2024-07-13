@@ -446,6 +446,7 @@ class Auth
             'name' => $this->settings['cookie_name'],
             'value' => $this->token,
             'expire' => $this->settings['token_duration_max'],
+            'secure' => config_item('cookie_secure'),
         ]);
     }
 }

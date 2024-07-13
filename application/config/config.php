@@ -312,7 +312,7 @@ $config['cache_query_string'] = false;
 | http://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = hex2bin('20621a2acfaa2b50f927398a454b5382');
+// $config['encryption_key'] = hex2bin($_ENV['ENCRYPTION_KEY']);
 
 /*
 |--------------------------------------------------------------------------
@@ -391,8 +391,8 @@ $config['sess_regenerate_destroy'] = false;
 $config['cookie_prefix'] = '';
 $config['cookie_domain'] = '';
 $config['cookie_path'] = '/';
-$config['cookie_secure'] = false;
-$config['cookie_httponly'] = false;
+$config['cookie_secure'] = ENVIRONMENT === 'production';
+$config['cookie_httponly'] = true;
 
 /*
 |--------------------------------------------------------------------------
