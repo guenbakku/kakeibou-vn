@@ -41,13 +41,13 @@ class Search extends MY_Controller
                             $can_execute_search = true;
                         }
 
-                        if ('memo_or_amount' === $key) {
+                        if ($key === 'memo_or_amount') {
                             if (is_numeric($val)) {
                                 $this->search_model->amount = $val;
                             } else {
                                 $this->search_model->memo = $val;
                             }
-                        } elseif ('offset' == $key) {
+                        } elseif ($key == 'offset') {
                             $this->search_model->{$key} = (int) $val;
                         } else {
                             $this->search_model->{$key} = $val;

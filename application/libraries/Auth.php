@@ -149,12 +149,12 @@ class Auth
      */
     public function try_to_remember()
     {
-        if (true === $this->is_authenticated()) {
+        if ($this->is_authenticated() === true) {
             return null;
         }
 
         $token = $this->CI->input->cookie($this->settings['cookie_name']);
-        if (false === $this->is_valid_token($token)) {
+        if ($this->is_valid_token($token) === false) {
             return null;
         }
 
@@ -173,7 +173,7 @@ class Auth
     {
         $session_name = $this->settings['session_name'];
         $user = $this->CI->session->userdata($session_name);
-        if (null === $key) {
+        if ($key === null) {
             return $user;
         }
         if (isset($user[$key])) {
@@ -191,12 +191,12 @@ class Auth
     public function is_authenticated()
     {
         $session_name = $this->settings['session_name'];
-        if (null == $this->CI->session->userdata($session_name)) {
+        if ($this->CI->session->userdata($session_name) == null) {
             return false;
         }
 
         $token = $this->user('token');
-        if (false === $this->is_valid_token($token)) {
+        if ($this->is_valid_token($token) === false) {
             return false;
         }
 
@@ -267,7 +267,7 @@ class Auth
     public function delete_all_other_tokens_of_user(?int $user_id = null)
     {
         if ($this->is_authenticated()) {
-            if (null === $user_id) {
+            if ($user_id === null) {
                 $user_id = $this->user('id');
             }
             $current_token = $this->user('token');
@@ -304,7 +304,7 @@ class Auth
      */
     protected function token_duration(): int
     {
-        if (true === $this->auth_info['remember']) {
+        if ($this->auth_info['remember'] === true) {
             return $this->settings['token_duration_max'];
         }
 

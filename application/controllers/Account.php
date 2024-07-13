@@ -15,7 +15,7 @@ class Account extends MY_Controller
 
     public function index()
     {
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             $data = $this->input->post('categories');
             $this->account_model->edit_batch($data);
             $this->flash->success(Consts::SUCC_EDIT_ACCOUNT_ORDER);
@@ -37,11 +37,11 @@ class Account extends MY_Controller
 
     public function add()
     {
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
 
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
 
@@ -73,16 +73,16 @@ class Account extends MY_Controller
             show_error(Consts::ERR_BAD_REQUEST);
         }
 
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             // Chuyển sang xử lý xóa category nếu lựa chọn xóa
-            if (true === (bool) $this->input->get('delete')) {
+            if ((bool) $this->input->get('delete') === true) {
                 return $this->del($id);
             }
 
             try {
                 $this->load->library('form_validation');
 
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
 

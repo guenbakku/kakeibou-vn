@@ -28,12 +28,12 @@ function array_gen_key($arr = null, $key = null, $val = null)
     if (!isset($first_item[$key]) || !is_string($first_item[$key])) {
         return $arr;
     }
-    if (null !== $val && !isset($first_item[$val])) {
+    if ($val !== null && !isset($first_item[$val])) {
         return $arr;
     }
 
     $new_arr = [];
-    if (null === $val) {
+    if ($val === null) {
         foreach ($arr as $i => $item) {
             $new_arr[$item[$key]] = $item;
         }

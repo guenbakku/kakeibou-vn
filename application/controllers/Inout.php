@@ -10,11 +10,11 @@ class Inout extends MY_Controller
             show_error(Consts::ERR_BAD_REQUEST);
         }
 
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
 
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
 
@@ -28,7 +28,7 @@ class Inout extends MY_Controller
                 ));
 
                 // Xét xem có nhập tiếp hay không
-                if (false === (bool) $this->input->get('continue')) {
+                if ((bool) $this->input->get('continue') === false) {
                     return redirect(base_url());
                 }
                 $this->form_validation->reset_field_data(['amount', 'memo']);
@@ -67,16 +67,16 @@ class Inout extends MY_Controller
             show_error(Consts::ERR_NOT_FOUND);
         }
 
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             // Chuyển sang xử lý xóa record nếu lựa chọn xóa
-            if (true === (bool) $this->input->get('delete')) {
+            if ((bool) $this->input->get('delete') === true) {
                 return $this->del($id);
             }
 
             try {
                 $this->load->library('form_validation');
 
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
 
@@ -95,7 +95,7 @@ class Inout extends MY_Controller
             $this->referer->saveSession();
         }
 
-        if ('internal' == $ioRecord['cash_flow']) {
+        if ($ioRecord['cash_flow'] == 'internal') {
             $transfer = $this->inout_model->get_transfer_code($ioRecord);
             $ioRecord['transfer_from'] = $transfer['from'];
             $ioRecord['transfer_to'] = $transfer['to'];

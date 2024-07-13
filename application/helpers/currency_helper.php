@@ -6,7 +6,7 @@ if (!defined('BASEPATH')) {
 
 function currency($num, bool $plus_sign = true)
 {
-    if (true === $plus_sign) {
+    if ($plus_sign === true) {
         $sign = $num > 0 ? '+' : '';
     } else {
         $sign = '';

@@ -131,7 +131,7 @@ class Template
     {
         if (!isset($this->config[$group])) {
             $this->config[$group] = $template;
-            if (true === $activate) {
+            if ($activate === true) {
                 $this->initialize($template);
             }
         } else {
@@ -151,7 +151,7 @@ class Template
     {
         // Set Template Folder
         if (isset($props['folder'])) {
-            if ('' !== trim($props['folder'])) {
+            if (trim($props['folder']) !== '') {
                 $this->folder = $props['folder'].'/';
             } else {
                 $this->folder = '';
@@ -312,7 +312,7 @@ class Template
     public function write($region, $content, $overwrite = false)
     {
         if (isset($this->regions[$region])) {
-            if (true === $overwrite) { // Should we append the content or overwrite it
+            if ($overwrite === true) { // Should we append the content or overwrite it
                 $this->regions[$region]['content'] = [$content];
             } else {
                 $this->regions[$region]['content'][] = $content;
@@ -504,7 +504,7 @@ class Template
         }
 
         // Add to js array if it doesn't already exist
-        if (null != $js && !in_array($js, $this->js)) {
+        if ($js != null && !in_array($js, $this->js)) {
             $this->js[] = $js;
             $this->write('_scripts', $js."\r\n");
         }
@@ -566,7 +566,7 @@ class Template
         }
 
         // Add to js array if it doesn't already exist
-        if (null != $css && !in_array($css, $this->css)) {
+        if ($css != null && !in_array($css, $this->css)) {
             $this->css[] = $css;
             $this->write('_styles', $css."\r\n");
         }
@@ -600,12 +600,12 @@ class Template
                 $this->output[$name] = $this->_build_content($region);
             }
 
-            if (true === $this->parse_template or true === $parse) {
+            if ($this->parse_template === true or $parse === true) {
                 // Use provided parser class and method to render the template
                 $output = $this->CI->{$this->parser}->{$this->parser_method}($this->master, $this->output, true);
 
                 // Parsers never handle output, but we need to mimick it in this case
-                if (false === $buffer) {
+                if ($buffer === false) {
                     $this->CI->output->set_output($output);
                 }
             } else {
@@ -655,11 +655,11 @@ class Template
      */
     public function set_viewmode($viewmode = null)
     {
-        if (null === $viewmode) {
+        if ($viewmode === null) {
             $viewmode = $this->CI->input->get('template_viewmode');
         }
 
-        if (null !== $viewmode && in_array($viewmode, ['web', 'mobile'])) {
+        if ($viewmode !== null && in_array($viewmode, ['web', 'mobile'])) {
             $cookie = [
                 'name' => 'viewmode',
                 'prefix' => 'template_',
@@ -667,7 +667,7 @@ class Template
                 'expire' => 31536000,   // 1 năm
             ];
             $this->CI->input->set_cookie($cookie);
-        } elseif (-1 == $viewmode) {
+        } elseif ($viewmode == -1) {
             $cookie = [
                 'name' => 'viewmode',
                 'prefix' => 'template_',
@@ -698,7 +698,7 @@ class Template
         // Cookie tuy được set tại connection này nhưng phải đến connection sau mới
         // có hiệu lực, nên phải dùng get để check cho connection hiện tại
         $viewmode = $this->CI->input->get('template_viewmode');
-        if (null === $viewmode || !in_array($viewmode, ['web', 'mobile', '-1'])) {
+        if ($viewmode === null || !in_array($viewmode, ['web', 'mobile', '-1'])) {
             $viewmode = $this->CI->input->cookie('template_viewmode');
         }
 
@@ -715,12 +715,12 @@ class Template
         }
 
         // Xét xem có quy định theme cho mobile hay không
-        if (true === $change_viewmode && empty($this->config['mobile_template'])) {
+        if ($change_viewmode === true && empty($this->config['mobile_template'])) {
             $is_mobile = false;
         }
 
         change_viewmode:
-        if (true === $is_mobile && true === $change_viewmode) {
+        if ($is_mobile === true && $change_viewmode === true) {
             $this->set_template($this->config['mobile_template']);
         }
 

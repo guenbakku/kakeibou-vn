@@ -37,7 +37,7 @@ class AddIconColumnToAccountsTable extends AbstractMigration
         $sql = 'SELECT * FROM accounts';
         $rows = $this->fetchAll($sql);
         foreach ($rows as $row) {
-            $icon = 1 == $row['restrict_delete'] ? 'fa-money' : 'fa-bank';
+            $icon = $row['restrict_delete'] == 1 ? 'fa-money' : 'fa-bank';
             $id = $row['id'];
             $sql = sprintf("UPDATE accounts SET `icon` = '%s' WHERE `id` = %s", $icon, $id);
             $this->execute($sql);

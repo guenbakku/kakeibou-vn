@@ -20,7 +20,7 @@ class Setting extends MY_Controller
             show_error(Consts::ERR_BAD_REQUEST);
         }
 
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             $this->setting_model->edit($this->input->post());
             $this->flash->success(Consts::SUCC_EDIT_SETTING);
 

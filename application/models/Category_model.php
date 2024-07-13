@@ -138,7 +138,7 @@ class Category_model extends App_Model
             ->get($this->get_table())->row_array()
         ;
 
-        if (null === $result) {
+        if ($result === null) {
             return null;
         }
 

@@ -215,7 +215,7 @@ class Inout_model extends App_Model
 
         // Bỏ item player nếu ko phải là item cash
         $modifier = function ($item) {
-            if (self::ACCOUNT_CASH_ID != $item['account_id']) {
+            if ($item['account_id'] != self::ACCOUNT_CASH_ID) {
                 unset($item['player']);
             }
 
@@ -258,14 +258,14 @@ class Inout_model extends App_Model
      */
     public function get_internal_category_id(array $pair)
     {
-        if (self::ACCOUNT_CASH_ID == $pair[0]['account_id']) {
-            if (self::ACCOUNT_CASH_ID == $pair[1]['account_id']) {
+        if ($pair[0]['account_id'] == self::ACCOUNT_CASH_ID) {
+            if ($pair[1]['account_id'] == self::ACCOUNT_CASH_ID) {
                 return self::$INTERNAL_CATEGORY_IDS['handover'];
             }
 
             return self::$INTERNAL_CATEGORY_IDS['deposit'];
         }
-        if (self::ACCOUNT_CASH_ID == $pair[1]['account_id']) {
+        if ($pair[1]['account_id'] == self::ACCOUNT_CASH_ID) {
             return self::$INTERNAL_CATEGORY_IDS['drawer'];
         }
 
@@ -327,7 +327,7 @@ class Inout_model extends App_Model
         );
 
         // Nếu không phải loại thao tác tạo ra dữ liệu lưu động nội bộ
-        if (1 == count($pair)) {
+        if (count($pair) == 1) {
             $pair[0] = array_merge($pair[0], $data);
             $amount_sign = $this::$INOUT_TYPE_SIGN[$pair[0]['inout_type_id']];
             $pair[0]['amount'] = $amount_sign * abs($data['amount']);
@@ -343,7 +343,7 @@ class Inout_model extends App_Model
             $pair[$i] = array_merge($pair[$i], $data);
             $amount_sign = $this::$INOUT_TYPE_SIGN[$pair[$i]['inout_type_id']];
             $pair[$i]['amount'] = $amount_sign * abs($data['amount']);
-            $transfer = 0 == $i ? $data['transfer_from'] : $data['transfer_to'];
+            $transfer = $i == 0 ? $data['transfer_from'] : $data['transfer_to'];
             list($pair[$i]['account_id'], $pair[$i]['player']) = $this->extract_transfer_code($transfer);
         }
 
@@ -438,7 +438,7 @@ class Inout_model extends App_Model
             return $pair;
         }
 
-        if (self::ACCOUNT_CASH_ID == $pair[0]['account_id']) {
+        if ($pair[0]['account_id'] == self::ACCOUNT_CASH_ID) {
             $pair[1]['player'] = $pair[0]['player'];
         } else {
             $pair[0]['player'] = $pair[1]['player'];

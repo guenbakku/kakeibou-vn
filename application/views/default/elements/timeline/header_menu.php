@@ -1,22 +1,22 @@
 <?php
 $menu = [
     'timeline_summary' => [
-        'url' => 'ymd' !== $dateFormatType ? base_url(['timeline', 'summary', $date]) : '',
+        'url' => $dateFormatType !== 'ymd' ? base_url(['timeline', 'summary', $date]) : '',
         'label' => 'Danh sách tóm tắt',
         'icon' => 'fa fa-th-list',
     ],
     'timeline_detail' => [
-        'url' => null !== $dateFormatType ? base_url(['timeline', 'detail', $date]) : '',
+        'url' => $dateFormatType !== null ? base_url(['timeline', 'detail', $date]) : '',
         'label' => 'Danh sách chi tiết',
         'icon' => 'fa fa-list',
     ],
     'viewchart_line' => [
-        'url' => 'ymd' !== $dateFormatType ? base_url(['timeline', 'chart', 'line', $date]) : '',
+        'url' => $dateFormatType !== 'ymd' ? base_url(['timeline', 'chart', 'line', $date]) : '',
         'label' => 'Biểu đồ đường',
         'icon' => 'fa fa-line-chart',
     ],
     'viewchart_pie' => [
-        'url' => null !== $dateFormatType ? base_url(['timeline', 'chart', 'pie', $date]) : '',
+        'url' => $dateFormatType !== null ? base_url(['timeline', 'chart', 'pie', $date]) : '',
         'label' => 'Biểu đồ quạt',
         'icon' => 'fa fa-pie-chart',
     ],

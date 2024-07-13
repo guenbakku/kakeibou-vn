@@ -50,7 +50,7 @@ class Flash
         $data = $this->CI->session->userdata(self::SESSION_NAME);
         unset($_SESSION[self::SESSION_NAME]);
 
-        if (null === $data) {
+        if ($data === null) {
             return null;
         }
 

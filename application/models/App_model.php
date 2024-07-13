@@ -41,7 +41,7 @@ class App_model extends CI_Model
      */
     public function get_error(false|string $glue = '<br>'): array|string
     {
-        return false === $glue ? $this->error : implode($glue, $this->error);
+        return $glue === false ? $this->error : implode($glue, $this->error);
     }
 
     /**

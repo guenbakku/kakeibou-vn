@@ -55,7 +55,7 @@ class Referer
     public function getSession($default = null, $reset = true)
     {
         $this->http_referer = $this->CI->session->userdata(self::SESSION_NAME);
-        if (true === $reset) {
+        if ($reset === true) {
             $this->emptySession();
         }
 
@@ -70,7 +70,7 @@ class Referer
     public function saveSession($rewrite = true)
     {
         // Không ghi đè session nếu dữ liệu session đã tồn tại
-        if (false == $rewrite && !empty($this->CI->session->userdata(self::SESSION_NAME))) {
+        if ($rewrite == false && !empty($this->CI->session->userdata(self::SESSION_NAME))) {
             return;
         }
 
@@ -120,7 +120,7 @@ class Referer
             @$http_referer = $_SERVER['HTTP_REFERER'];
         }
 
-        if (!empty($http_referer) && 0 === strpos($http_referer, base_url())) {
+        if (!empty($http_referer) && strpos($http_referer, base_url()) === 0) {
             $this->http_referer = $http_referer;
         }
 

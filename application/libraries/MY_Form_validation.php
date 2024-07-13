@@ -14,7 +14,7 @@ class MY_Form_validation extends CI_Form_validation
      */
     public function reset_field_data($keys = null)
     {
-        if (null === $keys) {
+        if ($keys === null) {
             foreach ($this->_field_data as &$key) {
                 $key['postdata'] = null;
             }
@@ -56,11 +56,11 @@ class MY_Form_validation extends CI_Form_validation
 
         foreach ($rules as &$rule) {
             // Let 'required' always be the first (non-callback) rule
-            if ('required' === $rule) {
+            if ($rule === 'required') {
                 array_unshift($new_rules, 'required');
             }
             // 'isset' is a kind of a weird alias for 'required' ...
-            elseif ('isset' === $rule && (empty($new_rules) or 'required' !== $new_rules[0])) {
+            elseif ($rule === 'isset' && (empty($new_rules) or $new_rules[0] !== 'required')) {
                 array_unshift($new_rules, 'isset');
             }
             // Everything else goes at the end of the queue

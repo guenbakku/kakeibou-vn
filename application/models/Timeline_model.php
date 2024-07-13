@@ -10,9 +10,9 @@ class Timeline_model extends Inout_Model
      */
     public function summary_inout_types_auto(?int $year, ?int $month, int $sort_order = SORT_ASC): array
     {
-        if (null !== $year && null !== $month) {
+        if ($year !== null && $month !== null) {
             $list = $this->summary_inout_types_by_day_in_month($year, $month);
-        } elseif (null !== $year) {
+        } elseif ($year !== null) {
             $list = $this->summary_inout_types_by_month_in_year($year);
         } else {
             $list = $this->summary_inout_types_by_year();
@@ -112,7 +112,7 @@ class Timeline_model extends Inout_Model
     public function calc_cumulative(array $timeline): array
     {
         foreach ($timeline as $i => &$item) {
-            if (0 == $i) {
+            if ($i == 0) {
                 continue;
             }
             $preItem = $timeline[$i - 1];
@@ -151,7 +151,7 @@ class Timeline_model extends Inout_Model
             $total[0] += $item['current_amount'];
             $total[1] += $item['future_amount'];
 
-            if (1 == $item['account_id']) {
+            if ($item['account_id'] == 1) {
                 if (!empty($item['player'])) {
                     $combine_data[$item['player']] = [$item['current_amount'], $item['future_amount']];
                 }
@@ -165,7 +165,7 @@ class Timeline_model extends Inout_Model
 
         // Loại account có tiền còn lại bằng 0 ra khỏi danh sách dữ liệu
         return array_filter($combine_data, function ($item, $key) {
-            return 'Tổng cộng' === $key || 0 != $item[0] || 0 != $item[1];
+            return $key === 'Tổng cộng' || $item[0] != 0 || $item[1] != 0;
         }, ARRAY_FILTER_USE_BOTH);
     }
 
@@ -241,8 +241,8 @@ class Timeline_model extends Inout_Model
             function ($item) {
                 $remain = $item['estimated'] - $item['elapsed'];
                 $item['remain'] = $remain > 0 ? $remain : 0;
-                $item['elapsed_percent'] = 0 != $item['estimated'] ? floor($item['elapsed'] / $item['estimated'] * 100) : 0;
-                $item['remain_percent'] = 0 != $item['estimated'] ? floor($item['remain'] / $item['estimated'] * 100) : 0;
+                $item['elapsed_percent'] = $item['estimated'] != 0 ? floor($item['elapsed'] / $item['estimated'] * 100) : 0;
+                $item['remain_percent'] = $item['estimated'] != 0 ? floor($item['remain'] / $item['estimated'] * 100) : 0;
 
                 return $item;
             },

@@ -21,7 +21,7 @@ function day_of_week(int|string $date): ?string
         $date = (int) $date;
     }
 
-    if (false === $date) {
+    if ($date === false) {
         return null;
     }
 
@@ -64,7 +64,7 @@ function extract_date_string(string $date, bool $includeNullItem = true): array
     return $includeNullItem
            ? $extracted
            : array_filter($extracted, function ($item) {
-               return null !== $item;
+               return $item !== null;
            });
 }
 
@@ -82,7 +82,7 @@ function combine_date_string(array $date, string $glue = '-'): string
     $date = array_slice($date, 0, 3);
 
     return implode($glue, array_filter($date, function ($item) {
-        return null !== $item;
+        return $item !== null;
     }));
 }
 

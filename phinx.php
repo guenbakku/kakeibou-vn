@@ -2,7 +2,7 @@
 
 use Dotenv\Dotenv;
 
-'cli' === php_sapi_name() or exit('No direct script access allowed');
+php_sapi_name() === 'cli' or exit('No direct script access allowed');
 
 // Load dotenv file
 $dotenv = Dotenv::createImmutable(__DIR__);

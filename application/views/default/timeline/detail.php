@@ -61,7 +61,7 @@
     <div class="infinite-container">
         <?php if ($current_num > 0) { ?>
             <?php for ($i = 0; $i < $current_num; ++$i) { ?>
-                <?php if (0 == $i || $result[$i]['date'] != $result[$i - 1]['date']) { ?>
+                <?php if ($i == 0 || $result[$i]['date'] != $result[$i - 1]['date']) { ?>
                     <div class="list-group infinite-item">
                         <div class="list-group-item active">
                             <strong><?= $result[$i]['date']; ?> (<?= day_of_week($result[$i]['date']); ?>)</strong>
@@ -77,7 +77,7 @@
                                     <div><?= $result[$i]['category']; ?></div>
                                     <div class="small text-muted">
                                         <span class="label label-default" style="margin-right:3px">
-                                            <span class="fa <?= $result[$i]['account_icon']; ?>"></span> <?= 'fa-bank' == $result[$i]['account_icon'] ? 'Tài khoản' : 'Tiền mặt'; ?>
+                                            <span class="fa <?= $result[$i]['account_icon']; ?>"></span> <?= $result[$i]['account_icon'] == 'fa-bank' ? 'Tài khoản' : 'Tiền mặt'; ?>
                                         </span>
                                         <?php if ($result[$i]['is_temp']) { ?>
                                         <span class="label label-default">
@@ -87,7 +87,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-5 text-right">
-                                    <div class="<?= 'Thu' == $result[$i]['inout_type'] ? 'text-income' : 'text-outgo'; ?>"><?= currency($result[$i]['amount']); ?></div>
+                                    <div class="<?= $result[$i]['inout_type'] == 'Thu' ? 'text-income' : 'text-outgo'; ?>"><?= currency($result[$i]['amount']); ?></div>
                                     <div class="label <?= $result[$i]['player_label']; ?>"><?= $result[$i]['player']; ?></div>
                                 </div>
                             </div>
@@ -109,7 +109,7 @@
             </div>
         <?php } ?>
     </div>
-    <?php if (null !== $url['next_page']) { ?>
+    <?php if ($url['next_page'] !== null) { ?>
     <a class="infinite-more-link sr-only" href="<?= $url['next_page']; ?>">Trang tiếp</a>
     <?php } ?>
 </div>

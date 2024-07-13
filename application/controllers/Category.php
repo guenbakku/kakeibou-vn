@@ -14,7 +14,7 @@ class Category extends MY_Controller
 
     public function index()
     {
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             $data = $this->input->post('categories');
             $this->category_model->edit_batch($data);
             $this->flash->success(Consts::SUCC_EDIT_CATEGORY_ORDER);
@@ -46,7 +46,7 @@ class Category extends MY_Controller
 
     public function month_estimated_outgo()
     {
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
                 $data = $this->input->post('categories');
@@ -59,7 +59,7 @@ class Category extends MY_Controller
                         'required|trim|greater_than_equal_to[0]'
                     );
                 }
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
 
@@ -86,11 +86,11 @@ class Category extends MY_Controller
 
     public function add()
     {
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
 
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
 
@@ -122,16 +122,16 @@ class Category extends MY_Controller
 
     public function edit(int $id)
     {
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             // Chuyển sang xử lý xóa category nếu lựa chọn xóa
-            if (true === (bool) $this->input->get('delete')) {
+            if ((bool) $this->input->get('delete') === true) {
                 return $this->del($id);
             }
 
             try {
                 $this->load->library('form_validation');
 
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
 

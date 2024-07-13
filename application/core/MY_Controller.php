@@ -46,7 +46,7 @@ class MY_Controller extends CI_Controller
         $combined_uris = array_filter(
             array_merge([$base], [$class_name], $uris),
             function ($uri) {
-                return (!empty($uri) && is_string($uri)) || '0' == $uri;
+                return (!empty($uri) && is_string($uri)) || $uri == '0';
             }
         );
 

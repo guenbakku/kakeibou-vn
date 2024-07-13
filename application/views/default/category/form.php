@@ -1,5 +1,5 @@
 <?php
-$disabled_attr = 'edit' == $this->router->fetch_method()
+$disabled_attr = $this->router->fetch_method() == 'edit'
                  ? ['disabled' => true]
                  : [];
 ?>
@@ -48,7 +48,7 @@ $disabled_attr = 'edit' == $this->router->fetch_method()
                 </div>
 
                 <button type="submit" onClick="Cashbook.submitButton(this, 'submit')" class="btn btn-primary"><?= Consts::LABEL['submit']; ?></button>
-                <?php if ('edit' == $this->router->fetch_method()) { ?>
+                <?php if ($this->router->fetch_method() == 'edit') { ?>
                     <button type="button" onClick="Cashbook.submitButton(this, 'delete')" class="btn btn-danger pull-right"><?= Consts::LABEL['delete']; ?></button>
                 <?php } ?>
 

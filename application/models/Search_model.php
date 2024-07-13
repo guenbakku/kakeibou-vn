@@ -32,7 +32,7 @@ class Search_model extends App_Model
 
     public function __set(string $name, $val)
     {
-        if (null === $val) {
+        if ($val === null) {
             return false;
         }
 
@@ -40,19 +40,19 @@ class Search_model extends App_Model
             throw new AppException($name.' không tồn tại');
         }
 
-        if ('amount' === $name) {
+        if ($name === 'amount') {
             if (!is_numeric($val) || $val < 0) {
                 throw new AppException('Dữ liệu số tiền không hợp lệ');
             }
-        } elseif ('player' === $name) {
+        } elseif ($name === 'player') {
             if (!is_numeric($val)) {
                 throw new AppException('Dữ liệu người phụ trách không hợp lệ');
             }
-        } elseif ('inout_type' === $name) {
+        } elseif ($name === 'inout_type') {
             if (!is_numeric($val) || !in_array($val, [0, 1, 2])) {
                 throw new AppException('Dữ liệu loại thu chi không hợp lệ');
             }
-        } elseif ('account' === $name) {
+        } elseif ($name === 'account') {
             if (!is_numeric($val)) {
                 throw new AppException('Dữ liệu loại tài khoản không hợp lệ');
             }
@@ -67,9 +67,9 @@ class Search_model extends App_Model
             if ($val < 0) {
                 throw new AppException('Dữ liệu '.$name.' không hợp lệ');
             }
-        } elseif ('also_show_pair_inout' === $name) {
+        } elseif ($name === 'also_show_pair_inout') {
             $val = (bool) $val;
-        } elseif ('only_show_temp_inout' === $name) {
+        } elseif ($name === 'only_show_temp_inout') {
             $val = (bool) $val;
         }
 
@@ -177,7 +177,7 @@ class Search_model extends App_Model
         ;
 
         // Set điều kiện tìm kiếm
-        if (null != $this->settings['amount']) { // Chú ý không phải là kiểm tra empty vì muốn xét luôn trường hợp nhập 0
+        if ($this->settings['amount'] != null) { // Chú ý không phải là kiểm tra empty vì muốn xét luôn trường hợp nhập 0
             $db->where('ABS(`inout_records`.`amount`)', $this->settings['amount'], false);
         }
         if (!empty($this->settings['memo'])) {
@@ -211,10 +211,10 @@ class Search_model extends App_Model
         if (!empty($this->settings['modified_to'])) {
             $db->where('inout_records.modified_on <', date('Y-m-d H:i:s', strtotime($this->settings['modified_to'].' +1 days')));
         }
-        if (false === $this->settings['also_show_pair_inout']) {
+        if ($this->settings['also_show_pair_inout'] === false) {
             $db->where('inout_records.pair_id', '');
         }
-        if (true === $this->settings['only_show_temp_inout']) {
+        if ($this->settings['only_show_temp_inout'] === true) {
             $db->where('inout_records.is_temp', 1);
         }
 
@@ -250,7 +250,7 @@ class Search_model extends App_Model
      */
     protected function has_next_page($db_obj): bool
     {
-        if (false === $this->settings['limit']) {
+        if ($this->settings['limit'] === false) {
             return false;
         }
 
@@ -288,7 +288,7 @@ class Search_model extends App_Model
     protected function count_fragment_num(array $result, bool $has_next_page): int
     {
         // Nếu không có trang tiếp theo không cần phải cắt phần lẻ
-        if (true === $has_next_page) {
+        if ($has_next_page === true) {
             return 0;
         }
 

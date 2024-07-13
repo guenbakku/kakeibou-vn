@@ -53,7 +53,7 @@ class AddColumnSkipMonthEstimatedToTableInoutRecords extends AbstractMigration
         ';
         $rows = $this->fetchAll($sql);
         foreach ($rows as $row) {
-            if (1 == $row['is_month_fixed_money']) {
+            if ($row['is_month_fixed_money'] == 1) {
                 $sql = "UPDATE inout_records SET skip_month_estimated=1 WHERE id={$row['id']}";
                 $this->execute($sql);
             }

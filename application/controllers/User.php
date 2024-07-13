@@ -27,10 +27,10 @@ class User extends MY_Controller
     public function edit_info()
     {
         // Do edit info
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
 
@@ -59,10 +59,10 @@ class User extends MY_Controller
     public function edit_password()
     {
         // Do edit password
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
                 $new_password = $this->input->post('new_password');
@@ -96,19 +96,19 @@ class User extends MY_Controller
         }
 
         // Do Login
-        if ('POST' == $this->input->server('REQUEST_METHOD')) {
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
             try {
                 $this->load->library('form_validation');
-                if (false === $this->form_validation->run()) {
+                if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
 
                 $auth_info = [
                     'username' => $this->input->post('username'),
                     'password' => $this->input->post('password'),
-                    'remember' => '1' === $this->input->post('remember') ? true : false,
+                    'remember' => $this->input->post('remember') === '1' ? true : false,
                 ];
-                if (false === $this->auth->auth_info($auth_info)->authenticate()) {
+                if ($this->auth->auth_info($auth_info)->authenticate() === false) {
                     throw new AppException($this->auth->error);
                 }
 
