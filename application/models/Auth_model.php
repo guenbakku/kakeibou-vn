@@ -4,8 +4,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Auth_model extends App_Model
 {
-    public const TABLE = 'users';
-
     public $user = [];
 
     protected $settings = [
@@ -19,6 +17,11 @@ class Auth_model extends App_Model
         $this->load->database('default');
     }
 
+    public function get_table(): string
+    {
+        return 'users';
+    }
+
     /**
      * Kiểm tra đăng nhập của user.
      */
@@ -30,7 +33,7 @@ class Auth_model extends App_Model
             }
 
             $this->user = $this->db->select('id, username, password, fullname, locked_on, lock_duration, login_attemps')
-                ->from(self::TABLE)
+                ->from($this->get_table())
                 ->where('username', $username)
                 ->limit(1)
                 ->get()->row_array()
@@ -81,7 +84,7 @@ class Auth_model extends App_Model
                                      : $this->settings['lock_duration_min'];
         }
         $this->db->where('id', $this->user['id'])
-            ->update(self::TABLE, $user)
+            ->update($this->get_table(), $user)
         ;
     }
 
@@ -97,7 +100,7 @@ class Auth_model extends App_Model
         ];
 
         $this->db->where('id', $this->user['id'])
-            ->update(self::TABLE, $user)
+            ->update($this->get_table(), $user)
         ;
     }
 }

@@ -4,7 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Setting_model extends App_Model
 {
-    public const TABLE = 'settings';
+    public function get_table(): string
+    {
+        return 'settings';
+    }
 
     /**
      * Lấy setting.
@@ -26,7 +29,7 @@ class Setting_model extends App_Model
             }
         }
 
-        $list = $this->db->get(self::TABLE)->result_array();
+        $list = $this->db->get($this->get_table())->result_array();
 
         // Json Decode Value
         if (isset($list[0]['value'])) {
@@ -49,7 +52,7 @@ class Setting_model extends App_Model
     {
         foreach ($data as $k => $v) {
             $this->db->where('item', $k)
-                ->update(self::TABLE, ['value' => json_encode($v)])
+                ->update($this->get_table(), ['value' => json_encode($v)])
             ;
         }
     }

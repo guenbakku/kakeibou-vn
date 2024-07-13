@@ -4,8 +4,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Inout_model extends App_Model
 {
-    public const TABLE = 'inout_records';
-
     // ID của Account Tiền mặt trong Table Categories (chú ý kiểu String)
     public const ACCOUNT_CASH_ID = '1';
 
@@ -53,12 +51,17 @@ class Inout_model extends App_Model
         $this->load->database('default');
     }
 
+    public function get_table(): string
+    {
+        return 'inout_records';
+    }
+
     public function get(int $id)
     {
         return $this->db->where('inout_records.id', $id)
             ->join('categories', 'categories.id = inout_records.category_id')
             ->limit(1)
-            ->get(self::TABLE)
+            ->get($this->get_table())
             ->row_array()
         ;
     }
@@ -78,7 +81,7 @@ class Inout_model extends App_Model
         $this->db->trans_start();
         foreach ($this->set_pair_add_data($type, $data) as $item) {
             $item = $this->remove_garbage_fields($item);
-            $this->db->insert(self::TABLE, $item);
+            $this->db->insert($this->get_table(), $item);
             $insert_id[] = $this->db->insert_id();
         }
         $this->db->trans_complete();
@@ -95,7 +98,7 @@ class Inout_model extends App_Model
         foreach ($this->set_pair_edit_data($id, $data) as $item) {
             $item = $this->remove_garbage_fields($item);
             $this->db->where('id', $item['id'])
-                ->update(self::TABLE, $item)
+                ->update($this->get_table(), $item)
             ;
         }
         $this->db->trans_complete();
@@ -108,7 +111,7 @@ class Inout_model extends App_Model
         $this->db->trans_start();
         foreach ($pair as $i => $item) {
             $this->db->where('id', $item['id'])
-                ->delete(self::TABLE)
+                ->delete($this->get_table())
             ;
         }
         $this->db->trans_complete();
@@ -149,7 +152,7 @@ class Inout_model extends App_Model
         do {
             $pair_id = random_string('md5');
             $existed = $this->db->select('pair_id')
-                ->from(self::TABLE)
+                ->from($this->get_table())
                 ->where('pair_id', $pair_id)
                 ->limit(1)
                 ->get()->num_rows() > 0
@@ -202,7 +205,7 @@ class Inout_model extends App_Model
             ->select('player')
             ->where('pair_id', $data['pair_id'])
             ->order_by('id', 'asc')
-            ->from(self::TABLE)
+            ->from($this->get_table())
             ->get()->result_array()
         ;
 
@@ -364,7 +367,7 @@ class Inout_model extends App_Model
         ];
 
         $res = $this->db->select($select)
-            ->from(self::TABLE)
+            ->from($this->get_table())
             ->join('categories', 'categories.id = inout_records.category_id')
             ->where('inout_records.id', $inout_id)
             ->limit(1)
@@ -381,7 +384,7 @@ class Inout_model extends App_Model
         }
 
         return $this->db->select($select)
-            ->from(self::TABLE)
+            ->from($this->get_table())
             ->join('categories', 'categories.id = inout_records.category_id')
             ->order_by('inout_records.id')
             ->where('inout_records.pair_id', $pair_id)

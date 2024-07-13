@@ -18,6 +18,11 @@ class App_model extends CI_Model
         parent::__construct();
     }
 
+    public function get_table(): string
+    {
+        throw new BadMethodCallException('`get_table()` method must be overridden in the sub class');
+    }
+
     /**
      * Merge settings của model với thông tin được truyền vào.
      */
@@ -47,7 +52,7 @@ class App_model extends CI_Model
     public function get_select_tag_data(): array
     {
         $select = $this->select_tag_columns;
-        $table = $this::TABLE;
+        $table = $this->get_table();
 
         if ($this->db->field_exists('order_no', $table)) {
             $this->db->order_by('order_no', 'asc');
@@ -71,7 +76,7 @@ class App_model extends CI_Model
      */
     public function remove_garbage_fields(array $data): array
     {
-        $whitelist = $this->db->list_fields(static::TABLE);
+        $whitelist = $this->db->list_fields($this->get_table());
         $whitelist = array_flip($whitelist);
         foreach ($data as $field => $val) {
             if (!isset($whitelist[$field])) {

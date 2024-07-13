@@ -4,9 +4,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class User_model extends App_Model
 {
-    public const TABLE = 'users';
-
     protected $select_tag_columns = ['id', 'fullname'];
+
+    public function get_table(): string
+    {
+        return 'users';
+    }
 
     /**
      * Lấy thông tin của user.
@@ -26,7 +29,7 @@ class User_model extends App_Model
             ->select($fields)
             ->where('id', $user_id)
             ->limit(1)
-            ->get(self::TABLE)->row_array()
+            ->get($this->get_table())->row_array()
         ;
     }
 
@@ -48,7 +51,7 @@ class User_model extends App_Model
         $this->db
             ->set($data)
             ->where('id', $user_id)
-            ->update(self::TABLE)
+            ->update($this->get_table())
         ;
     }
 
@@ -61,7 +64,7 @@ class User_model extends App_Model
             ->select('password')
             ->where('id', $user_id)
             ->limit(1)
-            ->get(self::TABLE)->row_array()
+            ->get($this->get_table())->row_array()
         ;
 
         if (empty($user)) {

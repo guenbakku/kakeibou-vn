@@ -4,7 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Account_model extends App_Model
 {
-    public const TABLE = 'accounts';
+    public function get_table(): string
+    {
+        return 'accounts';
+    }
 
     /**
      * Lấy danh sách tài khoản.
@@ -26,7 +29,7 @@ class Account_model extends App_Model
 
         $res = $this->db->where($where)
             ->order_by('order_no', 'asc')
-            ->get(self::TABLE)
+            ->get($this->get_table())
         ;
 
         return is_numeric($id) ? $res->row_array() : $res->result_array();
@@ -39,7 +42,7 @@ class Account_model extends App_Model
     {
         $order_no = current($this->db->select_max('order_no')
             ->where('restrict_delete', 0)
-            ->get(self::TABLE)->row_array()) + 1;
+            ->get($this->get_table())->row_array()) + 1;
 
         $add_data = [
             'name' => $account['name'],
@@ -48,7 +51,7 @@ class Account_model extends App_Model
             'icon' => 'fa-bank',
         ];
 
-        $this->db->insert(self::TABLE, $add_data);
+        $this->db->insert($this->get_table(), $add_data);
     }
 
     /**
@@ -61,7 +64,7 @@ class Account_model extends App_Model
             'description' => $account['description'],
         ];
 
-        $this->db->where('id', $id)->update(self::TABLE, $update_data);
+        $this->db->where('id', $id)->update($this->get_table(), $update_data);
     }
 
     /**
@@ -72,7 +75,7 @@ class Account_model extends App_Model
      */
     public function edit_batch(array $accounts, string $primary = 'id')
     {
-        $this->db->update_batch(self::TABLE, $accounts, $primary);
+        $this->db->update_batch($this->get_table(), $accounts, $primary);
     }
 
     /**
@@ -82,7 +85,7 @@ class Account_model extends App_Model
     {
         $account_name = $this->db->select('name')
             ->where('id', $id)
-            ->get(self::TABLE)->row_array()['name']
+            ->get($this->get_table())->row_array()['name']
         ;
 
         // Kiểm tra xem danh mục này có chứa dữ liệu thu chi nào không
@@ -97,13 +100,13 @@ class Account_model extends App_Model
         // Kiểm tra xem danh mục này có phải danh mục cấm xóa không
         $count = $this->db->where('id', $id)
             ->where('restrict_delete', 1)
-            ->from(self::TABLE)
+            ->from($this->get_table())
             ->count_all_results()
         ;
         if ($count > 0) {
             throw new AppException(sprintf(Consts::ERR_ACCOUNT_RESTRICT_DELETE, $account_name));
         }
 
-        $this->db->where('id', $id)->delete(self::TABLE);
+        $this->db->where('id', $id)->delete($this->get_table());
     }
 }

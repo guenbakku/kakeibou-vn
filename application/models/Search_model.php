@@ -4,8 +4,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Search_model extends App_Model
 {
-    public const TABLE = 'inout_records';
-
     public $result;
     public $next;
     public $num_of_results;
@@ -76,6 +74,11 @@ class Search_model extends App_Model
         }
 
         $this->settings[$name] = $val;
+    }
+
+    public function get_table(): string
+    {
+        return 'inout_records';
     }
 
     /**
@@ -166,7 +169,7 @@ class Search_model extends App_Model
      */
     protected function add_where_query($db)
     {
-        $db->from(self::TABLE)
+        $db->from($this->get_table())
             ->join('accounts', 'accounts.id = inout_records.account_id')
             ->join('categories', 'categories.id = inout_records.category_id')
             ->join('inout_types', 'inout_types.id = categories.inout_type_id')

@@ -4,7 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Category_model extends App_Model
 {
-    public const TABLE = 'categories';
+    public function get_table(): string
+    {
+        return 'categories';
+    }
 
     /**
      * Lấy thông tin category (theo list hoặc đơn lẻ).
@@ -26,7 +29,7 @@ class Category_model extends App_Model
 
         $res = $this->db->where($where)
             ->order_by('order_no', 'asc')
-            ->get(self::TABLE)
+            ->get($this->get_table())
         ;
 
         return is_numeric($id) ? $res->row_array() : $res->result_array();
@@ -40,7 +43,7 @@ class Category_model extends App_Model
         $order_no = current($this->db->select_max('order_no')
             ->where('inout_type_id', $category['inout_type_id'])
             ->where('restrict_delete', 0)
-            ->get(self::TABLE)->row_array()) + 1;
+            ->get($this->get_table())->row_array()) + 1;
 
         $add_data = [
             'name' => $category['name'],
@@ -48,7 +51,7 @@ class Category_model extends App_Model
             'order_no' => $order_no,
         ];
 
-        $this->db->insert(self::TABLE, $add_data);
+        $this->db->insert($this->get_table(), $add_data);
     }
 
     /**
@@ -61,7 +64,7 @@ class Category_model extends App_Model
             'is_month_fixed_money' => $category['is_month_fixed_money'],
         ];
 
-        $this->db->where('id', $id)->update(self::TABLE, $update_data);
+        $this->db->where('id', $id)->update($this->get_table(), $update_data);
     }
 
     /**
@@ -71,7 +74,7 @@ class Category_model extends App_Model
     {
         $category_name = $this->db->select('name')
             ->where('id', $id)
-            ->get(self::TABLE)->row_array()['name']
+            ->get($this->get_table())->row_array()['name']
         ;
 
         // Kiểm tra xem danh mục này có chứa dữ liệu thu chi nào không
@@ -86,14 +89,14 @@ class Category_model extends App_Model
         // Kiểm tra xem danh mục này có phải danh mục cấm xóa không
         $count = $this->db->where('id', $id)
             ->where('restrict_delete', 1)
-            ->from(self::TABLE)
+            ->from($this->get_table())
             ->count_all_results()
         ;
         if ($count > 0) {
             throw new AppException(sprintf(Consts::ERR_CATEGORY_RESTRICT_DELETE, $category_name));
         }
 
-        $this->db->where('id', $id)->delete(self::TABLE);
+        $this->db->where('id', $id)->delete($this->get_table());
     }
 
     /**
@@ -104,7 +107,7 @@ class Category_model extends App_Model
      */
     public function edit_batch(array $categories, string $primary = 'id')
     {
-        $this->db->update_batch(self::TABLE, $categories, $primary);
+        $this->db->update_batch($this->get_table(), $categories, $primary);
     }
 
     /**
@@ -116,7 +119,7 @@ class Category_model extends App_Model
             ->select('SUM(CASE WHEN `is_month_fixed_money` = 0 THEN `month_estimated_amount` ELSE 0 END) AS `liquid`', false)
             ->select('SUM(CASE WHEN `is_month_fixed_money` = 1 THEN `month_estimated_amount` ELSE 0 END) AS `fixed`', false)
             ->where('inout_type_id', array_flip($this->inout_model::$INOUT_TYPE)['Chi'])
-            ->get(self::TABLE)->row_array()
+            ->get($this->get_table())->row_array()
         ;
     }
 
@@ -132,7 +135,7 @@ class Category_model extends App_Model
     {
         $result = $this->db->select('is_month_fixed_money')
             ->where('id', $id)
-            ->get(self::TABLE)->row_array()
+            ->get($this->get_table())->row_array()
         ;
 
         if (null === $result) {
