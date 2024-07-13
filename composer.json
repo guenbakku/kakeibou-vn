@@ -4,6 +4,7 @@
         "vlucas/phpdotenv": "^4.3"
     },
     "require-dev": {
-        "kint-php/kint": "^5.1"
+        "kint-php/kint": "^5.1",
+        "friendsofphp/php-cs-fixer": "^3.59"
     }
 }
