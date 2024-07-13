@@ -391,8 +391,8 @@ $config['sess_regenerate_destroy'] = false;
 $config['cookie_prefix'] = '';
 $config['cookie_domain'] = '';
 $config['cookie_path'] = '/';
-$config['cookie_secure'] = false;
-$config['cookie_httponly'] = false;
+$config['cookie_secure'] = ENVIRONMENT === 'production';
+$config['cookie_httponly'] = true;
 
 /*
 |--------------------------------------------------------------------------
