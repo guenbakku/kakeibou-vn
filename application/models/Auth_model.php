@@ -1,76 +1,77 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Auth_model extends App_Model {
-    
-    const TABLE = 'users';
-    
+defined('BASEPATH') or exit('No direct script access allowed');
+
+class Auth_model extends App_Model
+{
     public $user = [];
-        
+
     protected $settings = [
         'login_attemps_max' => 5,
         'lock_duration_min' => 300, // seconds
     ];
-    
+
     public function __construct()
     {
         parent::__construct();
         $this->load->database('default');
     }
-    
+
+    public function get_table(): string
+    {
+        return 'users';
+    }
+
     /**
-     * Kiểm tra đăng nhập của user
-     *
-     * @param   string
-     * @param   string
+     * Kiểm tra đăng nhập của user.
      */
     public function verify(string $username, string $password): bool
     {
         try {
-            if (empty($username) || strlen($username) > 32){
+            if (empty($username) || strlen($username) > 32) {
                 throw new AppException(Consts::ERR_LOGIN_INFO_INVALID);
             }
-            
+
             $this->user = $this->db->select('id, username, password, fullname, locked_on, lock_duration, login_attemps')
-                            ->from(self::TABLE)
-                            ->where('username', $username)
-                            ->limit(1)
-                            ->get()->row_array();
-                            
+                ->from($this->get_table())
+                ->where('username', $username)
+                ->limit(1)
+                ->get()->row_array()
+            ;
+
             // Tài khoản không tồn tại
             if (empty($this->user)) {
                 throw new AppException(Consts::ERR_LOGIN_INFO_INVALID);
             }
-            
+
             // Tài khoản bị khóa
             if ($this->user['lock_duration'] > 0) {
                 $locked_to = strtotime($this->user['locked_on']) + $this->user['lock_duration'];
                 $now = time();
                 if ($locked_to > $now) {
-                    throw new AppException(sprintf(Consts::ERR_USER_LOCKED, (int)(($locked_to - $now) / 60)));
+                    throw new AppException(sprintf(Consts::ERR_USER_LOCKED, (int) (($locked_to - $now) / 60)));
                 }
             }
-            
+
             // Password không match
             if (!password_verify($password, $this->user['password'])) {
                 $this->lock_account();
+
                 throw new AppException(Consts::ERR_LOGIN_INFO_INVALID);
             }
-            
+
             $this->reset_locked_account();
+
             return true;
-        } 
-        catch (AppException $e) {
+        } catch (AppException $e) {
             $this->set_error($e->getMessage());
+
             return false;
         }
     }
-    
+
     /**
-     * Xử lý khóa tài khoản nếu password bị sai
-     *
-     * @param   void
-     * @return  void
+     * Xử lý khóa tài khoản nếu password bị sai.
      */
     private function lock_account()
     {
@@ -83,24 +84,23 @@ class Auth_model extends App_Model {
                                      : $this->settings['lock_duration_min'];
         }
         $this->db->where('id', $this->user['id'])
-                 ->update(self::TABLE, $user);
+            ->update($this->get_table(), $user)
+        ;
     }
-    
+
     /**
-     * Reset lại thông tin khóa tài khoản nếu đăng nhập thành công
-     *
-     * @param   array: dữ liệu user lấy từ db
-     * @return  void
+     * Reset lại thông tin khóa tài khoản nếu đăng nhập thành công.
      */
     private function reset_locked_account()
     {
-        $user = array(
+        $user = [
             'login_attemps' => 0,
-            'locked_on'     => null,
+            'locked_on' => null,
             'lock_duration' => 0,
-        );
-        
+        ];
+
         $this->db->where('id', $this->user['id'])
-                 ->update(self::TABLE, $user);
+            ->update($this->get_table(), $user)
+        ;
     }
-}    
+}

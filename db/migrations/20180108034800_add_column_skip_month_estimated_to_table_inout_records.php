@@ -33,23 +33,24 @@ class AddColumnSkipMonthEstimatedToTableInoutRecords extends AbstractMigration
             'null' => false,
             'default' => false,
         ])
-        ->update();
+            ->update()
+        ;
 
         $this->fillValue();
     }
 
     /**
      * Fill value to new added column `skip_month_estimated`.
-     * Record which has category type is `skip_month_estimated` 
+     * Record which has category type is `skip_month_estimated`
      * will has value `true` in that column.
      */
     protected function fillValue()
     {
-        $sql = "
+        $sql = '
             SELECT `inout_records`.`id`, `categories`.`is_month_fixed_money` 
             FROM `inout_records`
             JOIN `categories` ON `categories`.`id` = `inout_records`.`category_id`
-        ";
+        ';
         $rows = $this->fetchAll($sql);
         foreach ($rows as $row) {
             if ($row['is_month_fixed_money'] == 1) {

@@ -1,10 +1,10 @@
-<?=$this->template->get_view('elements/page-nav.php')?>
-<?=$this->template->get_view('elements/timeline/header', ['date_element' => 'header_ym'])?>
+<?= $this->template->get_view('elements/page-nav.php'); ?>
+<?= $this->template->get_view('elements/timeline/header', ['date_element' => 'header_ym']); ?>
 
 <div class="container">
     <div class="list-group">
-        <?php foreach($list as $k => $v) : ?>
-        <a page-scroll="<?=$v['date']?>" class="list-group-item" href="<?=sprintf($url['detailTemplate'], $v['date'])?>">
+        <?php foreach ($list as $k => $v) { ?>
+        <a page-scroll="<?= $v['date']; ?>" class="list-group-item" href="<?= sprintf($url['detailTemplate'], $v['date']); ?>">
             <div class="row">
                 <div class="pull-right" style="padding-right:15px; position:absolute; right:0px">
                     <span class="glyphicon glyphicon-menu-right"></span>
@@ -19,10 +19,10 @@
                 </div>
 
                 <div class="col-xs-3" style="padding-left:0">
-                    <span class="label label-default"><?=$v['date']?></span>
+                    <span class="label label-default"><?= $v['date']; ?></span>
                 </div>
-                <div class="col-xs-6 text-right <?=$v['tong']>=0 ? 'text-income' : 'text-outgo'?>" style="padding-left:0">
-                    <?=currency($v['tong'])?>
+                <div class="col-xs-6 text-right <?= $v['tong'] >= 0 ? 'text-income' : 'text-outgo'; ?>" style="padding-left:0">
+                    <?= currency($v['tong']); ?>
                 </div>
             </div>
             <div class="row table-summarize-container collapse" aria-expanded="false">
@@ -34,30 +34,30 @@
                             <th style="width:33%" class="text-center">Tổng hợp</th>
                         </tr>
                         <tr>
-                            <td class="text-right text-income"><?=currency($v['thu_temp'])?></td>
-                            <td class="text-right text-income"><?=currency($v['thu'] - $v['thu_temp'])?></td>
-                            <td class="text-right text-income"><?=currency($v['thu'])?></td>
+                            <td class="text-right text-income"><?= currency($v['thu_temp']); ?></td>
+                            <td class="text-right text-income"><?= currency($v['thu'] - $v['thu_temp']); ?></td>
+                            <td class="text-right text-income"><?= currency($v['thu']); ?></td>
                         </tr>
                         <tr>
-                            <td class="text-right text-outgo"><?=currency($v['chi_temp'])?></td>
-                            <td class="text-right text-outgo"><?=currency($v['chi'] - $v['chi_temp'])?></td>
-                            <td class="text-right text-outgo"><?=currency($v['chi'])?></td>
+                            <td class="text-right text-outgo"><?= currency($v['chi_temp']); ?></td>
+                            <td class="text-right text-outgo"><?= currency($v['chi'] - $v['chi_temp']); ?></td>
+                            <td class="text-right text-outgo"><?= currency($v['chi']); ?></td>
                         </tr>
                         <tr>
-                            <td class="text-right"><?=currency($v['tong_temp'])?></td>
-                            <td class="text-right"><?=currency($v['tong'] - $v['tong_temp'])?></td>
-                            <td class="text-right"><?=currency($v['tong'])?></td>
+                            <td class="text-right"><?= currency($v['tong_temp']); ?></td>
+                            <td class="text-right"><?= currency($v['tong'] - $v['tong_temp']); ?></td>
+                            <td class="text-right"><?= currency($v['tong']); ?></td>
                         </tr>
                     </table>
                 </div>
             </div>
         </a>
-        <?php endforeach ?>
+        <?php } ?>
     </div>
 </div>
 
 <script type="text/javascript">
-    pageScroll('<?=$pageScrollTarget?>', -50);
+    pageScroll('<?= $pageScrollTarget; ?>', -50);
     function toggle_collapse_table_detail(target) {
         const container = $(target).parent().parent().find(".table-summarize-container");
         const toogler = $(container).attr("aria-expanded") === "false"

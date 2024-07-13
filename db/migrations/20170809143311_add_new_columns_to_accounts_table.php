@@ -1,7 +1,7 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
 use Phinx\Db\Adapter\MysqlAdapter;
+use Phinx\Migration\AbstractMigration;
 
 class AddNewColumnsToAccountsTable extends AbstractMigration
 {
@@ -29,8 +29,9 @@ class AddNewColumnsToAccountsTable extends AbstractMigration
     public function change()
     {
         $table = $this->table('accounts');
-        $table->addColumn('order_no', 'integer', array('limit' => MysqlAdapter::INT_TINY, 'after' => 'description'))
-              ->addColumn('restrict_delete', 'boolean', array('after' => 'order_no'))
-              ->update();
+        $table->addColumn('order_no', 'integer', ['limit' => MysqlAdapter::INT_TINY, 'after' => 'description'])
+            ->addColumn('restrict_delete', 'boolean', ['after' => 'order_no'])
+            ->update()
+        ;
     }
 }

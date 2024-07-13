@@ -1,7 +1,6 @@
 <?php
 
 $config = [
-    
     'user/edit/info' => [
         [
             'field' => 'fullname',
@@ -27,7 +26,7 @@ $config = [
             'rules' => 'required|min_length[6]|matches[new_password]',
         ],
     ],
-    
+
     // Validation for Login
     'user/login' => [
         [
@@ -41,9 +40,9 @@ $config = [
             'rules' => 'required',
         ],
     ],
-    
+
     // For inout
-    'inout/add'=> [
+    'inout/add' => [
         [
             'field' => 'amount',
             'label' => 'Số tiền',
@@ -55,8 +54,8 @@ $config = [
             'rules' => 'strip_tags',
         ],
     ],
-    
-    'inout/edit'=> [
+
+    'inout/edit' => [
         [
             'field' => 'amount',
             'label' => 'Số tiền',
@@ -68,7 +67,7 @@ $config = [
             'rules' => 'strip_tags',
         ],
     ],
-    
+
     // For category
     'category/add' => [
         [
@@ -77,7 +76,7 @@ $config = [
             'rules' => 'required|trim|xss_clean',
         ],
     ],
-    
+
     'category/edit' => [
         [
             'field' => 'name',
@@ -85,7 +84,7 @@ $config = [
             'rules' => 'required|trim|xss_clean',
         ],
     ],
-    
+
     // For account
     'account/add' => [
         [
@@ -94,7 +93,7 @@ $config = [
             'rules' => 'required|trim|xss_clean',
         ],
     ],
-    
+
     'account/edit' => [
         [
             'field' => 'name',
@@ -103,4 +102,3 @@ $config = [
         ],
     ],
 ];
-

@@ -1,19 +1,20 @@
 <?php
 /**
- * System messages translation for CodeIgniter(tm)
+ * System messages translation for CodeIgniter(tm).
  *
- * @author	CodeIgniter community
- * @copyright	Copyright (c) 2014 - 2016, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
- * @link	http://codeigniter.com
+ * @author    CodeIgniter community
+ * @copyright    Copyright (c) 2014 - 2016, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license    http://opensource.org/licenses/MIT    MIT License
+ *
+ * @see    http://codeigniter.com
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 $lang['db_invalid_connection_str'] = 'Không thể xác định các giá trị bạn chỉnh trên Cơ Sở Dữ Liệu.';
 $lang['db_unable_to_connect'] = 'Không thể kết nối tới Cơ Sở Dữ Liệu (Kiểm tra cấu hình).';
 $lang['db_unable_to_select'] = 'Không thể chọn Cơ Sở Dữ Liệu: %s';
 $lang['db_unable_to_create'] = 'Không thể tạo Cơ Sở Dữ Liệu: %s';
-$lang['db_invalid_query'] = 'Truy vấn không hợp lệ.'; 
+$lang['db_invalid_query'] = 'Truy vấn không hợp lệ.';
 $lang['db_must_set_table'] = 'Bạn phải thiết lập Cơ Sở Dữ Liệu để truy vấn.';
 $lang['db_must_use_set'] = 'Bạn phải sử dụng phương thức "set" để cập nhật một mục.';
 $lang['db_must_use_index'] = 'Bạn phải xác định chỉ số phù hợp để cập nhật hàng loạt.';

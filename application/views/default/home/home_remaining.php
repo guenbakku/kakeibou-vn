@@ -6,12 +6,12 @@
             <th class="text-center">Hiện tại</th>
             <th class="text-center" style="width:33.3%">Tương lai</th>
         </tr>
-        <?php foreach ($remaining as $k => $v): ?>
+        <?php foreach ($remaining as $k => $v) { ?>
             <tr>
-                <th><?=$k?></th>
-                <td class="text-right"><?=currency($v[0])?></td>
-                <td class="text-right"><?=currency($v[1])?></td>
+                <th><?= $k; ?></th>
+                <td class="text-right"><?= currency($v[0]); ?></td>
+                <td class="text-right"><?= currency($v[1]); ?></td>
             </tr>
-        <?php endforeach ?>
+        <?php } ?>
     </table>
 </div>

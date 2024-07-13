@@ -1,25 +1,26 @@
 <?php
-php_sapi_name() === 'cli' or die('No direct script access allowed');
+
+use Dotenv\Dotenv;
+
+php_sapi_name() === 'cli' or exit('No direct script access allowed');
 
 // Load dotenv file
-$dotenv = \Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $PHINX_DIRNAME = 'db';
 
-$_ENV['PHINX_DDL_DIR_PATH'] = __DIR__ . "/$PHINX_DIRNAME/ddl";
+$_ENV['PHINX_DDL_DIR_PATH'] = __DIR__."/{$PHINX_DIRNAME}/ddl";
 
-/*
- * Required when include Codeigniter file invidually.
- */
+// Required when include Codeigniter file invidually.
 define('BASEPATH', true);
 define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
-/*
- * Get config of data from application config file's
- */
-function get_db_config() {
-    require (__DIR__ . '/application/config/database.php');
+// Get config of data from application config file's
+function get_db_config()
+{
+    require __DIR__.'/application/config/database.php';
+
     return $db['default'];
 }
 
@@ -27,8 +28,8 @@ $db = get_db_config();
 
 return [
     'paths' => [
-        'migrations' => "%%PHINX_CONFIG_DIR%%/$PHINX_DIRNAME/migrations",
-        'seeds' => "%%PHINX_CONFIG_DIR%%/$PHINX_DIRNAME/seeds",
+        'migrations' => "%%PHINX_CONFIG_DIR%%/{$PHINX_DIRNAME}/migrations",
+        'seeds' => "%%PHINX_CONFIG_DIR%%/{$PHINX_DIRNAME}/seeds",
     ],
 
     'environments' => [

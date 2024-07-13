@@ -1,5 +1,5 @@
-<?=$this->template->get_view('elements/page-nav.php')?>
-<?=$this->template->get_view('elements/timeline/header', ['date_element' => 'header_ym'])?>
+<?= $this->template->get_view('elements/page-nav.php'); ?>
+<?= $this->template->get_view('elements/timeline/header', ['date_element' => 'header_ym']); ?>
 
 <div class="container">
 
@@ -13,14 +13,14 @@
     </style>
 
     <!-- Resources -->
-    <script type="text/javascript" src="<?=asset_url('upload/amcharts/amcharts.js')?>"></script>
-    <script type="text/javascript" src="<?=asset_url('upload/amcharts/themes/black.js')?>"></script>
-    <script type="text/javascript" src="<?=asset_url('upload/amcharts/serial.js')?>"></script>
+    <script type="text/javascript" src="<?= asset_url('upload/amcharts/amcharts.js'); ?>"></script>
+    <script type="text/javascript" src="<?= asset_url('upload/amcharts/themes/black.js'); ?>"></script>
+    <script type="text/javascript" src="<?= asset_url('upload/amcharts/serial.js'); ?>"></script>
 
     <!-- Chart code -->
     <script type="text/javascript">
         (function(){
-            var chartData = <?=json_encode($list)?>;
+            var chartData = <?= json_encode($list); ?>;
             var dateFormat = genDateFormat(chartData);
 
             var chart = AmCharts.makeChart("chartdiv", {

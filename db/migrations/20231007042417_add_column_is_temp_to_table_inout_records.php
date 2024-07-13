@@ -33,7 +33,8 @@ class AddColumnIsTempToTableInoutRecords extends AbstractMigration
             'null' => false,
             'default' => false,
         ])
-        ->update();
+            ->update()
+        ;
         $table->addIndex(['is_temp'])->save();
     }
 }

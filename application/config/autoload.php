@@ -1,5 +1,6 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -39,7 +40,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |  $autoload['packages'] = array(APPPATH.'third_party', '/usr/local/shared');
 |
 */
-$autoload['packages'] = array();
+$autoload['packages'] = [];
 
 /*
 | -------------------------------------------------------------------
@@ -51,14 +52,14 @@ $autoload['packages'] = array();
 |
 | Prototype:
 |
-|	$autoload['libraries'] = array('database', 'email', 'session');
+|    $autoload['libraries'] = array('database', 'email', 'session');
 |
 | You can also supply an alternative library name to be assigned
 | in the controller:
 |
-|	$autoload['libraries'] = array('user_agent' => 'ua');
+|    $autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('consts', 'appexception', 'template', 'flash', 'referer');
+$autoload['libraries'] = ['consts', 'appexception', 'template', 'flash', 'referer'];
 
 /*
 | -------------------------------------------------------------------
@@ -71,9 +72,9 @@ $autoload['libraries'] = array('consts', 'appexception', 'template', 'flash', 'r
 |
 | Prototype:
 |
-|	$autoload['drivers'] = array('cache');
+|    $autoload['drivers'] = array('cache');
 */
-$autoload['drivers'] = array();
+$autoload['drivers'] = [];
 
 /*
 | -------------------------------------------------------------------
@@ -81,9 +82,9 @@ $autoload['drivers'] = array();
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['helper'] = array('url', 'file');
+|    $autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('array', 'url', 'form', 'security', 'string', 'number', 'date', 'currency');
+$autoload['helper'] = ['array', 'url', 'form', 'security', 'string', 'number', 'date', 'currency'];
 
 /*
 | -------------------------------------------------------------------
@@ -91,13 +92,13 @@ $autoload['helper'] = array('array', 'url', 'form', 'security', 'string', 'numbe
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['config'] = array('config1', 'config2');
+|    $autoload['config'] = array('config1', 'config2');
 |
 | NOTE: This item is intended for use ONLY if you have created custom
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array();
+$autoload['config'] = [];
 
 /*
 | -------------------------------------------------------------------
@@ -105,13 +106,13 @@ $autoload['config'] = array();
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['language'] = array('lang1', 'lang2');
+|    $autoload['language'] = array('lang1', 'lang2');
 |
 | NOTE: Do not include the "_lang" part of your file.  For example
 | "codeigniter_lang.php" would be referenced as array('codeigniter');
 |
 */
-$autoload['language'] = array();
+$autoload['language'] = [];
 
 /*
 | -------------------------------------------------------------------
@@ -119,19 +120,21 @@ $autoload['language'] = array();
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['model'] = array('first_model', 'second_model');
+|    $autoload['model'] = array('first_model', 'second_model');
 |
 | You can also supply an alternative model name to be assigned
 | in the controller:
 |
-|	$autoload['model'] = array('first_model' => 'first');
+|    $autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('app_model',
-                           'setting_model',
-                           'auth_model',
-                           'inout_model',
-                           'timeline_model',
-                           'account_model',
-                           'category_model',
-                           'user_model',
-                           'inout_type_model');
+$autoload['model'] = [
+    'app_model',
+    'setting_model',
+    'auth_model',
+    'inout_model',
+    'timeline_model',
+    'account_model',
+    'category_model',
+    'user_model',
+    'inout_type_model',
+];

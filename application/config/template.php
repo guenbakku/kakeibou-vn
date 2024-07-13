@@ -1,4 +1,8 @@
-<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH')) {
+    exit('No direct script access allowed');
+}
 /*
 |--------------------------------------------------------------------------
 | Active template
@@ -62,21 +66,21 @@ $template['mobile_template'] = '';
 |--------------------------------------------------------------------------
 */
 
-$template['default'] = array(
-    'template'      => 'master-layout',
-    'regions'       => array(
+$template['default'] = [
+    'template' => 'master-layout',
+    'regions' => [
         'MAIN',
-    ),
-    'parser'            => 'parser',
-    'parser_method'     => 'parse',
-    'parse_template'    => FALSE,
-    'default_args'      => array(
-        '_page_title'       => 'BH Cash Book (VND)',
+    ],
+    'parser' => 'parser',
+    'parser_method' => 'parse',
+    'parse_template' => false,
+    'default_args' => [
+        '_page_title' => 'BH Cash Book (VND)',
         '_page_description' => 'BH Cash Book (VND)',
-    ),
-);
+    ],
+];
 
-//-----
+// -----
 
-/* End of file template.php */
-/* Location: ./system/application/config/template.php */
+// End of file template.php
+// Location: ./system/application/config/template.php

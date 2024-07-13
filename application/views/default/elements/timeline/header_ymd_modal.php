@@ -2,40 +2,40 @@
     <div class="col-xs-4" style="padding-right:0px">
         <div class="form-group">
             <label>Năm</label>
-            <?=form_dropdown(
-                $field_name = 'year', 
+            <?= form_dropdown(
+                $field_name = 'year',
                 $select['year'],
-                $year?? date('Y'), 
-                array(
+                $year ?? date('Y'),
+                [
                     'class' => 'form-control',
-                )
-            )?>
+                ]
+            ); ?>
         </div>
     </div>
     <div class="col-xs-4" style="padding-right:7.5px">
         <div class="form-group">
             <label>Tháng</label>
-            <?=form_dropdown(
-                $field_name = 'month', 
-                array('' => '--') + $select['month'], 
-                $month?? date('m'), 
-                array(
+            <?= form_dropdown(
+                $field_name = 'month',
+                ['' => '--'] + $select['month'],
+                $month ?? date('m'),
+                [
                     'class' => 'form-control',
-                )
-            )?>
+                ]
+            ); ?>
         </div>
     </div>
     <div class="col-xs-4" style="padding-left:7.5px">
         <div class="form-group">
             <label>Ngày</label>
-            <?=form_dropdown(
-                $field_name = 'day', 
-                array('' => '--') + $select['day'], 
-                $day?? date('d'), 
-                array(
+            <?= form_dropdown(
+                $field_name = 'day',
+                ['' => '--'] + $select['day'],
+                $day ?? date('d'),
+                [
                     'class' => 'form-control',
-                )
-            )?>
+                ]
+            ); ?>
         </div>
     </div>
 </div>

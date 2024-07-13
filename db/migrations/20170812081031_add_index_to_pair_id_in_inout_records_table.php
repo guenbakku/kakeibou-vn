@@ -29,6 +29,7 @@ class AddIndexToPairIdInInoutRecordsTable extends AbstractMigration
     {
         $table = $this->table('inout_records');
         $table->addIndex('pair_id')
-              ->update();
+            ->update()
+        ;
     }
 }
