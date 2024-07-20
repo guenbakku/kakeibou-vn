@@ -67,5 +67,20 @@ function array_update(array $array1, array $array2): array
     return $array1;
 }
 
+/**
+ * Chuyển 1 associate array (key-value) thành 1 number-index array (list).
+ * Các phần tử của list này là 1 array con, mỗi array con chứa 2 phần tử có giá trị của `key` và `value`.
+ */
+function array_to_list(array $arr)
+{
+    return array_map(
+        function ($v, $k) {
+            return [$k, $v];
+        },
+        $arr,
+        array_keys($arr),
+    );
+}
+
 // End of file MY_date_helper.php
 // Location: ./application/helpers/MY_date_helper.php

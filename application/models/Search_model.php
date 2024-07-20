@@ -19,6 +19,7 @@ class Search_model extends App_Model
         'modified_to' => null,
         'account' => null,
         'player' => null,
+        'category' => null,
         'only_show_temp_inout' => false,
         'also_show_pair_inout' => false,
         'offset' => 0,
@@ -49,8 +50,12 @@ class Search_model extends App_Model
                 throw new AppException('Dữ liệu người phụ trách không hợp lệ');
             }
         } elseif ($name === 'inout_type') {
-            if (!is_numeric($val) || !in_array($val, [0, 1, 2])) {
+            if (!is_numeric($val) && !in_array($val, [0, 1, 2])) {
                 throw new AppException('Dữ liệu loại thu chi không hợp lệ');
+            }
+        } elseif ($name === 'category') {
+            if (!is_numeric($val)) {
+                throw new AppException('Dữ liệu category không hợp lệ');
             }
         } elseif ($name === 'account') {
             if (!is_numeric($val)) {
@@ -192,6 +197,9 @@ class Search_model extends App_Model
             } else {
                 $db->where('inout_records.amount <', 0);
             }
+        }
+        if ($this->settings['category'] > 0) {
+            $db->where('inout_records.category_id', $this->settings['category']);
         }
         if ($this->settings['account'] > 0) {
             $db->where('inout_records.account_id', $this->settings['account']);

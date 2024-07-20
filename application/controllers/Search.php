@@ -28,6 +28,7 @@ class Search extends MY_Controller
                     'inout_to' => true,
                     'modified_from' => true,
                     'modified_to' => true,
+                    'category' => false,
                     'also_show_pair_inout' => false,
                     'only_show_temp_inout' => false,
                     'offset' => false,
@@ -72,10 +73,19 @@ class Search extends MY_Controller
         $view_data['num_of_results'] = $this->search_model->num_of_results;
         $view_data['results_sum'] = $this->search_model->results_sum;
         $view_data['title'] = 'Tìm kiếm chi tiêu';
+        $view_data['inout_types'] = [
+            'outgo' => $this->inout_model->get_inout_type_id('outgo'),
+            'income' => $this->inout_model->get_inout_type_id('income'),
+        ];
         $view_data['select'] = [
             'players' => [0 => 'Tất cả'] + $this->user_model->get_select_tag_data(),
             'inout_types' => [0 => 'Tất cả'] + $this->inout_type_model->get_select_tag_data(),
+            'outgo_categories' => [0 => 'Tất cả'] + $this->category_model->get_select_tag_data($view_data['inout_types']['outgo']),
+            'income_categories' => [0 => 'Tất cả'] + $this->category_model->get_select_tag_data($view_data['inout_types']['income']),
         ];
+        $view_data['select']['initial_categories'] = $this->input->get('inout_type') == $view_data['inout_types']['income']
+            ? $view_data['select']['income_categories']
+            : $view_data['select']['outgo_categories'];
         $view_data['url'] = [
             'form' => $this->base_url(),
             'edit' => base_url(['inout', 'edit', '%s']),
