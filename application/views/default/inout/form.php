@@ -3,35 +3,37 @@
     <?= form_open($url['form'], ['id' => 'addCashFlow', 'class' => 'form-vertical']); ?>
         <div class="panel panel-default">
             <div class="panel-body">
-                <div class="form-group">
-                    <label>Số tiền:</label>
-                    <div class="input-group">
-                        <span class="input-group-addon"><?= $inout_type_sign; ?></span>
-                        <?= form_input(
-                            [
-                                'name' => $field_name = 'amount',
-                                'type' => 'text',
-                            ],
-                            set_value($field_name, null),
-                            [
-                                'class' => 'form-control amount',
-                            ]
-                        ); ?>
-                        <span class="input-group-addon"><?= APP_CURRENCY; ?></span>
+                <div class="row">
+                    <div class="col-xs-6" style="padding-right: 7.5px">
+                        <div class="form-group">
+                            <label>Số tiền:</label>
+                            <?= form_input(
+                                [
+                                    'name' => $field_name = 'amount',
+                                    'type' => 'text',
+                                ],
+                                set_value($field_name, null),
+                                [
+                                    'class' => 'form-control amount',
+                                ]
+                            ); ?>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>Thời gian:</label>
-                    <?= form_input(
-                        [
-                            'name' => $field_name = 'date',
-                            'type' => 'date',
-                        ],
-                        set_value($field_name, date('Y-m-d')),
-                        [
-                            'class' => 'form-control',
-                        ]
-                    ); ?>
+                    <div class="col-xs-6" style="padding-left: 7.5px">
+                        <div class="form-group">
+                            <label>Thời gian:</label>
+                            <?= form_input(
+                                [
+                                    'name' => $field_name = 'date',
+                                    'type' => 'date',
+                                ],
+                                set_value($field_name, date('Y-m-d')),
+                                [
+                                    'class' => 'form-control',
+                                ]
+                            ); ?>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
