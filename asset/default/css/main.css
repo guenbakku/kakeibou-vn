@@ -134,12 +134,6 @@ input[type="color"] {
     font-size: 16px;
 }
 
-input[type="date"] {
-    display:inline-block;
-    -webkit-appearance: textfield;
-    padding-top: 0px;
-}
-
 /* Chỉnh span trong progress bar vô giữa div */
 .progress {
     position: relative;
@@ -246,8 +240,12 @@ table.last-row-is-total tr:nth-last-child(2) th {
 
 /* Disable iOS device render using iOS button */
 input[type="date"] {
+    display:inline-block;
     -webkit-appearance: none;
     -moz-appearance: none;
+    appearance: none;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /* Utility class */
