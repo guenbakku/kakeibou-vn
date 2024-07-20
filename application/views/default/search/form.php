@@ -60,7 +60,7 @@
                 <div class="advance-search collapse">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-xs-6">
+                            <div class="col-xs-6" style="padding-right: 7.5px">
                                 <label>Loại:</label>
                                 <?= form_dropdown(
                                     $field_name = 'inout_type',
@@ -71,7 +71,7 @@
                                     ]
                                 ); ?>
                             </div>
-                            <div class="col-xs-6">
+                            <div class="col-xs-6" style="padding-left: 7.5px">
                                 <label>Phụ trách</label>
                                 <?= form_dropdown(
                                     $field_name = 'player',
@@ -88,43 +88,31 @@
                     <div class="form-group">
                         <label>Thời gian thu chi:</label>
                         <div class="row">
-                            <div class="col-xs-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon" style="min-width:60px">Từ</span>
-                                    <?= form_input(
-                                        [
-                                            'name' => $field_name = 'inout_from',
-                                            'type' => 'date',
-                                        ],
-                                        set_value($field_name, null),
-                                        [
-                                            'class' => 'form-control',
-                                        ]
-                                    ); ?>
-                                    <span class="input-group-addon" style="min-width:50px">
-                                        <span class="glyphicon glyphicon-remove clear-date"></span>
-                                    </span>
-                                </div>
+                            <div class="col-xs-6" style="padding-right: 7.5px">
+                                <label>Từ ngày</label>
+                                <?= form_input(
+                                    [
+                                        'name' => $field_name = 'inout_from',
+                                        'type' => 'date',
+                                    ],
+                                    set_value($field_name, null),
+                                    [
+                                        'class' => 'form-control',
+                                    ]
+                                ); ?>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon" style="min-width:60px">Đến</span>
-                                    <?= form_input(
-                                        [
-                                            'name' => $field_name = 'inout_to',
-                                            'type' => 'date',
-                                        ],
-                                        set_value($field_name, null),
-                                        [
-                                            'class' => 'form-control',
-                                        ]
-                                    ); ?>
-                                    <span class="input-group-addon" style="min-width:50px">
-                                        <span class="glyphicon glyphicon-remove clear-date"></span>
-                                    </span>
-                                </div>
+                            <div class="col-xs-6" style="padding-left: 7.5px">
+                                <label>Đến ngày</label>
+                                <?= form_input(
+                                    [
+                                        'name' => $field_name = 'inout_to',
+                                        'type' => 'date',
+                                    ],
+                                    set_value($field_name, null),
+                                    [
+                                        'class' => 'form-control',
+                                    ]
+                                ); ?>
                             </div>
                         </div>
                     </div>
@@ -132,43 +120,31 @@
                     <div class="form-group">
                         <label>Thời gian nhập/chỉnh sửa:</label>
                         <div class="row">
-                            <div class="col-xs-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon" style="min-width:60px">Từ</span>
-                                    <?= form_input(
-                                        [
-                                            'name' => $field_name = 'modified_from',
-                                            'type' => 'date',
-                                        ],
-                                        set_value($field_name, null),
-                                        [
-                                            'class' => 'form-control',
-                                        ]
-                                    ); ?>
-                                    <span class="input-group-addon" style="min-width:50px">
-                                        <span class="glyphicon glyphicon-remove clear-date"></span>
-                                    </span>
-                                </div>
+                            <div class="col-xs-6" style="padding-right: 7.5px">
+                                <label>Từ ngày</label>
+                                <?= form_input(
+                                    [
+                                        'name' => $field_name = 'modified_from',
+                                        'type' => 'date',
+                                    ],
+                                    set_value($field_name, null),
+                                    [
+                                        'class' => 'form-control',
+                                    ]
+                                ); ?>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="input-group">
-                                    <span class="input-group-addon" style="min-width:60px">Đến</span>
-                                    <?= form_input(
-                                        [
-                                            'name' => $field_name = 'modified_to',
-                                            'type' => 'date',
-                                        ],
-                                        set_value($field_name, null),
-                                        [
-                                            'class' => 'form-control',
-                                        ]
-                                    ); ?>
-                                    <span class="input-group-addon" style="min-width:50px">
-                                        <span class="glyphicon glyphicon-remove clear-date"></span>
-                                    </span>
-                                </div>
+                            <div class="col-xs-6" style="padding-left: 7.5px">
+                                <label>Đến ngày</label>
+                                <?= form_input(
+                                    [
+                                        'name' => $field_name = 'modified_to',
+                                        'type' => 'date',
+                                    ],
+                                    set_value($field_name, null),
+                                    [
+                                        'class' => 'form-control',
+                                    ]
+                                ); ?>
                             </div>
                         </div>
                     </div>
