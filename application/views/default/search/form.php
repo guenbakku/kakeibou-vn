@@ -72,6 +72,22 @@
                                 ); ?>
                             </div>
                             <div class="col-xs-6" style="padding-left: 7.5px">
+                                <label>Danh mục</label>
+                                <?= form_dropdown(
+                                    $field_name = 'category',
+                                    $select['initial_categories'],
+                                    set_value($field_name, 0),
+                                    [
+                                        'class' => 'form-control',
+                                    ]
+                                ); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12">
                                 <label>Phụ trách</label>
                                 <?= form_dropdown(
                                     $field_name = 'player',
@@ -156,3 +172,44 @@
         </div>
     </form>
 </div>
+
+<script type="text/javascript">
+const INOUT_TYPES = <?= json_encode($inout_types); ?>;
+
+<?php
+// Category select list will be converted to json object and passed to javascript.
+// So it must be convert to the number-index array (array_to_list) to reserve the order of items
+// before converting it to json.
+    ?>
+const CATEGORIES = {
+    [INOUT_TYPES.income]: <?= json_encode(array_to_list($select['income_categories'])); ?>,
+    [INOUT_TYPES.outgo]: <?= json_encode(array_to_list($select['outgo_categories'])); ?>,
+}
+
+const reRenderCategorySelectItems = (inoutTypeId, previousInoutTypeId) => {
+    if (inoutTypeId !== previousInoutTypeId) {
+        // Generate select options based on inoutTypeId
+        const optionElms = CATEGORIES[inoutTypeId].map((item) => {
+            const elm = $('<option>', {
+                'value': item[0],
+                'text': item[1],
+            });
+            return elm;
+        });
+
+        // Re-render category select list
+        $('[name=category]').html('');
+        optionElms.forEach((elm) => {
+            $('[name=category]').append(elm);
+        });
+    }
+
+    return true;
+};
+
+$('[name=inout_type]').switcher({
+    targets: ['[name=category]'],
+    disableValues: ['0'],
+    onBeforeEnable: reRenderCategorySelectItems,
+});
+</script>
