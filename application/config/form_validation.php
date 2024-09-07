@@ -49,6 +49,11 @@ $config = [
             'rules' => 'required|is_natural_no_zero|xss_clean',
         ],
         [
+            'field' => 'date',
+            'label' => 'Thời gian',
+            'rules' => 'required|xss_clean',
+        ],
+        [
             'field' => 'memo',
             'label' => 'Ghi chú',
             'rules' => 'strip_tags',
@@ -60,6 +65,11 @@ $config = [
             'field' => 'amount',
             'label' => 'Số tiền',
             'rules' => 'required|is_natural_no_zero|xss_clean',
+        ],
+        [
+            'field' => 'date',
+            'label' => 'Thời gian',
+            'rules' => 'required|xss_clean',
         ],
         [
             'field' => 'memo',
