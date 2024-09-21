@@ -94,7 +94,7 @@ class Account_model extends App_Model
             ->count_all_results()
         ;
         if ($count > 0) {
-            throw new AppException(sprintf(Consts::ERR_ACCOUNT_NOT_EMPTY, $account_name));
+            throw new AppException(sprintf(settings('err_account_not_empty'), $account_name));
         }
 
         // Kiểm tra xem danh mục này có phải danh mục cấm xóa không
@@ -104,7 +104,7 @@ class Account_model extends App_Model
             ->count_all_results()
         ;
         if ($count > 0) {
-            throw new AppException(sprintf(Consts::ERR_ACCOUNT_RESTRICT_DELETE, $account_name));
+            throw new AppException(sprintf(settings('err_account_restrict_delete'), $account_name));
         }
 
         $this->db->where('id', $id)->delete($this->get_table());

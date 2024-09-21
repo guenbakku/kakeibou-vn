@@ -162,12 +162,12 @@
                 </div>
                 <?php } ?>
 
-                <button type="button" onClick="submitForm(this)" class="btn btn-primary"><?= Consts::LABEL['submit']; ?></button>
+                <button type="button" onClick="submitForm(this)" class="btn btn-primary"><?= settings('label.submit'); ?></button>
                 <?php if ($this->router->fetch_method() == 'add') { ?>
-                    <button type="button" onClick="submitFormAndContinue(this)" class="btn btn-primary"><?= Consts::LABEL['submit_continue']; ?></button>
+                    <button type="button" onClick="submitFormAndContinue(this)" class="btn btn-primary"><?= settings('label.submit_continue'); ?></button>
                 <?php } ?>
                 <?php if ($this->router->fetch_method() == 'edit') { ?>
-                    <button type="button" onClick="Cashbook.submitButton(this, 'delete')" class="btn btn-danger pull-right"><?= Consts::LABEL['delete']; ?></button>
+                    <button type="button" onClick="Cashbook.submitButton(this, 'delete')" class="btn btn-danger pull-right"><?= settings('label.delete'); ?></button>
                 <?php } ?>
             </div>
         </div>

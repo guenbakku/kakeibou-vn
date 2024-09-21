@@ -83,7 +83,7 @@ class Category_model extends App_Model
             ->count_all_results()
         ;
         if ($count > 0) {
-            throw new AppException(sprintf(Consts::ERR_CATEGORY_NOT_EMPTY, $category_name));
+            throw new AppException(sprintf(settings('err_category_not_empty'), $category_name));
         }
 
         // Kiểm tra xem danh mục này có phải danh mục cấm xóa không
@@ -93,7 +93,7 @@ class Category_model extends App_Model
             ->count_all_results()
         ;
         if ($count > 0) {
-            throw new AppException(sprintf(Consts::ERR_CATEGORY_RESTRICT_DELETE, $category_name));
+            throw new AppException(sprintf(settings('err_category_restrict_delete'), $category_name));
         }
 
         $this->db->where('id', $id)->delete($this->get_table());

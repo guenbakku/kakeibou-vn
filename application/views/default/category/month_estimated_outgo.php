@@ -37,7 +37,7 @@
                                                 'class' => 'form-control amount',
                                             ]
                                         ); ?>
-                                        <span class="input-group-addon"><?= APP_CURRENCY; ?></span>
+                                        <span class="input-group-addon"><?= settings('currency'); ?></span>
                                     </div>
                                 </div>
                             </div>
@@ -63,7 +63,7 @@
                 </div>
                 <?php } ?>
 
-                <button type="submit" onClick="submitForm(this)" class="btn btn-primary"><?= Consts::LABEL['submit']; ?></button>
+                <button type="submit" onClick="submitForm(this)" class="btn btn-primary"><?= settings('label.submit'); ?></button>
             </div>
         </div>
     </form>

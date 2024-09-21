@@ -17,12 +17,12 @@ class Setting extends MY_Controller
     public function edit(string $item)
     {
         if (empty($data = $this->setting_model->get($item))) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
 
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
             $this->setting_model->edit($this->input->post());
-            $this->flash->success(Consts::SUCC_EDIT_SETTING);
+            $this->flash->success(settings('succ_edit_setting'));
 
             return redirect($this->referer->getSession());
         }

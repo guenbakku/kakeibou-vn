@@ -29,7 +29,7 @@
             <?php } ?>
         </div>
         <div class="currency">
-            <span><?= APP_CURRENCY; ?></span>
+            <span><?= settings('currency'); ?></span>
         </div>
     </div>
 </nav>

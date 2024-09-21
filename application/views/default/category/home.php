@@ -45,7 +45,7 @@
             <table class="table table-bordered" style="border-top:1px solid; border-color:inherit">
                 <tr>
                     <td>
-                        <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')"><?= Consts::LABEL['submit']; ?></button>
+                        <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')"><?= settings('label.submit'); ?></button>
                     </td>
                 </tr>
             </table>

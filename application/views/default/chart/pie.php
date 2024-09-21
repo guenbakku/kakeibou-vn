@@ -114,7 +114,7 @@
     <?php } else { ?>
         <div class="panel panel-default">
             <div class="panel-body">
-                <?= Consts::ERR_NOT_FOUND; ?>
+                <?= settings('err_not_found'); ?>
             </div>
         </div>
     <?php } ?>
