@@ -9,7 +9,7 @@ class Settings
     public function __construct()
     {
         $this->storage = [
-            'version' => '3.0.0',
+            'version' => '3.1.0',
             'currency' => $_ENV['CURRENCY'] ?? 'VND',
             'err_bad_request' => 'Yêu cầu không hợp lệ',
             'err_not_found' => 'Không tìm thấy dữ liệu',
