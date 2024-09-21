@@ -88,5 +88,88 @@ if (!function_exists('array_to_list')) {
     }
 }
 
+if (!function_exists('value')) {
+    /**
+     * Return the default value of the given value.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    function value($value)
+    {
+        return $value instanceof Closure ? $value() : $value;
+    }
+}
+
+if (!function_exists('array_accessible')) {
+    /**
+     * Determine whether the given value is array accessible.
+     *
+     * @param mixed $value
+     *
+     * @return bool
+     */
+    function array_accessible($value)
+    {
+        return is_array($value) || $value instanceof ArrayAccess;
+    }
+}
+
+if (!function_exists('array_exists')) {
+    /**
+     * Determine if the given key exists in the provided array.
+     *
+     * @param array|ArrayAccess $array
+     * @param int|string        $key
+     *
+     * @return bool
+     */
+    function array_exists($array, $key)
+    {
+        if ($array instanceof ArrayAccess) {
+            return $array->offsetExists($key);
+        }
+
+        return array_key_exists($key, $array);
+    }
+}
+
+if (!function_exists('array_get')) {
+    /**
+     * Get an item from an array using "dot" notation.
+     *
+     * @param array|ArrayAccess $array
+     * @param string            $key
+     * @param mixed             $default
+     *
+     * @return mixed
+     */
+    function array_get($array, $key, $default = null)
+    {
+        if (!array_accessible($array)) {
+            return value($default);
+        }
+        if (is_null($key)) {
+            return $array;
+        }
+        if (array_exists($array, $key)) {
+            return $array[$key];
+        }
+        if (strpos($key, '.') === false) {
+            return $array[$key] ?? value($default);
+        }
+        foreach (explode('.', $key) as $segment) {
+            if (array_accessible($array) && array_exists($array, $segment)) {
+                $array = $array[$segment];
+            } else {
+                return value($default);
+            }
+        }
+
+        return $array;
+    }
+}
+
 // End of file MY_date_helper.php
 // Location: ./application/helpers/MY_date_helper.php
