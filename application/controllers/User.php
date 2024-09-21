@@ -16,7 +16,7 @@ class User extends MY_Controller
     {
         $method = 'edit_'.$method;
         if (!is_callable([$this, $method])) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
         call_user_func([$this, $method]);
     }

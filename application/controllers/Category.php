@@ -17,7 +17,7 @@ class Category extends MY_Controller
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
             $data = $this->input->post('categories');
             $this->category_model->edit_batch($data);
-            $this->flash->success(Consts::SUCC_EDIT_CATEGORY_ORDER);
+            $this->flash->success(settings('succ_edit_category_order'));
 
             return redirect($this->referer->get());
         }
@@ -64,7 +64,7 @@ class Category extends MY_Controller
                 }
 
                 $this->category_model->edit_batch($data, 'id');
-                $this->flash->success(Consts::SUCC_EDIT_MONTH_ESTIMATED_OUTGO);
+                $this->flash->success(settings('succ_edit_month_estimated_outgo'));
 
                 return redirect($this->referer->get());
             } catch (AppException $e) {
@@ -95,7 +95,7 @@ class Category extends MY_Controller
                 }
 
                 $this->category_model->add($this->input->post());
-                $this->flash->success(Consts::SUCC_ADD_CATEGORY);
+                $this->flash->success(settings('succ_add_category'));
 
                 return redirect($this->referer->getSession());
             } catch (AppException $e) {
@@ -136,7 +136,7 @@ class Category extends MY_Controller
                 }
 
                 $this->category_model->edit($id, $this->input->post());
-                $this->flash->success(Consts::SUCC_EDIT_CATEGORY);
+                $this->flash->success(settings('succ_edit_category'));
 
                 return redirect($this->referer->getSession());
             } catch (AppException $e) {
@@ -146,7 +146,7 @@ class Category extends MY_Controller
             $category_data = $this->category_model->get($id);
 
             if (empty($category_data)) {
-                show_error(Consts::ERR_NOT_FOUND);
+                show_error(settings('err_not_found'));
             }
             $_POST = $category_data;
 
@@ -172,7 +172,7 @@ class Category extends MY_Controller
     {
         try {
             $this->category_model->del($id);
-            $this->flash->success(Consts::SUCC_DEL_CATEGORY);
+            $this->flash->success(settings('succ_del_category'));
         } catch (AppException $ex) {
             $this->flash->error($ex->getMessage());
         }
@@ -187,7 +187,7 @@ class Category extends MY_Controller
     {
         $category_id = $this->input->get('id');
         if (!ctype_digit($category_id)) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
 
         $result = $this->category_model->is_month_fixed_money($category_id);

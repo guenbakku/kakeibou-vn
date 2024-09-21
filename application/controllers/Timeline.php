@@ -74,10 +74,10 @@ class Timeline extends MY_Controller
     public function detail(string $date = '')
     {
         if (empty($date)) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
         if (empty($range = boundary_date($date))) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
 
         // Lấy thông tin từ request parameter

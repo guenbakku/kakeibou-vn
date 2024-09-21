@@ -37,9 +37,9 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" onClick="Cashbook.submitButton(this, 'submit')" class="btn btn-primary"><?= Consts::LABEL['submit']; ?></button>
+                <button type="submit" onClick="Cashbook.submitButton(this, 'submit')" class="btn btn-primary"><?= settings('label.submit'); ?></button>
                 <?php if ($this->router->fetch_method() == 'edit') { ?>
-                    <button type="button" onClick="Cashbook.submitButton(this, 'delete')" class="btn btn-danger pull-right"><?= Consts::LABEL['delete']; ?></button>
+                    <button type="button" onClick="Cashbook.submitButton(this, 'delete')" class="btn btn-danger pull-right"><?= settings('label.delete'); ?></button>
                 <?php } ?>
 
             </div>

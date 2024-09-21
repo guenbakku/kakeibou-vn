@@ -210,7 +210,7 @@ class Inout_model extends App_Model
         ;
 
         if (empty($pair)) {
-            throw new AppException(Consts::ERR_NOT_FOUND);
+            throw new AppException(settings('err_not_found'));
         }
 
         // Bỏ item player nếu ko phải là item cash
@@ -289,10 +289,10 @@ class Inout_model extends App_Model
         }
 
         if (!isset($data['transfer_from']) || !isset($data['transfer_to'])) {
-            throw new AppException(Consts::ERR_BAD_REQUEST);
+            throw new AppException(settings('err_bad_request'));
         }
         if ($data['transfer_from'] == $data['transfer_to']) {
-            throw new AppException(Consts::ERR_TRANSFER_FROM_TO_SAME);
+            throw new AppException(settings('err_transfer_from_to_same'));
         }
 
         $pair = [$data, $data];
@@ -336,7 +336,7 @@ class Inout_model extends App_Model
         }
 
         if ($data['transfer_from'] == $data['transfer_to']) {
-            throw new AppException(Consts::ERR_TRANSFER_FROM_TO_SAME);
+            throw new AppException(settings('err_transfer_from_to_same'));
         }
 
         foreach ($pair as $i => $val) {
@@ -375,7 +375,7 @@ class Inout_model extends App_Model
         ;
 
         if (empty($res)) {
-            throw new AppException(Consts::ERR_BAD_REQUEST);
+            throw new AppException(settings('err_bad_request'));
         }
 
         $pair_id = $res[0]['pair_id'];

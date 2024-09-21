@@ -7,7 +7,7 @@ class Inout extends MY_Controller
     public function add(string $type)
     {
         if (!$cashFlowName = $this->inout_model->get_cash_flow_name($type)) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
 
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -22,7 +22,7 @@ class Inout extends MY_Controller
                 $first_insert_id = reset($insert_ids);
 
                 $this->flash->success(sprintf(
-                    Consts::SUCC_ADD_INOUT_RECORD,
+                    settings('succ_add_inout_record'),
                     $this->inout_model->get_cash_flow_name($type),
                     $this->base_url(['edit', $first_insert_id])
                 ));
@@ -58,13 +58,13 @@ class Inout extends MY_Controller
     public function edit(int $id)
     {
         if (!is_numeric($id)) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
 
         $ioRecord = $this->inout_model->get($id);
 
         if (empty($ioRecord)) {
-            show_error(Consts::ERR_NOT_FOUND);
+            show_error(settings('err_not_found'));
         }
 
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -82,7 +82,7 @@ class Inout extends MY_Controller
 
                 $this->inout_model->edit($id, $this->input->post());
                 $this->flash->success(sprintf(
-                    Consts::SUCC_EDIT_INOUT_RECORD,
+                    settings('succ_edit_inout_record'),
                     $this->base_url(['edit', $id])
                 ));
 
@@ -126,11 +126,11 @@ class Inout extends MY_Controller
     public function del(int $id)
     {
         if (!is_numeric($id)) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
 
         $this->inout_model->del($id);
-        $this->flash->success(Consts::SUCC_DELETE_INOUT_RECORD);
+        $this->flash->success(settings('succ_delete_inout_record'));
 
         return redirect($this->referer->getSession());
     }

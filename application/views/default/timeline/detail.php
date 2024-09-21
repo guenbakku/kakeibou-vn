@@ -105,7 +105,7 @@
             <?php } ?>
         <?php } else { ?>
             <div class="list-group">
-                <span class="list-group-item"><?= Consts::ERR_NOT_FOUND; ?></span>
+                <span class="list-group-item"><?= settings('err_not_found'); ?></span>
             </div>
         <?php } ?>
     </div>

@@ -63,7 +63,7 @@
                 </div>
                 <?php } ?>
 
-                <button type="submit" onClick="submitForm(this)" class="btn btn-primary"><?= Consts::LABEL['submit']; ?></button>
+                <button type="submit" onClick="submitForm(this)" class="btn btn-primary"><?= settings('label.submit'); ?></button>
             </div>
         </div>
     </form>

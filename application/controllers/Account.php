@@ -18,7 +18,7 @@ class Account extends MY_Controller
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
             $data = $this->input->post('categories');
             $this->account_model->edit_batch($data);
-            $this->flash->success(Consts::SUCC_EDIT_ACCOUNT_ORDER);
+            $this->flash->success(settings('succ_edit_account_order'));
 
             return redirect($this->referer->get());
         }
@@ -46,7 +46,7 @@ class Account extends MY_Controller
                 }
 
                 $this->account_model->add($this->input->post());
-                $this->flash->success(Consts::SUCC_ADD_ACCOUNT);
+                $this->flash->success(settings('succ_add_account'));
 
                 return redirect($this->referer->getSession());
             } catch (AppException $e) {
@@ -70,7 +70,7 @@ class Account extends MY_Controller
     public function edit(int $id)
     {
         if (!is_numeric($id)) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
 
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
@@ -87,7 +87,7 @@ class Account extends MY_Controller
                 }
 
                 $this->account_model->edit($id, $this->input->post());
-                $this->flash->success(Consts::SUCC_EDIT_ACCOUNT);
+                $this->flash->success(settings('succ_edit_account'));
 
                 return redirect($this->referer->getSession());
             } catch (AppException $e) {
@@ -97,7 +97,7 @@ class Account extends MY_Controller
             $account_data = $this->account_model->get($id);
 
             if (empty($account_data)) {
-                show_error(Consts::ERR_NOT_FOUND);
+                show_error(settings('err_not_found'));
             }
             $_POST = $account_data;
 
@@ -119,12 +119,12 @@ class Account extends MY_Controller
     public function del(int $id)
     {
         if (!is_numeric($id)) {
-            show_error(Consts::ERR_BAD_REQUEST);
+            show_error(settings('err_bad_request'));
         }
 
         try {
             $this->account_model->del($id);
-            $this->flash->success(Consts::SUCC_DEL_ACCOUNT);
+            $this->flash->success(settings('succ_del_account'));
         } catch (AppException $ex) {
             $this->flash->error($ex->getMessage());
         }

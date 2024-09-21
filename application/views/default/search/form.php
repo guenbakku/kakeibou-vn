@@ -166,7 +166,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')"><?= Consts::LABEL['search']; ?></button>
+                <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')"><?= settings('label.search'); ?></button>
                 <a href="" onclick="toggle_collapse_form(); return false">Tìm chi tiết</a>
             </div>
         </div>

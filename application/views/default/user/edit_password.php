@@ -46,7 +46,7 @@
                         ]
                     ); ?>
                 </div>
-                <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')"><?= Consts::LABEL['submit']; ?></button>
+                <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')"><?= settings('label.submit'); ?></button>
             </form>
         </div>
     </div>
