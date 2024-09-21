@@ -37,7 +37,7 @@
                                                 'class' => 'form-control amount',
                                             ]
                                         ); ?>
-                                        <span class="input-group-addon"><?= APP_CURRENCY; ?></span>
+                                        <span class="input-group-addon"><?= settings('currency'); ?></span>
                                     </div>
                                 </div>
                             </div>

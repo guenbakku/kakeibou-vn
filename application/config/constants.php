@@ -90,4 +90,3 @@ defined('EXIT__AUTO_MAX') or define('EXIT__AUTO_MAX', 125); // highest automatic
 | App's unique constants
 |--------------------------------------------------------------------------
 */
-defined('APP_CURRENCY') or define('APP_CURRENCY', 'VND');

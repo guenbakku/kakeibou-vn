@@ -10,6 +10,7 @@ class Settings
     {
         $this->storage = [
             'version' => '3.0.0',
+            'currency' => $_ENV['CURRENCY'] ?? 'VND',
             'err_bad_request' => 'Yêu cầu không hợp lệ',
             'err_not_found' => 'Không tìm thấy dữ liệu',
             'err_login_info_invalid' => 'Username hoặc password không đúng',
