@@ -87,11 +87,22 @@
 
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-xs-6" style="padding-right: 7.5px">
                                 <label>Phụ trách</label>
                                 <?= form_dropdown(
                                     $field_name = 'player',
                                     $select['players'],
+                                    set_value($field_name, 0),
+                                    [
+                                        'class' => 'form-control',
+                                    ]
+                                ); ?>
+                            </div>
+                            <div class="col-xs-6" style="padding-left: 7.5px">
+                                <label>Tài khoản</label>
+                                <?= form_dropdown(
+                                    $field_name = 'account',
+                                    $select['account'],
                                     set_value($field_name, 0),
                                     [
                                         'class' => 'form-control',

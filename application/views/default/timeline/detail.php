@@ -18,7 +18,7 @@
                     <label>Tài khoản</label>
                     <?= form_dropdown(
                         'account',
-                        $select['accounts'] + ['0' => 'Thực thu chi', '-1' => 'Tất cả'],
+                        ['-1' => 'Tất cả', '0' => 'Thực thu chi'] + $select['accounts'],
                         $account_id,
                         [
                             'class' => 'form-control submit-on-change',
@@ -29,7 +29,7 @@
                     <label>Phụ trách</label>
                     <?= form_dropdown(
                         'player',
-                        $select['players'] + ['0' => 'Tất cả'],
+                        [0 => 'Tất cả'] + $select['players'],
                         $player_id,
                         [
                             'class' => 'form-control submit-on-change',
