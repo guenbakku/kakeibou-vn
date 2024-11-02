@@ -78,7 +78,7 @@
                                     <div class="small text-muted">
                                         <span class="label label-default" style="margin-right:3px">
                                             <span class="fa <?= $result[$i]['account_icon']; ?>"></span>
-                                            <?= $result[$i]['account_icon'] == 'fa-bank' ? $result[$i]['account'] : 'Tiền mặt'; ?>
+                                            <?= $result[$i]['account']; ?>
                                         </span>
                                         <?php if ($result[$i]['is_temp']) { ?>
                                         <span class="label label-default">
