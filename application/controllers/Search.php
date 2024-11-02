@@ -26,6 +26,7 @@ class Search extends MY_Controller
                     'inout_type' => true,
                     'inout_from' => true,
                     'inout_to' => true,
+                    'account' => true,
                     'modified_from' => true,
                     'modified_to' => true,
                     'category' => false,
@@ -82,6 +83,7 @@ class Search extends MY_Controller
             'inout_types' => [0 => 'Tất cả'] + $this->inout_type_model->get_select_tag_data(),
             'outgo_categories' => [0 => 'Tất cả'] + $this->category_model->get_select_tag_data($view_data['inout_types']['outgo']),
             'income_categories' => [0 => 'Tất cả'] + $this->category_model->get_select_tag_data($view_data['inout_types']['income']),
+            'account' => [0 => 'Tất cả'] + $this->account_model->get_select_tag_data(),
         ];
         $view_data['select']['initial_categories'] = $this->input->get('inout_type') == $view_data['inout_types']['income']
             ? $view_data['select']['income_categories']
