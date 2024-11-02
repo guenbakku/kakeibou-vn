@@ -32,30 +32,82 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>
-                        <input type="hidden" value="0" name="<?= $field_name = 'only_show_temp_inout'; ?>">
-                        <?= form_checkbox(
-                            [
-                                'name' => $field_name,
-                                'value' => '1',
-                                'checked' => (bool) set_value($field_name, false),
-                            ]
-                        ); ?>
-                        Chỉ hiện dữ liệu Danh nghĩa
-                    </label>
+                    <label>Dữ liệu danh nghĩa</label><br>
+                    <?php $field_name = 'temp_inout'; ?>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <label>
+                                <?= form_radio(
+                                    [
+                                        'name' => $field_name,
+                                        'value' => 'include',
+                                        'checked' => set_value($field_name, 'include') === 'include',
+                                    ]
+                                ); ?> Bao gồm
+                            </label>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>
+                                <?= form_radio(
+                                    [
+                                        'name' => $field_name,
+                                        'value' => 'exclude',
+                                        'checked' => set_value($field_name, 'include') === 'exclude',
+                                    ]
+                                ); ?> Loại trừ
+                            </label>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>
+                                <?= form_radio(
+                                    [
+                                        'name' => $field_name,
+                                        'value' => 'only',
+                                        'checked' => set_value($field_name, 'include') === 'only',
+                                    ]
+                                ); ?> Chỉ mỗi
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>
-                        <input type="hidden" value="0" name="<?= $field_name = 'also_show_pair_inout'; ?>">
-                        <?= form_checkbox(
-                            [
-                                'name' => $field_name,
-                                'value' => '1',
-                                'checked' => (bool) set_value($field_name, false),
-                            ]
-                        ); ?>
-                        Hiện dữ liệu lưu động nội bộ
-                    </label>
+                <label>Dữ liệu lưu động nội bộ</label><br>
+                    <?php $field_name = 'pair_inout'; ?>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <label>
+                                <?= form_radio(
+                                    [
+                                        'name' => $field_name,
+                                        'value' => 'include',
+                                        'checked' => set_value($field_name, 'include') === 'include',
+                                    ]
+                                ); ?> Bao gồm
+                            </label>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>
+                                <?= form_radio(
+                                    [
+                                        'name' => $field_name,
+                                        'value' => 'exclude',
+                                        'checked' => set_value($field_name, 'include') === 'exclude',
+                                    ]
+                                ); ?> Loại trừ
+                            </label>
+                        </div>
+                        <div class="col-xs-4">
+                            <label>
+                                <?= form_radio(
+                                    [
+                                        'name' => $field_name,
+                                        'value' => 'only',
+                                        'checked' => set_value($field_name, 'include') === 'only',
+                                    ]
+                                ); ?> Chỉ mỗi
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <div class="advance-search collapse">
                     <div class="form-group">

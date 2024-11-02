@@ -74,10 +74,8 @@ class Chart extends MY_Controller
         }
 
         // Lấy thông tin từ request parameter
-        $account_id = $this->input->get('account') ?? 0;
-        $player_id = $this->input->get('player') ?? 0;
-        $inout_type_id = $this->input->get('inout_type') ?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
-        $only_show_temp_inout = $this->input->get('only_show_temp_inout') ?? 0;
+        $inout_type_id = (int) ($this->input->get('inout_type') ?? array_flip(Inout_model::$INOUT_TYPE)['Chi']);
+        $only_show_temp_inout = (bool) $this->input->get('only_show_temp_inout');
 
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
@@ -91,15 +89,13 @@ class Chart extends MY_Controller
             $range[0],
             $range[1],
             $inout_type_id,
-            (bool) $only_show_temp_inout,
+            $only_show_temp_inout,
         );
         $view_data['year'] = $extractedDate['y'] ?? '';
         $view_data['month'] = $extractedDate['m'] ?? '';
         $view_data['day'] = $extractedDate['d'] ?? '';
         $view_data['total_items'] = count($view_data['list']);
         $view_data['select'] = [
-            'accounts' => $this->account_model->get_select_tag_data(),
-            'players' => $this->user_model->get_select_tag_data(),
             'inout_types' => $this->inout_type_model->get_select_tag_data(),
             'year' => array_combine($yearsList, $yearsList),
             'month' => array_combine($monthsList, $monthsList),
@@ -118,8 +114,6 @@ class Chart extends MY_Controller
         $view_data = array_merge($view_data, compact(
             'date',
             'dateFormatType',
-            'account_id',
-            'player_id',
             'inout_type_id',
             'only_show_temp_inout',
         ));

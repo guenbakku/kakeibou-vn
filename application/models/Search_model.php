@@ -20,8 +20,8 @@ class Search_model extends App_Model
         'account' => null,
         'player' => null,
         'category' => null,
-        'only_show_temp_inout' => false,
-        'also_show_pair_inout' => false,
+        'temp_inout' => 'include',
+        'pair_inout' => 'exclude',
         'offset' => 0,
         'limit' => 100,
     ];
@@ -72,10 +72,14 @@ class Search_model extends App_Model
             if ($val < 0) {
                 throw new AppException('Dữ liệu '.$name.' không hợp lệ');
             }
-        } elseif ($name === 'also_show_pair_inout') {
-            $val = (bool) $val;
-        } elseif ($name === 'only_show_temp_inout') {
-            $val = (bool) $val;
+        } elseif ($name === 'pair_inout') {
+            if (!in_array($val, ['exclude', 'include', 'only'])) {
+                throw new AppException('Dữ liệu lưu động nội bộ không hợp lệ');
+            }
+        } elseif ($name === 'temp_inout') {
+            if (!in_array($val, ['exclude', 'include', 'only'])) {
+                throw new AppException('Dữ liệu thu chi danh nghĩa không hợp lệ');
+            }
         }
 
         $this->settings[$name] = $val;
@@ -148,6 +152,7 @@ class Search_model extends App_Model
                            inout_records.date,
                            inout_records.skip_month_estimated,
                            inout_records.is_temp,
+                           inout_records.pair_id,
                            inout_types.name AS inout_type,
                            inout_types.id AS inout_type_id,
                            accounts.name AS account,
@@ -219,10 +224,14 @@ class Search_model extends App_Model
         if (!empty($this->settings['modified_to'])) {
             $db->where('inout_records.modified_on <', date('Y-m-d H:i:s', strtotime($this->settings['modified_to'].' +1 days')));
         }
-        if ($this->settings['also_show_pair_inout'] === false) {
+        if ($this->settings['pair_inout'] === 'exclude') {
             $db->where('inout_records.pair_id', '');
+        } elseif ($this->settings['pair_inout'] === 'only') {
+            $db->where('inout_records.pair_id <>', '');
         }
-        if ($this->settings['only_show_temp_inout'] === true) {
+        if ($this->settings['temp_inout'] === 'exclude') {
+            $db->where('inout_records.is_temp', 0);
+        } elseif ($this->settings['temp_inout'] === 'only') {
             $db->where('inout_records.is_temp', 1);
         }
 

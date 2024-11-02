@@ -81,11 +81,11 @@ class Timeline extends MY_Controller
         }
 
         // Lấy thông tin từ request parameter
-        $offset = $this->input->get('offset') ?? 0;
-        $account_id = $this->input->get('account') ?? 0;
-        $player_id = $this->input->get('player') ?? 0;
-        $inout_type_id = $this->input->get('inout_type') ?? array_flip(Inout_model::$INOUT_TYPE)['Chi'];
-        $only_show_temp_inout = $this->input->get('only_show_temp_inout') ?? 0;
+        $offset = (int) ($this->input->get('offset') ?? 0);
+        $account_id = (int) ($this->input->get('account') ?? -1);
+        $player_id = (int) ($this->input->get('player') ?? 0);
+        $inout_type_id = (int) ($this->input->get('inout_type') ?? array_flip(Inout_model::$INOUT_TYPE)['Chi']);
+        $only_show_temp_inout = (bool) $this->input->get('only_show_temp_inout');
 
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
@@ -101,8 +101,8 @@ class Timeline extends MY_Controller
         $this->search_model->inout_to = $range[1];
         $this->search_model->account = $account_id;
         $this->search_model->player = $player_id;
-        $this->search_model->only_show_temp_inout = $only_show_temp_inout;
-        $this->search_model->also_show_pair_inout = $account_id != 0;
+        $this->search_model->temp_inout = $only_show_temp_inout ? 'only' : 'include';
+        $this->search_model->pair_inout = $account_id === -1 ? 'exclude' : 'include';
         $this->search_model->offset = $offset;
         $view_data['result'] = $this->search_model->search();
 

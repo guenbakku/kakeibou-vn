@@ -30,8 +30,8 @@ class Search extends MY_Controller
                     'modified_from' => true,
                     'modified_to' => true,
                     'category' => false,
-                    'also_show_pair_inout' => false,
-                    'only_show_temp_inout' => false,
+                    'pair_inout' => false,
+                    'temp_inout' => false,
                     'offset' => false,
                 ];
                 $can_execute_search = false;
