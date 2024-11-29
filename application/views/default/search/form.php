@@ -25,7 +25,7 @@
                                 ],
                                 set_value($field_name, null, false),
                                 [
-                                    'class' => 'form-control',
+                                    'class' => 'form-control autofocus',
                                 ]
                             ); ?>
                         </div>
