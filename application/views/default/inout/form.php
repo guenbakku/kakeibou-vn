@@ -14,7 +14,7 @@
                                 ],
                                 set_value($field_name, null),
                                 [
-                                    'class' => 'form-control amount',
+                                    'class' => 'form-control amount autofocus',
                                 ]
                             ); ?>
                         </div>

@@ -1,5 +1,6 @@
 /**
- * Utilities
+ * Utilities.
+ * This contains the js snippets that are automatically applied to all screens
  */
 $(function(){
     /**
@@ -27,5 +28,12 @@ $(function(){
             dateField.defaultValue = '';
             dateField.value = value;
         }
+    });
+
+    /**
+     * Auto focus to specific input field
+     */
+    $(window).on("load", function(){
+        $('.autofocus').focus();
     });
 })
