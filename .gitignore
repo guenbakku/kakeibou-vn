@@ -1,4 +1,5 @@
 /.docker/data
+/.devcontainer
 /.env
 /application/cache
 /application/logs
