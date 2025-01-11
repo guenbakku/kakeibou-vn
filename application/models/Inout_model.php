@@ -121,17 +121,42 @@ class Inout_model extends App_Model
     {
         $keyword = $this->db->escape_like_str($keyword);
         $keyword = trim($keyword);
+
+        if ($keyword === '') {
+            return [];
+        }
+
+        // Construct sub query's sql
+        $db = $this->get_fresh_query();
+        $db->select('memo')
+            ->select('COUNT(`memo`) as `count`')
+            ->select('MAX(`modified_on`) as `modified_on`')
+            ->select('cash_flow')
+            ->from($this->get_table())
+            ->where('cash_flow', $cash_flow)
+            ->group_by('memo')
+        ;
+
+        // Search by memo's parts
+        array_map(
+            function ($part) use ($db) {
+                $part = trim($part);
+                if ($part !== '') {
+                    $db->like('memo', $part);
+                }
+            },
+            explode(' ', $keyword)
+        );
+
+        $sub_sql = $db->get_compiled_select();
+
         $sql = "SELECT
                     `inout_records`.`id`,
                     `inout_records`.`category_id`,
                     `inout_records`.`account_id`,
                     `inout_records`.`cash_flow`,
                     `inout_records`.`memo` as `value`
-                FROM (SELECT `memo`, COUNT(`memo`) as `count`, MAX(`modified_on`) as `modified_on`, `cash_flow`
-                      FROM `inout_records`
-                      WHERE `memo` LIKE '%{$keyword}%'
-                        AND `cash_flow` = '{$cash_flow}'
-                      GROUP BY `memo`) AS t
+                FROM ({$sub_sql}) AS t
                 LEFT JOIN `inout_records`
                     ON `inout_records`.`memo` = `t`.`memo`
                     AND `inout_records`.`modified_on` = `t`.`modified_on`
