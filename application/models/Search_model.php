@@ -130,14 +130,6 @@ class Search_model extends App_Model
         return current_url().'?'.http_build_query($query);
     }
 
-    protected function get_fresh_query()
-    {
-        $db = clone $this->db;
-        $db->reset_query();
-
-        return $db;
-    }
-
     /**
      * Tạo query cho xử lý tìm kiếm.
      */

@@ -119,29 +119,56 @@ class Inout_model extends App_Model
 
     public function search_memo(string $keyword, string $cash_flow)
     {
-        $keyword = $this->db->escape_like_str($keyword);
         $keyword = trim($keyword);
-        $sql = "SELECT
-                    `inout_records`.`id`,
-                    `inout_records`.`category_id`,
-                    `inout_records`.`account_id`,
-                    `inout_records`.`cash_flow`,
-                    `inout_records`.`memo` as `value`
-                FROM (SELECT `memo`, COUNT(`memo`) as `count`, MAX(`modified_on`) as `modified_on`, `cash_flow`
-                      FROM `inout_records`
-                      WHERE `memo` LIKE '%{$keyword}%'
-                        AND `cash_flow` = '{$cash_flow}'
-                      GROUP BY `memo`) AS t
-                LEFT JOIN `inout_records`
-                    ON `inout_records`.`memo` = `t`.`memo`
-                    AND `inout_records`.`modified_on` = `t`.`modified_on`
-                    AND `inout_records`.`cash_flow` = `t`.`cash_flow`
-                WHERE `inout_records`.`cash_flow` != 'internal'
-                    OR `inout_records`.`amount` >= 0
-                ORDER BY `inout_records`.`modified_on` DESC, `t`.`count` DESC
-                LIMIT 0, 10";
+        if ($keyword === '') {
+            return [];
+        }
 
-        return $this->db->query($sql)->result_array();
+        // Construct sub query's sql
+        $this->db->select('memo')
+            ->select('COUNT(`memo`) as `count`')
+            ->select('MAX(`modified_on`) as `modified_on`')
+            ->select('cash_flow')
+            ->from($this->get_table())
+            ->where('cash_flow', $cash_flow)
+            ->group_by('memo')
+        ;
+
+        // Search by keyword's parts
+        array_map(
+            function ($part) {
+                $part = trim($part);
+                $part = $this->db->escape_like_str($part);
+                if ($part !== '') {
+                    $this->db->like('memo', $part);
+                }
+            },
+            explode(' ', $keyword)
+        );
+
+        $sub_sql = $this->db->get_compiled_select();
+
+        $this->db->reset_query();
+        $this->db->select('inout_records.id')
+            ->select('inout_records.category_id')
+            ->select('inout_records.account_id')
+            ->select('inout_records.cash_flow')
+            ->select('inout_records.memo as `value`')
+            ->from("({$sub_sql}) AS t")
+            ->join(
+                'inout_records',
+                'inout_records.memo = t.memo AND inout_records.modified_on = t.modified_on AND inout_records.cash_flow = t.cash_flow',
+                'left'
+            )
+            ->where('inout_records.cash_flow !=', 'internal')
+            ->or_where('inout_records.amount >=', 0)
+            ->order_by('inout_records.modified_on', 'DESC')
+            ->order_by('t.count', 'DESC')
+            ->limit(10)
+            ->offset(0)
+        ;
+
+        return $this->db->get()->result_array();
     }
 
     /**

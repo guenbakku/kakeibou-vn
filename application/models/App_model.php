@@ -98,4 +98,17 @@ class App_model extends CI_Model
 
         return $this;
     }
+
+    /**
+     * Return a fresh query builder instance.
+     *
+     * @return object
+     */
+    protected function get_fresh_query()
+    {
+        $db = clone $this->db;
+        $db->reset_query();
+
+        return $db;
+    }
 }
