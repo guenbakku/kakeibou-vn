@@ -134,7 +134,7 @@ class Inout_model extends App_Model
             ->group_by('memo')
         ;
 
-        // Search by memo's parts
+        // Search by keyword's parts
         array_map(
             function ($part) {
                 $part = trim($part);
