@@ -206,19 +206,22 @@
             },
             select: function(even, ui) {
                 if (!is_edit) {
-                    const {category_id, account_id} = ui.item;
+                    const {category_id, account_id, is_temp} = ui.item;
                     if (category_id) {
                         $("[name=category_id]").val(category_id).trigger('change');
                     }
                     if (account_id) {
                         $("[name=account_id]").val(account_id).trigger('change');
                     }
+                    if (is_temp) {
+                        $("[name=is_temp]").prop('checked', Boolean(Number(is_temp))).trigger('change');
+                    }
                 }
             },
             minLength: 2,
         });
 
-        // Tự động check skip_month_estimated
+        // Tự động check skip_month_estimated dựa vào attribute của category
         $("[name=category_id]").change(function (evt) {
             if ($("[name=skip_month_estimated]").length === 0) {
                 return false;
