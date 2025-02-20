@@ -154,6 +154,8 @@ class Inout_model extends App_Model
             ->select('inout_records.account_id')
             ->select('inout_records.cash_flow')
             ->select('inout_records.memo as `value`')
+            ->select('inout_records.skip_month_estimated')
+            ->select('inout_records.is_temp')
             ->from("({$sub_sql}) AS t")
             ->join(
                 'inout_records',
