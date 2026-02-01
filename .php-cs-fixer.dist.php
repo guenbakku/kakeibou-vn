@@ -20,6 +20,7 @@ return (new PhpCsFixer\Config())
         'echo_tag_syntax' => ['format' => 'short'],
         'binary_operator_spaces' => ['default' => 'single_space', 'operators' => ['=>' => 'single_space']],
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
+        'no_alternative_syntax' => false,
     ])
     ->setIndent("    ")
     ->setLineEnding("\n")
