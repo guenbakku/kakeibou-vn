@@ -43,7 +43,8 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
                                 'checked' => (bool) set_value($field_name, false),
                             ]
                         ); ?>
-                        Khoản thu chi cố định hàng tháng
+                        Cố định mỗi tháng <br>
+                        <span class="small text-muted">(Không tính vào Dự định thu chi mỗi tháng)</span>
                     </label>
                 </div>
 
