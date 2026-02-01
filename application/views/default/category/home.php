@@ -22,36 +22,43 @@
                 </tr>
             </table>
 
-            <?php if (count($categories) > 0) { ?>
-            <table class="table table-bordered table-ex sortable">
-                <?php foreach ($categories as $i => $item) { ?>
-                <tr class="sort">
-                    <td style="width:30px" class="handle">
-                        <span class="glyphicon glyphicon-menu-hamburger"></span>
-                    </td>
-                    <td style="border-right:0; width:100%">
-                        <a href="<?= sprintf($url['edit'], $item['id']); ?>" style="display:block; color:inherit; text-decoration:none">
-                            <?= $item['name']; ?>
-                        </a>
-                        <input type="hidden" name="categories[<?= $item['id']; ?>][id]" value="<?= $item['id']; ?>">
-                        <input type="hidden" name="categories[<?= $item['id']; ?>][order_no]" data-role="order_no" value="<?= $i; ?>">
-                    </td>
-                    <td style="border-left:0; padding-right:15px">
-                        <span class="glyphicon glyphicon-menu-right"></span>
-                    </td>
-                </tr>
-                <?php } ?>
-            </table>
-            <table class="table table-bordered" style="border-top:1px solid; border-color:inherit">
-                <tr>
-                    <td>
-                        <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')"><?= settings('label.submit'); ?></button>
-                    </td>
-                </tr>
-            </table>
-            <?php } else { ?>
-            <p class="text-center" style="margin-top:10px">Chưa có dữ liệu</p>
-            <?php } ?>
+            <?php if (count($categories) > 0): ?>
+                <table class="table table-bordered table-ex sortable">
+                    <?php foreach ($categories as $i => $item): ?>
+                        <tr class="sort">
+                            <td style="width:30px" class="handle">
+                                <span class="glyphicon glyphicon-menu-hamburger"></span>
+                            </td>
+                            <td style="border-right:0; width:100%">
+                                <a href="<?= sprintf($url['edit'], $item['id']); ?>" style="display:block; color:inherit; text-decoration:none">
+                                    <?= $item['name']; ?>
+                                </a>
+                                <div class="small text-muted">
+                                    <?php if ($item['is_month_fixed_money'] == 1): ?>
+                                        <span class="label label-default">Cố định mỗi tháng</span>
+                                    <?php endif; ?>
+                                </div>
+                                <input type="hidden" name="categories[<?= $item['id']; ?>][id]" value="<?= $item['id']; ?>">
+                                <input type="hidden" name="categories[<?= $item['id']; ?>][order_no]" data-role="order_no" value="<?= $i; ?>">
+                            </td>
+                            <td style="border-left:0; padding-right:15px">
+                                <span class="glyphicon glyphicon-menu-right"></span>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+                <table class="table table-bordered" style="border-top:1px solid; border-color:inherit">
+                    <tr>
+                        <td>
+                            <button type="submit" class="btn btn-primary" onClick="Cashbook.submitButton(this, 'submit')">
+                                <?= settings('label.submit'); ?>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            <?php else: ?>
+                <p class="text-center" style="margin-top:10px">Chưa có dữ liệu</p>
+            <?php endif; ?>
         </div>
     </form>
 </div>

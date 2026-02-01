@@ -43,14 +43,15 @@ $disabled_attr = $this->router->fetch_method() == 'edit'
                                 'checked' => (bool) set_value($field_name, false),
                             ]
                         ); ?>
-                        Khoản thu chi cố định hàng tháng
+                        Cố định mỗi tháng <br>
+                        <span class="small text-muted">(Không tính vào Dự định thu chi mỗi tháng)</span>
                     </label>
                 </div>
 
                 <button type="submit" onClick="Cashbook.submitButton(this, 'submit')" class="btn btn-primary"><?= settings('label.submit'); ?></button>
-                <?php if ($this->router->fetch_method() == 'edit') { ?>
+                <?php if ($this->router->fetch_method() == 'edit'): ?>
                     <button type="button" onClick="Cashbook.submitButton(this, 'delete')" class="btn btn-danger pull-right"><?= settings('label.delete'); ?></button>
-                <?php } ?>
+                <?php endif; ?>
 
             </div>
         </div>
