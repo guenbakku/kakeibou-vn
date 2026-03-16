@@ -20,6 +20,8 @@ class Settings
             'err_account_not_empty' => 'Không xóa được tài khoản <strong>%s</strong>.<br>Cần xóa hết dữ liệu thu chi của tài khoản này trước khi xóa.',
             'err_account_restrict_delete' => 'Tài khoản <strong>%s</strong> không được phép xóa.',
             'err_transfer_from_to_same' => 'Giá trị <strong>Chuyển từ</strong> và <strong>đến</strong> không được giống nhau.',
+            'err_account_move_from_to_same' => 'Tài khoản đi và đến không được giống nhau.',
+            'err_account_move_to_cash_account' => 'Không thể di chuyển dữ liệu ghi chép đến tài khoản <strong>Tiền mặt</strong>.',
             'succ_add_inout_record' => 'Thêm ghi chép <strong>%s</strong> thành công. <a href="%s">Sửa lại</a>',
             'succ_edit_inout_record' => 'Sửa ghi chép thành công. <a href="%s">Sửa lại</a>',
             'succ_delete_inout_record' => 'Xóa ghi chép thành công',

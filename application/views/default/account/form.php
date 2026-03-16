@@ -39,7 +39,7 @@
                 </div>
                 <button type="submit" onClick="Cashbook.submitButton(this, 'submit')" class="btn btn-primary"><?= settings('label.submit'); ?></button>
                 <?php if ($this->router->fetch_method() == 'edit'): ?>
-                    <a href="<?= $url['delConfirm']; ?>" class="btn btn-danger pull-right"><?= settings('label.delete'); ?></a>
+                    <a href="<?= $url['del_confirm']; ?>" class="btn btn-danger pull-right"><?= settings('label.delete'); ?></a>
                 <?php endif; ?>
             </div>
         </div>

@@ -18,7 +18,7 @@
                             <div class="col-xs-12">
                                 <p>Tài khoản đang chứa dữ liệu ghi chép. <br>
                                 Nếu bạn muốn xóa tài khoản này, cần phải di chuyển dữ liệu ghi chép sang tài khoản khác.</p>
-                                <label>Di chuyển đến tài khoản khác:</label>
+                                <label>Tài khoản khác:</label>
                                 <?= form_dropdown(
                                     $field_name = 'target_account_id',
                                     $select['target_accounts'],
@@ -31,7 +31,7 @@
                         </div>
                     <?php endif; ?>
                 </div>
-                <button type="submit" onClick="Cashbook.submitButton(this, 'delete')" class="btn btn-danger"><?= settings('label.delete'); ?></button>
+                <button type="submit" class="btn btn-danger"><?= settings('label.delete'); ?></button>
             </div>
         </div>
     </form>
