@@ -47,132 +47,132 @@
                     ); ?>
                 </div>
 
-                <?php if (in_array($type, ['outgo', 'income'])) { ?>
-                <div class="form-group">
-                    <label>Danh mục:</label>
-                    <?= form_dropdown(
-                        $field_name = 'category_id',
-                        $select['categories'],
-                        set_value($field_name, null),
-                        [
-                            'class' => 'form-control',
-                        ]
-                    ); ?>
-                </div>
-                <?php } ?>
-
-                <?php if (in_array($type, ['outgo', 'income'])) { ?>
-                <div class="row">
-                    <div class="col-xs-6" style="padding-right: 7.5px">
-                        <div class="form-group">
-                            <label>Tài khoản:</label>
-                            <?= form_dropdown(
-                                $field_name = 'account_id',
-                                $select['accounts'],
-                                set_value($field_name, null),
-                                [
-                                    'class' => 'form-control',
-                                ]
-                            ); ?>
-                        </div>
-                    </div>
-                    <div class="col-xs-6" style="padding-left: 7.5px">
-                        <div class="form-group">
-                            <label>Phụ trách:</label>
-                            <?= form_dropdown(
-                                $field_name = 'player',
-                                $select['players'],
-                                set_value($field_name, $this->auth->user('id')),
-                                [
-                                    'class' => 'form-control',
-                                ]
-                            ); ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="hidden" value="0" name="<?= $field_name = 'is_temp'; ?>">
-                        <?= form_checkbox(
+                <?php if (in_array($type, ['outgo', 'income'])): ?>
+                    <div class="form-group">
+                        <label>Danh mục:</label>
+                        <?= form_dropdown(
+                            $field_name = 'category_id',
+                            $select['categories'],
+                            set_value($field_name, null),
                             [
-                                'name' => $field_name,
-                                'value' => '1',
-                                'checked' => (bool) set_value($field_name, false),
+                                'class' => 'form-control',
                             ]
                         ); ?>
-                        Thu chi danh nghĩa
-                    </label>
-                </div>
-                <?php } ?>
+                    </div>
+                <?php endif; ?>
 
-                <?php if (in_array($type, ['internal'])) { ?>
-                <div class="row">
-                    <div class="col-xs-9">
-                        <div class="row">
-                            <div class="col-xs-6" style="padding-right: 0">
-                                <div class="form-group">
-                                    <label>Chuyển từ:</label>
-                                    <?= form_dropdown(
-                                        $field_name = 'transfer_from',
-                                        $select['transfer'],
-                                        set_value($field_name, element(0, array_keys($select['transfer']))),
-                                        [
-                                            'class' => 'form-control',
-                                        ]
-                                    ); ?>
-                                </div>
+                <?php if (in_array($type, ['outgo', 'income'])): ?>
+                    <div class="row">
+                        <div class="col-xs-6" style="padding-right: 7.5px">
+                            <div class="form-group">
+                                <label>Tài khoản:</label>
+                                <?= form_dropdown(
+                                    $field_name = 'account_id',
+                                    $select['accounts'],
+                                    set_value($field_name, null),
+                                    [
+                                        'class' => 'form-control',
+                                    ]
+                                ); ?>
                             </div>
-                            <div class="col-xs-6" style="padding-right: 0">
-                                <div class="form-group">
-                                    <label>đến:</label>
-                                    <?= form_dropdown(
-                                        $field_name = 'transfer_to',
-                                        $select['transfer'],
-                                        set_value($field_name, element(1, array_keys($select['transfer']))),
-                                        [
-                                            'class' => 'form-control',
-                                        ]
-                                    ); ?>
-                                </div>
+                        </div>
+                        <div class="col-xs-6" style="padding-left: 7.5px">
+                            <div class="form-group">
+                                <label>Phụ trách:</label>
+                                <?= form_dropdown(
+                                    $field_name = 'player',
+                                    $select['players'],
+                                    set_value($field_name, $this->auth->user('id')),
+                                    [
+                                        'class' => 'form-control',
+                                    ]
+                                ); ?>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xs-3">
-                        <div class="form-group">
-                            <label>　</label>
-                            <button id="switch-account" type="button" class="btn btn-default form-control"><i class="glyphicon glyphicon-retweet"></i></button>
+                    <div class="form-group">
+                        <label>
+                            <input type="hidden" value="0" name="<?= $field_name = 'is_temp'; ?>">
+                            <?= form_checkbox(
+                                [
+                                    'name' => $field_name,
+                                    'value' => '1',
+                                    'checked' => (bool) set_value($field_name, false),
+                                ]
+                            ); ?>
+                            Thu chi danh nghĩa
+                        </label>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (in_array($type, ['internal'])): ?>
+                    <div class="row">
+                        <div class="col-xs-9">
+                            <div class="row">
+                                <div class="col-xs-6" style="padding-right: 0">
+                                    <div class="form-group">
+                                        <label>Chuyển từ:</label>
+                                        <?= form_dropdown(
+                                            $field_name = 'transfer_from',
+                                            $select['transfer'],
+                                            set_value($field_name, element(0, array_keys($select['transfer']))),
+                                            [
+                                                'class' => 'form-control',
+                                            ]
+                                        ); ?>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6" style="padding-right: 0">
+                                    <div class="form-group">
+                                        <label>đến:</label>
+                                        <?= form_dropdown(
+                                            $field_name = 'transfer_to',
+                                            $select['transfer'],
+                                            set_value($field_name, element(1, array_keys($select['transfer']))),
+                                            [
+                                                'class' => 'form-control',
+                                            ]
+                                        ); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label>　</label>
+                                <button id="switch-account" type="button" class="btn btn-default form-control"><i class="glyphicon glyphicon-retweet"></i></button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <?php } ?>
+                <?php endif; ?>
 
-                <?php if (in_array($type, ['outgo'])) { ?>
-                <div class="form-group">
-                    <label>
-                        <input type="hidden" value="0" name="<?= $field_name = 'skip_month_estimated'; ?>">
-                        <?= form_checkbox(
-                            [
-                                'name' => $field_name,
-                                'value' => '1',
-                                'checked' => (bool) set_value($field_name, false),
-                            ]
-                        ); ?>
-                        Không tính vào Dự định chi tháng này
-                    </label>
-                </div>
-                <?php } ?>
+                <?php if (in_array($type, ['outgo'])): ?>
+                    <div class="form-group">
+                        <label>
+                            <input type="hidden" value="0" name="<?= $field_name = 'skip_month_estimated'; ?>">
+                            <?= form_checkbox(
+                                [
+                                    'name' => $field_name,
+                                    'value' => '1',
+                                    'checked' => (bool) set_value($field_name, false),
+                                ]
+                            ); ?>
+                            Không tính vào Dự định chi tháng này
+                        </label>
+                    </div>
+                <?php endif; ?>
 
                 <button type="button" onClick="submitForm(this)" class="btn btn-primary"><?= settings('label.submit'); ?></button>
-                <?php if ($this->router->fetch_method() == 'add') { ?>
+                <?php if ($this->router->fetch_method() == 'add'): ?>
                     <button type="button" onClick="submitFormAndContinue(this)" class="btn btn-primary" style="margin-left:15px">
                         <?= settings('label.submit_continue'); ?>
                     </button>
-                <?php } ?>
-                <?php if ($this->router->fetch_method() == 'edit') { ?>
+                <?php endif; ?>
+                <?php if ($this->router->fetch_method() == 'edit'): ?>
                     <button type="button" onClick="Cashbook.submitButton(this, 'delete')" class="btn btn-danger pull-right">
                         <?= settings('label.delete'); ?>
                     </button>
-                <?php } ?>
+                <?php endif; ?>
             </div>
         </div>
     </form>
@@ -226,17 +226,20 @@
         });
 
         // Tự động check skip_month_estimated dựa vào attribute của category
-        $("[name=category_id]").change(function (evt) {
-            if ($("[name=skip_month_estimated]").length === 0) {
-                return false;
-            }
-            const category_id = $(this).val();
-            $.getJSON("/category/is_month_fixed_money", {
-                'id': category_id
-            }).done(function (data) {
-                $("[name=skip_month_estimated]").prop('checked', data);
+        // Không bật tính năng này nếu đang ở mode=edit
+        if (!is_edit) {
+            $("[name=category_id]").change(function (evt) {
+                if ($("[name=skip_month_estimated]").length === 0) {
+                    return false;
+                }
+                const category_id = $(this).val();
+                $.getJSON("/category/is_month_fixed_money", {
+                    'id': category_id
+                }).done(function (data) {
+                    $("[name=skip_month_estimated]").prop('checked', data);
+                });
             });
-        });
+        }
 
         // Switch giá trị transfer-from và transfer-to
         $("#switch-account").on("click", () => {
