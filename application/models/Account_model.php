@@ -89,11 +89,7 @@ class Account_model extends App_Model
         ;
 
         // Kiểm tra xem danh mục này có chứa dữ liệu thu chi nào không
-        $count = $this->db->where('account_id', $id)
-            ->from('inout_records')
-            ->count_all_results()
-        ;
-        if ($count > 0) {
+        if (!$this->isEmpty($id)) {
             throw new AppException(sprintf(settings('err_account_not_empty'), $account_name));
         }
 
@@ -108,5 +104,17 @@ class Account_model extends App_Model
         }
 
         $this->db->where('id', $id)->delete($this->get_table());
+    }
+
+    /**
+     * Kiểm tra xem tài khoản này có dữ liệu inout hay không.
+     * Trả về true nếu rỗng, false nếu có dữ liệu.
+     */
+    public function isEmpty(int $id): bool
+    {
+        return $this->db->where('account_id', $id)
+            ->from('inout_records')
+            ->count_all_results() == 0
+        ;
     }
 }
