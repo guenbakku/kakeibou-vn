@@ -142,23 +142,27 @@ class Account_model extends App_Model
         // Trong trường hợp này, sau khi di chuyển hết dữ liệu sang account_to,
         // sẽ xảy ra trường hợp 2 bản ghi internal cùng trỏ về 1 account, cần được loại bỏ.
         // Dưới dây là xử lý xóa những dữ liệu internal như vậy.
-        $sub_query_str_1 = $this->db->select('inout_records.pair_id')
-            ->from('inout_records')
-            ->where('inout_records.account_id', $to)
-            ->where('inout_records.cash_flow', 'internal')
-            ->where('inout_records.amount <', 0)
+        $sub_query = $this->db->select('ir_neg.pair_id')
+            ->from('inout_records AS ir_neg')
+            ->join(
+                'inout_records AS ir_pos',
+                'ir_neg.pair_id = ir_pos.pair_id
+                    AND ir_neg.amount < 0
+                    AND ir_pos.amount > 0
+                    AND ir_neg.pair_id != ""
+                    AND ir_pos.pair_id != ""'
+            )
+            ->where('ir_neg.account_id', $to)
+            ->where('ir_pos.account_id', $to)
+            ->where('ir_neg.cash_flow', 'internal')
             ->get_compiled_select()
         ;
         // ---
-        $sub_query_str_2 = $this->db->select('inout_records.pair_id')
-            ->from('inout_records')
-            ->join("({$sub_query_str_1}) AS ir1", 'inout_records.pair_id = ir1.pair_id AND inout_records.amount > 0')
-            ->get_compiled_select()
-        ;
+        $sql = "DELETE ir FROM inout_records ir
+                INNER JOIN ({$sub_query}) AS to_delete
+                ON ir.pair_id = to_delete.pair_id";
         // ---
-        $this->db->where("inout_records.pair_id IN (SELECT ir2.pair_id FROM ({$sub_query_str_2}) as ir2)", null, false)
-            ->delete('inout_records')
-        ;
+        $this->db->query($sql);
     }
 
     /**
