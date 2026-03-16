@@ -4,9 +4,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Inout_model extends App_Model
 {
-    // ID của Account Tiền mặt trong Table Categories (chú ý kiểu String)
-    public const ACCOUNT_CASH_ID = '1';
-
     // Mốc đánh dấu ID kết thúc của category fix
     public const FIX_CATEGORY_ID_MAX = '20';
 
@@ -48,7 +45,10 @@ class Inout_model extends App_Model
     public function __construct()
     {
         parent::__construct();
+
         $this->load->database('default');
+        $this->load->model('user_model');
+        $this->load->model('account_model');
     }
 
     public function get_table(): string
@@ -195,17 +195,15 @@ class Inout_model extends App_Model
      */
     public function get_select_tag_data_for_transfer(): array
     {
-        $this->load->model('user_model');
-        $this->load->model('account_model');
         $player_select_tags = $this->user_model->get_select_tag_data();
         $account_select_tags = $this->account_model->get_select_tag_data();
         $glue = self::TRANSFER_SELECT_GLUE;
         $select_tags = [];
         foreach ($player_select_tags as $player_id => $name) {
-            $key = implode($glue, [self::ACCOUNT_CASH_ID, $player_id]);
+            $key = implode($glue, [$this->account_model::ACCOUNT_CASH_ID, $player_id]);
             $select_tags[$key] = $name;
         }
-        unset($account_select_tags[self::ACCOUNT_CASH_ID]);
+        unset($account_select_tags[$this->account_model::ACCOUNT_CASH_ID]);
         $select_tags += $account_select_tags;
 
         return $select_tags;
@@ -243,7 +241,7 @@ class Inout_model extends App_Model
 
         // Bỏ item player nếu ko phải là item cash
         $modifier = function ($item) {
-            if ($item['account_id'] != self::ACCOUNT_CASH_ID) {
+            if ($item['account_id'] != $this->account_model::ACCOUNT_CASH_ID) {
                 unset($item['player']);
             }
 
@@ -286,14 +284,14 @@ class Inout_model extends App_Model
      */
     public function get_internal_category_id(array $pair)
     {
-        if ($pair[0]['account_id'] == self::ACCOUNT_CASH_ID) {
-            if ($pair[1]['account_id'] == self::ACCOUNT_CASH_ID) {
+        if ($pair[0]['account_id'] == $this->account_model::ACCOUNT_CASH_ID) {
+            if ($pair[1]['account_id'] == $this->account_model::ACCOUNT_CASH_ID) {
                 return self::$INTERNAL_CATEGORY_IDS['handover'];
             }
 
             return self::$INTERNAL_CATEGORY_IDS['deposit'];
         }
-        if ($pair[1]['account_id'] == self::ACCOUNT_CASH_ID) {
+        if ($pair[1]['account_id'] == $this->account_model::ACCOUNT_CASH_ID) {
             return self::$INTERNAL_CATEGORY_IDS['drawer'];
         }
 
@@ -455,7 +453,7 @@ class Inout_model extends App_Model
      */
     private function modify_pair_player($pair): array
     {
-        if (!in_array(self::ACCOUNT_CASH_ID, [
+        if (!in_array($this->account_model::ACCOUNT_CASH_ID, [
             $pair[0]['account_id'],
             $pair[1]['account_id'],
         ])) {
@@ -466,7 +464,7 @@ class Inout_model extends App_Model
             return $pair;
         }
 
-        if ($pair[0]['account_id'] == self::ACCOUNT_CASH_ID) {
+        if ($pair[0]['account_id'] == $this->account_model::ACCOUNT_CASH_ID) {
             $pair[1]['player'] = $pair[0]['player'];
         } else {
             $pair[0]['player'] = $pair[1]['player'];
