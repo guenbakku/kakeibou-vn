@@ -134,7 +134,11 @@ class Account_model extends App_Model
 
         $this->db
             ->where('account_id', $from)
-            ->update('inout_records', ['account_id' => $to])
+            ->update('inout_records', [
+                'account_id' => $to,
+                'modified_on' => date('Y-m-d H:i:s'),
+                'modified_by' => $this->auth->user('id'),
+            ])
         ;
 
         // Đối với những dữ liệu lưu động nội bộ (internal),
