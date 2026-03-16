@@ -74,11 +74,6 @@ class Account extends MY_Controller
         }
 
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
-            // Chuyển sang xử lý xóa category nếu lựa chọn xóa
-            if ((bool) $this->input->get('delete') === true) {
-                return $this->del($id);
-            }
-
             try {
                 $this->load->library('form_validation');
 
@@ -89,7 +84,7 @@ class Account extends MY_Controller
                 $this->account_model->edit($id, $this->input->post());
                 $this->flash->success(settings('succ_edit_account'));
 
-                return redirect($this->referer->getSession());
+                return redirect($this->base_url());
             } catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
@@ -100,19 +95,54 @@ class Account extends MY_Controller
                 show_error(settings('err_not_found'));
             }
             $_POST = $account_data;
-
-            // Lưu referer của page access đến form
-            $this->referer->saveSession();
         }
 
         $view_data['title'] = 'Sửa tài khoản';
         $view_data['url'] = [
             'form' => $this->base_url([__FUNCTION__, $id]),
             'del' => $this->base_url(['del', $id]),
-            'back' => $this->referer->getSession(null, false),
+            'del_confirm' => $this->base_url(['del_confirm', $id]),
+            'back' => $this->base_url(),
         ];
 
         $this->template->write_view('MAIN', 'account/form', $view_data);
+        $this->template->render();
+    }
+
+    public function del_confirm(int $id)
+    {
+        if (!is_numeric($id)) {
+            show_error(settings('err_bad_request'));
+        }
+
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            return $this->del($id);
+        }
+
+        $account_data = $this->account_model->get($id);
+        if (empty($account_data)) {
+            show_error(settings('err_not_found'));
+        }
+
+        $is_account_empty = $this->account_model->is_empty($id);
+        $target_accounts = ['' => ''] + array_filter(
+            $this->account_model->get_select_tag_data(),
+            fn ($account_id) => $account_id !== $id && $account_id !== $this->account_model::ACCOUNT_CASH_ID,
+            ARRAY_FILTER_USE_KEY,
+        );
+
+        $view_data['title'] = 'Xác nhận xóa tài khoản';
+        $view_data['url'] = [
+            'form' => $this->base_url(['del_confirm', $id]),
+            'back' => $this->base_url(['edit', $id]),
+        ];
+        $view_data['account'] = $account_data;
+        $view_data['is_account_empty'] = $is_account_empty;
+        $view_data['select'] = [
+            'target_accounts' => $target_accounts,
+        ];
+
+        $this->template->write_view('MAIN', 'account/del_confirm', $view_data);
         $this->template->render();
     }
 
@@ -123,12 +153,26 @@ class Account extends MY_Controller
         }
 
         try {
-            $this->account_model->del($id);
+            if (!$this->account_model->is_empty($id)) {
+                $this->load->library('form_validation');
+
+                if ($this->form_validation->run() === false) {
+                    throw new AppException(validation_errors());
+                }
+
+                $target_account_id = (int) $this->input->post('target_account_id');
+                $this->account_model->move_records_and_delete($id, $target_account_id);
+            } else {
+                $this->account_model->del($id);
+            }
+
             $this->flash->success(settings('succ_del_account'));
+
+            return redirect($this->base_url());
         } catch (AppException $ex) {
             $this->flash->error($ex->getMessage());
-        }
 
-        return redirect($this->referer->getSession());
+            return redirect($this->base_url(['del_confirm', $id]));
+        }
     }
 }

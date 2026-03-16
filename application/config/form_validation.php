@@ -111,4 +111,12 @@ $config = [
             'rules' => 'required|trim|xss_clean',
         ],
     ],
+
+    'account/del_confirm' => [
+        [
+            'field' => 'target_account_id',
+            'label' => 'Tài khoản khác',
+            'rules' => 'required|exist[accounts.id]',
+        ],
+    ],
 ];

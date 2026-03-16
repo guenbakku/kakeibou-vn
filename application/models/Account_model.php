@@ -4,6 +4,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Account_model extends App_Model
 {
+    // ID của Account Tiền mặt
+    public const ACCOUNT_CASH_ID = 1;
+
     public function get_table(): string
     {
         return 'accounts';
@@ -79,6 +82,17 @@ class Account_model extends App_Model
     }
 
     /**
+     * Di chuyển tất cả các bản ghi từ tài khoản $from sang tài khoản $to, rồi xóa tài khoản $from.
+     */
+    public function move_records_and_delete(int $from, int $to)
+    {
+        $this->db->trans_start();
+        $this->move_records($from, $to);
+        $this->del($from);
+        $this->db->trans_complete();
+    }
+
+    /**
      * Xóa tài khoản khỏi db.
      */
     public function del(int $id)
@@ -89,11 +103,7 @@ class Account_model extends App_Model
         ;
 
         // Kiểm tra xem danh mục này có chứa dữ liệu thu chi nào không
-        $count = $this->db->where('account_id', $id)
-            ->from('inout_records')
-            ->count_all_results()
-        ;
-        if ($count > 0) {
+        if (!$this->is_empty($id)) {
             throw new AppException(sprintf(settings('err_account_not_empty'), $account_name));
         }
 
@@ -108,5 +118,58 @@ class Account_model extends App_Model
         }
 
         $this->db->where('id', $id)->delete($this->get_table());
+    }
+
+    /**
+     * Di chuyển tất cả các dữ liệu inout từ tài khoản $from sang tài khoản $to.
+     */
+    public function move_records(int $from, int $to)
+    {
+        if ($from == $to) {
+            throw new AppException(sprintf(settings('err_account_move_from_to_same')));
+        }
+        if ($to === self::ACCOUNT_CASH_ID) {
+            throw new AppException(sprintf(settings('err_account_move_to_cash_account')));
+        }
+
+        $this->db
+            ->where('account_id', $from)
+            ->update('inout_records', ['account_id' => $to])
+        ;
+
+        // Đối với những dữ liệu lưu động nội bộ (internal),
+        // có khả năng account_to và account_from mỗi bên đang chứa 1 nửa của dữ liệu internal.
+        // Trong trường hợp này, sau khi di chuyển hết dữ liệu sang account_to,
+        // sẽ xảy ra trường hợp 2 bản ghi internal cùng trỏ về 1 account, cần được loại bỏ.
+        // Dưới dây là xử lý xóa những dữ liệu internal như vậy.
+        $sub_query_str_1 = $this->db->select('inout_records.pair_id')
+            ->from('inout_records')
+            ->where('inout_records.account_id', $to)
+            ->where('inout_records.cash_flow', 'internal')
+            ->where('inout_records.amount <', 0)
+            ->get_compiled_select()
+        ;
+        // ---
+        $sub_query_str_2 = $this->db->select('inout_records.pair_id')
+            ->from('inout_records')
+            ->join("({$sub_query_str_1}) AS ir1", 'inout_records.pair_id = ir1.pair_id AND inout_records.amount > 0')
+            ->get_compiled_select()
+        ;
+        // ---
+        $this->db->where("inout_records.pair_id IN (SELECT ir2.pair_id FROM ({$sub_query_str_2}) as ir2)", null, false)
+            ->delete('inout_records')
+        ;
+    }
+
+    /**
+     * Kiểm tra xem tài khoản này có dữ liệu inout hay không.
+     * Trả về true nếu rỗng, false nếu có dữ liệu.
+     */
+    public function is_empty(int $id): bool
+    {
+        return $this->db->where('account_id', $id)
+            ->from('inout_records')
+            ->count_all_results() == 0
+        ;
     }
 }
