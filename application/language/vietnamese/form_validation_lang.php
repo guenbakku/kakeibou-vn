@@ -1,4 +1,5 @@
 <?php
+
 /**
  * System messages translation for CodeIgniter(tm).
  *
@@ -39,3 +40,4 @@ $lang['form_validation_greater_than'] = 'Trường {field} phải lớn hơn {pa
 $lang['form_validation_greater_than_equal_to'] = 'Trường {field} phải lớn hơn hoặc bằng {param}.';
 $lang['form_validation_error_message_not_set'] = 'Không thể xác định thông báo lỗi với trường {field}.';
 $lang['form_validation_in_list'] = 'Trường {field} phải là một trong: {param}.';
+$lang['form_validation_exist'] = 'Trường {field} chứa giá trị không tồn tại trong hệ thống.';

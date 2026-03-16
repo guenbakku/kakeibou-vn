@@ -82,6 +82,17 @@ class Account_model extends App_Model
     }
 
     /**
+     * Di chuyển tất cả các bản ghi từ tài khoản $from sang tài khoản $to, rồi xóa tài khoản $from.
+     */
+    public function move_records_and_delete(int $from, int $to)
+    {
+        $this->db->trans_start();
+        $this->move_records($from, $to);
+        $this->del($from);
+        $this->db->trans_complete();
+    }
+
+    /**
      * Xóa tài khoản khỏi db.
      */
     public function del(int $id)
@@ -109,7 +120,10 @@ class Account_model extends App_Model
         $this->db->where('id', $id)->delete($this->get_table());
     }
 
-    public function move_inout_records(int $from, int $to)
+    /**
+     * Di chuyển tất cả các dữ liệu inout từ tài khoản $from sang tài khoản $to.
+     */
+    public function move_records(int $from, int $to)
     {
         if ($from == $to) {
             throw new AppException(sprintf(settings('err_account_move_from_to_same')));
@@ -121,6 +135,29 @@ class Account_model extends App_Model
         $this->db
             ->where('account_id', $from)
             ->update('inout_records', ['account_id' => $to])
+        ;
+
+        // Đối với những dữ liệu lưu động nội bộ (internal),
+        // có khả năng account_to và account_from mỗi bên đang chứa 1 nửa của dữ liệu internal.
+        // Trong trường hợp này, sau khi di chuyển hết dữ liệu sang account_to,
+        // sẽ xảy ra trường hợp 2 bản ghi internal cùng trỏ về 1 account, cần được loại bỏ.
+        // Dưới dây là xử lý xóa những dữ liệu internal như vậy.
+        $sub_query_str_1 = $this->db->select('inout_records.pair_id')
+            ->from('inout_records')
+            ->where('inout_records.account_id', $to)
+            ->where('inout_records.cash_flow', 'internal')
+            ->where('inout_records.amount <', 0)
+            ->get_compiled_select()
+        ;
+        // ---
+        $sub_query_str_2 = $this->db->select('inout_records.pair_id')
+            ->from('inout_records')
+            ->join("({$sub_query_str_1}) AS ir1", 'inout_records.pair_id = ir1.pair_id AND inout_records.amount > 0')
+            ->get_compiled_select()
+        ;
+        // ---
+        $this->db->where("inout_records.pair_id IN (SELECT ir2.pair_id FROM ({$sub_query_str_2}) as ir2)", null, false)
+            ->delete('inout_records')
         ;
     }
 

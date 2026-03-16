@@ -14,6 +14,7 @@
                         </div>
                     </div>
                     <?php if (!$is_account_empty): ?>
+                        <hr>
                         <div class="row" style="margin-top: 20px">
                             <div class="col-xs-12">
                                 <p>Tài khoản đang chứa dữ liệu ghi chép. <br>

@@ -33,6 +33,23 @@ class MY_Form_validation extends CI_Form_validation
     }
 
     /**
+     * Rule kiểm tra giá trị cần tồn tại trong database.
+     *
+     * Usage: exist[table.field]
+     *
+     * @param string $str
+     * @param string $field
+     */
+    public function exist($str, $field): bool
+    {
+        sscanf($field, '%[^.].%[^.]', $table, $field);
+
+        return isset($this->CI->db)
+            ? ($this->CI->db->limit(1)->get_where($table, [$field => $str])->num_rows() > 0)
+            : false;
+    }
+
+    /**
      * OVERRIDED METHOD.
      * Bỏ cách xử lý đưa callback rule lên ưu tiên cao nhất của xử lý mặc định.
      * Trừ rule required, tất cả đều được xử lý theo thứ tự nhập vào.

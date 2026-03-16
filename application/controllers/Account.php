@@ -159,9 +159,13 @@ class Account extends MY_Controller
                 if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());
                 }
+
+                $target_account_id = (int) $this->input->post('target_account_id');
+                $this->account_model->move_records_and_delete($id, $target_account_id);
+            } else {
+                $this->account_model->del($id);
             }
 
-            $this->account_model->del($id);
             $this->flash->success(settings('succ_del_account'));
 
             return redirect($this->base_url());

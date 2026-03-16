@@ -116,7 +116,7 @@ $config = [
         [
             'field' => 'target_account_id',
             'label' => 'Tài khoản khác',
-            'rules' => 'required',
+            'rules' => 'required|exist[accounts.id]',
         ],
     ],
 ];
