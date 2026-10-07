@@ -22,12 +22,12 @@
                                     <?php endif; ?>
                                 </div>
                                 <div class="col-xs-5 text-right">
-                                    <?= number_format($category['month_estimated_amount']); ?> <?= settings('currency'); ?>
+                                    <?= number_format($category['month_estimated_amount']); ?>
                                 </div>
                             </div>
-                            <div class="row small text-muted" style="margin-top:2px">
-                                <div class="col-xs-12 text-right">
-                                    Đã chi: <?= number_format($category['actual_amount']); ?> <?= settings('currency'); ?>
+                            <div class="row" style="margin-top:2px">
+                                <div class="col-xs-12 small text-muted text-right">
+                                    Đã chi: <?= number_format($category['actual_amount']); ?>
                                 </div>
                             </div>
                             <div class="progress" style="margin-bottom:0; margin-top:4px; height:8px">
