@@ -111,6 +111,27 @@ class Category_model extends App_Model
     }
 
     /**
+     * Lấy số tiền đã chi thực tế trong tháng hiện tại theo từng category.
+     *
+     * @return array [category_id => actual_amount]
+     */
+    public function get_month_actual_outgo_by_category(): array
+    {
+        $results = $this->db->select('category_id')
+            ->select('SUM(ABS(amount)) as actual_amount', false)
+            ->where('cash_flow', 'outgo')
+            ->where('skip_month_estimated', 0)
+            ->where('YEAR(created_on)', date('Y'), false)
+            ->where('MONTH(created_on)', date('n'), false)
+            ->group_by('category_id')
+            ->get('inout_records')
+            ->result_array()
+        ;
+
+        return array_column($results, 'actual_amount', 'category_id');
+    }
+
+    /**
      * Lấy dữ liệu dự định chi trong tháng này.
      */
     public function get_month_estimated_outgo(): array
