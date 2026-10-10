@@ -141,7 +141,7 @@ class Search_model extends App_Model
         $db->select('inout_records.id,
                            inout_records.amount,
                            inout_records.memo,
-                           inout_records.date,
+                           inout_records.transaction_date,
                            inout_records.skip_month_estimated,
                            inout_records.is_temp,
                            inout_records.pair_id,
@@ -153,7 +153,7 @@ class Search_model extends App_Model
                            categories.name AS category,
                            users.fullname AS player,
                            users.label AS player_label')
-            ->order_by('inout_records.date', 'DESC')
+            ->order_by('inout_records.transaction_date', 'DESC')
             ->order_by('categories.inout_type_id', 'ASC')
             ->order_by('inout_records.created_on', 'ASC')
         ;
@@ -205,10 +205,10 @@ class Search_model extends App_Model
             $db->where('inout_records.player', $this->settings['player']);
         }
         if (!empty($this->settings['inout_from'])) {
-            $db->where('inout_records.date >=', $this->settings['inout_from']);
+            $db->where('inout_records.transaction_date >=', $this->settings['inout_from']);
         }
         if (!empty($this->settings['inout_to'])) {
-            $db->where('inout_records.date <=', $this->settings['inout_to']);
+            $db->where('inout_records.transaction_date <=', $this->settings['inout_to']);
         }
         if (!empty($this->settings['modified_from'])) {
             $db->where('inout_records.modified_on >=', date('Y-m-d H:i:s', strtotime($this->settings['modified_from'])));
@@ -305,7 +305,7 @@ class Search_model extends App_Model
         $fragment_num = 0;
         for ($i = count($result) - 1; $i > 0; --$i) {
             ++$fragment_num;
-            if ($result[$i]['date'] !== $result[$i - 1]['date']) {
+            if ($result[$i]['transaction_date'] !== $result[$i - 1]['transaction_date']) {
                 break;
             }
         }

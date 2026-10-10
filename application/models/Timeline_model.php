@@ -19,7 +19,7 @@ class Timeline_model extends Inout_Model
         }
 
         // Sort danh sách theo date
-        $date = array_column($list, 'date');
+        $date = array_column($list, 'transaction_date');
         array_multisort($date, $sort_order, $list);
 
         return $list;
@@ -76,22 +76,22 @@ class Timeline_model extends Inout_Model
      */
     public function summary_inout_types(string $from, string $to, string $date_format_string): array
     {
-        $subQuery = $this->db->select("DATE_FORMAT(`date`, '{$date_format_string}') as `date`,
+        $subQuery = $this->db->select("DATE_FORMAT(`transaction_date`, '{$date_format_string}') as `transaction_date`,
                                        SUM(CASE WHEN `categories`.`inout_type_id` = 1 THEN `amount` ELSE 0 END) AS `thu`,
                                        SUM(CASE WHEN `categories`.`inout_type_id` = 2 THEN `amount` ELSE 0 END) AS `chi`,
                                        SUM(CASE WHEN `categories`.`inout_type_id` = 1 AND `inout_records`.`is_temp` = 1 THEN `amount` ELSE 0 END) AS `thu_temp`,
                                        SUM(CASE WHEN `categories`.`inout_type_id` = 2 AND `inout_records`.`is_temp` = 1 THEN `amount` ELSE 0 END) AS `chi_temp`")
             ->from('inout_records')
             ->join('categories', 'categories.id = inout_records.category_id')
-            ->where('inout_records.date >=', $from)
-            ->where('inout_records.date <=', $to)
+            ->where('inout_records.transaction_date >=', $from)
+            ->where('inout_records.transaction_date <=', $to)
             ->where('inout_records.pair_id', '')
-            ->group_by("DATE_FORMAT(`inout_records`.`date`, '{$date_format_string}')")
+            ->group_by("DATE_FORMAT(`inout_records`.`transaction_date`, '{$date_format_string}')")
             ->get_compiled_select()
         ;
 
         return $this->db->select('
-                            date,
+                            transaction_date,
                             thu,
                             chi,
                             thu_temp,
@@ -99,7 +99,7 @@ class Timeline_model extends Inout_Model
                             (`thu` + `chi`) AS `tong`,
                             (`thu_temp` + `chi_temp`) AS `tong_temp`')
             ->from("({$subQuery}) t")
-            ->order_by('date ASC')
+            ->order_by('transaction_date ASC')
             ->get()->result_array()
         ;
     }
@@ -133,7 +133,7 @@ class Timeline_model extends Inout_Model
         $now = date('Y-m-d');
 
         $sql = sprintf("SELECT SUM(`amount`) as `future_amount`,
-                               SUM(CASE WHEN `date` <= '{$now}' THEN `amount` ELSE 0 END) AS `current_amount`,
+                               SUM(CASE WHEN `transaction_date` <= '{$now}' THEN `amount` ELSE 0 END) AS `current_amount`,
                                `accounts`.`id` as `account_id`,
                                `accounts`.`name` as `account`,
                                `users`.`fullname` as `player`
@@ -192,7 +192,7 @@ class Timeline_model extends Inout_Model
      *               )
      *               ```
      */
-    public function get_liquid_outgo_status(): array
+    public function get_liquid_outgo_status(): array|false
     {
         $month_estimated_outgo = $this->category_model->get_month_estimated_outgo()['liquid'];
 
@@ -204,10 +204,10 @@ class Timeline_model extends Inout_Model
         $month = date('Y-m');
 
         $sql = "SELECT SUM(`amount`) as `liqid_outgo_to_now`,
-                       SUM(CASE WHEN `date` = '{$today}' THEN `amount` ELSE 0 END) AS `liqid_outgo_today`
+                       SUM(CASE WHEN `transaction_date` = '{$today}' THEN `amount` ELSE 0 END) AS `liqid_outgo_today`
                 FROM `inout_records`
                 JOIN `categories` ON `categories`.`id` = `inout_records`.`category_id`
-                WHERE DATE_FORMAT(`inout_records`.`date`, '%Y-%m') = '{$month}'
+                WHERE DATE_FORMAT(`inout_records`.`transaction_date`, '%Y-%m') = '{$month}'
                     AND `categories`.`inout_type_id` = 2
                     AND `inout_records`.`skip_month_estimated` = 0
                     AND `inout_records`.`pair_id` = ''";
@@ -270,8 +270,8 @@ class Timeline_model extends Inout_Model
             ->from('inout_records')
             ->where('categories.inout_type_id', $inout_type_id)
             ->where('categories.restrict_delete !=', 1)
-            ->where('inout_records.date >=', $from)
-            ->where('inout_records.date <=', $to)
+            ->where('inout_records.transaction_date >=', $from)
+            ->where('inout_records.transaction_date <=', $to)
             ->join('categories', 'categories.id = inout_records.category_id')
             ->group_by('categories.id', 'categories.name')
         ;
@@ -300,8 +300,8 @@ class Timeline_model extends Inout_Model
     public function get_years_list(): array
     {
         $table = 'inout_records';
-        $range = $this->db->select("DATE_FORMAT(MIN(`date`), '%Y') as `min`,
-                                    DATE_FORMAT(MAX(`date`), '%Y') as `max`", false)
+        $range = $this->db->select("DATE_FORMAT(MIN(`transaction_date`), '%Y') as `min`,
+                                    DATE_FORMAT(MAX(`transaction_date`), '%Y') as `max`", false)
             ->get($table)->row_array()
         ;
 
@@ -333,7 +333,7 @@ class Timeline_model extends Inout_Model
             'tong_temp' => '0',
             'thu_temp' => '0',
             'chi_temp' => '0',
-            'date' => null,
+            'transaction_date' => null,
         ];
 
         $full_list = [];
@@ -341,14 +341,14 @@ class Timeline_model extends Inout_Model
         foreach ($full_list_keys as $k) {
             $db_item = current($db_list);
 
-            if ($db_item && $k == $db_item['date']) {
+            if ($db_item && $k == $db_item['transaction_date']) {
                 $item = $db_item;
                 next($db_list);
             } else {
                 $item = $empty_item;
             }
 
-            $full_list[] = array_merge($item, ['date' => $k]);
+            $full_list[] = array_merge($item, ['transaction_date' => $k]);
         }
 
         return $full_list;

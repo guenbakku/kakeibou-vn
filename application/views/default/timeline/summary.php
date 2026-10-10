@@ -4,7 +4,7 @@
 <div class="container">
     <div class="list-group">
         <?php foreach ($list as $k => $v) { ?>
-        <a page-scroll="<?= $v['date']; ?>" class="list-group-item" href="<?= sprintf($url['detailTemplate'], $v['date']); ?>">
+        <a page-scroll="<?= $v['transaction_date']; ?>" class="list-group-item" href="<?= sprintf($url['detailTemplate'], $v['transaction_date']); ?>">
             <div class="row">
                 <div class="pull-right" style="padding-right:15px; position:absolute; right:0px">
                     <span class="glyphicon glyphicon-menu-right"></span>
@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="col-xs-3" style="padding-left:0">
-                    <span class="label label-default"><?= $v['date']; ?></span>
+                    <span class="label label-default"><?= $v['transaction_date']; ?></span>
                 </div>
                 <div class="col-xs-6 text-right <?= $v['tong'] >= 0 ? 'text-income' : 'text-outgo'; ?>" style="padding-left:0">
                     <?= currency($v['tong']); ?>

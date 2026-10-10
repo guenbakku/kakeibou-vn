@@ -61,10 +61,10 @@
     <div class="infinite-container">
         <?php if ($current_num > 0) { ?>
             <?php for ($i = 0; $i < $current_num; ++$i) { ?>
-                <?php if ($i == 0 || $result[$i]['date'] != $result[$i - 1]['date']) { ?>
+                <?php if ($i == 0 || $result[$i]['transaction_date'] != $result[$i - 1]['transaction_date']) { ?>
                     <div class="list-group infinite-item">
                         <div class="list-group-item active">
-                            <strong><?= $result[$i]['date']; ?> (<?= day_of_week($result[$i]['date']); ?>)</strong>
+                            <strong><?= $result[$i]['transaction_date']; ?> (<?= day_of_week($result[$i]['transaction_date']); ?>)</strong>
                         </div>
                 <?php } ?>
                         <!-- Item -->
@@ -100,7 +100,7 @@
                                 </div>
                             </div>
                         </a>
-                <?php if ($i == $current_num - 1 || $result[$i]['date'] != $result[$i + 1]['date']) { ?>
+                <?php if ($i == $current_num - 1 || $result[$i]['transaction_date'] != $result[$i + 1]['transaction_date']) { ?>
                     </div>
                 <?php } ?>
             <?php } ?>

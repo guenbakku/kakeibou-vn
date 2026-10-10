@@ -49,7 +49,7 @@ $config = [
             'rules' => 'required|is_natural_no_zero|xss_clean',
         ],
         [
-            'field' => 'date',
+            'field' => 'transaction_date',
             'label' => 'Thời gian',
             'rules' => 'required|xss_clean',
         ],
@@ -67,7 +67,7 @@ $config = [
             'rules' => 'required|is_natural_no_zero|xss_clean',
         ],
         [
-            'field' => 'date',
+            'field' => 'transaction_date',
             'label' => 'Thời gian',
             'rules' => 'required|xss_clean',
         ],

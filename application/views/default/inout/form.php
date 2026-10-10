@@ -24,7 +24,7 @@
                             <label>Thời gian:</label>
                             <?= form_input(
                                 [
-                                    'name' => $field_name = 'date',
+                                    'name' => $field_name = 'transaction_date',
                                     'type' => 'date',
                                 ],
                                 set_value($field_name, date('Y-m-d')),
