@@ -93,7 +93,9 @@ class Category extends MY_Controller
                 $this->category_model->edit($id, $this->input->post());
                 $this->flash->success(settings('succ_edit_category'));
 
-                return redirect($this->referer->getSession());
+                $inout_type_id = $this->category_model->get($id)['inout_type_id'] ?? 1;
+
+                return redirect($this->base_url().'?inout_type_id='.$inout_type_id);
             } catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
@@ -104,10 +106,9 @@ class Category extends MY_Controller
                 show_error(settings('err_not_found'));
             }
             $_POST = $category_data;
-
-            // Lưu referer của page access đến form
-            $this->referer->saveSession();
         }
+
+        $inout_type_id = $_POST['inout_type_id'] ?? 1;
 
         $view_data['title'] = 'Sửa danh mục';
         $view_data['select'] = [
@@ -116,7 +117,7 @@ class Category extends MY_Controller
         $view_data['url'] = [
             'form' => $this->base_url([__FUNCTION__, $id]),
             'del' => $this->base_url(['del_confirm', $id]),
-            'back' => $this->referer->getSession(null, false),
+            'back' => $this->base_url().'?inout_type_id='.$inout_type_id,
         ];
 
         $this->template->write_view('MAIN', 'category/form', $view_data);
@@ -182,7 +183,9 @@ class Category extends MY_Controller
 
             $this->flash->success(settings('succ_del_category'));
 
-            return redirect($this->referer->getSession());
+            $inout_type_id = $this->category_model->get($id)['inout_type_id'] ?? 1;
+
+            return redirect($this->base_url().'?inout_type_id='.$inout_type_id);
         } catch (AppException $ex) {
             $this->flash->error($ex->getMessage());
 
