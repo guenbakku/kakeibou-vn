@@ -29,9 +29,8 @@ class AddIconColumnToAccountsTable extends AbstractMigration
     {
         // Add column
         $table = $this->table('accounts');
-        $table->addColumn('icon', 'string', ['limit' => 50, 'after' => 'order_no'])
-            ->update()
-        ;
+        $table->addColumn('icon', 'string', ['limit' => 50, 'after' => 'order_no']);
+        $table->update();
 
         // Fill data
         $sql = 'SELECT * FROM accounts';

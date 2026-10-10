@@ -23,6 +23,9 @@ class AddTransferItemToCategoriesTable extends AbstractMigration
             ],
         ];
 
-        $this->insert('categories', $rows);
+        $this->table('categories')
+            ->insert($rows)
+            ->save()
+        ;
     }
 }

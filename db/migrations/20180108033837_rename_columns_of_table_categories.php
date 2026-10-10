@@ -31,5 +31,6 @@ class RenameColumnsOfTableCategories extends AbstractMigration
         $table->renameColumn('month_estimated_inout', 'month_estimated_amount')
             ->renameColumn('month_fixed_money', 'is_month_fixed_money')
         ;
+        $table->update();
     }
 }

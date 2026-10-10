@@ -6,27 +6,30 @@ class ChangeTypeOfIdColumn extends AbstractMigration
 {
     public function up()
     {
-        $foreignKeys = ['account_id', 'category_id'];
-        $foreignTables = ['accounts', 'categories'];
+        $foreignKeys = [
+            'account_id' => ['table' => 'accounts', 'constraint' => 'inout_records_ibfk_1'],
+            'category_id' => ['table' => 'categories', 'constraint' => 'inout_records_ibfk_2'],
+        ];
         $table = $this->table('inout_records');
-        foreach ($foreignKeys as $i => $foreignKey) {
-            // Delete foreign key relation
-            if ($table->hasForeignKey($foreignKey)) {
-                $table->dropForeignKey($foreignKey);
+        foreach ($foreignKeys as $column => $foreignKey) {
+            if ($table->hasForeignKey($column, $foreignKey['constraint'])) {
+                $table->dropForeignKey($column, $foreignKey['constraint'])->update();
             }
+        }
 
-            // Change column type
-            $table->changeColumn($foreignKey, 'integer', ['limit' => 11])
+        foreach ($foreignKeys as $column => $foreignKey) {
+            $table->changeColumn($column, 'integer', ['limit' => 11])
                 ->update()
             ;
 
-            $foreignTable = $this->table($foreignTables[$i]);
+            $foreignTable = $this->table($foreignKey['table']);
             $foreignTable->changeColumn('id', 'integer', ['limit' => 11, 'identity' => true])
                 ->update()
             ;
+        }
 
-            // Recreate foreign key relation
-            $table->addForeignKey($foreignKey, $foreignTables[$i], 'id', [
+        foreach ($foreignKeys as $column => $foreignKey) {
+            $table->addForeignKey($column, $foreignKey['table'], 'id', [
                 'delete' => 'RESTRICT',
                 'update' => 'CASCADE',
             ])->update();

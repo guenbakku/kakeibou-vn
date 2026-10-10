@@ -6,7 +6,10 @@ class DropSettingsTable extends AbstractMigration
 {
     public function up()
     {
-        $this->dropTable('settings');
+        $this->table('settings')
+            ->drop()
+            ->save()
+        ;
     }
 
     public function down()
