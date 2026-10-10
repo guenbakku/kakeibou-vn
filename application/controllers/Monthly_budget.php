@@ -10,23 +10,17 @@ class Monthly_budget extends MY_Controller
     {
         parent::__construct();
         $this->load->model('category_model');
+        $this->load->model('monthly_budget_model');
     }
 
     public function index()
     {
         $inout_type_id = array_flip($this->inout_model::$INOUT_TYPE)['Chi'];
         $categories = $this->category_model->get(null, ['inout_type_id' => $inout_type_id]);
-        $actual_by_category = $this->category_model->get_month_actual_outgo_by_category();
+        $budget_data = $this->monthly_budget_model->build_budget_data($categories);
 
-        foreach ($categories as &$cat) {
-            $estimated = (int) $cat['month_estimated_amount'];
-            $actual = (int) ($actual_by_category[$cat['id']] ?? 0);
-            $cat['actual_amount'] = $actual;
-            $cat['percent'] = $estimated > 0 ? max(0, (int) round(($estimated - $actual) / $estimated * 100)) : 0;
-        }
-        unset($cat);
-
-        $view_data['categories'] = $categories;
+        $view_data['categories'] = $budget_data['categories'];
+        $view_data['summary'] = $budget_data['summary'];
         $view_data['title'] = 'Dự định chi tháng này';
         $view_data['url'] = [
             'edit' => $this->base_url(['edit']),
