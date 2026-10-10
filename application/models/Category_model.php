@@ -17,7 +17,7 @@ class Category_model extends App_Model
      *                        - int   => lấy category đơn lẻ theo id
      * @param array    $where điều kiện search
      */
-    public function get(?int $id = null, array $where = []): array
+    public function get(?int $id = null, array $where = []): ?array
     {
         if (is_numeric($id)) {
             $this->db->where('id', $id);
