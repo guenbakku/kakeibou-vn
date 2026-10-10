@@ -17,7 +17,7 @@ class Category_model extends App_Model
      *                        - int   => lấy category đơn lẻ theo id
      * @param array    $where điều kiện search
      */
-    public function get(?int $id = null, array $where = []): ?array
+    public function get(?int $id = null, array $where = []): array
     {
         if (is_numeric($id)) {
             $this->db->where('id', $id);
@@ -83,19 +83,8 @@ class Category_model extends App_Model
      */
     public function move_records_and_delete(int $from, int $to)
     {
-        if ($from == $to) {
-            throw new AppException(settings('err_category_move_from_to_same'));
-        }
-
         $this->db->trans_start();
-        $this->db
-            ->where('category_id', $from)
-            ->update('inout_records', [
-                'category_id' => $to,
-                'modified_on' => date('Y-m-d H:i:s'),
-                'modified_by' => $this->auth->user('id'),
-            ])
-        ;
+        $this->move_records($from, $to);
         $this->del($from);
         $this->db->trans_complete();
     }
@@ -126,6 +115,25 @@ class Category_model extends App_Model
         }
 
         $this->db->where('id', $id)->delete($this->get_table());
+    }
+
+    /**
+     * Di chuyển tất cả các dữ liệu inout từ danh mục $from sang danh mục $to.
+     */
+    public function move_records(int $from, int $to)
+    {
+        if ($from == $to) {
+            throw new AppException(settings('err_category_move_from_to_same'));
+        }
+
+        $this->db
+            ->where('category_id', $from)
+            ->update('inout_records', [
+                'category_id' => $to,
+                'modified_on' => date('Y-m-d H:i:s'),
+                'modified_by' => $this->auth->user('id'),
+            ])
+        ;
     }
 
     /**
