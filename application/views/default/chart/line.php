@@ -84,7 +84,7 @@
                     "bulletsEnabled": true,
                     "categoryBalloonDateFormat": dateFormat.categoryBalloonDateFormat,
                 },
-                "categoryField": 'date',
+                "categoryField": 'transaction_date',
                 "dataDateFormat": dateFormat.dataDateFormat,
                 "categoryAxis": {
                     "parseDates": true,
@@ -106,11 +106,11 @@
 
             // Generate setting for dataDateFormat and categoryAxis.minPeriod
             function genDateFormat(chartData) {
-                if (chartData.length == 0 || typeof(chartData[0]['date']) === 'undefined') {
+                if (chartData.length == 0 || typeof(chartData[0]['transaction_date']) === 'undefined') {
                     return false;
                 }
 
-                var testDate = chartData[0]['date'];
+                var testDate = chartData[0]['transaction_date'];
                 switch (true) {
                     case new RegExp(/^\d{4}$/).test(testDate):
                         return {
