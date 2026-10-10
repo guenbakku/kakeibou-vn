@@ -12,8 +12,8 @@ class Search_model extends App_Model
     protected $settings = [
         'amount' => null,
         'memo' => null,
-        'inout_from' => null,
-        'inout_to' => null,
+        'transaction_date_from' => null,
+        'transaction_date_to' => null,
         'inout_type' => null,
         'modified_from' => null,
         'modified_to' => null,
@@ -61,7 +61,7 @@ class Search_model extends App_Model
             if (!is_numeric($val)) {
                 throw new AppException('Dữ liệu loại tài khoản không hợp lệ');
             }
-        } elseif (in_array($name, ['inout_from', 'inout_to', 'modified_from', 'modified_to'])) {
+        } elseif (in_array($name, ['transaction_date_from', 'transaction_date_to', 'modified_from', 'modified_to'])) {
             // Quăng ngoại lệ nếu val không có dạng yyyy-mm-dd
             // hoặc không phải là ngày tháng năm có nghĩa
             if (!preg_match('/^\d{4}(\-\d{2})?(\-\d{2})?$/', $val) || !strtotime($val)) {
@@ -204,11 +204,11 @@ class Search_model extends App_Model
         if (!empty($this->settings['player'])) {
             $db->where('inout_records.player', $this->settings['player']);
         }
-        if (!empty($this->settings['inout_from'])) {
-            $db->where('inout_records.transaction_date >=', $this->settings['inout_from']);
+        if (!empty($this->settings['transaction_date_from'])) {
+            $db->where('inout_records.transaction_date >=', $this->settings['transaction_date_from']);
         }
-        if (!empty($this->settings['inout_to'])) {
-            $db->where('inout_records.transaction_date <=', $this->settings['inout_to']);
+        if (!empty($this->settings['transaction_date_to'])) {
+            $db->where('inout_records.transaction_date <=', $this->settings['transaction_date_to']);
         }
         if (!empty($this->settings['modified_from'])) {
             $db->where('inout_records.modified_on >=', date('Y-m-d H:i:s', strtotime($this->settings['modified_from'])));

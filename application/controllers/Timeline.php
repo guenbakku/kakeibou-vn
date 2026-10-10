@@ -97,8 +97,8 @@ class Timeline extends MY_Controller
         $view_data['title'] = 'Danh sách chi tiết';
 
         $this->load->model('search_model');
-        $this->search_model->inout_from = $range[0];
-        $this->search_model->inout_to = $range[1];
+        $this->search_model->transaction_date_from = $range[0];
+        $this->search_model->transaction_date_to = $range[1];
         $this->search_model->account = $account_id;
         $this->search_model->player = $player_id;
         $this->search_model->temp_inout = $only_show_temp_inout ? 'only' : 'include';

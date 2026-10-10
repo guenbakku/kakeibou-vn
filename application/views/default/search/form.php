@@ -171,7 +171,7 @@
                                 <label>Từ ngày</label>
                                 <?= form_input(
                                     [
-                                        'name' => $field_name = 'inout_from',
+                                        'name' => $field_name = 'transaction_date_from',
                                         'type' => 'date',
                                     ],
                                     set_value($field_name, null),
@@ -184,7 +184,7 @@
                                 <label>Đến ngày</label>
                                 <?= form_input(
                                     [
-                                        'name' => $field_name = 'inout_to',
+                                        'name' => $field_name = 'transaction_date_to',
                                         'type' => 'date',
                                     ],
                                     set_value($field_name, null),
