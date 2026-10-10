@@ -22,9 +22,6 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <label><?= $category['name']; ?></label>
-                            <?php if ($category['is_month_fixed_money'] == 1): ?>
-                                <span class="label label-default">Cố định</span>
-                            <?php endif; ?>
                         </div>
                         <div class="col-xs-12">
                             <div class="input-group">
@@ -41,6 +38,22 @@
                                 <span class="input-group-addon"><?= settings('currency'); ?></span>
                             </div>
                         </div>
+                        <div class="col-xs-12">
+                            <label>
+                                <?= form_input([
+                                                'name' => sprintf('categories[%d][is_month_fixed_money]', $i),
+                                                'type' => 'hidden',
+                                                'value' => '0',
+                                            ]); ?>
+                                <?= form_checkbox([
+                                                'name' => sprintf('categories[%d][is_month_fixed_money]', $i),
+                                                'value' => '1',
+                                                'checked' => (bool) $category['is_month_fixed_money'],
+                                            ]); ?>
+                                Khoảng chi cố định
+                            </label>
+                            <i class="fa fa-info-circle text-muted ml-1" data-toggle="popover" data-placement="top" data-content="Không tính vào &quot;Số tiền có thể chi&quot; hàng tháng" style="cursor:pointer"></i>
+                        </div>
                     </div>
                 </div>
                 <?php } ?>
@@ -53,6 +66,24 @@
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
 <script type="text/javascript">
+    $(function () {
+        $('[data-toggle="popover"]').popover({
+            'container': 'body',
+            'placement': 'top',
+            'trigger': 'click',
+        });
+
+        $('body').on('click', function (e) {
+            $('[data-toggle="popover"]').each(function () {
+                if (!$(this).is(e.target)
+                    && $(this).is('[aria-describedby]')
+                    && $('.popover').has(e.target).length === 0) {
+                    $(this).popover('hide');
+                }
+            });
+        });
+    });
+
     anElements = new AutoNumeric.multiple('.amount', {
         formatOnPageLoad: true,
         decimalPlaces: 0,

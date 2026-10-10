@@ -33,11 +33,6 @@
                                 <a href="<?= sprintf($url['edit'], $item['id']); ?>" style="display:block; color:inherit; text-decoration:none">
                                     <?= $item['name']; ?>
                                 </a>
-                                <div class="small text-muted">
-                                    <?php if ($item['is_month_fixed_money'] == 1): ?>
-                                        <span class="label label-default">Cố định mỗi tháng</span>
-                                    <?php endif; ?>
-                                </div>
                                 <input type="hidden" name="categories[<?= $item['id']; ?>][id]" value="<?= $item['id']; ?>">
                                 <input type="hidden" name="categories[<?= $item['id']; ?>][order_no]" data-role="order_no" value="<?= $i; ?>">
                             </td>

@@ -43,6 +43,7 @@ class Monthly_budget extends MY_Controller
                         sprintf('Dự định chi tháng này của %s', $category['name']),
                         'required|trim|greater_than_equal_to[0]'
                     );
+                    $data[$i]['is_month_fixed_money'] = isset($category['is_month_fixed_money']) ? (int) $category['is_month_fixed_money'] : 0;
                 }
                 if ($this->form_validation->run() === false) {
                     throw new AppException(validation_errors());

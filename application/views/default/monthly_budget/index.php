@@ -48,16 +48,18 @@
                             <div class="row">
                                 <div class="col-xs-7">
                                     <?= $category['name']; ?>
-                                    <?php if ($category['is_month_fixed_money'] == 1): ?>
-                                        <span class="label label-default">Cố định</span>
-                                    <?php endif; ?>
                                 </div>
                                 <div class="col-xs-5 text-right">
                                     <?= number_format($category['month_estimated_amount']); ?>
                                 </div>
                             </div>
                             <div class="row" style="margin-top:2px">
-                                <div class="col-xs-12 small text-muted text-right">
+                                <div class="col-xs-5 small text-muted">
+                                    <?php if ($category['is_month_fixed_money'] == 1): ?>
+                                        <span class="label label-default">Cố định</span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="col-xs-7 small text-muted text-right">
                                     Đã chi: <?= number_format($category['actual_amount']); ?>
                                 </div>
                             </div>
