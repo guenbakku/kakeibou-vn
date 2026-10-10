@@ -119,4 +119,12 @@ $config = [
             'rules' => 'required|exist[accounts.id]',
         ],
     ],
+
+    'category/del_confirm' => [
+        [
+            'field' => 'target_category_id',
+            'label' => 'Danh mục khác',
+            'rules' => 'required|exist[categories.id]',
+        ],
+    ],
 ];

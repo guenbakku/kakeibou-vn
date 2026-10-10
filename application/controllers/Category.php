@@ -83,11 +83,6 @@ class Category extends MY_Controller
     public function edit(int $id)
     {
         if ($this->input->server('REQUEST_METHOD') == 'POST') {
-            // Chuyển sang xử lý xóa category nếu lựa chọn xóa
-            if ((bool) $this->input->get('delete') === true) {
-                return $this->del($id);
-            }
-
             try {
                 $this->load->library('form_validation');
 
@@ -98,7 +93,9 @@ class Category extends MY_Controller
                 $this->category_model->edit($id, $this->input->post());
                 $this->flash->success(settings('succ_edit_category'));
 
-                return redirect($this->referer->getSession());
+                $inout_type_id = $this->category_model->get($id)['inout_type_id'] ?? 1;
+
+                return redirect($this->base_url().'?inout_type_id='.$inout_type_id);
             } catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
@@ -109,10 +106,9 @@ class Category extends MY_Controller
                 show_error(settings('err_not_found'));
             }
             $_POST = $category_data;
-
-            // Lưu referer của page access đến form
-            $this->referer->saveSession();
         }
+
+        $inout_type_id = $_POST['inout_type_id'] ?? 1;
 
         $view_data['title'] = 'Sửa danh mục';
         $view_data['select'] = [
@@ -120,24 +116,84 @@ class Category extends MY_Controller
         ];
         $view_data['url'] = [
             'form' => $this->base_url([__FUNCTION__, $id]),
-            'del' => $this->base_url(['del', $id]),
-            'back' => $this->referer->getSession(null, false),
+            'del' => $this->base_url(['del_confirm', $id]),
+            'back' => $this->base_url().'?inout_type_id='.$inout_type_id,
         ];
 
         $this->template->write_view('MAIN', 'category/form', $view_data);
         $this->template->render();
     }
 
-    public function del(int $id)
+    public function del_confirm(int $id)
     {
-        try {
-            $this->category_model->del($id);
-            $this->flash->success(settings('succ_del_category'));
-        } catch (AppException $ex) {
-            $this->flash->error($ex->getMessage());
+        if (!is_numeric($id)) {
+            show_error(settings('err_bad_request'));
         }
 
-        return redirect($this->referer->getSession());
+        if ($this->input->server('REQUEST_METHOD') == 'POST') {
+            return $this->del($id);
+        }
+
+        $category_data = $this->category_model->get($id);
+        if (empty($category_data)) {
+            show_error(settings('err_not_found'));
+        }
+
+        $is_category_empty = $this->category_model->is_empty($id);
+        $target_categories = ['' => ''] + array_filter(
+            $this->category_model->get_select_tag_data($category_data['inout_type_id']),
+            fn ($category_id) => $category_id !== $id,
+            ARRAY_FILTER_USE_KEY,
+        );
+
+        $view_data['title'] = 'Xác nhận xóa danh mục';
+        $view_data['url'] = [
+            'form' => $this->base_url(['del_confirm', $id]),
+            'back' => $this->base_url(['edit', $id]),
+        ];
+        $view_data['category'] = $category_data;
+        $view_data['is_category_empty'] = $is_category_empty;
+        $view_data['select'] = [
+            'target_categories' => $target_categories,
+        ];
+
+        $this->template->write_view('MAIN', 'category/del_confirm', $view_data);
+        $this->template->render();
+    }
+
+    public function del(int $id)
+    {
+        if (!is_numeric($id)) {
+            show_error(settings('err_bad_request'));
+        }
+
+        $del_category = $this->category_model->get($id);
+        if (empty($del_category)) {
+            show_error(settings('err_not_found'));
+        }
+
+        try {
+            if (!$this->category_model->is_empty($id)) {
+                $this->load->library('form_validation');
+
+                if ($this->form_validation->run() === false) {
+                    throw new AppException(validation_errors());
+                }
+
+                $target_category_id = $this->input->post('target_category_id');
+                $this->category_model->move_records_and_delete($id, (int) $target_category_id);
+            } else {
+                $this->category_model->del($id);
+            }
+
+            $this->flash->success(settings('succ_del_category'));
+
+            return redirect($this->base_url().'?inout_type_id='.$del_category['inout_type_id']);
+        } catch (AppException $ex) {
+            $this->flash->error($ex->getMessage());
+
+            return redirect($this->base_url(['del_confirm', $id]));
+        }
     }
 
     /**

@@ -17,6 +17,7 @@ class Settings
             'err_user_locked' => 'Tài khoản đã bị khóa do nhập sai mật khẩu quá số lần quy định.<br>Vui lòng thử lại sau khoản %s phút nữa.',
             'err_category_not_empty' => 'Không xóa được danh mục <strong>%s</strong>.<br>Cần xóa hết dữ liệu thu chi của danh mục này trước khi xóa.',
             'err_category_restrict_delete' => 'Danh mục <strong>%s</strong> không được phép xóa.',
+            'err_category_move_from_to_same' => 'Danh mục đi và đến không được giống nhau.',
             'err_account_not_empty' => 'Không xóa được tài khoản <strong>%s</strong>.<br>Cần xóa hết dữ liệu thu chi của tài khoản này trước khi xóa.',
             'err_account_restrict_delete' => 'Tài khoản <strong>%s</strong> không được phép xóa.',
             'err_transfer_from_to_same' => 'Giá trị <strong>Chuyển từ</strong> và <strong>đến</strong> không được giống nhau.',
