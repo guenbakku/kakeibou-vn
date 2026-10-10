@@ -1,7 +1,7 @@
 {
     "require": {
         "robmorgan/phinx": "^0.16.1",
-        "vlucas/phpdotenv": "^4.3",
+        "vlucas/phpdotenv": "^5.7",
         "pocketarc/codeigniter": "^3.4"
     },
     "require-dev": {
