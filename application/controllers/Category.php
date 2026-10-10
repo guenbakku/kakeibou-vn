@@ -167,6 +167,11 @@ class Category extends MY_Controller
             show_error(settings('err_bad_request'));
         }
 
+        $del_category = $this->category_model->get($id);
+        if (empty($del_category)) {
+            show_error(settings('err_not_found'));
+        }
+
         try {
             if (!$this->category_model->is_empty($id)) {
                 $this->load->library('form_validation');
@@ -183,9 +188,7 @@ class Category extends MY_Controller
 
             $this->flash->success(settings('succ_del_category'));
 
-            $inout_type_id = $this->category_model->get($id)['inout_type_id'] ?? 1;
-
-            return redirect($this->base_url().'?inout_type_id='.$inout_type_id);
+            return redirect($this->base_url().'?inout_type_id='.$del_category['inout_type_id']);
         } catch (AppException $ex) {
             $this->flash->error($ex->getMessage());
 
