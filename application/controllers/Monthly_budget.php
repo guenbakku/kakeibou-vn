@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Estimated_month_outgo extends MY_Controller
+class Monthly_budget extends MY_Controller
 {
     protected $ctrl_base_url = 'setting';
 
@@ -32,7 +32,7 @@ class Estimated_month_outgo extends MY_Controller
             'edit' => $this->base_url(['edit']),
             'back' => base_url('setting'),
         ];
-        $this->template->write_view('MAIN', 'estimated_month_outgo/index', $view_data);
+        $this->template->write_view('MAIN', 'monthly_budget/index', $view_data);
         $this->template->render();
     }
 
@@ -71,7 +71,7 @@ class Estimated_month_outgo extends MY_Controller
             'back' => $this->base_url(),
         ];
         $_POST['categories'] = $view_data['categories'];
-        $this->template->write_view('MAIN', 'estimated_month_outgo/form', $view_data);
+        $this->template->write_view('MAIN', 'monthly_budget/form', $view_data);
         $this->template->render();
     }
 }
