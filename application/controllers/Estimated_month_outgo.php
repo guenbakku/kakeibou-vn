@@ -57,7 +57,7 @@ class Estimated_month_outgo extends MY_Controller
                 $this->category_model->edit_batch($data, 'id');
                 $this->flash->success(settings('succ_edit_month_estimated_outgo'));
 
-                return redirect($this->referer->get());
+                return redirect($this->base_url());
             } catch (AppException $e) {
                 $this->flash->error($e->getMessage());
             }
