@@ -67,6 +67,40 @@ class Category_model extends App_Model
     }
 
     /**
+     * Kiểm tra xem danh mục này có dữ liệu inout hay không.
+     * Trả về true nếu rỗng, false nếu có dữ liệu.
+     */
+    public function is_empty(int $id): bool
+    {
+        return $this->db->where('category_id', $id)
+            ->from('inout_records')
+            ->count_all_results() == 0
+        ;
+    }
+
+    /**
+     * Di chuyển tất cả các bản ghi từ danh mục $from sang danh mục $to, rồi xóa danh mục $from.
+     */
+    public function move_records_and_delete(int $from, int $to)
+    {
+        if ($from == $to) {
+            throw new AppException(settings('err_category_move_from_to_same'));
+        }
+
+        $this->db->trans_start();
+        $this->db
+            ->where('category_id', $from)
+            ->update('inout_records', [
+                'category_id' => $to,
+                'modified_on' => date('Y-m-d H:i:s'),
+                'modified_by' => $this->auth->user('id'),
+            ])
+        ;
+        $this->del($from);
+        $this->db->trans_complete();
+    }
+
+    /**
      * Xóa danh mục khỏi db.
      */
     public function del(int $id)
@@ -77,11 +111,7 @@ class Category_model extends App_Model
         ;
 
         // Kiểm tra xem danh mục này có chứa dữ liệu thu chi nào không
-        $count = $this->db->where('category_id', $id)
-            ->from('inout_records')
-            ->count_all_results()
-        ;
-        if ($count > 0) {
+        if (!$this->is_empty($id)) {
             throw new AppException(sprintf(settings('err_category_not_empty'), $category_name));
         }
 
