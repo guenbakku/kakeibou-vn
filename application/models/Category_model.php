@@ -61,7 +61,6 @@ class Category_model extends App_Model
     {
         $update_data = [
             'name' => $category['name'],
-            'is_month_fixed_money' => $category['is_month_fixed_money'],
         ];
 
         $this->db->where('id', $id)->update($this->get_table(), $update_data);
