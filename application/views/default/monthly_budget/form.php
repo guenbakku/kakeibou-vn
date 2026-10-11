@@ -41,15 +41,15 @@
                         <div class="col-xs-12">
                             <label>
                                 <?= form_input([
-                                                'name' => sprintf('categories[%d][is_month_fixed_money]', $i),
-                                                'type' => 'hidden',
-                                                'value' => '0',
-                                            ]); ?>
+                                    'name' => sprintf('categories[%d][is_month_fixed_money]', $i),
+                                    'type' => 'hidden',
+                                    'value' => '0',
+                                ]); ?>
                                 <?= form_checkbox([
-                                                'name' => sprintf('categories[%d][is_month_fixed_money]', $i),
-                                                'value' => '1',
-                                                'checked' => (bool) $category['is_month_fixed_money'],
-                                            ]); ?>
+                                    'name' => sprintf('categories[%d][is_month_fixed_money]', $i),
+                                    'value' => '1',
+                                    'checked' => (bool) $category['is_month_fixed_money'],
+                                ]); ?>
                                 Khoảng chi cố định
                             </label>
                             <i class="fa fa-info-circle text-muted ml-1" data-toggle="popover" data-placement="top" data-content="Không tính vào &quot;Số tiền có thể chi&quot; hàng tháng" style="cursor:pointer"></i>
