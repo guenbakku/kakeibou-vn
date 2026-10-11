@@ -35,13 +35,36 @@ $today = date('Y-m-d');
 </script>
 
 <div class="container">
+    <div class="panel panel-default home-shortcuts">
+        <div class="panel-heading"><strong>Truy cập nhanh</strong></div>
+        <div class="panel-body">
+            <div class="row" style="margin-right:-7.5px; margin-left:-7.5px">
+                <div class="col-xs-4" style="padding-left:7.5px; padding-right:7.5px;">
+                    <a class="btn btn-default btn-block home-shortcut" href="<?= $url['detailThisMonth']; ?>">
+                        <span class="fa fa-list-ul" aria-hidden="true"></span>
+                        <span>Chi tiết tháng này</span>
+                    </a>
+                </div>
+                <div class="col-xs-4" style="padding-left:7.5px; padding-right:7.5px;">
+                    <a class="btn btn-default btn-block home-shortcut" href="<?= $url['summaryThisMonth']; ?>">
+                        <span class="fa fa-calendar" aria-hidden="true"></span>
+                        <span>Tổng hợp tháng này</span>
+                    </a>
+                </div>
+                <div class="col-xs-4" style="padding-left:7.5px; padding-right:7.5px;">
+                    <a class="btn btn-default btn-block home-shortcut" href="<?= $url['summaryThisYear']; ?>">
+                        <span class="fa fa-calendar-o" aria-hidden="true"></span>
+                        <span>Tổng hợp năm nay</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php // Chỉ hiện bảng Chi thực tế/Dự định nếu có setting "Dự định chi tháng này"?>
     <?php if ($liquidOutgoStatus['month']['estimated'] > 0) { ?>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a class="pull-right" href="<?= $url['summaryThisMonth']; ?>">
-                <span class="glyphicon glyphicon-option-horizontal"></span>
-            </a>
             <strong>Số tiền có thể chi</strong><br>
             <span class="small text-muted"><em>(Không tính các khoản chi cố định)</em></span>
         </div>

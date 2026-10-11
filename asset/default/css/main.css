@@ -14,6 +14,16 @@ a {
     -webkit-tap-highlight-color: rgba(226, 226, 226, 0.4);
 }
 
+.home-shortcut {
+    white-space: normal;
+}
+
+.home-shortcut .fa {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 16px;
+}
+
 a.clean {
     color: inherit !important;
 }
