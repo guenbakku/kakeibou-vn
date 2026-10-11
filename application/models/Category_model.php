@@ -126,6 +126,20 @@ class Category_model extends App_Model
             throw new AppException(settings('err_category_move_from_to_same'));
         }
 
+        // Di chuyển Dự định chi tháng này sang category mới
+        $from_month_estimated_amount = $this->db->select('month_estimated_amount')
+            ->where('id', $from)
+            ->get($this->get_table())
+            ->row_array()['month_estimated_amount']
+        ;
+        // ---
+        $this->db
+            ->set('month_estimated_amount', 'month_estimated_amount + '.(int) $from_month_estimated_amount, false)
+            ->where('id', $to)
+            ->update($this->get_table())
+        ;
+
+        // Di chuyển tất cả bản ghi inout sang category mới
         $this->db
             ->where('category_id', $from)
             ->update('inout_records', [
