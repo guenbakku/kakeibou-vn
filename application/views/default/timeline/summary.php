@@ -58,13 +58,14 @@
 
 <script type="text/javascript">
     pageScroll('<?= $pageScrollTarget; ?>', -50);
+
     function toggle_collapse_table_detail(target) {
         const container = $(target).parent().parent().find(".table-summarize-container");
-        const toogler = $(container).attr("aria-expanded") === "false"
-        ? $("<span>").addClass("glyphicon glyphicon-triangle-top")
-        : $("<span>").addClass("glyphicon glyphicon-triangle-bottom");
+        const toggler = $(container).attr("aria-expanded") === "false"
+            ? $("<span>").addClass("glyphicon glyphicon-triangle-top")
+            : $("<span>").addClass("glyphicon glyphicon-triangle-bottom");
 
         container.collapse("toggle");
-        $(target).children("div").html(toogler);
+        $(target).children("div").html(toggler);
     }
 </script>
