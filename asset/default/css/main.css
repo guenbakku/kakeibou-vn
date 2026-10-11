@@ -18,6 +18,15 @@ a {
     white-space: normal;
 }
 
+.home-shortcuts-heading {
+    cursor: pointer;
+}
+
+.home-shortcuts-heading:focus {
+    outline: 2px solid #337ab7;
+    outline-offset: -2px;
+}
+
 .home-shortcut .fa {
     display: block;
     margin-bottom: 6px;
