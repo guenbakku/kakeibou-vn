@@ -156,6 +156,7 @@ class Category extends MY_Controller
         $view_data['select'] = [
             'target_categories' => $target_categories,
         ];
+        $view_data['inout_type'] = array_flip(Inout_model::$INOUT_TYPE);
 
         $this->template->write_view('MAIN', 'category/del_confirm', $view_data);
         $this->template->render();

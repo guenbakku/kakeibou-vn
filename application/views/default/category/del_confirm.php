@@ -7,9 +7,16 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <p>Bạn có chắc chắn muốn xóa danh mục dưới đây?</p>
-                            <div class="well well-sm" style="margin-bottom: 0">
+                            <div class="well well-sm" style="margin-bottom: 0px">
+                                <label class="text-muted">Tên danh mục:</label>
                                 <div><?= $category['name']; ?></div>
                             </div>
+                            <?php if ($inout_type['Chi'] == $category['inout_type_id']): ?>
+                                <div class="well well-sm" style="margin-bottom: 0; margin-top: 10px">
+                                    <label class="text-muted">Dự định chi hàng tháng:</label>
+                                    <div><?= number_format($category['month_estimated_amount']); ?></div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <?php if (!$is_category_empty): ?>
