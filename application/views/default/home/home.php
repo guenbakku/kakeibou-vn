@@ -1,30 +1,31 @@
 <div class="container">
     <div class="panel panel-default home-shortcuts">
         <div class="panel-heading home-shortcuts-heading" role="button" tabindex="0"
-            data-toggle="collapse" data-target="#home-shortcuts-body"
             aria-controls="home-shortcuts-body" aria-expanded="true">
             <strong>Truy cập nhanh</strong>
             <span class="glyphicon glyphicon-chevron-down pull-right home-shortcuts-toggle" aria-hidden="true"></span>
         </div>
-        <div class="panel-body collapse in" id="home-shortcuts-body">
-            <div class="row" style="margin-right:-7.5px; margin-left:-7.5px">
-                <div class="col-xs-4" style="padding-left:7.5px; padding-right:7.5px;">
-                    <a class="btn btn-default btn-block home-shortcut" href="<?= $url['detailThisMonth']; ?>">
-                        <span class="fa fa-list-ul" aria-hidden="true"></span>
-                        <span>Chi tiết tháng này</span>
-                    </a>
-                </div>
-                <div class="col-xs-4" style="padding-left:7.5px; padding-right:7.5px;">
-                    <a class="btn btn-default btn-block home-shortcut" href="<?= $url['summaryThisMonth']; ?>">
-                        <span class="fa fa-calendar" aria-hidden="true"></span>
-                        <span>Tổng hợp tháng này</span>
-                    </a>
-                </div>
-                <div class="col-xs-4" style="padding-left:7.5px; padding-right:7.5px;">
-                    <a class="btn btn-default btn-block home-shortcut" href="<?= $url['summaryThisYear']; ?>">
-                        <span class="fa fa-calendar-o" aria-hidden="true"></span>
-                        <span>Tổng hợp năm nay</span>
-                    </a>
+        <div class="panel-collapse collapse in" id="home-shortcuts-body">
+            <div class="panel-body">
+                <div class="row" style="margin-right:-7.5px; margin-left:-7.5px">
+                    <div class="col-xs-4" style="padding-left:7.5px; padding-right:7.5px;">
+                        <a class="btn btn-default btn-block home-shortcut" href="<?= $url['detailThisMonth']; ?>">
+                            <span class="fa fa-list-ul" aria-hidden="true"></span>
+                            <span>Chi tiết tháng này</span>
+                        </a>
+                    </div>
+                    <div class="col-xs-4" style="padding-left:7.5px; padding-right:7.5px;">
+                        <a class="btn btn-default btn-block home-shortcut" href="<?= $url['summaryThisMonth']; ?>">
+                            <span class="fa fa-calendar" aria-hidden="true"></span>
+                            <span>Tổng hợp tháng này</span>
+                        </a>
+                    </div>
+                    <div class="col-xs-4" style="padding-left:7.5px; padding-right:7.5px;">
+                        <a class="btn btn-default btn-block home-shortcut" href="<?= $url['summaryThisYear']; ?>">
+                            <span class="fa fa-calendar-o" aria-hidden="true"></span>
+                            <span>Tổng hợp năm nay</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,6 +122,11 @@
                 e.preventDefault();
                 $(this).trigger('click');
             }
+        });
+
+        shortcutHeading.on('click', function (e) {
+            e.preventDefault();
+            shortcutBody.collapse('toggle');
         });
 
         shortcutBody.on('show.bs.collapse hide.bs.collapse', function (e) {
