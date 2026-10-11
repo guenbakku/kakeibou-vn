@@ -1,8 +1,5 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <a class="pull-right" href="<?= $url['summaryThisYear']; ?>">
-            <span class="glyphicon glyphicon-option-horizontal"></span>
-        </a>
         <strong>Thu chi tháng này</strong>
     </div>
     <table class="table table-bordered last-row-is-total">

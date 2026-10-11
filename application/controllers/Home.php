@@ -12,6 +12,7 @@ class Home extends MY_Controller
         $view_data['remaining'] = $this->timeline_model->get_remaining();
         $view_data['url'] = [
             'detailToday' => base_url(['timeline', 'detail', date('Y-m-d')]),
+            'detailThisMonth' => base_url(['timeline', 'detail', date('Y-m')]),
             'summaryThisMonth' => base_url(['timeline', 'summary', date('Y-m')]),
             'summaryThisYear' => base_url(['timeline', 'summary', date('Y')]),
         ];
