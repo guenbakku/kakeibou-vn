@@ -6,3 +6,4 @@
 /application/session
 /vendor
 *.cache
+_ide_helper.php

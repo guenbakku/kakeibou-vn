@@ -5,11 +5,21 @@
         "pocketarc/codeigniter": "^3.4"
     },
     "require-dev": {
-        "kint-php/kint": "^5.1",
         "friendsofphp/php-cs-fixer": "^3.59",
+        "haemanthus/codeigniter3-ide-helper": "^1.0",
+        "kint-php/kint": "^5.1",
         "phpro/grumphp": "^2.6"
     },
+    "scripts": {
+        "post-install-cmd": [
+            "@generate-ide-helper"
+        ],
+        "generate-ide-helper": [
+            "ide-helper generate"
+        ]
+    },
     "config": {
+        "sort-packages": true,
         "allow-plugins": {
             "phpro/grumphp": true
         }
