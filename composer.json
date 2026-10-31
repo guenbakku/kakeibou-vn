@@ -15,7 +15,7 @@
             "@generate-ide-helper"
         ],
         "generate-ide-helper": [
-            "ide-helper generate"
+            "@php -r \"if (file_exists('vendor/bin/ide-helper')) { passthru('vendor/bin/ide-helper generate'); }\""
         ]
     },
     "config": {
