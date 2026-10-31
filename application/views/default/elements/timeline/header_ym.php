@@ -43,7 +43,7 @@
                                 <label>Năm</label>
                                 <?= form_dropdown(
                                     $field_name = 'year',
-                                    ['' => '--'] + $select['year'],
+                                    ['' => '--'] + array_reverse($select['year'], true),
                                     $year ?? date('Y'),
                                     [
                                         'class' => 'form-control',
