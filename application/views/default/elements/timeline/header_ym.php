@@ -28,7 +28,7 @@
 </a>
 
 <!-- Date selecting modal -->
-<div class="modal fade" id="date-selection" tabindex="-1" role="dialog">
+<div class="modal" id="date-selection" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <?= form_open($url['dateSelectionForm'], ['method' => 'get', 'id' => 'dateSelectionForm', 'class' => 'form-horizon']); ?>
             <div class="modal-content">
