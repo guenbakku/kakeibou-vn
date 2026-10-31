@@ -10,10 +10,10 @@ $menu = [
         'label' => 'Danh sách chi tiết',
         'icon' => 'fa fa-list',
     ],
-    'viewchart_line' => [
-        'url' => $dateFormatType !== 'ymd' ? base_url(['timeline', 'chart', 'line', $date]) : '',
-        'label' => 'Biểu đồ đường',
-        'icon' => 'fa fa-line-chart',
+    'viewchart_income_outgo' => [
+        'url' => $dateFormatType !== 'ymd' ? base_url(['timeline', 'chart', 'income_outgo', $date]) : '',
+        'label' => 'Biểu đồ thu chi',
+        'icon' => 'fa fa-bar-chart',
     ],
     'viewchart_pie' => [
         'url' => $dateFormatType !== null ? base_url(['timeline', 'chart', 'pie', $date]) : '',
