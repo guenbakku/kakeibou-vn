@@ -105,11 +105,12 @@ class Timeline_model extends Inout_Model
     }
 
     /**
-     * Tính lũy kế của thu, chi, tổng trong một dãi thời gian.
+     * Tính lũy kế các cột được chỉ định trong một dải thời gian.
      *
-     * @param array $timeline dữ liệu thu, chi, tổng theo một dải thời gian
+     * @param array    $timeline dữ liệu theo một dải thời gian
+     * @param string[] $keys     danh sách key cần tính lũy kế
      */
-    public function calc_cumulative(array $timeline): array
+    public function calc_cumulative(array $timeline, array $keys): array
     {
         foreach ($timeline as $i => &$item) {
             if ($i == 0) {
@@ -117,8 +118,10 @@ class Timeline_model extends Inout_Model
             }
             $preItem = $timeline[$i - 1];
 
-            foreach (['tong', 'thu', 'chi'] as $key) {
-                $item[$key] += $preItem[$key];
+            foreach ($keys as $key) {
+                if (isset($preItem[$key])) {
+                    $item[$key] += $preItem[$key];
+                }
             }
         }
 

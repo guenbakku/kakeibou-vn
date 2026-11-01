@@ -23,7 +23,7 @@ class Chart extends MY_Controller
      *                     - yyyy
      *                     - null
      */
-    public function line(string $date = '')
+    public function inout(string $date = '')
     {
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
@@ -31,9 +31,9 @@ class Chart extends MY_Controller
         $yearsList = $this->timeline_model->get_years_list();
         $monthsList = months_list();
 
-        $view_data['title'] = 'Biểu đồ đường';
+        $view_data['title'] = 'Biểu đồ thu chi';
         $view_data['list'] = $this->timeline_model->summary_inout_types_auto($extractedDate['y'], $extractedDate['m']);
-        $view_data['list'] = $this->timeline_model->calc_cumulative($view_data['list']);
+        $view_data['list'] = $this->timeline_model->calc_cumulative($view_data['list'], ['tong']);
         $view_data['year'] = $extractedDate['y'] ?? '';
         $view_data['month'] = $extractedDate['m'] ?? '';
         $view_data['select'] = [
@@ -51,7 +51,7 @@ class Chart extends MY_Controller
         ];
         $view_data = array_merge($view_data, compact('date', 'dateFormatType'));
 
-        $this->template->write_view('MAIN', 'chart/line', $view_data);
+        $this->template->write_view('MAIN', 'chart/inout', $view_data);
         $this->template->render();
     }
 
