@@ -23,7 +23,7 @@ class Chart extends MY_Controller
      *                     - yyyy
      *                     - null
      */
-    public function income_outgo(string $date = '')
+    public function inout(string $date = '')
     {
         $extractedDate = extract_date_string($date);
         $dateFormatType = date_format_type_of_string($date);
@@ -51,7 +51,7 @@ class Chart extends MY_Controller
         ];
         $view_data = array_merge($view_data, compact('date', 'dateFormatType'));
 
-        $this->template->write_view('MAIN', 'chart/income_outgo', $view_data);
+        $this->template->write_view('MAIN', 'chart/inout', $view_data);
         $this->template->render();
     }
 
