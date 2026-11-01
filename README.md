@@ -17,6 +17,9 @@ cp .env.example .env
 
 # migrate database
 vendor/bin/phinx migrate
+
+# install node_modules to enable php linter in git pre-commit
+yarn install
 ```
 
 ### Access urls
