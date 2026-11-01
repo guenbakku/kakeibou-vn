@@ -1,32 +1,17 @@
-version: '3'
-
 services:
-  php:
+  app:
     build: ./.docker/php
-    image: php8.2-apache:kakeibou-vn
-    container_name: kakeibou-vn_php
+    image: php8.2-apache:kakeibo
     volumes:
-      - ./.docker/php/php.ini:/usr/local/etc/php/php.ini
-      - ./.docker/php/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
-      - ./:/var/www/html
+      - ./.docker/php/php.ini:/usr/local/etc/php/php.ini:cached
+      - ./.docker/php/000-default.conf:/etc/apache2/sites-enabled/000-default.conf:cached
+      - ./:/var/www/html:delegated
     depends_on:
       - mysql
     ports:
       - 8080:80
-    networks:
-      - kakeibou-vn
-  mysql:
-    image: mysql:5.6
-    container_name: kakeibou-vn_mysql
-    volumes:
-      - ./.docker/data/mysql:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-    networks:
-      - kakeibou-vn
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: kakeibou-vn_phpmyadmin
     environment:
       - PMA_ARBITRARY=1
       - PMA_HOST=mysql
@@ -38,8 +23,9 @@ services:
       - 4040:80
     volumes:
       - ./.docker/data/phpmyadmin/sessions:/sessions
-    networks:
-      - kakeibou-vn
-networks:
-    kakeibou-vn:
-      driver: bridge
+  mysql:
+    image: mysql:5.6
+    volumes:
+      - ./.docker/data/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
