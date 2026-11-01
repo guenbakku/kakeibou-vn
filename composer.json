@@ -15,6 +15,9 @@
         ],
         "generate-ide-helper": [
             "@php -r \"if (file_exists('vendor/bin/ide-helper')) { passthru('vendor/bin/ide-helper generate'); }\""
+        ],
+        "lintfix": [
+            "php-cs-fixer --config=.php-cs-fixer.dist.php fix"
         ]
     },
     "config": {
